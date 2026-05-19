@@ -14,6 +14,6 @@ Dependencies
 - Repo-local helpers: selected | skipped | fallback
   - `project-structure`, `design.md`, `sync-docs`, `agent-eval-harness`
 - Spec handoff target: selected | skipped | fallback
-  - `spec-workflow`: ready vertical slice handoff
+  - `feature-workflow`: ready vertical slice handoff
 
 Next step: report selected, skipped, and fallback primitives with source package labels before claiming direct skill use.

@@ -22,16 +22,16 @@ const htmlPath = path.join(skillRoot, "skill.html");
 const summaryBySkill: Record<string, string> = {
   "show-skills": "현재 스킬 목록을 카테고리별로 보여주고 조합을 추천",
   "web-research": "최신 정보, 출처 검증, 추천, 기술 문서 조사",
-  "skill-to-html": "스킬의 사람용 diagram-rich HTML guide 생성",
+  "skill-to-html": "스킬의 사람용 도표 중심 HTML guide 생성",
   "skill-update": "기존 스킬 패키지를 references, validator, docs까지 함께 유지보수",
   "sync-docs": "README, AGENTS, docs, snippets, history 충돌과 stale 설명 정리",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
   "agent-improvement-loop": "스킬 호출성, 검증, 문서 정합성, repo 품질 개선 루프",
   "agent-eval-harness": "routing, portability, safety, artifact hygiene를 검증하는 eval harness",
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
-  "project-structure": "frontend, backend, monorepo, desktop app, infra-aware 구조 결정",
-  "project-workflow": "Workflow suite setup: domain, PRD, issue backlog, workflow-state cache",
-  "spec-workflow": "Workflow suite loop: spec/issue를 TDD, QA, docs sync, eval seed로 구현",
+  "project-structure": "frontend, backend, monorepo, desktop app, ESM TypeScript 구조 결정",
+  "project-workflow": "워크플로우 묶음 초기 설정: 도메인, PRD, ESM TypeScript 정책, workflow-state cache",
+  "feature-workflow": "워크플로우 묶음 반복 구현: feature/issue/bug를 ESM TypeScript, TDD, QA로 구현",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
   "code-review": "findings-first 코드 리뷰와 회귀/테스트/보안 위험 점검",
@@ -83,7 +83,7 @@ function escapeHtml(value: string): string {
 
 function displayName(skill: SkillTile): string {
   if (skill.name === "project-workflow") return "project-workflow 스킬";
-  if (skill.name === "spec-workflow") return "spec-workflow 스킬";
+  if (skill.name === "feature-workflow") return "feature-workflow 스킬";
   return skill.name;
 }
 

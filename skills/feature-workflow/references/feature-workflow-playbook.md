@@ -1,8 +1,8 @@
-# spec-workflow playbook 기준
+# feature-workflow playbook 기준
 
 ## core idea 기준
 
-`spec-workflow`는 `workflow suite`의 반복 개발 loop다. project setup 이후 이미 존재하는 spec, issue, bug repro, PRD section, ADR, design.md를 기준으로 작은 vertical slice를 검증 가능한 변경으로 끝낸다.
+`feature-workflow`는 `workflow suite`의 기능 개발 loop다. project setup 이후 이미 존재하는 PRD section, issue, spec, bug repro, ADR, design.md를 기준으로 작은 feature, bug fix, vertical slice를 검증 가능한 변경으로 끝낸다.
 
 ## read order 기준
 
@@ -55,9 +55,27 @@ Work Claim Preflight
 
 claim이 없거나 stale이면 먼저 `work-claims.md`를 갱신한다. scope 자체를 다시 나눠야 하면 `project-workflow`로 병렬 lane 재분해를 넘긴다.
 
+## TypeScript module policy preflight 기준
+
+TypeScript production edit이면 plan 전에 module boundary를 확인한다. 기본값은 ESM only다.
+
+```text
+TypeScript Module Preflight
+- module system: ESM only
+- package boundary: package.json type: "module"
+- allowed imports: import/export
+- blocked patterns: CommonJS, require, module.exports, .cjs, .cts
+- migration boundary: <existing CommonJS path or none>
+- result: clear | blocked
+```
+
+새 production code, test, fixture, script는 `import`/`export`를 사용한다. `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`를 편의상 추가하지 않는다.
+
+기존 spec이 CommonJS 파일 수정을 요구하면 바로 변환하지 않는다. 현재 lane이 그 파일을 claim했는지, migration owner가 누구인지, ESM으로 바꿀 수 있는지 확인하고 blocker 또는 migration note를 남긴 뒤 진행한다.
+
 ## local implementation fallback lane 기준
 
-Superpowers-style implementation helper가 없으면 fallback으로 issue-level implementation design, exact TDD 또는 characterization plan, RED/GREEN/REFACTOR evidence, non-browser runtime evidence를 직접 남긴다. 이 fallback은 project setup이 아니라 spec implementation loop 안에서만 실행한다.
+Superpowers-style implementation helper가 없으면 fallback으로 issue-level implementation design, exact TDD 또는 characterization plan, RED/GREEN/REFACTOR evidence, non-browser runtime evidence를 직접 남긴다. 이 fallback은 project setup이 아니라 feature/issue implementation loop 안에서만 실행한다.
 
 ## CLI/no-browser 기준
 
@@ -74,7 +92,7 @@ browser surface가 없으면 browser-qa, screenshot, mockup selection을 요구�
 
 이 shared skills repo에서는 TDD hook을 설치하거나 실행하지 않는다. 이 repo는 스킬 문서와 eval fixture를 관리하는 repo이며, production code 변경을 만들지 않는다.
 
-대상 코드 repo에서 `spec-workflow`를 project instruction에 연결할 때만 project-local hook으로 TDD gate를 강제한다. 전역 hook 설치나 shared skills repo hook 추가는 하지 않는다.
+대상 코드 repo에서 `feature-workflow`를 project instruction에 연결할 때만 project-local hook으로 TDD gate를 강제한다. 전역 hook 설치나 shared skills repo hook 추가는 하지 않는다.
 
 권장 gate는 아래 순서다.
 
@@ -117,6 +135,7 @@ Workflow State Update
 - reused authority:
 - selected primitives:
 - skipped/fallback primitives:
+- TypeScript module policy:
 - RED/GREEN/REFACTOR:
 - QA/runtime evidence:
 - docs sync:

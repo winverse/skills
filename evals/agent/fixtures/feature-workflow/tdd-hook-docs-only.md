@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: TDD Hook Docs Only
+# Saved Feature Workflow Output: TDD Hook Docs Only
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Target project TDD gate planning
 
 Repo classification:

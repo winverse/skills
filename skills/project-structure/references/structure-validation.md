@@ -6,6 +6,8 @@
 - env와 secret boundary가 보이는가
 - GraphQL generated artifact 위치가 보이는가
 - Drizzle migration 위치가 보이는가
+- TypeScript를 쓰면 `package.json`의 `type: "module"`과 ESM `tsconfig` 정책이 보이는가
+- `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`를 새 구조에 만들지 않는가
 - test, health/readiness, observability 위치가 보이는가
 - folder-local `AGENTS.md`가 필요한 boundary에 있는가
 

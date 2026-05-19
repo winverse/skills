@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: Workflow State Cache
+# Saved Feature Workflow Output: Workflow State Cache
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Implementation cache
 
 State cache:

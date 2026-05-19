@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: Implementation Routing
+# Saved Feature Workflow Output: Implementation Routing
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Implementation loop
 
 Spec authority

@@ -1,6 +1,6 @@
 # Workflow Fixture: CLI / No-Browser Evidence
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Implementation
 
 Next step:

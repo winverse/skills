@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: Improvement Seed
+# Saved Feature Workflow Output: Improvement Seed
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Completion with missed gate
 
 Completion:
@@ -13,7 +13,7 @@ Improvement seed:
 - Path: `.scratch/profile-import/eval-candidates/2026-05-14-docs-sync-miss.md`
 - Candidate skill: agent-eval-harness
 - Prompt: "구현 완료 후 docs sync 누락을 잡아줘."
-- Expected skill: spec-workflow
+- Expected skill: feature-workflow
 - Missing gate: document sync before completion
 - Required evidence: docs sync decision and artifact hygiene
 

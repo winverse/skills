@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: Dependency Inventory
+# Saved Feature Workflow Output: Dependency Inventory
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Implementation planning
 
 Dependencies

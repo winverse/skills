@@ -3,222 +3,177 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>web-research skill guide</title>
+  <title>web-research 시각 가이드</title>
   <link rel="icon" href="data:,">
   <style>
-    :root{--bg:#f8fafc;--surface:#fff;--surface-muted:#f1f5f9;--text:#111827;--muted:#6b7280;--border:#d1d5db;--accent:#2563eb;--accent-soft:#eff6ff;--ok:#1f7a52;--ok-soft:#e7f5ec;--warn:#a16207;--warn-soft:#fef3c7;--danger:#b42318;--danger-soft:#fee4e2;--shadow:0 1px 2px rgba(15,23,42,.08)}
-    *{box-sizing:border-box}
-    html{width:100%;min-width:100%;min-height:100%;background:var(--bg)}
-    body{width:100%;min-width:100%;min-height:100vh;margin:0;background:var(--bg);color:var(--text);font-family:Pretendard,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55;overflow-x:hidden}
-    a{color:inherit;text-decoration:none}
-    .shell{width:100%;max-width:1192px;margin:0 auto;padding:28px 16px 44px}
-    .top{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;margin-bottom:18px}
-    .brand{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center}.mark{width:48px;height:48px;border-radius:8px;background:var(--text);color:#fff;display:grid;place-items:center;font-weight:800}
-    h1,h2,h3,p{margin:0}h1{font-size:30px;line-height:1.15;letter-spacing:0}.sub{font-size:14px;color:var(--muted);margin-top:4px}
-    .pair{background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);padding:12px;min-width:270px}.pair strong{display:block;font-size:13px}.pair code{display:block;color:var(--muted);font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.wide{grid-column:1/-1}.panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}.head{padding:16px 16px 0}.head h2{font-size:16px;line-height:1.25}.note{font-size:13px;color:var(--muted);margin-top:3px}.body{padding:16px}
-    svg{display:block;width:100%;height:auto}.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.sw{width:11px;height:11px;border-radius:3px;background:var(--accent);border:1px solid rgba(0,0,0,.08)}
-    .matrix{display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--border)}.cell{min-height:132px;padding:14px;background:#fbfdff}.cell strong{display:block;font-size:13px;margin-bottom:6px}.cell p{font-size:12px;color:var(--muted)}
-    .axis{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}
-    .rules{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rule{border:1px solid var(--border);border-radius:8px;padding:12px;background:#fbfdff}.rule strong{display:block;font-size:13px}.rule p{font-size:12px;color:var(--muted);margin-top:4px}
-    .code{border-radius:8px;background:#111827;color:#f9fafb;padding:14px;overflow-x:auto;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
-    .files{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:10px}.file{min-width:0;border:1px solid var(--border);border-radius:8px;background:#fbfdff;padding:12px;min-height:82px;overflow-wrap:anywhere}.file strong{display:block;font-size:13px}.file span{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+    :root { --bg:#f6f7f9; --surface:#ffffff; --soft:#eef2f6; --text:#151922; --muted:#5f6876; --border:#cfd6df; --line:#8793a3; --blue:#2457c5; --green:#24724f; --amber:#93640d; --red:#aa2e25; --code:#111827; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; margin:0; background:var(--bg); color:var(--text); font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; line-height:1.55; }
+    body { padding:28px 0 52px; }
+    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
+    a { color:inherit; text-decoration:none; }
+    h1, h2, h3, p { margin:0; }
+    h1 { font-size:30px; line-height:1.18; }
+    h2 { font-size:18px; line-height:1.3; }
+    h3 { font-size:14px; line-height:1.35; }
+    .shell { width:100%; max-width:1180px; margin:0 auto; padding:0 28px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:16px; align-items:stretch; margin-bottom:24px; }
+    .identity, .quick, .matrix, .panel, .schema, .chart, .resource, .table, .rule, .snippet, .catalog-section { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .identity { min-height:154px; padding:20px; display:grid; grid-template-columns:68px minmax(0,1fr); gap:16px; align-items:center; }
+    .mark { width:68px; height:68px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:17px; font-weight:800; }
+    .subtitle { max-width:780px; margin-top:7px; color:var(--muted); font-size:14px; }
+    .quick { padding:16px; display:grid; gap:10px; align-content:center; }
+    .quick strong, .matrix-cell strong, .step strong, .schema-node strong, .resource-tile strong, .table-cell strong, .rule strong, .catalog-item strong { display:block; margin-bottom:5px; font-size:13px; }
+    .quick span, .matrix-cell p, .step span, .schema-node span, .resource-tile span, .table-cell span, .rule p, .catalog-item span { color:var(--muted); font-size:13px; }
+    .section { margin-top:22px; }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:baseline; margin-bottom:10px; }
+    .section-head p, .small { color:var(--muted); font-size:13px; }
+    .matrix { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; }
+    .matrix-cell { min-height:148px; padding:14px; border-right:1px solid var(--border); border-top:4px solid var(--line); }
+    .matrix-cell:last-child { border-right:0; }
+    .matrix-cell.use { border-top-color:var(--green); } .matrix-cell.combine { border-top-color:var(--blue); } .matrix-cell.skip { border-top-color:var(--amber); } .matrix-cell.stop { border-top-color:var(--red); }
+    .two { display:grid; grid-template-columns:minmax(0,1.14fr) minmax(300px,.86fr); gap:16px; align-items:stretch; }
+    .panel, .resource { padding:16px; overflow:hidden; }
+    svg { display:block; width:100%; height:auto; }
+    .steps, .rules { display:grid; gap:10px; }
+    .step, .rule { padding:12px 14px; }
+    .schema { display:grid; grid-template-columns:1fr 56px 1fr; gap:12px; padding:16px; align-items:center; }
+    .schema-stack { display:grid; gap:10px; }
+    .schema-node { min-height:82px; border:1px solid var(--border); border-radius:8px; padding:12px; background:#fbfcfe; }
+    .schema-arrow { display:grid; place-items:center; min-height:184px; color:var(--blue); font-size:22px; font-weight:800; }
+    .chart { display:grid; gap:10px; padding:16px; }
+    .bar { display:grid; grid-template-columns:170px minmax(0,1fr) 78px; gap:10px; align-items:center; font-size:13px; }
+    .track { height:14px; border:1px solid var(--border); border-radius:4px; background:var(--soft); overflow:hidden; }
+    .fill { display:block; height:100%; background:var(--blue); } .fill.green{background:var(--green);} .fill.amber{background:var(--amber);} .fill.red{background:var(--red);}
+    .files, .catalog-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .resource-tile, .catalog-item { min-height:78px; border:1px solid var(--border); border-radius:8px; background:#fbfcfe; padding:10px; }
+    .table { display:grid; grid-template-columns:172px repeat(3,minmax(0,1fr)); overflow:hidden; }
+    .table-cell { min-height:84px; padding:12px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .table-cell:nth-child(4n) { border-right:0; } .table-cell:nth-last-child(-n+4) { border-bottom:0; } .table-head { background:var(--soft); }
+    .snippet { margin:0; padding:14px; background:var(--code); color:#f8fafc; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
 <body>
   <main class="shell">
-    <header class="top">
-      <div class="brand">
-        <div class="mark">WR</div>
+    <header class="hero">
+      <div class="identity">
+        <div class="mark">WEB</div>
         <div>
           <h1>web-research</h1>
-          <p class="sub">최신성, 출처, 비교, 추천을 조사 범위 결정, 하위 질문 분기, 병렬 하위 에이전트, 출처 기록으로 처리하는 출처 우선 스킬</p>
-          <p class="sub"><code>web-search</code>, <code>web search</code>, <code>웹서치</code>, <code>웹 검색</code>은 이 repo에서 <code>web-research</code> alias입니다.</p>
+          <p class="subtitle">현재 사실, 출처 검증, 추천, 시장·제품 비교, 법·규정, 기술 문서, 뉴스처럼 바뀔 수 있는 정보를 source-first로 조사하고 citation과 함께 답할 때 사용한다.</p>
         </div>
       </div>
-      <div class="pair"><strong>스킬 파일 쌍</strong><code>SKILL.md</code><code>skill.html</code></div>
+      <aside class="quick" aria-label="스킬 파일 쌍">
+        <div><strong>에이전트 원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
+        <div><strong>사람용 가이드</strong><span><a href="skill.html"><code>skill.html</code></a></span></div>
+        <div><strong>언어 기준</strong><span>화면 설명은 한국어 문장 우선이며, 정확한 식별자만 원문으로 둡니다.</span></div>
+      </aside>
     </header>
 
-    <section class="grid">
-      <article class="panel">
-        <div class="head"><h2>조사 범위 선택</h2><p class="note">질문의 위험도와 범위에 따라 로컬 답변, 빠른 확인, 근거 확인, 깊은 조사를 고릅니다.</p></div>
-        <div class="body">
-          <div class="matrix">
-            <div class="cell" style="background:var(--accent-soft)"><strong>빠른 확인</strong><p>공식 페이지 1-2개로 끝나는 낮은 리스크 사실 확인.</p></div>
-            <div class="cell" style="background:var(--warn-soft)"><strong>근거 확인 검색</strong><p>추천, 비교, 정책, 가격, 문서 변경처럼 claim별 근거가 필요한 경우.</p></div>
-            <div class="cell"><strong>로컬 답변</strong><p>안정적인 개념 설명. 최신성이나 외부 출처가 결정적이지 않음.</p></div>
-            <div class="cell" style="background:var(--danger-soft)"><strong>깊은 재현 가능 조사</strong><p>넓은 의사결정, 충돌한 출처, 고영향 선택, 재실행 가능한 로그가 필요한 조사.</p></div>
-          </div>
-          <div class="axis"><span>좁은 질문</span><span>넓은 질문</span></div>
-          <div class="axis"><span>낮은 영향도</span><span>높은 영향도</span></div>
-        </div>
-      </article>
+    <section class="section">
+      <div class="section-head"><h2>사용 판단 매트릭스</h2><p>언제 쓰고, 언제 다른 스킬로 넘길지 먼저 판단합니다.</p></div>
+      <div class="matrix" aria-label="사용 판단 매트릭스">
+        <div class="matrix-cell use"><strong>사용</strong><p>현재 사실, 출처 검증, 추천, 시장·제품 비교, 법·규정, 기술 문서, 뉴스처럼 바뀔 수 있는 정보를 source-first로 조사하고 citation과 함께 답할 때 사용한다.</p></div>
+        <div class="matrix-cell combine"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>처럼 전담 스킬과 연결합니다.</p></div>
+        <div class="matrix-cell skip"><strong>건너뜀</strong><p>요청이 이 스킬의 호출 조건과 맞지 않거나 더 구체적인 스킬이 있으면 그 스킬을 우선합니다.</p></div>
+        <div class="matrix-cell stop"><strong>확인</strong><p>비밀값, 파괴적 작업, 외부 쓰기, 전역 설치가 얽히면 먼저 범위와 승인 조건을 확인합니다.</p></div>
+      </div>
+    </section>
 
-      <article class="panel">
-        <div class="head"><h2>검색 실행 플로우</h2><p class="note">먼저 조사 범위와 검증 강도를 정하고, 충분한 근거나 명확한 한계가 나오면 답합니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 720 300" role="img" aria-label="질문 정리, 분기 검색, 출처 지도, 정보 추출, 답변 작성으로 이어지는 검색 플로우차트">
-            <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2">
-              <rect x="20" y="70" width="120" height="76" rx="8"/><rect x="158" y="70" width="120" height="76" rx="8"/><rect x="296" y="70" width="120" height="76" rx="8"/><rect x="434" y="70" width="120" height="76" rx="8"/><rect x="572" y="190" width="120" height="72" rx="8"/>
-            </g>
-            <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"><line x1="140" y1="108" x2="154" y2="108"/><line x1="278" y1="108" x2="292" y2="108"/><line x1="416" y1="108" x2="430" y2="108"/><path d="M554 108 C642 108 646 166 632 186" fill="none"/></g>
-            <g fill="#2563eb"><circle cx="80" cy="70" r="17"/><circle cx="218" cy="70" r="17"/><circle cx="356" cy="70" r="17"/><circle cx="494" cy="70" r="17"/><circle cx="632" cy="190" r="17"/></g>
-            <g fill="#fff" font-size="13" font-weight="800" text-anchor="middle"><text x="80" y="75">1</text><text x="218" y="75">2</text><text x="356" y="75">3</text><text x="494" y="75">4</text><text x="632" y="195">5</text></g>
-            <g fill="#111827" font-size="14" font-weight="700" text-anchor="middle"><text x="80" y="104">질문 정리</text><text x="218" y="104">분기 검색</text><text x="356" y="104">출처 지도</text><text x="494" y="104">정보 추출</text><text x="632" y="224">답변 작성</text></g>
-            <g fill="#6b7280" font-size="12" text-anchor="middle"><text x="80" y="126">범위 결정</text><text x="218" y="126">하위 질문</text><text x="356" y="126">원문 우선</text><text x="494" y="126">값과 날짜</text><text x="632" y="244">근거와 한계</text></g>
-          </svg>
-          <div class="legend"><span class="chip"><span class="sw"></span>필수 단계</span><span class="chip"><span class="sw" style="background:#6b7280"></span>검증 흐름</span></div>
-        </div>
-      </article>
-
-      <article class="panel wide">
-        <div class="head"><h2>에이전트 조사 루프</h2><p class="note">질문을 쪼개고, 출처를 추적하고, 근거를 점수화한 뒤 답합니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 960 360" role="img" aria-label="사용자 질문에서 query fan-out, source map, extraction, ledger, scored answer로 이어지는 agentic research workflow">
-            <defs><marker id="researchArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2">
-              <rect x="28" y="56" width="150" height="70" rx="8"/><rect x="220" y="56" width="150" height="70" rx="8"/><rect x="412" y="56" width="150" height="70" rx="8"/><rect x="604" y="56" width="150" height="70" rx="8"/><rect x="778" y="216" width="150" height="70" rx="8"/>
-              <rect x="220" y="216" width="150" height="70" rx="8"/><rect x="412" y="216" width="150" height="70" rx="8"/><rect x="604" y="216" width="150" height="70" rx="8"/>
-            </g>
-            <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#researchArrow)"><line x1="178" y1="91" x2="216" y2="91"/><line x1="370" y1="91" x2="408" y2="91"/><line x1="562" y1="91" x2="600" y2="91"/><path d="M754 91 C850 91 856 172 854 212" fill="none"/><line x1="295" y1="216" x2="295" y2="132"/><line x1="487" y1="216" x2="487" y2="132"/><line x1="679" y1="216" x2="679" y2="132"/></g>
-            <g fill="#2563eb"><circle cx="103" cy="56" r="17"/><circle cx="295" cy="56" r="17"/><circle cx="487" cy="56" r="17"/><circle cx="679" cy="56" r="17"/><circle cx="853" cy="216" r="17"/></g>
-            <g fill="#fff" font-size="13" font-weight="800" text-anchor="middle"><text x="103" y="61">1</text><text x="295" y="61">2</text><text x="487" y="61">3</text><text x="679" y="61">4</text><text x="853" y="221">5</text></g>
-            <g fill="#111827" font-size="14" font-weight="700" text-anchor="middle"><text x="103" y="88">질문 정리</text><text x="295" y="88">분기 검색</text><text x="487" y="88">출처 지도</text><text x="679" y="88">정보 추출</text><text x="853" y="248">답변 작성</text><text x="295" y="248">관련 용어</text><text x="487" y="248">출처 기록</text><text x="679" y="248">안전 경계</text></g>
-            <g fill="#6b7280" font-size="12" text-anchor="middle"><text x="103" y="109">조사 범위 결정</text><text x="295" y="109">3-7개 하위 질문</text><text x="487" y="109">원문 우선 확인</text><text x="679" y="109">날짜와 핵심값</text><text x="853" y="269">신뢰도와 한계</text><text x="295" y="269">별칭과 용어</text><text x="487" y="269">주장-출처 연결</text><text x="679" y="269">페이지 지시 무시</text></g>
-          </svg>
-          <div class="legend"><span class="chip"><span class="sw"></span>query fan-out</span><span class="chip"><span class="sw" style="background:#1f7a52"></span>source ledger</span><span class="chip"><span class="sw" style="background:#a16207"></span>safety boundary</span></div>
-        </div>
-      </article>
-
-      <article class="panel wide">
-        <div class="head"><h2>병렬 하위 에이전트 분기</h2><p class="note">검증 검색이나 깊은 조사에서는 실행 환경이 허용할 때 독립 검색 경로를 병렬로 나눕니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 960 330" role="img" aria-label="main agent가 질문 프레임과 최종 합성을 유지하고 subagent들이 독립 검색 lane을 병렬 조사하는 구조">
-            <defs><marker id="subArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
-            <rect x="38" y="116" width="160" height="78" rx="8" fill="#111827" stroke="#111827"/>
-            <text x="118" y="148" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">메인 에이전트</text>
-            <text x="118" y="171" text-anchor="middle" font-size="12" fill="#d1d5db">질문 틀 + 최종 합성</text>
-
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2">
-              <rect x="314" y="30" width="154" height="64" rx="8"/>
-              <rect x="314" y="104" width="154" height="64" rx="8"/>
-              <rect x="314" y="178" width="154" height="64" rx="8"/>
-              <rect x="314" y="252" width="154" height="64" rx="8"/>
-              <rect x="618" y="116" width="160" height="78" rx="8"/>
-            </g>
-            <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#subArrow)">
-              <path d="M198 154 C252 154 252 62 310 62" fill="none"/>
-              <path d="M198 154 C252 154 252 136 310 136" fill="none"/>
-              <path d="M198 154 C252 154 252 210 310 210" fill="none"/>
-              <path d="M198 154 C252 154 252 284 310 284" fill="none"/>
-              <path d="M468 62 C548 62 548 132 614 132" fill="none"/>
-              <path d="M468 136 H614" fill="none"/>
-              <path d="M468 210 C548 210 548 176 614 176" fill="none"/>
-              <path d="M468 284 C548 284 548 190 614 190" fill="none"/>
-            </g>
-            <g fill="#111827" font-size="13" font-weight="700" text-anchor="middle">
-              <text x="391" y="58">원문 조사</text>
-              <text x="391" y="132">시장 조사</text>
-              <text x="391" y="206">반례 확인</text>
-              <text x="391" y="280">값 추출</text>
-              <text x="698" y="148">출처 기록 병합</text>
-            </g>
-            <g fill="#6b7280" font-size="11" text-anchor="middle">
-              <text x="391" y="78">공식 / 표준</text>
-              <text x="391" y="152">목록 / 사용 현황</text>
-              <text x="391" y="226">위험 / 한계</text>
-              <text x="391" y="300">날짜 / 스펙 / 가격</text>
-              <text x="698" y="171">중복 제거 / 점수 / 인용</text>
-            </g>
-            <rect x="806" y="116" width="118" height="78" rx="8" fill="#e7f5ec" stroke="#1f7a52" stroke-width="2"/>
-            <text x="865" y="148" text-anchor="middle" font-size="13" font-weight="800" fill="#111827">최종 답변</text>
-            <text x="865" y="171" text-anchor="middle" font-size="11" fill="#4b5563">메인이 책임</text>
-            <line x1="778" y1="154" x2="802" y2="154" stroke="#1f7a52" stroke-width="2" marker-end="url(#subArrow)"/>
-          </svg>
-          <div class="rules">
-            <div class="rule"><strong>호출 자체가 병렬 요청</strong><p>web-research 또는 alias 활성화는 research portion에 대한 explicit parallel sub-agent fan-out, delegation, parallel agent work 요청으로 해석합니다.</p></div>
-            <div class="rule"><strong>조사 경로 독립 유지</strong><p>primary-source, market, counterexample, extraction처럼 서로 막지 않는 query lane만 위임합니다.</p></div>
-            <div class="rule"><strong>main agent가 병합</strong><p>최종 답변은 main agent가 출처 기록(source ledger)을 병합하고 충돌을 해소한 뒤 작성합니다.</p></div>
-            <div class="rule"><strong>단일 에이전트는 예외</strong><p>사용자가 단일 조사를 요구했거나 private data, runtime 제한, tiny official quick check일 때만 main agent가 직접 수행하고 skip reason을 남깁니다.</p></div>
-            <div class="rule"><strong>downstream artifact는 verified search</strong><p>PR, architecture note, skill update, product decision의 입력 조사는 한 official source로 끝나지 않으면 병렬 lane을 먼저 고려합니다.</p></div>
-          </div>
-        </div>
-      </article>
-
-      <article class="panel wide">
-        <div class="head"><h2>출처 우선순위 차트</h2><p class="note">검색 결과는 권위, 신선도, 직접성, 독립성으로 점수화합니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 960 330" role="img" aria-label="공식 문서, 표준, 저장소, 정부, 벤더 원문은 1순위이고 보조 매체와 블로그는 낮은 우선순위인 막대 차트">
-            <g stroke="#d1d5db" stroke-width="1"><line x1="220" y1="36" x2="220" y2="286"/><line x1="400" y1="36" x2="400" y2="286"/><line x1="580" y1="36" x2="580" y2="286"/><line x1="760" y1="36" x2="760" y2="286"/></g>
-            <g font-size="12" fill="#6b7280"><text x="20" y="68">공식 문서 / 표준</text><text x="20" y="118">소스 repo / 논문</text><text x="20" y="168">정부 / 벤더 원문</text><text x="20" y="218">신뢰 가능한 보조 출처</text><text x="20" y="268">SEO 글 / 출처 없음</text></g>
-            <g><rect x="220" y="48" width="650" height="24" rx="5" fill="#1f7a52"/><rect x="220" y="98" width="600" height="24" rx="5" fill="#1f7a52"/><rect x="220" y="148" width="560" height="24" rx="5" fill="#2563eb"/><rect x="220" y="198" width="360" height="24" rx="5" fill="#a16207"/><rect x="220" y="248" width="130" height="24" rx="5" fill="#b42318"/></g>
-            <g font-size="12" fill="#111827" font-weight="700"><text x="884" y="66">primary</text><text x="834" y="116">primary</text><text x="794" y="166">primary/context</text><text x="594" y="216">context</text><text x="364" y="266">avoid</text></g>
+    <section class="section">
+      <div class="section-head"><h2>실행 흐름</h2><p>읽기에서 검증까지의 기본 흐름입니다. 화살표는 실제 node에 닿도록 배치했습니다.</p></div>
+      <div class="two">
+        <div class="panel">
+          <svg viewBox="0 0 760 284" role="img" aria-label="web-research 실행 흐름">
+            <defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457c5"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="24" y="96" width="116" height="78" rx="8"></rect><rect x="174" y="96" width="116" height="78" rx="8"></rect><rect x="324" y="96" width="116" height="78" rx="8"></rect><rect x="474" y="96" width="116" height="78" rx="8"></rect><rect x="624" y="96" width="112" height="78" rx="8"></rect></g>
+            <g fill="none" stroke="#2457c5" stroke-width="2.4" marker-end="url(#flow-arrow)"><path d="M140 135 L174 135"></path><path d="M290 135 L324 135"></path><path d="M440 135 L474 135"></path><path d="M590 135 L624 135"></path></g>
+            <g text-anchor="middle" font-size="13" font-weight="700" fill="#151922"><text x="82" y="124">요청 읽기</text><text x="232" y="124">근거 확인</text><text x="382" y="124">경계 결정</text><text x="532" y="124">작업 수행</text><text x="680" y="124">검증</text></g>
+            <g text-anchor="middle" font-size="11" fill="#5f6876"><text x="82" y="145">사용자 의도</text><text x="82" y="159">현재 repo</text><text x="232" y="145">SKILL.md</text><text x="232" y="159">필요 문서</text><text x="382" y="145">허용 범위</text><text x="382" y="159">안전 조건</text><text x="532" y="145">최소 변경</text><text x="532" y="159">증거 남김</text><text x="680" y="145">validator</text><text x="680" y="159">보고</text></g>
           </svg>
         </div>
-      </article>
-
-      <article class="panel">
-        <div class="head"><h2>검증 강도 매트릭스</h2><p class="note">영향도가 클수록 독립 확인, 날짜, 한계 표시를 강화합니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 720 310" role="img" aria-label="법률 의료 금융 보안 구매 최신 뉴스는 강한 검증, 일반 개념은 낮은 검증이 필요한 heatmap">
-            <g font-size="12" fill="#6b7280"><text x="24" y="44">Legal / finance / safety</text><text x="24" y="88">Security / auth / infra</text><text x="24" y="132">Purchasing recommendation</text><text x="24" y="176">Current software docs</text><text x="24" y="220">News / schedule</text><text x="24" y="264">Stable concepts</text></g>
-            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="300" y="20">1 source</text><text x="420" y="20">2 sources</text><text x="540" y="20">Primary + date</text><text x="660" y="20">Disclose limits</text></g>
-            <g stroke="#fff" stroke-width="3"><rect x="248" y="28" width="104" height="30" fill="#fef3c7"/><rect x="368" y="28" width="104" height="30" fill="#fee4e2"/><rect x="488" y="28" width="104" height="30" fill="#fee4e2"/><rect x="608" y="28" width="84" height="30" fill="#fee4e2"/><rect x="248" y="72" width="104" height="30" fill="#eff6ff"/><rect x="368" y="72" width="104" height="30" fill="#fef3c7"/><rect x="488" y="72" width="104" height="30" fill="#fee4e2"/><rect x="608" y="72" width="84" height="30" fill="#fee4e2"/><rect x="248" y="116" width="104" height="30" fill="#eff6ff"/><rect x="368" y="116" width="104" height="30" fill="#fef3c7"/><rect x="488" y="116" width="104" height="30" fill="#fee4e2"/><rect x="608" y="116" width="84" height="30" fill="#fef3c7"/><rect x="248" y="160" width="104" height="30" fill="#eff6ff"/><rect x="368" y="160" width="104" height="30" fill="#fef3c7"/><rect x="488" y="160" width="104" height="30" fill="#fee4e2"/><rect x="608" y="160" width="84" height="30" fill="#fef3c7"/><rect x="248" y="204" width="104" height="30" fill="#eff6ff"/><rect x="368" y="204" width="104" height="30" fill="#fef3c7"/><rect x="488" y="204" width="104" height="30" fill="#fee4e2"/><rect x="608" y="204" width="84" height="30" fill="#fef3c7"/><rect x="248" y="248" width="104" height="30" fill="#e7f5ec"/><rect x="368" y="248" width="104" height="30" fill="#eff6ff"/><rect x="488" y="248" width="104" height="30" fill="#eff6ff"/><rect x="608" y="248" width="84" height="30" fill="#eff6ff"/></g>
-          </svg>
-          <div class="legend"><span class="chip"><span class="sw" style="background:#e7f5ec"></span>낮음</span><span class="chip"><span class="sw" style="background:#fef3c7"></span>주의</span><span class="chip"><span class="sw" style="background:#fee4e2"></span>강함</span></div>
+        <div class="steps">
+          <div class="step"><strong>1. research 작업 흐름 기준</strong><span>1. 질문의 현재성 위험과 stakes를 판단한다. 2. official/source-of-record를 먼저 찾는다. 3. web-research 또는 alias 호출 자체를 research portion에 대한 explicit parallel s...</span></div>
+          <div class="step"><strong>2. output defaults 기준</strong><span>- 한국어 사용자가 한국어로 물으면 한국어로 답한다. - 짧은 답을 선호하되 high-stakes나 recommendation은 근거를 충분히 둔다. - source link를 제공한다. - 최신 여부가 중요하면 absolute date를 쓴다.</span></div>
+          <div class="step"><strong>3. source rules 기준</strong><span>- technical question은 official docs, spec, paper 같은 primary source를 우선한다. - product recommendation은 최신 가격, availability, safety, review dri...</span></div>
+          <div class="step"><strong>4. failure modes 기준</strong><span>- 검색 결과 snippet만 믿기 - 오래된 문서를 최신으로 단정하기 - citation 없이 recommendation하기 - source conflict를 누락하기</span></div>
         </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="panel">
-        <div class="head"><h2>스킬 파일 관계도</h2><p class="note">사용자는 HTML을 먼저 보고, agent는 SKILL.md를 읽습니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 720 310" role="img" aria-label="web-research 스킬의 SKILL.md, skill.html, preferences, project snippet 파일 관계도">
-            <defs><marker id="mapArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#6b7280"/></marker></defs>
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2"><rect x="282" y="118" width="156" height="68" rx="8"/><rect x="34" y="42" width="170" height="60" rx="8"/><rect x="34" y="210" width="170" height="60" rx="8"/><rect x="518" y="42" width="170" height="60" rx="8"/><rect x="518" y="210" width="170" height="60" rx="8"/></g>
-            <g fill="none" stroke="#6b7280" stroke-width="2" marker-end="url(#mapArrow)"><line x1="204" y1="72" x2="278" y2="136"/><line x1="204" y1="240" x2="278" y2="168"/><line x1="438" y1="136" x2="514" y2="72"/><line x1="438" y1="168" x2="514" y2="240"/></g>
-            <g font-size="14" font-weight="700" fill="#111827" text-anchor="middle"><text x="360" y="148">web-research</text><text x="119" y="76">skill.html</text><text x="119" y="244">SKILL.md</text><text x="603" y="76">preferences</text><text x="603" y="244">연결 조각</text></g>
-            <g font-size="12" fill="#6b7280" text-anchor="middle"><text x="360" y="166">폴더</text><text x="119" y="90">사용자 가이드</text><text x="119" y="258">에이전트 가이드</text><text x="603" y="90">스타일 규칙</text><text x="603" y="258">프로젝트 설정</text></g>
+    <section class="section">
+      <div class="section-head"><h2>입출력 구조</h2><p>입력은 사용자의 요청과 repo 근거이고, 출력은 검증 가능한 답변 또는 파일 변경입니다.</p></div>
+      <div class="two">
+        <div class="schema" aria-label="입출력 구조">
+          <div class="schema-stack"><div class="schema-node"><strong>입력</strong><span>사용자 요청, <code>SKILL.md</code>, 관련 repo 파일, 필요한 참조 문서.</span></div><div class="schema-node"><strong>제약</strong><span>한국어 문장 우선, 전역 설치 금지, 관련 없는 파일 보존.</span></div></div>
+          <div class="schema-arrow" aria-hidden="true">→</div>
+          <div class="schema-stack"><div class="schema-node"><strong>출력</strong><span>실행 결과, 변경 파일, 검증 명령, 남은 위험을 짧게 정리합니다.</span></div><div class="schema-node"><strong>증거</strong><span>필요한 validator, 테스트, 브라우저 확인, 파일 경로를 함께 남깁니다.</span></div></div>
+        </div>
+        <div class="chart" aria-label="위험과 검증 차트">
+          <div class="bar"><strong>요청 적합도</strong><span class="track"><span class="fill green" style="width:94%"></span></span><span>먼저</span></div>
+          <div class="bar"><strong>근거 확인</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>범위 통제</strong><span class="track"><span class="fill" style="width:82%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>검증 강도</strong><span class="track"><span class="fill amber" style="width:74%"></span></span><span>위험별</span></div>
+          <div class="bar"><strong>전역 변경</strong><span class="track"><span class="fill red" style="width:58%"></span></span><span>차단</span></div>
+          <p class="small">HTML은 PC desktop 기준으로 확인합니다. mobile/tablet 레이아웃은 이 재생성 범위가 아닙니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>파일 관계도</h2><p>스킬 폴더 안의 원본, 사람용 가이드, 검증기, 참조 문서를 분리합니다.</p></div>
+      <div class="two">
+        <div class="resource">
+          <svg viewBox="0 0 620 310" role="img" aria-label="파일 관계도">
+            <defs><marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#8793a3"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="236" y="112" width="148" height="76" rx="8"></rect><rect x="34" y="42" width="150" height="64" rx="8"></rect><rect x="34" y="208" width="150" height="64" rx="8"></rect><rect x="436" y="42" width="150" height="64" rx="8"></rect><rect x="436" y="208" width="150" height="64" rx="8"></rect></g>
+            <g fill="none" stroke="#8793a3" stroke-width="2.2" marker-end="url(#map-arrow)"><path d="M184 74 L236 126"></path><path d="M184 240 L236 174"></path><path d="M384 126 L436 74"></path><path d="M384 174 L436 240"></path></g>
+            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">web-research</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
+            <g text-anchor="middle" font-size="10" fill="#5f6876"><text x="310" y="164">스킬 폴더</text><text x="109" y="88">원본 지시</text><text x="109" y="254">사람용 가이드</text><text x="511" y="88">세부 기준</text><text x="511" y="254">품질 확인</text></g>
           </svg>
           <div class="files">
-            <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트 흐름</span></a>
-            <a class="file" href="skill.html"><strong>skill.html</strong><span>사용자용 시각 가이드</span></a>
-            <a class="file" href="references/preferences.md"><strong>preferences.md</strong><span>답변 스타일</span></a>
-            <a class="file" href="references/structured-search.md"><strong>methods</strong><span>fan-out / ledger</span></a>
-            <a class="file" href="references/eval-prompts.md"><strong>evals</strong><span>회귀 검사용 prompt</span></a>
-            <a class="file" href="scripts/validate-web-research.ts"><strong>검증기</strong><span>정적 검사</span></a>
-            <a class="file" href="../../project-snippets/web-research.md"><strong>연결 조각</strong><span>프로젝트 연결</span></a>
+            <a class="resource-tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 지시문</span></a>
+            <a class="resource-tile" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 훑는 도표 가이드</span></a>
+            <a class="resource-tile" href="scripts/validate-web-research.ts"><strong>scripts/validate-web-research.ts</strong><span>스킬 전용 검증기</span></a>
+            <a class="resource-tile" href="../../project-snippets/web-research.md"><strong>../../project-snippets/web-research.md</strong><span>프로젝트 연결 조각</span></a>
+            <a class="resource-tile" href="references/eval-prompts.md"><strong>references/eval-prompts.md</strong><span>긴 기준과 세부 예시</span></a>
+            <a class="resource-tile" href="references/preferences.md"><strong>references/preferences.md</strong><span>긴 기준과 세부 예시</span></a>
           </div>
         </div>
-      </article>
-
-      <article class="panel">
-        <div class="head"><h2>답변 산출 구조</h2><p class="note">조사 결과는 긴 조사 로그가 아니라 판단 가능한 답변이어야 합니다.</p></div>
-        <div class="body">
-          <svg viewBox="0 0 720 250" role="img" aria-label="결론, 근거, 날짜, 링크, 한계를 포함한 답변 구조">
-            <g fill="#fff" stroke="#d1d5db" stroke-width="2"><rect x="34" y="46" width="130" height="58" rx="8"/><rect x="190" y="46" width="130" height="58" rx="8"/><rect x="346" y="46" width="130" height="58" rx="8"/><rect x="502" y="46" width="130" height="58" rx="8"/><rect x="190" y="150" width="286" height="58" rx="8"/></g>
-            <g fill="#2563eb" font-size="13" font-weight="800" text-anchor="middle"><text x="99" y="80">결론</text><text x="255" y="80">근거</text><text x="411" y="80">날짜</text><text x="567" y="80">링크</text><text x="333" y="184">한계 / 추론</text></g>
-            <g fill="none" stroke="#6b7280" stroke-width="2"><line x1="99" y1="104" x2="255" y2="150"/><line x1="255" y1="104" x2="300" y2="150"/><line x1="411" y1="104" x2="366" y2="150"/><line x1="567" y1="104" x2="411" y2="150"/></g>
-          </svg>
+        <div class="rules">
+          <div class="rule"><strong>한국어 문장 우선</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>정확한 파일명과 명령은 원문 유지</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>PC desktop 기준</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>외부 asset 없음</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
         </div>
-      </article>
+      </div>
+    </section>
 
-      <article class="panel wide">
-        <div class="head"><h2>프로젝트 연결 블록</h2><p class="note">필요한 프로젝트의 AGENTS.md에만 넣습니다.</p></div>
-        <div class="body"><div class="code">## Project Skills
+    <section class="section">
+      <div class="section-head"><h2>검증 표</h2><p>넓은 표는 전체 폭 section에 두어 2열 layout overflow를 피합니다.</p></div>
+      <div class="table" aria-label="검증 표">
+        <div class="table-cell table-head"><strong>검증 gate</strong></div><div class="table-cell table-head"><strong>명령 또는 대상</strong></div><div class="table-cell table-head"><strong>실패 신호</strong></div><div class="table-cell table-head"><strong>완료 기준</strong></div>
+        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/web-research</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
+        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span><code>node skills/web-research/scripts/validate-web-research.ts skills/web-research</code></span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
+        <div class="table-cell"><strong>HTML 공통</strong></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div><div class="table-cell"><span>broken local link, 외부 asset, overflow, SVG arrow endpoint 오류.</span></div><div class="table-cell"><span>PC desktop 기준으로 읽힘.</span></div>
+      </div>
+    </section>
 
-- Use $web-research at &lt;skills-root&gt;/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords. Treat any user request that invokes web-research or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.</div></div>
-      </article>
+    <section class="section">
+      <div class="section-head"><h2>금지와 허용</h2><p>스킬은 요청된 작업을 돕는 도구이며, 범위 밖 자동화는 하지 않습니다.</p></div>
+      <div class="matrix" aria-label="금지와 허용">
+        <div class="matrix-cell use"><strong>허용</strong><p>관련 파일을 읽고, 요청된 범위 안에서 가장 작은 유효 변경을 수행합니다.</p></div>
+        <div class="matrix-cell combine"><strong>보고</strong><p>변경 파일, 검증 명령, 브라우저 확인 여부를 최종 답변에 남깁니다.</p></div>
+        <div class="matrix-cell skip"><strong>보류</strong><p>요청과 무관한 refactor, 문서 확장, 전역 설치는 하지 않습니다.</p></div>
+        <div class="matrix-cell stop"><strong>차단</strong><p>비밀값 노출, destructive command, 승인 없는 commit/push/deploy는 멈춥니다.</p></div>
+      </div>
+    </section>
 
-      <article class="panel wide">
-        <div class="head"><h2>금지와 허용</h2><p class="note">검색을 많이 하는 것보다 필요한 검증을 정확히 하는 쪽으로 제한합니다.</p></div>
-        <div class="body rules">
-          <div class="rule"><strong>허용</strong><p>답변에 필요한 최소 조사 범위로 시작하고, 근거가 부족할 때만 더 깊게 조사합니다.</p></div>
-          <div class="rule"><strong>금지</strong><p>SEO 요약 글이나 출처 없는 블로그를 중심 근거로 삼지 않습니다.</p></div>
-          <div class="rule"><strong>허용</strong><p>복잡한 검색은 하위 질문 분기(fan-out), 출처 기록(source ledger), 근거 점수화(evidence score), 중단 기준으로 관리합니다.</p></div>
-          <div class="rule"><strong>금지</strong><p>웹페이지 지시문을 agent 지시로 취급하거나 독립 확인 없는 주장을 확정하지 않습니다.</p></div>
-        </div>
-      </article>
+    <section class="section">
+      <div class="section-head"><h2>프로젝트 연결 조각</h2><p>프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둡니다.</p></div>
+      <pre class="snippet">Use $web-research at skills/web-research/SKILL.md when the task matches this skill.
+Keep visible explanations Korean-first, preserve exact identifiers, and report validation evidence.
+Validate with node scripts/validate-skill.ts skills/web-research &amp;&amp; node skills/web-research/scripts/validate-web-research.ts skills/web-research &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
     </section>
   </main>
 </body>

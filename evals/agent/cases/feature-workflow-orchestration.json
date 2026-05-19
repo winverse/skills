@@ -1,11 +1,11 @@
 [
   {
-    "id": "spec-workflow-implementation-routing",
-    "title": "Existing spec implementation routes to spec-workflow",
+    "id": "feature-workflow-implementation-routing",
+    "title": "Existing feature implementation routes to feature-workflow",
     "prompt": "이 PRD의 첫 번째 이슈를 TDD로 구현하고 검증까지 해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [
       "project-workflow"
@@ -21,7 +21,7 @@
     "checks": [
       {
         "type": "skill_listed_in",
-        "skill": "spec-workflow",
+        "skill": "feature-workflow",
         "files": [
           "AGENTS.md",
           "project-snippets/base.md",
@@ -30,28 +30,28 @@
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/implementation-routing.md",
-        "value": "Skill: spec-workflow"
+        "file": "evals/agent/fixtures/feature-workflow/implementation-routing.md",
+        "value": "Skill: feature-workflow"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/implementation-routing.md",
+        "file": "evals/agent/fixtures/feature-workflow/implementation-routing.md",
         "value": "Project setup gate: already satisfied"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/implementation-routing.md",
+        "file": "evals/agent/fixtures/feature-workflow/implementation-routing.md",
         "value": "Run project-workflow first"
       }
     ]
   },
   {
-    "id": "spec-workflow-dependency-inventory",
-    "title": "Spec workflow records implementation primitive provenance",
+    "id": "feature-workflow-dependency-inventory",
+    "title": "Feature workflow records implementation primitive provenance",
     "prompt": "이 issue를 구현하기 전에 어떤 구현 스킬 primitive를 쓸지 정리해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [],
     "agentSurfaces": [
@@ -65,33 +65,33 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/dependency-inventory.md",
+        "file": "evals/agent/fixtures/feature-workflow/dependency-inventory.md",
         "value": "Superpowers plugin: selected | skipped | fallback"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/dependency-inventory.md",
+        "file": "evals/agent/fixtures/feature-workflow/dependency-inventory.md",
         "value": "`writing-plans`: implementation plan"
       },
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/upstream-dependency-map.md",
+        "file": "skills/feature-workflow/references/upstream-dependency-map.md",
         "value": "| Superpowers plugin | `tdd`"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/dependency-inventory.md",
+        "file": "evals/agent/fixtures/feature-workflow/dependency-inventory.md",
         "value": "Repo-local helpers: selected | skipped | fallback"
       }
     ]
   },
   {
-    "id": "spec-workflow-project-setup-missing",
-    "title": "Spec workflow hands raw project setup back to project-workflow",
+    "id": "feature-workflow-project-setup-missing",
+    "title": "Feature workflow hands raw project setup back to project-workflow",
     "prompt": "아직 PRD도 ADR도 없지만 바로 구현해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow",
+      "feature-workflow",
       "project-workflow"
     ],
     "forbiddenSkills": [],
@@ -106,28 +106,28 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/project-setup-missing.md",
+        "file": "evals/agent/fixtures/feature-workflow/project-setup-missing.md",
         "value": "Missing prior gate: project setup"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/project-setup-missing.md",
+        "file": "evals/agent/fixtures/feature-workflow/project-setup-missing.md",
         "value": "Hand off to project-workflow"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/project-setup-missing.md",
+        "file": "evals/agent/fixtures/feature-workflow/project-setup-missing.md",
         "value": "Start coding now"
       }
     ]
   },
   {
-    "id": "spec-workflow-tdd-evidence",
-    "title": "Spec workflow requires RED GREEN REFACTOR evidence",
+    "id": "feature-workflow-tdd-evidence",
+    "title": "Feature workflow requires RED GREEN REFACTOR evidence",
     "prompt": "이 버그를 고치고 회귀 테스트까지 남겨줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [],
     "agentSurfaces": [
@@ -141,28 +141,28 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/tdd-evidence.md",
+        "file": "evals/agent/fixtures/feature-workflow/tdd-evidence.md",
         "value": "RED:"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/tdd-evidence.md",
+        "file": "evals/agent/fixtures/feature-workflow/tdd-evidence.md",
         "value": "GREEN:"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/tdd-evidence.md",
+        "file": "evals/agent/fixtures/feature-workflow/tdd-evidence.md",
         "value": "REFACTOR:"
       }
     ]
   },
   {
-    "id": "spec-workflow-tdd-hook-docs-only",
-    "title": "Spec workflow documents target-project TDD hook without installing it in the skills repo",
-    "prompt": "spec-workflow에서 코드 작성시 TDD를 강제하고 싶어. 이 스킬 repo에서는 문서만 수정해줘.",
-    "scope": "spec-workflow",
+    "id": "feature-workflow-tdd-hook-docs-only",
+    "title": "Feature workflow documents target-project TDD hook without installing it in the skills repo",
+    "prompt": "feature-workflow에서 코드 작성시 TDD를 강제하고 싶어. 이 스킬 repo에서는 문서만 수정해줘.",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [],
     "agentSurfaces": [
@@ -176,38 +176,38 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
         "value": "이 shared skills repo에서는 TDD hook을 설치하거나 실행하지 않는다"
       },
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/SKILL.md",
+        "file": "skills/feature-workflow/SKILL.md",
         "value": "target code repo가 project-local TDD hook을 제공하면"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/tdd-hook-docs-only.md",
+        "file": "evals/agent/fixtures/feature-workflow/tdd-hook-docs-only.md",
         "value": "Document the target-project TDD hook contract only"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/tdd-hook-docs-only.md",
+        "file": "evals/agent/fixtures/feature-workflow/tdd-hook-docs-only.md",
         "value": "Do not create `.codex/hooks/enforce_spec_tdd.mjs` in this repo"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/tdd-hook-docs-only.md",
+        "file": "evals/agent/fixtures/feature-workflow/tdd-hook-docs-only.md",
         "value": "Created `.codex/hooks/enforce_spec_tdd.mjs` in this repo"
       }
     ]
   },
   {
-    "id": "spec-workflow-document-sync-artifact-hygiene",
-    "title": "Spec workflow completion keeps document sync and artifacts in the workflow area",
+    "id": "feature-workflow-document-sync-artifact-hygiene",
+    "title": "Feature workflow completion keeps document sync and artifacts in the workflow area",
     "prompt": "구현 끝났으니까 완료 처리하고 push까지 해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow",
+      "feature-workflow",
       "sync-docs"
     ],
     "forbiddenSkills": [],
@@ -222,28 +222,28 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/document-sync-artifact-hygiene.md",
+        "file": "evals/agent/fixtures/feature-workflow/document-sync-artifact-hygiene.md",
         "value": "Use document-sync before completion"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/document-sync-artifact-hygiene.md",
+        "file": "evals/agent/fixtures/feature-workflow/document-sync-artifact-hygiene.md",
         "value": ".scratch/<feature-slug>/artifacts/"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/document-sync-artifact-hygiene.md",
+        "file": "evals/agent/fixtures/feature-workflow/document-sync-artifact-hygiene.md",
         "value": "Put screenshots in repo root"
       }
     ]
   },
   {
-    "id": "spec-workflow-local-implementation-fallback",
-    "title": "Spec workflow uses a local implementation fallback when direct implementation skills are missing",
+    "id": "feature-workflow-local-implementation-fallback",
+    "title": "Feature workflow uses a local implementation fallback when direct implementation skills are missing",
     "prompt": "이 프로젝트에는 brainstorming이나 writing-plans 스킬이 없는데, 이 이슈는 구현까지 진행해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [],
     "agentSurfaces": [
@@ -257,33 +257,33 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
         "value": "local implementation fallback lane 기준"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/local-implementation-fallback.md",
+        "file": "evals/agent/fixtures/feature-workflow/local-implementation-fallback.md",
         "value": "Dependency status: Superpowers-style fallback"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/local-implementation-fallback.md",
+        "file": "evals/agent/fixtures/feature-workflow/local-implementation-fallback.md",
         "value": "issue-level implementation design"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/local-implementation-fallback.md",
+        "file": "evals/agent/fixtures/feature-workflow/local-implementation-fallback.md",
         "value": "non-browser runtime evidence"
       }
     ]
   },
   {
-    "id": "spec-workflow-cli-no-browser-evidence",
+    "id": "feature-workflow-cli-no-browser-evidence",
     "title": "CLI and no-browser specs use runtime evidence instead of browser QA",
     "prompt": "이 CLI issue를 구현하고 테스트와 런타임 증거까지 남겨줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [
       "browser-qa"
@@ -299,28 +299,28 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
         "value": "CLI/no-browser"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/cli-no-browser-evidence.md",
+        "file": "evals/agent/fixtures/feature-workflow/cli-no-browser-evidence.md",
         "value": "Do not require browser-qa, screenshots, or mockup selection without a browser surface"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/cli-no-browser-evidence.md",
+        "file": "evals/agent/fixtures/feature-workflow/cli-no-browser-evidence.md",
         "value": "non-browser runtime evidence"
       }
     ]
   },
   {
-    "id": "spec-workflow-completion-ship-local-skill-mapping",
+    "id": "feature-workflow-completion-ship-local-skill-mapping",
     "title": "Spec completion maps source workflow names to repo-local skills and separates release prep",
     "prompt": "구현은 된 것 같아. 이제 검토하고 문서 맞추고 커밋/푸시/릴리즈 준비해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow",
+      "feature-workflow",
       "code-review",
       "sync-docs",
       "atomic-committer"
@@ -337,28 +337,28 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
         "value": "completion/ship 기준"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/completion-ship-local-skill-mapping.md",
+        "file": "evals/agent/fixtures/feature-workflow/completion-ship-local-skill-mapping.md",
         "value": "review -> code-review"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/completion-ship-local-skill-mapping.md",
+        "file": "evals/agent/fixtures/feature-workflow/completion-ship-local-skill-mapping.md",
         "value": "Release prep is not release publishing"
       }
     ]
   },
   {
-    "id": "spec-workflow-state-cache",
-    "title": "Spec workflow reads and updates workflow-state without rerunning setup discovery",
+    "id": "feature-workflow-state-cache",
+    "title": "Feature workflow reads and updates workflow-state without rerunning setup discovery",
     "prompt": "이미 workflow-state.md가 있으니 이걸 읽고 이번 issue 구현에 필요한 evidence만 갱신해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [
       "project-workflow"
@@ -374,33 +374,33 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/SKILL.md",
+        "file": "skills/feature-workflow/SKILL.md",
         "value": "workflow-state.md"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/workflow-state-cache.md",
+        "file": "evals/agent/fixtures/feature-workflow/workflow-state-cache.md",
         "value": "Read `.scratch/new-product/workflow-state.md` before planning"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/workflow-state-cache.md",
+        "file": "evals/agent/fixtures/feature-workflow/workflow-state-cache.md",
         "value": "Append only new evidence and decisions to workflow-state.md"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/workflow-state-cache.md",
+        "file": "evals/agent/fixtures/feature-workflow/workflow-state-cache.md",
         "value": "Run office-hours again before planning"
       }
     ]
   },
   {
-    "id": "spec-workflow-improvement-seed",
-    "title": "Spec workflow leaves an eval seed only when a gate miss was observed",
+    "id": "feature-workflow-improvement-seed",
+    "title": "Feature workflow leaves an eval seed only when a gate miss was observed",
     "prompt": "이번 구현에서 문서 동기화 누락을 나중에 재발 방지할 수 있게 기록해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow",
+      "feature-workflow",
       "agent-eval-harness"
     ],
     "forbiddenSkills": [],
@@ -415,33 +415,33 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
         "value": "improvement seed 기준"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/improvement-seed.md",
+        "file": "evals/agent/fixtures/feature-workflow/improvement-seed.md",
         "value": "Candidate skill: agent-eval-harness"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/improvement-seed.md",
+        "file": "evals/agent/fixtures/feature-workflow/improvement-seed.md",
         "value": "Missing gate: document sync before completion"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/improvement-seed.md",
+        "file": "evals/agent/fixtures/feature-workflow/improvement-seed.md",
         "value": "Always run a heavy improvement loop"
       }
     ]
   },
   {
-    "id": "spec-workflow-work-claim-overlap-block",
-    "title": "Spec workflow blocks production edits when a claimed write set overlaps another active lane",
+    "id": "feature-workflow-work-claim-overlap-block",
+    "title": "Feature workflow blocks production edits when a claimed write set overlaps another active lane",
     "prompt": "내 lane은 checkout UI인데 a.ts도 조금 고쳐야 해. 그런데 work-claims.md에는 다른 세션이 a.ts를 active로 잡고 있어. 그래도 바로 수정해줘.",
-    "scope": "spec-workflow",
+    "scope": "feature-workflow",
     "expectedSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "forbiddenSkills": [],
     "agentSurfaces": [
@@ -455,33 +455,78 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/SKILL.md",
+        "file": "skills/feature-workflow/SKILL.md",
         "value": "overlap block"
       },
       {
         "type": "required_text",
-        "file": "skills/spec-workflow/references/spec-workflow-playbook.md",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
         "value": "work claim preflight 기준"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "file": "evals/agent/fixtures/feature-workflow/work-claim-overlap-block.md",
         "value": "Read `.scratch/new-product/work-claims.md` before production edits"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "file": "evals/agent/fixtures/feature-workflow/work-claim-overlap-block.md",
         "value": "Overlap block: `src/a.ts` is owned by active lane `lane-auth-session`"
       },
       {
         "type": "required_text",
-        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "file": "evals/agent/fixtures/feature-workflow/work-claim-overlap-block.md",
         "value": "Do not edit `src/a.ts` in this lane"
       },
       {
         "type": "forbidden_text",
-        "file": "evals/agent/fixtures/spec-workflow/work-claim-overlap-block.md",
+        "file": "evals/agent/fixtures/feature-workflow/work-claim-overlap-block.md",
         "value": "Edit src/a.ts anyway"
+      }
+    ]
+  },
+  {
+    "id": "feature-workflow-typescript-esm-implementation",
+    "title": "Feature workflow blocks CommonJS during TypeScript implementation",
+    "prompt": "이 TypeScript issue를 구현해줘. 테스트 편하게 require를 하나 추가해도 돼.",
+    "scope": "feature-workflow",
+    "expectedSkills": [
+      "feature-workflow"
+    ],
+    "forbiddenSkills": [],
+    "agentSurfaces": [
+      "codex",
+      "claude-code"
+    ],
+    "assumptionDate": "2026-05-18",
+    "exampleType": "adversarial",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/feature-workflow/SKILL.md",
+        "value": "ESM only"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/feature-workflow/references/feature-workflow-playbook.md",
+        "value": "TypeScript module policy preflight 기준"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/feature-workflow/typescript-esm-implementation.md",
+        "value": "TypeScript Module Preflight"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/feature-workflow/typescript-esm-implementation.md",
+        "value": "Do not add require, module.exports, .cjs, or .cts"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/feature-workflow/typescript-esm-implementation.md",
+        "value": "Add require for convenience"
       }
     ]
   }

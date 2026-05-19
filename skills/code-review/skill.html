@@ -2,602 +2,178 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>code-review skill guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>code-review 시각 가이드</title>
+  <link rel="icon" href="data:,">
   <style>
-    :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-muted: #f1f5f9;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #d1d5db;
-      --border-strong: #9ca3af;
-      --accent: #2563eb;
-      --focus: #1d4ed8;
-      --ok: #1f7a52;
-      --warn: #a16207;
-      --danger: #b42318;
-      --code: #0f172a;
-    }
-
-    html,
-    body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 14px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      letter-spacing: 0;
-    }
-
-    * { box-sizing: border-box; }
-
-    .shell {
-      width: 100%;
-      max-width: 1192px;
-      margin: 0 auto;
-      padding: 32px;
-    }
-
-    header,
-    section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-
-    header {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 326px;
-      gap: 18px;
-      align-items: start;
-    }
-
-    h1,
-    h2,
-    h3,
-    p { margin-top: 0; }
-
-    h1 {
-      margin-bottom: 8px;
-      font-size: 28px;
-      line-height: 1.2;
-      letter-spacing: 0;
-    }
-
-    h2 {
-      margin-bottom: 14px;
-      font-size: 18px;
-      line-height: 1.3;
-      letter-spacing: 0;
-    }
-
-    h3 {
-      margin-bottom: 6px;
-      font-size: 15px;
-      line-height: 1.35;
-      letter-spacing: 0;
-    }
-
-    p { color: var(--muted); }
-
-    a {
-      color: var(--focus);
-      overflow-wrap: anywhere;
-    }
-
-    code,
-    pre {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      overflow-wrap: anywhere;
-    }
-
-    pre,
-    .tree {
-      margin: 0;
-      padding: 14px;
-      color: #e5e7eb;
-      background: var(--code);
-      border-radius: 8px;
-      overflow-x: auto;
-      white-space: pre;
-    }
-
-    .file-pair {
-      display: grid;
-      gap: 8px;
-      padding: 14px;
-      background: var(--surface-muted);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-
-    .file-pair div {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      min-width: 0;
-    }
-
-    .file-pair strong { color: var(--text); }
-    .file-pair span { color: var(--muted); }
-
-    .meta-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 3px 10px;
-      border: 1px solid var(--border-strong);
-      border-radius: 999px;
-      background: var(--surface);
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .matrix {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .cell,
-    .lane,
-    .schema-box,
-    .rule {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-      padding: 14px;
-      min-width: 0;
-    }
-
-    .tag {
-      display: inline-block;
-      margin-bottom: 8px;
-      padding: 2px 8px;
-      border: 1px solid currentColor;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .ok { color: var(--ok); }
-    .warn { color: var(--warn); }
-    .danger { color: var(--danger); }
-    .accent { color: var(--accent); }
-
-    .flow {
-      width: 100%;
-      height: 248px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-muted);
-      display: block;
-    }
-
-    .legend {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .swatch {
-      width: 14px;
-      height: 10px;
-      border: 1px solid var(--border-strong);
-      border-radius: 2px;
-      background: var(--surface);
-    }
-
-    .swatch.accent-fill { background: #dbeafe; border-color: var(--accent); }
-    .swatch.warn-fill { background: #fef3c7; border-color: var(--warn); }
-    .swatch.danger-fill { background: #fee2e2; border-color: var(--danger); }
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 12px;
-    }
-
-    .grid3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .schema {
-      display: grid;
-      grid-template-columns: 1fr 42px 1fr 42px 1fr;
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .arrow-label {
-      display: grid;
-      place-items: center;
-      color: var(--accent);
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    ul {
-      margin: 8px 0 0;
-      padding-left: 18px;
-      color: var(--muted);
-    }
-
-    li + li { margin-top: 4px; }
-
-    .bars {
-      display: grid;
-      gap: 10px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 190px minmax(0, 1fr) 84px;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .bar-label {
-      font-weight: 700;
-      overflow-wrap: anywhere;
-    }
-
-    .bar-track {
-      height: 18px;
-      background: var(--surface-muted);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: #dbeafe;
-      border-right: 1px solid var(--accent);
-    }
-
-    .bar-fill.warn {
-      background: #fef3c7;
-      border-right-color: var(--warn);
-    }
-
-    .bar-fill.danger {
-      background: #fee2e2;
-      border-right-color: var(--danger);
-    }
-
-    .bar-note {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .resource-map {
-      width: 100%;
-      height: 286px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-muted);
-      display: block;
-    }
-
-    .rules {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 12px;
-    }
-
-    .rule {
-      border-left: 4px solid var(--border-strong);
-    }
-
-    .rule.allow { border-left-color: var(--ok); }
-    .rule.block { border-left-color: var(--danger); }
-
-    .snippet-label {
-      margin-bottom: 8px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
+    :root { --bg:#f6f7f9; --surface:#ffffff; --soft:#eef2f6; --text:#151922; --muted:#5f6876; --border:#cfd6df; --line:#8793a3; --blue:#2457c5; --green:#24724f; --amber:#93640d; --red:#aa2e25; --code:#111827; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; margin:0; background:var(--bg); color:var(--text); font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; line-height:1.55; }
+    body { padding:28px 0 52px; }
+    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
+    a { color:inherit; text-decoration:none; }
+    h1, h2, h3, p { margin:0; }
+    h1 { font-size:30px; line-height:1.18; }
+    h2 { font-size:18px; line-height:1.3; }
+    h3 { font-size:14px; line-height:1.35; }
+    .shell { width:100%; max-width:1180px; margin:0 auto; padding:0 28px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:16px; align-items:stretch; margin-bottom:24px; }
+    .identity, .quick, .matrix, .panel, .schema, .chart, .resource, .table, .rule, .snippet, .catalog-section { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .identity { min-height:154px; padding:20px; display:grid; grid-template-columns:68px minmax(0,1fr); gap:16px; align-items:center; }
+    .mark { width:68px; height:68px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:17px; font-weight:800; }
+    .subtitle { max-width:780px; margin-top:7px; color:var(--muted); font-size:14px; }
+    .quick { padding:16px; display:grid; gap:10px; align-content:center; }
+    .quick strong, .matrix-cell strong, .step strong, .schema-node strong, .resource-tile strong, .table-cell strong, .rule strong, .catalog-item strong { display:block; margin-bottom:5px; font-size:13px; }
+    .quick span, .matrix-cell p, .step span, .schema-node span, .resource-tile span, .table-cell span, .rule p, .catalog-item span { color:var(--muted); font-size:13px; }
+    .section { margin-top:22px; }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:baseline; margin-bottom:10px; }
+    .section-head p, .small { color:var(--muted); font-size:13px; }
+    .matrix { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; }
+    .matrix-cell { min-height:148px; padding:14px; border-right:1px solid var(--border); border-top:4px solid var(--line); }
+    .matrix-cell:last-child { border-right:0; }
+    .matrix-cell.use { border-top-color:var(--green); } .matrix-cell.combine { border-top-color:var(--blue); } .matrix-cell.skip { border-top-color:var(--amber); } .matrix-cell.stop { border-top-color:var(--red); }
+    .two { display:grid; grid-template-columns:minmax(0,1.14fr) minmax(300px,.86fr); gap:16px; align-items:stretch; }
+    .panel, .resource { padding:16px; overflow:hidden; }
+    svg { display:block; width:100%; height:auto; }
+    .steps, .rules { display:grid; gap:10px; }
+    .step, .rule { padding:12px 14px; }
+    .schema { display:grid; grid-template-columns:1fr 56px 1fr; gap:12px; padding:16px; align-items:center; }
+    .schema-stack { display:grid; gap:10px; }
+    .schema-node { min-height:82px; border:1px solid var(--border); border-radius:8px; padding:12px; background:#fbfcfe; }
+    .schema-arrow { display:grid; place-items:center; min-height:184px; color:var(--blue); font-size:22px; font-weight:800; }
+    .chart { display:grid; gap:10px; padding:16px; }
+    .bar { display:grid; grid-template-columns:170px minmax(0,1fr) 78px; gap:10px; align-items:center; font-size:13px; }
+    .track { height:14px; border:1px solid var(--border); border-radius:4px; background:var(--soft); overflow:hidden; }
+    .fill { display:block; height:100%; background:var(--blue); } .fill.green{background:var(--green);} .fill.amber{background:var(--amber);} .fill.red{background:var(--red);}
+    .files, .catalog-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .resource-tile, .catalog-item { min-height:78px; border:1px solid var(--border); border-radius:8px; background:#fbfcfe; padding:10px; }
+    .table { display:grid; grid-template-columns:172px repeat(3,minmax(0,1fr)); overflow:hidden; }
+    .table-cell { min-height:84px; padding:12px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .table-cell:nth-child(4n) { border-right:0; } .table-cell:nth-last-child(-n+4) { border-bottom:0; } .table-head { background:var(--soft); }
+    .snippet { margin:0; padding:14px; background:var(--code); color:#f8fafc; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
 <body>
   <main class="shell">
-    <header>
-      <div>
-        <h1>code-review</h1>
-        <p>리뷰 요청을 받았을 때 구현을 고치기보다 버그, 회귀, 누락 테스트, 책임 경계, JS/TS 스타일 위험을 findings-first 형식으로 드러내는 스킬.</p>
-        <div class="meta-row" aria-label="핵심 범위">
-          <span class="pill">review 전용</span>
-          <span class="pill">file:line 근거</span>
-          <span class="pill">SRP / SOLID</span>
-          <span class="pill">JavaScript / TypeScript</span>
+    <header class="hero">
+      <div class="identity">
+        <div class="mark">COD</div>
+        <div>
+          <h1>code-review</h1>
+          <p class="subtitle">code review, PR review, diff review, implementation audit, regression risk, missing test, maintainability, JS/TS style, agent/tool-call boundary를 findings-first로 검토할 때 사용한다.</p>
         </div>
       </div>
-      <div class="file-pair" aria-label="파일 쌍">
-        <div><strong>에이전트 지침</strong><a href="SKILL.md">SKILL.md</a></div>
-        <div><strong>사용자 가이드</strong><a href="skill.html">skill.html</a></div>
-        <div><strong>현재 역할</strong><span>stale guide 갱신</span></div>
-      </div>
+      <aside class="quick" aria-label="스킬 파일 쌍">
+        <div><strong>에이전트 원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
+        <div><strong>사람용 가이드</strong><span><a href="skill.html"><code>skill.html</code></a></span></div>
+        <div><strong>언어 기준</strong><span>화면 설명은 한국어 문장 우선이며, 정확한 식별자만 원문으로 둡니다.</span></div>
+      </aside>
     </header>
 
-    <section aria-labelledby="decision-title">
-      <h2 id="decision-title">사용 판단</h2>
-      <div class="matrix">
-        <div class="cell">
-          <span class="tag ok">사용</span>
-          <h3>리뷰, PR, diff</h3>
-          <p>코드가 이미 있고 사용자가 review, audit, regression risk, missing tests 검토를 원할 때.</p>
+    <section class="section">
+      <div class="section-head"><h2>사용 판단 매트릭스</h2><p>언제 쓰고, 언제 다른 스킬로 넘길지 먼저 판단합니다.</p></div>
+      <div class="matrix" aria-label="사용 판단 매트릭스">
+        <div class="matrix-cell use"><strong>사용</strong><p>code review, PR review, diff review, implementation audit, regression risk, missing test, maintainability, JS/TS style, agent/tool-call boundary를 findings-first로 검토할 때 사용한다.</p></div>
+        <div class="matrix-cell combine"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>처럼 전담 스킬과 연결합니다.</p></div>
+        <div class="matrix-cell skip"><strong>건너뜀</strong><p>요청이 이 스킬의 호출 조건과 맞지 않거나 더 구체적인 스킬이 있으면 그 스킬을 우선합니다.</p></div>
+        <div class="matrix-cell stop"><strong>확인</strong><p>비밀값, 파괴적 작업, 외부 쓰기, 전역 설치가 얽히면 먼저 범위와 승인 조건을 확인합니다.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>실행 흐름</h2><p>읽기에서 검증까지의 기본 흐름입니다. 화살표는 실제 node에 닿도록 배치했습니다.</p></div>
+      <div class="two">
+        <div class="panel">
+          <svg viewBox="0 0 760 284" role="img" aria-label="code-review 실행 흐름">
+            <defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457c5"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="24" y="96" width="116" height="78" rx="8"></rect><rect x="174" y="96" width="116" height="78" rx="8"></rect><rect x="324" y="96" width="116" height="78" rx="8"></rect><rect x="474" y="96" width="116" height="78" rx="8"></rect><rect x="624" y="96" width="112" height="78" rx="8"></rect></g>
+            <g fill="none" stroke="#2457c5" stroke-width="2.4" marker-end="url(#flow-arrow)"><path d="M140 135 L174 135"></path><path d="M290 135 L324 135"></path><path d="M440 135 L474 135"></path><path d="M590 135 L624 135"></path></g>
+            <g text-anchor="middle" font-size="13" font-weight="700" fill="#151922"><text x="82" y="124">요청 읽기</text><text x="232" y="124">근거 확인</text><text x="382" y="124">경계 결정</text><text x="532" y="124">작업 수행</text><text x="680" y="124">검증</text></g>
+            <g text-anchor="middle" font-size="11" fill="#5f6876"><text x="82" y="145">사용자 의도</text><text x="82" y="159">현재 repo</text><text x="232" y="145">SKILL.md</text><text x="232" y="159">필요 문서</text><text x="382" y="145">허용 범위</text><text x="382" y="159">안전 조건</text><text x="532" y="145">최소 변경</text><text x="532" y="159">증거 남김</text><text x="680" y="145">validator</text><text x="680" y="159">보고</text></g>
+          </svg>
         </div>
-        <div class="cell">
-          <span class="tag accent">집중</span>
-          <h3>findings 우선</h3>
-          <p>요약보다 correctness, 보안, 데이터 손실, 사용자-visible 회귀를 먼저 판단한다.</p>
-        </div>
-        <div class="cell">
-          <span class="tag warn">결합</span>
-          <h3>증거가 더 필요</h3>
-          <p>브라우저 런타임은 browser-qa, UI 비평은 design-review 같은 별도 검증과 함께 쓴다.</p>
-        </div>
-        <div class="cell">
-          <span class="tag danger">건너뜀</span>
-          <h3>구현 요청</h3>
-          <p>사용자가 fix를 명시하지 않았다면 리뷰 중 파일을 수정하지 않는다.</p>
+        <div class="steps">
+          <div class="step"><strong>1. review stance 기준</strong><span>- bug, behavioral regression, missing test, security risk를 우선한다. - 추측은 추측이라고 표시한다. - 문제가 없으면 그렇게 말하고 residual risk나 test gap만 남긴다. - 단순 취향...</span></div>
+          <div class="step"><strong>2. 확인할 것</strong><span>- 입력 검증, error path, async race, state mismatch - SRP/SOLID boundary와 over-coupling - JS/TS에서 type soundness, nullable handling, collection...</span></div>
+          <div class="step"><strong>3. output shape 기준</strong><span>```text Findings - [severity] path:line - 문제와 영향</span></div>
+          <div class="step"><strong>4. 하지 말 것</strong><span>- findings 전에 긴 요약을 쓰지 않는다. - file/line 없는 일반론만 말하지 않는다. - unrelated refactor를 리뷰 요구로 둔갑시키지 않는다.</span></div>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="flow-title">
-      <h2 id="flow-title">리뷰 흐름: 위험을 찾고 근거를 붙인 뒤 짧게 끝낸다</h2>
-      <svg class="flow" viewBox="0 0 1128 248" role="img" aria-label="code-review 실행 흐름">
-        <defs>
-          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#2563eb"></path>
-          </marker>
-        </defs>
-        <rect x="24" y="72" width="146" height="82" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-        <text x="97" y="101" text-anchor="middle" font-size="14" font-weight="700">1. 범위 읽기</text>
-        <text x="97" y="124" text-anchor="middle" font-size="12" fill="#6b7280">diff / PR / 요구사항</text>
-
-        <line x1="170" y1="113" x2="226" y2="113" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="230" y="72" width="158" height="82" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
-        <text x="309" y="101" text-anchor="middle" font-size="14" font-weight="700">2. 동작 검토</text>
-        <text x="309" y="124" text-anchor="middle" font-size="12" fill="#374151">edge / async / cache</text>
-
-        <line x1="388" y1="113" x2="444" y2="113" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="448" y="72" width="156" height="82" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-        <text x="526" y="101" text-anchor="middle" font-size="14" font-weight="700">3. 경계 점검</text>
-        <text x="526" y="124" text-anchor="middle" font-size="12" fill="#6b7280">SRP / dependency</text>
-
-        <line x1="604" y1="113" x2="660" y2="113" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="664" y="72" width="158" height="82" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
-        <text x="743" y="101" text-anchor="middle" font-size="14" font-weight="700">4. 테스트 판단</text>
-        <text x="743" y="124" text-anchor="middle" font-size="12" fill="#374151">missing regression net</text>
-
-        <line x1="822" y1="113" x2="878" y2="113" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"></line>
-        <rect x="882" y="72" width="222" height="82" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-        <text x="993" y="101" text-anchor="middle" font-size="14" font-weight="700">5. findings 작성</text>
-        <text x="993" y="124" text-anchor="middle" font-size="12" fill="#6b7280">Severity + file:line + fix direction</text>
-
-        <path d="M309 164 C309 208, 993 208, 993 164" fill="none" stroke="#b42318" stroke-width="2" stroke-dasharray="6 5"></path>
-        <text x="650" y="218" text-anchor="middle" font-size="12" fill="#b42318">중대한 버그나 보안 위험은 나머지 스타일 논점보다 먼저 올린다</text>
-      </svg>
-      <div class="legend">
-        <span><i class="swatch accent-fill"></i>핵심 동작 검토</span>
-        <span><i class="swatch warn-fill"></i>테스트 누락 판단</span>
-        <span><i class="swatch danger-fill"></i>심각 위험 우선 경로</span>
-      </div>
-    </section>
-
-    <section aria-labelledby="schema-title">
-      <h2 id="schema-title">입출력 스키마</h2>
-      <div class="schema">
-        <div class="schema-box">
-          <h3>사용자 입력</h3>
-          <ul>
-            <li>PR, diff, 파일 경로, 구현 설명</li>
-            <li>요구 동작과 검증 결과</li>
-            <li>리뷰 범위 또는 우선순위</li>
-          </ul>
+    <section class="section">
+      <div class="section-head"><h2>입출력 구조</h2><p>입력은 사용자의 요청과 repo 근거이고, 출력은 검증 가능한 답변 또는 파일 변경입니다.</p></div>
+      <div class="two">
+        <div class="schema" aria-label="입출력 구조">
+          <div class="schema-stack"><div class="schema-node"><strong>입력</strong><span>사용자 요청, <code>SKILL.md</code>, 관련 repo 파일, 필요한 참조 문서.</span></div><div class="schema-node"><strong>제약</strong><span>한국어 문장 우선, 전역 설치 금지, 관련 없는 파일 보존.</span></div></div>
+          <div class="schema-arrow" aria-hidden="true">→</div>
+          <div class="schema-stack"><div class="schema-node"><strong>출력</strong><span>실행 결과, 변경 파일, 검증 명령, 남은 위험을 짧게 정리합니다.</span></div><div class="schema-node"><strong>증거</strong><span>필요한 validator, 테스트, 브라우저 확인, 파일 경로를 함께 남깁니다.</span></div></div>
         </div>
-        <div class="arrow-label" aria-hidden="true">→</div>
-        <div class="schema-box">
-          <h3>읽는 근거</h3>
-          <ul>
-            <li><code>SKILL.md</code> 리뷰 stance</li>
-            <li><code>review-checklist.md</code></li>
-            <li><code>js-ts-style.md</code></li>
-          </ul>
-        </div>
-        <div class="arrow-label" aria-hidden="true">→</div>
-        <div class="schema-box">
-          <h3>응답 출력</h3>
-          <ul>
-            <li>Findings가 맨 앞</li>
-            <li><code>[Severity] file:line</code></li>
-            <li>Open Questions, Summary, Tests</li>
-          </ul>
+        <div class="chart" aria-label="위험과 검증 차트">
+          <div class="bar"><strong>요청 적합도</strong><span class="track"><span class="fill green" style="width:94%"></span></span><span>먼저</span></div>
+          <div class="bar"><strong>근거 확인</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>범위 통제</strong><span class="track"><span class="fill" style="width:82%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>검증 강도</strong><span class="track"><span class="fill amber" style="width:74%"></span></span><span>위험별</span></div>
+          <div class="bar"><strong>전역 변경</strong><span class="track"><span class="fill red" style="width:58%"></span></span><span>차단</span></div>
+          <p class="small">HTML은 PC desktop 기준으로 확인합니다. mobile/tablet 레이아웃은 이 재생성 범위가 아닙니다.</p>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="priority-title">
-      <h2 id="priority-title">검토 우선순위: 스타일보다 동작과 손실 위험이 먼저다</h2>
-      <div class="bars" aria-label="리뷰 우선순위 막대">
-        <div class="bar-row">
-          <div class="bar-label">정확성 / 회귀</div>
-          <div class="bar-track"><div class="bar-fill danger" style="width: 100%;"></div></div>
-          <div class="bar-note">Blocker/High</div>
+    <section class="section">
+      <div class="section-head"><h2>파일 관계도</h2><p>스킬 폴더 안의 원본, 사람용 가이드, 검증기, 참조 문서를 분리합니다.</p></div>
+      <div class="two">
+        <div class="resource">
+          <svg viewBox="0 0 620 310" role="img" aria-label="파일 관계도">
+            <defs><marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#8793a3"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="236" y="112" width="148" height="76" rx="8"></rect><rect x="34" y="42" width="150" height="64" rx="8"></rect><rect x="34" y="208" width="150" height="64" rx="8"></rect><rect x="436" y="42" width="150" height="64" rx="8"></rect><rect x="436" y="208" width="150" height="64" rx="8"></rect></g>
+            <g fill="none" stroke="#8793a3" stroke-width="2.2" marker-end="url(#map-arrow)"><path d="M184 74 L236 126"></path><path d="M184 240 L236 174"></path><path d="M384 126 L436 74"></path><path d="M384 174 L436 240"></path></g>
+            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">code-review</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
+            <g text-anchor="middle" font-size="10" fill="#5f6876"><text x="310" y="164">스킬 폴더</text><text x="109" y="88">원본 지시</text><text x="109" y="254">사람용 가이드</text><text x="511" y="88">세부 기준</text><text x="511" y="254">품질 확인</text></g>
+          </svg>
+          <div class="files">
+            <a class="resource-tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 지시문</span></a>
+            <a class="resource-tile" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 훑는 도표 가이드</span></a>
+            <a class="resource-tile" href="scripts/validate-code-review.ts"><strong>scripts/validate-code-review.ts</strong><span>스킬 전용 검증기</span></a>
+            <a class="resource-tile" href="../../project-snippets/code-review.md"><strong>../../project-snippets/code-review.md</strong><span>프로젝트 연결 조각</span></a>
+            <a class="resource-tile" href="references/js-ts-style.md"><strong>references/js-ts-style.md</strong><span>긴 기준과 세부 예시</span></a>
+            <a class="resource-tile" href="references/review-checklist.md"><strong>references/review-checklist.md</strong><span>긴 기준과 세부 예시</span></a>
+          </div>
         </div>
-        <div class="bar-row">
-          <div class="bar-label">보안 / 운영 실패</div>
-          <div class="bar-track"><div class="bar-fill danger" style="width: 92%;"></div></div>
-          <div class="bar-note">High</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">테스트 누락</div>
-          <div class="bar-track"><div class="bar-fill warn" style="width: 78%;"></div></div>
-          <div class="bar-note">Medium+</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">책임 경계 / SOLID</div>
-          <div class="bar-track"><div class="bar-fill" style="width: 66%;"></div></div>
-          <div class="bar-note">Medium</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">JS/TS style</div>
-          <div class="bar-track"><div class="bar-fill" style="width: 46%;"></div></div>
-          <div class="bar-note">Low/Note</div>
+        <div class="rules">
+          <div class="rule"><strong>한국어 문장 우선</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>정확한 파일명과 명령은 원문 유지</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>PC desktop 기준</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>외부 asset 없음</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="risk-title">
-      <h2 id="risk-title">위험 신호 지도</h2>
-      <div class="grid3">
-        <div class="lane">
-          <span class="tag danger">높음</span>
-          <h3>사용자-visible 실패</h3>
-          <ul>
-            <li>데이터 손실 또는 stale state</li>
-            <li>auth bypass, XSS, SSRF, secret leak</li>
-            <li>동시성, 취소, 순서 보장 누락</li>
-            <li>MCP, agent tool, CLI wrapper의 destructive side effect</li>
-          </ul>
-        </div>
-        <div class="lane">
-          <span class="tag warn">중간</span>
-          <h3>설계 경계 흐림</h3>
-          <ul>
-            <li>UI에 domain/persistence 로직 누수</li>
-            <li>flag-heavy 함수와 책임 혼합</li>
-            <li>공유 helper의 speculative extraction</li>
-            <li>tool output, web content, generated file을 신뢰한 경계 누락</li>
-          </ul>
-        </div>
-        <div class="lane">
-          <span class="tag accent">상황 의존</span>
-          <h3>JS/TS 표현</h3>
-          <ul>
-            <li>단순 collection 변환의 반복 <code>for</code>/<code>if</code></li>
-            <li><code>any</code>와 무리한 type assertion</li>
-            <li>명확한 loop를 <code>reduce</code>로 숨기는 경우</li>
-          </ul>
-        </div>
+    <section class="section">
+      <div class="section-head"><h2>검증 표</h2><p>넓은 표는 전체 폭 section에 두어 2열 layout overflow를 피합니다.</p></div>
+      <div class="table" aria-label="검증 표">
+        <div class="table-cell table-head"><strong>검증 gate</strong></div><div class="table-cell table-head"><strong>명령 또는 대상</strong></div><div class="table-cell table-head"><strong>실패 신호</strong></div><div class="table-cell table-head"><strong>완료 기준</strong></div>
+        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/code-review</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
+        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span><code>node skills/code-review/scripts/validate-code-review.ts skills/code-review</code></span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
+        <div class="table-cell"><strong>HTML 공통</strong></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div><div class="table-cell"><span>broken local link, 외부 asset, overflow, SVG arrow endpoint 오류.</span></div><div class="table-cell"><span>PC desktop 기준으로 읽힘.</span></div>
       </div>
     </section>
 
-    <section aria-labelledby="resource-title">
-      <h2 id="resource-title">리소스 지도</h2>
-      <div class="grid2">
-        <svg class="resource-map" viewBox="0 0 540 286" role="img" aria-label="code-review 파일 관계 지도">
-          <rect x="22" y="24" width="150" height="48" rx="8" fill="#dbeafe" stroke="#2563eb"></rect>
-          <text x="97" y="53" text-anchor="middle" font-size="13" font-weight="700">SKILL.md</text>
-
-          <rect x="206" y="24" width="150" height="48" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-          <text x="281" y="45" text-anchor="middle" font-size="13" font-weight="700">references/</text>
-          <text x="281" y="61" text-anchor="middle" font-size="11" fill="#6b7280">checklist + JS/TS</text>
-
-          <rect x="390" y="24" width="128" height="48" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-          <text x="454" y="45" text-anchor="middle" font-size="13" font-weight="700">agents/</text>
-          <text x="454" y="61" text-anchor="middle" font-size="11" fill="#6b7280">openai.yaml</text>
-
-          <rect x="113" y="122" width="150" height="48" rx="8" fill="#fef3c7" stroke="#a16207"></rect>
-          <text x="188" y="143" text-anchor="middle" font-size="13" font-weight="700">scripts/</text>
-          <text x="188" y="159" text-anchor="middle" font-size="11" fill="#6b7280">validator</text>
-
-          <rect x="298" y="122" width="150" height="48" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-          <text x="373" y="143" text-anchor="middle" font-size="13" font-weight="700">skill.html</text>
-          <text x="373" y="159" text-anchor="middle" font-size="11" fill="#6b7280">사용자 가이드</text>
-
-          <rect x="174" y="218" width="196" height="44" rx="8" fill="#ffffff" stroke="#d1d5db"></rect>
-          <text x="272" y="245" text-anchor="middle" font-size="13" font-weight="700">project-snippets/code-review.md</text>
-
-          <line x1="172" y1="48" x2="206" y2="48" stroke="#2563eb" stroke-width="2"></line>
-          <line x1="356" y1="48" x2="390" y2="48" stroke="#2563eb" stroke-width="2"></line>
-          <line x1="97" y1="72" x2="188" y2="122" stroke="#a16207" stroke-width="2"></line>
-          <line x1="281" y1="72" x2="373" y2="122" stroke="#2563eb" stroke-width="2"></line>
-          <line x1="373" y1="170" x2="272" y2="218" stroke="#6b7280" stroke-width="2" stroke-dasharray="5 5"></line>
-        </svg>
-        <div class="tree">skills/code-review/
-├── SKILL.md
-├── skill.html
-├── agents/openai.yaml
-├── references/
-│   ├── review-checklist.md
-│   └── js-ts-style.md
-└── scripts/
-    └── validate-code-review.ts</div>
+    <section class="section">
+      <div class="section-head"><h2>금지와 허용</h2><p>스킬은 요청된 작업을 돕는 도구이며, 범위 밖 자동화는 하지 않습니다.</p></div>
+      <div class="matrix" aria-label="금지와 허용">
+        <div class="matrix-cell use"><strong>허용</strong><p>관련 파일을 읽고, 요청된 범위 안에서 가장 작은 유효 변경을 수행합니다.</p></div>
+        <div class="matrix-cell combine"><strong>보고</strong><p>변경 파일, 검증 명령, 브라우저 확인 여부를 최종 답변에 남깁니다.</p></div>
+        <div class="matrix-cell skip"><strong>보류</strong><p>요청과 무관한 refactor, 문서 확장, 전역 설치는 하지 않습니다.</p></div>
+        <div class="matrix-cell stop"><strong>차단</strong><p>비밀값 노출, destructive command, 승인 없는 commit/push/deploy는 멈춥니다.</p></div>
       </div>
     </section>
 
-    <section aria-labelledby="connection-title">
-      <h2 id="connection-title">프로젝트 연결 조각</h2>
-      <p class="snippet-label">프로젝트 instruction 파일에는 이 스킬의 <code>SKILL.md</code>를 링크하고, 리뷰 요청에서 구현 수정을 하지 않는다는 경계를 유지한다.</p>
-      <pre>Use $code-review at skills/code-review/SKILL.md when asked for code review, PR review, diff review, implementation audit, regression risk review, missing test review, maintainability review, or JS/TS style review.</pre>
-    </section>
-
-    <section aria-labelledby="validation-title">
-      <h2 id="validation-title">품질 게이트</h2>
-      <div class="grid2">
-        <div class="cell">
-          <h3>스킬 검증</h3>
-          <pre>node scripts/validate-skill.ts skills/code-review
-node skills/code-review/scripts/validate-code-review.ts skills/code-review</pre>
-        </div>
-        <div class="cell">
-          <h3>HTML 검증</h3>
-          <pre>node scripts/validate-skill-html.ts .
-node scripts/validate-skill-repo.ts .</pre>
-        </div>
-      </div>
-    </section>
-
-    <section aria-labelledby="rules-title">
-      <h2 id="rules-title">금지와 허용: 오용 방지</h2>
-      <div class="rules">
-        <div class="rule allow">
-          <span class="tag ok">해야 함</span>
-          <ul>
-            <li>findings를 맨 앞에 두고 심각도 순으로 정렬한다.</li>
-            <li>가능하면 모든 finding에 <code>file:line</code>, 영향, 수정 방향을 붙인다.</li>
-            <li>테스트 누락은 실제 회귀 가능성과 연결될 때 finding으로 쓴다.</li>
-            <li>collection 변환은 <code>map</code>, <code>filter</code>, <code>flatMap</code>, <code>some</code>, <code>every</code>, <code>find</code>가 더 명확한지 본다.</li>
-          </ul>
-        </div>
-        <div class="rule block">
-          <span class="tag danger">하지 않음</span>
-          <ul>
-            <li>칭찬, 배경 설명, 긴 요약으로 findings를 묻지 않는다.</li>
-            <li>사용자가 명시하지 않은 코드 수정을 리뷰 중 수행하지 않는다.</li>
-            <li>루프가 더 명확한 async sequencing, parser, hot path에 functional style을 강요하지 않는다.</li>
-            <li>SOLID를 의식주처럼 적용하지 않고 실제 책임·의존성 문제에만 쓴다.</li>
-          </ul>
-        </div>
-      </div>
+    <section class="section">
+      <div class="section-head"><h2>프로젝트 연결 조각</h2><p>프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둡니다.</p></div>
+      <pre class="snippet">Use $code-review at skills/code-review/SKILL.md when the task matches this skill.
+Keep visible explanations Korean-first, preserve exact identifiers, and report validation evidence.
+Validate with node scripts/validate-skill.ts skills/code-review &amp;&amp; node skills/code-review/scripts/validate-code-review.ts skills/code-review &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
     </section>
   </main>
 </body>

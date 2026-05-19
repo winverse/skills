@@ -23,3 +23,7 @@ urql client와 generated artifact 위치를 명확히 둔다. query document, ge
 ## validation
 
 lint, typecheck, test, build, browser smoke를 final tree에 함께 적는다.
+
+## TypeScript module 기준
+
+Next.js frontend는 ESM only로 둔다. `package.json`에는 `type: "module"`을 두고, `tsconfig`는 `module: "ESNext"`와 `moduleResolution: "Bundler"`를 우선한다. 새 frontend 구조에서 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`를 만들지 않는다.

@@ -246,7 +246,7 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/agent-eval-handoff-seeds.md",
-        "value": "Seed cases: project-workflow routing, spec-workflow routing, dependency inventory, project-structure timing, PRD settings, mockup selection, workflow-state cache, work-claims parallel lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, artifact hygiene, improvement seed"
+        "value": "Seed cases: project-workflow routing, feature-workflow routing, dependency inventory, project-structure timing, PRD settings, mockup selection, workflow-state cache, work-claims parallel lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate decisions, project setup verification, completion/ship mapping, document sync, artifact hygiene, improvement seed"
       },
       {
         "type": "required_text",
@@ -498,7 +498,7 @@
       "project-workflow"
     ],
     "forbiddenSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "agentSurfaces": [
       "codex",
@@ -527,7 +527,7 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/workflow-state-cache.md",
-        "value": "spec-workflow must read this state before repeating setup questions"
+        "value": "feature-workflow must read this state before repeating setup questions"
       },
       {
         "type": "forbidden_text",
@@ -545,7 +545,7 @@
       "project-workflow"
     ],
     "forbiddenSkills": [
-      "spec-workflow"
+      "feature-workflow"
     ],
     "agentSurfaces": [
       "codex",
@@ -585,6 +585,53 @@
         "type": "forbidden_text",
         "file": "evals/agent/fixtures/project-workflow/parallel-work-claims.md",
         "value": "Let every session edit shared files freely"
+      }
+    ]
+  },
+  {
+    "id": "project-workflow-typescript-esm-setup",
+    "title": "Project workflow records TypeScript ESM policy before structure handoff",
+    "prompt": "새 TypeScript 서비스 초기 셋팅을 해줘. CommonJS는 쓰지 말고 ESM으로만 잡아줘.",
+    "scope": "project-workflow",
+    "expectedSkills": [
+      "project-workflow"
+    ],
+    "forbiddenSkills": [
+      "feature-workflow"
+    ],
+    "agentSurfaces": [
+      "codex",
+      "claude-code"
+    ],
+    "assumptionDate": "2026-05-18",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/project-workflow/SKILL.md",
+        "value": "ESM only"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "value": "TypeScript module policy 기준"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/typescript-esm-setup.md",
+        "value": "TypeScript Module Policy"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/typescript-esm-setup.md",
+        "value": "CommonJS, require, module.exports, .cjs, .cts are blocked"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/project-workflow/typescript-esm-setup.md",
+        "value": "Use CommonJS by default"
       }
     ]
   }

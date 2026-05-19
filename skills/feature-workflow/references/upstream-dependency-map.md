@@ -1,8 +1,8 @@
-# spec-workflow upstream dependency map 기준
+# feature-workflow upstream dependency map 기준
 
 ## 목적
 
-이 파일은 `spec-workflow`가 참고하는 반복 개발 primitive의 출처 장부다. `spec-workflow`는 Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local helper를 통째로 복제하지 않고, 현재 spec 구현에 필요한 최소 primitive만 채택한다.
+이 파일은 `feature-workflow`가 참고하는 반복 개발 primitive의 출처 장부다. `feature-workflow`는 Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local helper를 통째로 복제하지 않고, 현재 feature, issue, bug fix, vertical slice 구현에 필요한 최소 primitive만 채택한다.
 
 외부에서 온 이름은 항상 `출처 패키지`와 `정확한 skill/plugin 이름`을 함께 적는다. 예: `Superpowers plugin / writing-plans`, `Superpowers plugin / tdd`, `GStack plugin / plan-eng-review`, `Matt Pocock skills / diagnose`.
 
@@ -10,7 +10,7 @@
 
 | 원칙 | 기준 |
 | --- | --- |
-| spec 단위 반복 | 하나의 issue/spec/bug/vertical slice를 끝내는 데 필요한 loop만 실행한다. |
+| feature 단위 반복 | 하나의 feature/issue/spec/bug/vertical slice를 끝내는 데 필요한 loop만 실행한다. |
 | project setup 회피 | raw idea, domain setup, PRD, project structure는 `project-workflow`로 넘긴다. |
 | 출처 라벨 필수 | 외부 primitive는 source package와 exact name을 함께 기록한다. |
 | evidence 우선 | RED/GREEN/REFACTOR, runtime evidence, review result를 남긴다. |
@@ -20,7 +20,7 @@
 
 | 출처 패키지 | 정확한 skill/plugin 이름 | 채택 역할 | 로컬 산출물과 handoff | 기본 상태 |
 | --- | --- | --- | --- | --- |
-| Superpowers plugin | `brainstorming` | spec implementation approach와 alternative 정리 | implementation design notes | 구현 조건부 |
+| Superpowers plugin | `brainstorming` | feature/issue implementation approach와 alternative 정리 | implementation design notes | 구현 조건부 |
 | Superpowers plugin | `writing-plans` | 2-5분 단위 task와 검증 명령 작성 | `.scratch/<slug>/plans/` | 핵심 |
 | Superpowers plugin | `subagent-driven-development` | 큰 plan을 subagent로 실행하고 review | task ledger, spec/code-quality review notes | 큰 구현만 |
 | Superpowers plugin | `tdd` 또는 `test-driven-development` | RED -> GREEN -> REFACTOR loop | test evidence | 핵심 |
@@ -52,18 +52,18 @@
 upstream source가 바뀌면 아래 순서로 추적한다.
 
 1. 출처 패키지와 정확한 skill/plugin 이름을 확인한다.
-2. 이 primitive가 spec implementation loop에 속하는지 다시 판단한다.
+2. 이 primitive가 feature/issue implementation loop에 속하는지 다시 판단한다.
    - TDD, implementation plan, review, QA, diagnose, docs sync라면 유지한다.
    - domain/product/project structure 초기화라면 `project-workflow`로 옮긴다.
 3. 갱신 범위를 제한한다.
-   - 수정 대상: `SKILL.md`, 이 reference, `project-snippets/spec-workflow.md`, `project-snippets/base.md`, `project-snippets/claude-base.md`, `AGENTS.md`, `README.md`, `docs/skill-catalog.md`, `skill.html`, eval fixture/case, `history/skills.md`
+   - 수정 대상: `SKILL.md`, 이 reference, `project-snippets/feature-workflow.md`, `project-snippets/base.md`, `project-snippets/claude-base.md`, `AGENTS.md`, `README.md`, `docs/skill-catalog.md`, `skill.html`, eval fixture/case, `history/skills.md`
    - 수정하지 않을 것: upstream skill 전문 복사, global install 정책, project setup stage 편입
 4. eval을 추가하거나 갱신한다.
-   - routing에 영향을 주면 `evals/agent/cases/spec-workflow-orchestration.json`에 deterministic check를 둔다.
+   - routing에 영향을 주면 `evals/agent/cases/feature-workflow-orchestration.json`에 deterministic check를 둔다.
    - saved output fixture에는 `source package`, `exact skill/plugin name`, `selected/skipped/fallback`이 보여야 한다.
 5. 검증한다.
-   - `node scripts/validate-skill.ts skills/spec-workflow`
-   - `node skills/spec-workflow/scripts/validate-spec-workflow.ts skills/spec-workflow`
+   - `node scripts/validate-skill.ts skills/feature-workflow`
+   - `node skills/feature-workflow/scripts/validate-feature-workflow.ts skills/feature-workflow`
    - `node scripts/validate-korean-markdown.ts .`
    - `node scripts/validate-skill-html.ts .`
    - `node scripts/run-agent-evals.ts`
@@ -82,4 +82,4 @@ upstream source가 바뀌면 아래 순서로 추적한다.
 
 ## 중복 경계 보호 규칙
 
-`spec-workflow`는 repeated implementation loop를 맡고, project setup은 `project-workflow`, folder structure는 `project-structure`, docs drift는 `sync-docs`, commit은 `atomic-committer`가 맡는다.
+`feature-workflow`는 repeated implementation loop를 맡고, project setup은 `project-workflow`, folder structure는 `project-structure`, docs drift는 `sync-docs`, commit은 `atomic-committer`가 맡는다.

@@ -1,6 +1,6 @@
 # Workflow Fixture: Completion / Ship Mapping
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Completion
 
 Repo-local mapping:

@@ -10,4 +10,4 @@ Agent Tool And Security Risk Gate:
 - Approval required: destructive commands and account-changing actions.
 - Least privilege: narrow workspace path, command allowlist, and environment scope.
 - Decision: dev-only.
-- Evidence: record this gate in `.scratch/example/workflow-state.md` and the spec handoff.
+- Evidence: record this gate in `.scratch/example/workflow-state.md` and the feature handoff.

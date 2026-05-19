@@ -4,9 +4,12 @@
 
 ## Project Structure Overrides
 
-- If the request is still raw product discovery, domain modeling, PRD/issues, project setup, or “start a new project and prepare implementation,” use `project-workflow` first. Use `project-structure` after domain language and architecture questions are concrete enough to choose folder/env/codegen/db/infra boundaries. Use `spec-workflow` later for concrete implementation slices.
+- If the request is still raw product discovery, domain modeling, PRD/issues, project setup, or “start a new project and prepare implementation,” use `project-workflow` first. Use `project-structure` after domain language and architecture questions are concrete enough to choose folder/env/codegen/db/infra boundaries. Use `feature-workflow` later for concrete implementation slices.
 - Prefer numeric choices when the project kind or stack is not clear.
 - Default to Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation, and Pulumi/Docker/AWS ECR/ECS Fargate when infrastructure is requested unless the project says otherwise.
+- When TypeScript is used, enforce ESM only: set `package.json` `type: "module"`, use `import`/`export`, choose ESM `tsconfig` settings, and do not create or recommend CommonJS, `require`, `module.exports`, `.cjs`, or `.cts`.
+- For Node/NestJS TypeScript runtime, prefer `module: "NodeNext"` and `moduleResolution: "NodeNext"`. For Bun, Next.js, or browser-bundled TypeScript runtime, prefer `module: "ESNext"` and `moduleResolution: "Bundler"`.
+- If an existing repo uses CommonJS, mark it as an ESM migration boundary instead of copying the CommonJS pattern into new structure.
 - Use MongoDB + Atlas when MongoDB/document DB is selected, and Supabase Postgres when the user wants managed psql-compatible Postgres. Keep Supabase service-role keys and MongoDB URIs server-only.
 - Use `apps/web` or `apps/api` by default even for standalone frontend/backend projects unless the existing repo or user explicitly wants a root-level app.
 - Use app-local env schemas and keep `packages/config` as helper-only. Shared packages must not read `process.env` directly.

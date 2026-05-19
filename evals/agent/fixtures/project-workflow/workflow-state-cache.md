@@ -11,8 +11,8 @@ Workflow State
 - Skipped questions: payment integration is out of scope for first usable slice
 - Open questions: production data retention policy
 - Tool/security gate: needs-info
-- Next spec-workflow target: `.scratch/new-product/issues/001-first-usable-slice.md`
+- Next feature-workflow target: `.scratch/new-product/issues/001-first-usable-slice.md`
 
 Validation
 - workflow-state.md is a cache, not the source of truth.
-- spec-workflow must read this state before repeating setup questions.
+- feature-workflow must read this state before repeating setup questions.

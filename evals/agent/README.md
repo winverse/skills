@@ -23,7 +23,7 @@ evals/agent/
 │   ├── output-shape.json
 │   ├── project-setup-verification.json
 │   ├── project-workflow-orchestration.json
-│   └── spec-workflow-orchestration.json
+│   └── feature-workflow-orchestration.json
 ├── artifacts/
 │   └── README.md
 ├── fixtures/
@@ -39,7 +39,7 @@ evals/agent/
 3. Include `assumptionDate` and `agentSurfaces` when the case depends on fast-changing agent behavior.
 4. Mark the example as `typical`, `edge`, or `adversarial`.
 5. Prefer checks that read current repo files or scrubbed fixtures: `AGENTS.md`, `project-snippets/`, `skills/*/SKILL.md`, references, compatibility docs, saved output files, and JSON reports.
-6. For `workflow`, `project-workflow`, or `spec-workflow` scope, include at least one scrubbed saved output fixture under `evals/agent/fixtures/project-workflow/` or `evals/agent/fixtures/spec-workflow/`; static source phrases alone are not enough.
+6. For `workflow`, `project-workflow`, or `feature-workflow` scope, include at least one scrubbed saved output fixture under `evals/agent/fixtures/project-workflow/` or `evals/agent/fixtures/feature-workflow/`; static source phrases alone are not enough.
 7. Keep high-confidence deterministic checks `blocking`.
 8. Mark judgment-heavy, live-routing, or future live-output checks `advisory` until calibrated.
 

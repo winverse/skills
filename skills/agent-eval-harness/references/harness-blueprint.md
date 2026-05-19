@@ -52,7 +52,7 @@ runner는 case를 순서대로 읽고 check 결과를 blocking/advisory로 나�
 
 ## workflow seed pack 기준
 
-`project-workflow`는 raw idea, existing API cleanup, substantial UI, MCP/API automation, project setup verification, `workflow-state.md` cache, `spec-workflow` handoff, goal condition quality 같은 setup lane을 가진다. `spec-workflow`는 CLI/no-browser implementation, TDD fallback, review, QA, completion mapping, document sync, `workflow-state.md` update, failure-driven improvement seed 같은 반복 구현 lane을 가진다. 각 lane은 최소 하나의 routing case와 하나의 artifact hygiene case를 둔다.
+`project-workflow`는 raw idea, existing API cleanup, substantial UI, MCP/API automation, project setup verification, `workflow-state.md` cache, `feature-workflow` handoff, goal condition quality 같은 setup lane을 가진다. `feature-workflow`는 CLI/no-browser implementation, TDD fallback, review, QA, completion mapping, document sync, `workflow-state.md` update, failure-driven improvement seed 같은 반복 구현 lane을 가진다. 각 lane은 최소 하나의 routing case와 하나의 artifact hygiene case를 둔다.
 
 saved output은 그대로 커밋하지 않고 scrubbed artifact로 줄여 fixture에 둔다.
 

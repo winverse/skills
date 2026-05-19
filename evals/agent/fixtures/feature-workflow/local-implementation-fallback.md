@@ -1,6 +1,6 @@
 # Workflow Fixture: Local Implementation Fallback
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Implementation
 Dependency status: Superpowers-style fallback
 

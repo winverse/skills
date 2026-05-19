@@ -11,7 +11,7 @@
 | 원칙 | 기준 |
 | --- | --- |
 | 초기 셋팅 전용 | 프로젝트 언어, 제품 이유, 구조, 디자인, PRD, issue backlog까지만 맡는다. |
-| 구현 loop 분리 | TDD, `writing-plans`, `subagent-driven-development`, QA, diagnose는 `spec-workflow`로 넘긴다. |
+| 구현 loop 분리 | TDD, `writing-plans`, `subagent-driven-development`, QA, diagnose는 `feature-workflow`로 넘긴다. |
 | 출처 라벨 필수 | 외부 primitive는 source package와 exact name을 함께 기록한다. |
 | handoff만 복제 | 원본 prompt 전문을 가져오지 않고 trigger, handoff, artifact, validator boundary만 반영한다. |
 | 업데이트 추적 | upstream 이름, 산출물 경로, 전제 조건, review chain이 바뀌면 이 파일과 eval fixture를 먼저 갱신한다. |
@@ -35,7 +35,7 @@
 | repo-local custom | `agent-eval-harness` | project workflow routing regression guard | eval case + fixture | behavior 변경 시 |
 | repo-local custom | Agent Tool And Security Risk Gate | tool/MCP/API/file-write/network 위험 평가 | `approved`, `dev-only`, `needs-info`, `blocked` decision | tool 작업 전 |
 | repo-local custom | `workflow-state.md` cache | setup 결과와 skipped/open question 색인 | `.scratch/<slug>/workflow-state.md` | handoff 전 |
-| handoff target | `spec-workflow` | spec/issue 단위 반복 구현 | spec handoff block | setup 완료 후 |
+| handoff target | `feature-workflow` | feature/issue 단위 반복 구현 | feature handoff block | setup 완료 후 |
 
 ## 업데이트 규칙
 
@@ -46,7 +46,7 @@ upstream source가 바뀌면 아래 순서로 추적한다.
    - 근거가 YouTube/블로그 같은 2차 설명이면 `사용자 custom` 또는 `observed workflow`로 표시하고 official source처럼 취급하지 않는다.
 2. 이 primitive가 project setup에 속하는지 다시 판단한다.
    - domain, product, architecture, design baseline, PRD, issue backlog라면 유지한다.
-   - TDD, 구현 plan, subagent 실행, QA라면 `spec-workflow`로 옮긴다.
+   - TDD, 구현 plan, subagent 실행, QA라면 `feature-workflow`로 옮긴다.
 3. 갱신 범위를 제한한다.
    - 수정 대상: `SKILL.md`, 이 reference, `project-snippets/project-workflow.md`, `project-snippets/base.md`, `project-snippets/claude-base.md`, `AGENTS.md`, `README.md`, `docs/skill-catalog.md`, `skill.html`, eval fixture/case, `history/skills.md`
    - 수정하지 않을 것: upstream skill 전문 복사, global install 정책, 사용자가 요청하지 않은 구현 loop 편입
@@ -70,10 +70,10 @@ upstream source가 바뀌면 아래 순서로 추적한다.
 | existing cleanup | `grill-with-docs`, boundary audit, ADR, staged issues | full product discovery unless behavior changes |
 | substantial UI | `design.md`, mock directions, `plan-design-review` | UI coding before direction selection |
 | infra-aware service | tool/security gate, `project-structure`, ADR | cloud writes or deploy without explicit request |
-| ready for implementation | `spec-workflow` handoff | local implementation inside project-workflow |
+| ready for implementation | `feature-workflow` handoff | local implementation inside project-workflow |
 
 ## 중복 경계 보호 규칙
 
-`project-workflow`는 setup orchestration을 맡고, repeated implementation은 `spec-workflow`, folder structure는 `project-structure`, docs drift는 `sync-docs`, eval은 `agent-eval-harness`가 맡는다.
+`project-workflow`는 setup orchestration을 맡고, repeated implementation은 `feature-workflow`, folder structure는 `project-structure`, docs drift는 `sync-docs`, eval은 `agent-eval-harness`가 맡는다.
 
 맞춤 확장은 외부 출처와 섞어 쓰지 않는다. 예를 들어 `project-structure`와 `design.md`는 Matt Pocock/GStack에서 온 primitive가 아니라 repo-local 또는 user custom handoff다.

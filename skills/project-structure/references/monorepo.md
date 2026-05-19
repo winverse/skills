@@ -19,8 +19,16 @@ infra/
 
 - `packages/db`: Drizzle schema, migration, Redis boundary
 - `packages/env`: server/client/shared env validation
-- `packages/config`: eslint, tsconfig, shared tooling
+- `packages/config`: eslint, tsconfig, shared tooling. TypeScript 설정은 ESM only이며 CommonJS 설정을 만들지 않는다.
 - `packages/ui`: app 간 공유가 확실한 component만
+
+## TypeScript module 기준
+
+- 모든 TypeScript package는 `package.json`에 `type: "module"`을 둔다.
+- workspace source와 repo-owned config는 `import`/`export`만 사용한다.
+- `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`는 새 구조에 넣지 않는다.
+- Node/NestJS package는 `module: "NodeNext"`와 `moduleResolution: "NodeNext"`를 우선한다.
+- Next.js, Bun, browser-bundled package는 `module: "ESNext"`와 `moduleResolution: "Bundler"`를 우선한다.
 
 ## script policy 기준
 

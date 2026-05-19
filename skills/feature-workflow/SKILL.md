@@ -1,17 +1,17 @@
 ---
-name: spec-workflow
-description: "기존 PRD, issue, acceptance criteria, design.md, ADR을 기준으로 하나의 spec 또는 vertical slice를 TDD, implementation plan, review, QA, document sync까지 반복 개발할 때 사용한다."
+name: feature-workflow
+description: "기존 PRD, issue, spec, bug report, acceptance criteria, design.md, ADR을 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA, document sync까지 끝낼 때 사용한다."
 ---
 
-# spec-workflow
+# feature-workflow
 
-이 스킬은 `workflow suite`의 반복 개발 loop다. 이미 방향이 잡힌 프로젝트에서 하나의 spec, issue, bug, vertical slice를 검증 가능한 코드 변경으로 끝낸다. 프로젝트 초기 domain/product/architecture 셋팅이 없으면 `project-workflow`로 되돌린다.
+이 스킬은 `workflow suite`의 기능 개발 loop다. 이미 방향이 잡힌 프로젝트에서 하나의 feature, issue, bug fix, vertical slice를 검증 가능한 코드 변경으로 끝낸다. 프로젝트 초기 domain/product/architecture 셋팅이 없으면 `project-workflow`로 되돌린다.
 
-`spec-workflow`는 플러그인식 실행 loop에 가깝다. 같은 프로젝트 안에서 여러 번 호출되며, 매번 현재 spec과 acceptance criteria를 기준으로 plan, TDD, implementation, review, QA, docs sync를 반복한다.
+`feature-workflow`는 플러그인식 실행 loop에 가깝다. 같은 프로젝트 안에서 여러 번 호출되며, 매번 현재 PRD, issue, spec, bug repro, acceptance criteria를 기준으로 plan, TDD, implementation, review, QA, docs sync를 반복한다.
 
 ## dependency contract 기준
 
-Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local custom helper에서 spec 구현에 필요한 primitive만 고른다. 전체 패키지를 전부 실행하지 않는다.
+Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local custom helper에서 feature/issue 구현에 필요한 primitive만 고른다. 전체 패키지를 전부 실행하지 않는다.
 
 출력에는 각 primitive의 출처와 상태를 함께 표시한다.
 
@@ -27,7 +27,7 @@ Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local custom helper�
 - GStack plugin: `plan-eng-review`, `plan-design-review`, `browse`, `review`, `qa`, `ship`, `retro`
 - Matt Pocock skills: `review`, `diagnose`, `document-sync`, `improve-codebase-architecture`, `semantic-commits`, `ship`
 - repo-local custom: `code-review`, `browser-qa`, `design-review`, `sync-docs`, `atomic-committer`, `agent-eval-harness`, Agent Tool And Security Risk Gate
-- setup source: `project-workflow`가 만든 `CONTEXT.md`, ADR, PRD, issue backlog, design.md, spec handoff
+- setup source: `project-workflow`가 만든 `CONTEXT.md`, ADR, PRD, issue backlog, design.md, feature handoff
 
 upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, exact name, adopted role, handoff condition, artifact path, validator/eval fixture, `skill.html`, project snippet, history만 갱신한다.
 
@@ -38,6 +38,8 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - `CONTEXT.md`, ADR, PRD, design.md가 있으면 현재 spec 해석의 authority로 사용한다.
 - `.scratch/<slug>/workflow-state.md` 또는 동등한 state cache가 있으면 selected primitives, skipped questions, gate decision, prior answers를 먼저 읽는다.
 - `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact가 있으면 현재 lane의 claimed write set, read-only paths, shared/hotspot files, integration owner를 production edit 전에 확인한다.
+- TypeScript production edit이면 ESM only boundary를 확인한다. `type: "module"`, `import`/`export`, ESM `tsconfig`를 유지하고 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`를 새로 도입하지 않는다.
+- spec이 CommonJS 추가를 요구하거나 기존 CommonJS 파일을 직접 확장해야 하면 production edit 전에 blocker, migration boundary, 또는 사용자 확인을 남긴다.
 - raw idea, product discovery, project structure 선택, design system 초기화가 부족하면 `project-workflow`로 넘긴다.
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 확인하거나 작성한다.
 
@@ -59,15 +61,16 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 2. source-labeled primitive inventory
 3. acceptance criteria와 out-of-scope 확인
 4. 현재 lane의 intended write set을 `work-claims.md`와 대조하고, active claim과 겹치면 overlap block으로 멈춤
-5. Superpowers plugin `brainstorming` 또는 fallback으로 implementation approach 정리
-6. Superpowers plugin `writing-plans` 또는 fallback으로 2-5분 단위 plan과 검증 명령 작성
-7. GStack plugin `plan-eng-review` 또는 repo-local reviewer로 plan review
-8. UI면 `plan-design-review`, `design-review`, selected mock direction 확인
-9. TDD 또는 characterization test로 RED 상태 기록
-10. 구현 후 GREEN, 필요한 경우 REFACTOR
-11. 큰 구현이면 Superpowers plugin `subagent-driven-development`로 task fan-out과 review를 수행
-12. `code-review` 또는 `codex:review`, `browser-qa` 또는 non-browser runtime evidence, `diagnose` 필요 여부 확인
-13. `sync-docs`로 docs drift를 정리하고 completion/commit handoff를 남김
+5. TypeScript 작업이면 ESM only와 CommonJS 금지 boundary를 plan과 검증 명령에 포함
+6. Superpowers plugin `brainstorming` 또는 fallback으로 implementation approach 정리
+7. Superpowers plugin `writing-plans` 또는 fallback으로 2-5분 단위 plan과 검증 명령 작성
+8. GStack plugin `plan-eng-review` 또는 repo-local reviewer로 plan review
+9. UI면 `plan-design-review`, `design-review`, selected mock direction 확인
+10. TDD 또는 characterization test로 RED 상태 기록
+11. 구현 후 GREEN, 필요한 경우 REFACTOR
+12. 큰 구현이면 Superpowers plugin `subagent-driven-development`로 task fan-out과 review를 수행
+13. `code-review` 또는 `codex:review`, `browser-qa` 또는 non-browser runtime evidence, `diagnose` 필요 여부 확인
+14. `sync-docs`로 docs drift를 정리하고 completion/commit handoff를 남김
 
 ## artifact map 기준
 
@@ -91,10 +94,11 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - RED가 현실적으로 불가능하면 이유와 대체 evidence를 workflow log와 TDD exception record에 기록한다.
 - GREEN 후 refactor를 수행하고, refactor가 behavior를 바꾸지 않는다는 검증 명령을 남긴다.
 - 테스트가 없는 프로젝트라도 최소 command output, fixture, browser evidence, API response, log 중 하나는 남긴다.
+- TypeScript production change는 TDD loop 중에도 ESM only를 유지한다. CommonJS 패턴이 RED/GREEN 편의를 위해 추가되면 실패로 본다.
 
 ## subagent boundary 기준
 
-`subagent-driven-development`는 큰 spec에서만 쓴다. 바로 다음 작업이 그 결과에 막혀 있으면 main agent가 직접 처리한다. subagent를 쓸 때는 disjoint write set, task ledger, spec review, code quality review를 남긴다.
+`subagent-driven-development`는 큰 feature나 issue에서만 쓴다. 바로 다음 작업이 그 결과에 막혀 있으면 main agent가 직접 처리한다. subagent를 쓸 때는 disjoint write set, task ledger, spec review, code quality review를 남긴다.
 
 여러 agent/session/worktree가 동시에 움직이면 아래 규칙을 production edit 전 gate로 둔다.
 
@@ -113,6 +117,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - review findings 처리 또는 명시적 defer
 - docs sync 필요 여부
 - artifact hygiene
+- TypeScript 작업이면 ESM only 유지와 CommonJS 미도입 확인
 - gate, review, QA, docs sync 누락이 반복될 위험이 있으면 `agent-eval-harness`에 넘길 eval seed 후보를 남김
 - commit/push는 사용자가 요청했을 때만 `atomic-committer` handoff
 
@@ -126,6 +131,7 @@ Spec authority
 - <spec/issue/PRD/ADR/design source>
 - state cache: <workflow-state.md path or none>
 - work claim: <lane id, claimed write set, overlap block result>
+- TypeScript module policy: ESM only / CommonJS blocked or not applicable
 
 Primitive inventory
 - <source package>: <exact name> -> selected | skipped | fallback

@@ -3,562 +3,175 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>transcript-polisher 시각 가이드</title>
   <link rel="icon" href="data:,">
-  <title>Transcript Polisher Skill</title>
   <style>
-    :root {
-      --bg: #F8FAFC;
-      --surface: #FFFFFF;
-      --surface-muted: #F1F5F9;
-      --text: #111827;
-      --muted: #6B7280;
-      --border: #D1D5DB;
-      --accent: #2563EB;
-      --focus: #1D4ED8;
-      --ok: #1F7A52;
-      --warn: #A16207;
-      --danger: #B42318;
-      --ink-soft: #374151;
-    }
-
-    * { box-sizing: border-box; }
-
-    html,
-    body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 14px;
-      line-height: 1.55;
-      letter-spacing: 0;
-    }
-
-    .shell {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 32px;
-    }
-
-    header {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 20px;
-      align-items: stretch;
-      margin-bottom: 20px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-      padding: 20px;
-    }
-
-    h1, h2, h3, p { margin-top: 0; }
-
-    h1 {
-      margin-bottom: 8px;
-      font-size: 28px;
-      line-height: 1.2;
-      letter-spacing: 0;
-    }
-
-    h2 {
-      margin-bottom: 14px;
-      font-size: 18px;
-      line-height: 1.35;
-      letter-spacing: 0;
-    }
-
-    h3 {
-      margin-bottom: 8px;
-      font-size: 15px;
-      letter-spacing: 0;
-    }
-
-    p { margin-bottom: 10px; }
-
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .purpose {
-      margin-bottom: 0;
-      color: var(--ink-soft);
-      font-size: 15px;
-    }
-
-    .file-pair {
-      display: grid;
-      gap: 8px;
-      align-content: center;
-      border-left: 1px solid var(--border);
-      padding-left: 18px;
-    }
-
-    .pair-label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .pair-item {
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--surface-muted);
-    }
-
-    section {
-      margin-top: 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-      padding: 20px;
-    }
-
-    .matrix {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .cell {
-      min-height: 118px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fff;
-    }
-
-    .cell strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .cell p {
-      margin-bottom: 0;
-      color: var(--ink-soft);
-      font-size: 13px;
-    }
-
-    .use strong { color: var(--ok); }
-    .combine strong { color: var(--accent); }
-    .skip strong { color: var(--warn); }
-    .stop strong { color: var(--danger); }
-
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .step {
-      position: relative;
-      min-height: 132px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: var(--surface);
-    }
-
-    .step:not(:last-child)::after {
-      content: "→";
-      position: absolute;
-      top: 50%;
-      right: -11px;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      background: var(--surface);
-      color: var(--accent);
-      text-align: center;
-      line-height: 16px;
-      font-weight: 700;
-      z-index: 2;
-    }
-
-    .num {
-      display: inline-flex;
-      width: 24px;
-      height: 24px;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 8px;
-      border-radius: 50%;
-      background: #DBEAFE;
-      color: var(--focus);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .step p {
-      margin-bottom: 0;
-      color: var(--ink-soft);
-      font-size: 13px;
-    }
-
-    .io-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-    }
-
-    .io {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: var(--surface);
-      min-height: 150px;
-    }
-
-    .io ul,
-    .guard ul {
-      margin: 0;
-      padding-left: 18px;
-    }
-
-    .io li,
-    .guard li {
-      margin: 5px 0;
-      color: var(--ink-soft);
-    }
-
-    .resource-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      align-items: start;
-    }
-
-    .tree {
-      margin: 0;
-      padding: 14px;
-      border-radius: 6px;
-      background: #111827;
-      color: #E5E7EB;
-      overflow-x: auto;
-      white-space: pre;
-    }
-
-    .bars {
-      display: grid;
-      gap: 10px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 140px 1fr 42px;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .bar-label {
-      color: var(--ink-soft);
-      font-size: 13px;
-    }
-
-    .track {
-      height: 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--surface-muted);
-      overflow: hidden;
-    }
-
-    .fill {
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .fill.ok { background: var(--ok); }
-    .fill.warn { background: var(--warn); }
-    .fill.danger { background: var(--danger); }
-
-    .score {
-      color: var(--muted);
-      font-size: 12px;
-      text-align: right;
-    }
-
-    .guard-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .guard {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: var(--surface);
-    }
-
-    .guard.good h3 { color: var(--ok); }
-    .guard.bad h3 { color: var(--danger); }
-
-    .validation {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-    }
-
-    .goal-loop {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .loop-svg {
-      width: 240px;
-      height: 190px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface-muted);
-    }
-
-    .loop-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .loop-item {
-      min-height: 82px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: var(--surface);
-    }
-
-    .loop-item strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--focus);
-    }
-
-    .loop-item span {
-      color: var(--ink-soft);
-      font-size: 13px;
-    }
-
-    .gate {
-      min-height: 96px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: var(--surface);
-    }
-
-    .gate strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--focus);
-    }
-
-    .gate span {
-      color: var(--ink-soft);
-      font-size: 13px;
-    }
-
-    .note {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
+    :root { --bg:#f6f7f9; --surface:#ffffff; --soft:#eef2f6; --text:#151922; --muted:#5f6876; --border:#cfd6df; --line:#8793a3; --blue:#2457c5; --green:#24724f; --amber:#93640d; --red:#aa2e25; --code:#111827; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; margin:0; background:var(--bg); color:var(--text); font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; line-height:1.55; }
+    body { padding:28px 0 52px; }
+    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
+    a { color:inherit; text-decoration:none; }
+    h1, h2, h3, p { margin:0; }
+    h1 { font-size:30px; line-height:1.18; }
+    h2 { font-size:18px; line-height:1.3; }
+    h3 { font-size:14px; line-height:1.35; }
+    .shell { width:100%; max-width:1180px; margin:0 auto; padding:0 28px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:16px; align-items:stretch; margin-bottom:24px; }
+    .identity, .quick, .matrix, .panel, .schema, .chart, .resource, .table, .rule, .snippet, .catalog-section { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .identity { min-height:154px; padding:20px; display:grid; grid-template-columns:68px minmax(0,1fr); gap:16px; align-items:center; }
+    .mark { width:68px; height:68px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:17px; font-weight:800; }
+    .subtitle { max-width:780px; margin-top:7px; color:var(--muted); font-size:14px; }
+    .quick { padding:16px; display:grid; gap:10px; align-content:center; }
+    .quick strong, .matrix-cell strong, .step strong, .schema-node strong, .resource-tile strong, .table-cell strong, .rule strong, .catalog-item strong { display:block; margin-bottom:5px; font-size:13px; }
+    .quick span, .matrix-cell p, .step span, .schema-node span, .resource-tile span, .table-cell span, .rule p, .catalog-item span { color:var(--muted); font-size:13px; }
+    .section { margin-top:22px; }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:baseline; margin-bottom:10px; }
+    .section-head p, .small { color:var(--muted); font-size:13px; }
+    .matrix { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; }
+    .matrix-cell { min-height:148px; padding:14px; border-right:1px solid var(--border); border-top:4px solid var(--line); }
+    .matrix-cell:last-child { border-right:0; }
+    .matrix-cell.use { border-top-color:var(--green); } .matrix-cell.combine { border-top-color:var(--blue); } .matrix-cell.skip { border-top-color:var(--amber); } .matrix-cell.stop { border-top-color:var(--red); }
+    .two { display:grid; grid-template-columns:minmax(0,1.14fr) minmax(300px,.86fr); gap:16px; align-items:stretch; }
+    .panel, .resource { padding:16px; overflow:hidden; }
+    svg { display:block; width:100%; height:auto; }
+    .steps, .rules { display:grid; gap:10px; }
+    .step, .rule { padding:12px 14px; }
+    .schema { display:grid; grid-template-columns:1fr 56px 1fr; gap:12px; padding:16px; align-items:center; }
+    .schema-stack { display:grid; gap:10px; }
+    .schema-node { min-height:82px; border:1px solid var(--border); border-radius:8px; padding:12px; background:#fbfcfe; }
+    .schema-arrow { display:grid; place-items:center; min-height:184px; color:var(--blue); font-size:22px; font-weight:800; }
+    .chart { display:grid; gap:10px; padding:16px; }
+    .bar { display:grid; grid-template-columns:170px minmax(0,1fr) 78px; gap:10px; align-items:center; font-size:13px; }
+    .track { height:14px; border:1px solid var(--border); border-radius:4px; background:var(--soft); overflow:hidden; }
+    .fill { display:block; height:100%; background:var(--blue); } .fill.green{background:var(--green);} .fill.amber{background:var(--amber);} .fill.red{background:var(--red);}
+    .files, .catalog-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .resource-tile, .catalog-item { min-height:78px; border:1px solid var(--border); border-radius:8px; background:#fbfcfe; padding:10px; }
+    .table { display:grid; grid-template-columns:172px repeat(3,minmax(0,1fr)); overflow:hidden; }
+    .table-cell { min-height:84px; padding:12px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .table-cell:nth-child(4n) { border-right:0; } .table-cell:nth-last-child(-n+4) { border-bottom:0; } .table-head { background:var(--soft); }
+    .snippet { margin:0; padding:14px; background:var(--code); color:#f8fafc; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header>
-      <div>
-        <h1>Transcript Polisher</h1>
-        <p class="purpose">전사본을 코드 치환이 아니라 에이전트가 직접 읽고, source/output 구조와 output mode를 지키며 Claude Code `/goal`식 완료 조건 루프로 평가자가 납득할 증거가 나올 때까지 다듬는 로컬 스킬.</p>
+  <main class="shell">
+    <header class="hero">
+      <div class="identity">
+        <div class="mark">TRA</div>
+        <div>
+          <h1>transcript-polisher</h1>
+          <p class="subtitle">텍스트 전사본, 강의 대본, 자막, 회의록, 긴 산문을 에이전트가 직접 읽고 문맥에 맞게 검토하거나 다듬을 때 사용한다. 코드 치환표, regex, 일괄 문자열 치환으로 해결하지 않고 어색한 STT 용어, 깨진 문장, 문단 흐름, 강의 흐름, 섹션 연결, 용어 일관성을 직접 판단해 수정한다. 사용자가 문단이나 구문 단위로 나누고 각 단위마다 서브 에이전트를 배정하라고 요청하거나, Claud...</p>
+        </div>
       </div>
-      <div class="file-pair" aria-label="스킬 파일 구성">
-        <div class="pair-label">파일 쌍</div>
-        <div class="pair-item"><code>SKILL.md</code> 에이전트용 규칙</div>
-        <div class="pair-item"><code>skill.html</code> 사용자용 안내</div>
-      </div>
+      <aside class="quick" aria-label="스킬 파일 쌍">
+        <div><strong>에이전트 원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
+        <div><strong>사람용 가이드</strong><span><a href="skill.html"><code>skill.html</code></a></span></div>
+        <div><strong>언어 기준</strong><span>화면 설명은 한국어 문장 우선이며, 정확한 식별자만 원문으로 둡니다.</span></div>
+      </aside>
     </header>
 
-    <section>
-      <h2>사용 판단: 직접 읽어서 고칠 때만 사용</h2>
-      <div class="matrix">
-        <div class="cell use">
-          <strong>사용</strong>
-          <p>STT 전사본, 강의 대본, 자막, 회의록의 문맥과 흐름을 다듬을 때.</p>
+    <section class="section">
+      <div class="section-head"><h2>사용 판단 매트릭스</h2><p>언제 쓰고, 언제 다른 스킬로 넘길지 먼저 판단합니다.</p></div>
+      <div class="matrix" aria-label="사용 판단 매트릭스">
+        <div class="matrix-cell use"><strong>사용</strong><p>텍스트 전사본, 강의 대본, 자막, 회의록, 긴 산문을 에이전트가 직접 읽고 문맥에 맞게 검토하거나 다듬을 때 사용한다. 코드 치환표, regex, 일괄 문자열 치환으로 해결하지 않고 어색한 STT 용어, 깨진 문장, 문단 흐름, 강의 흐름, 섹션 연결, 용어 일관성을 직접 판단해 수정한다. 사용자가 문단이나 구문 단위로 나누고 각 단위마다 서브 에이전트를 배정하라고 요청하거나, Claud...</p></div>
+        <div class="matrix-cell combine"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>처럼 전담 스킬과 연결합니다.</p></div>
+        <div class="matrix-cell skip"><strong>건너뜀</strong><p>요청이 이 스킬의 호출 조건과 맞지 않거나 더 구체적인 스킬이 있으면 그 스킬을 우선합니다.</p></div>
+        <div class="matrix-cell stop"><strong>확인</strong><p>비밀값, 파괴적 작업, 외부 쓰기, 전역 설치가 얽히면 먼저 범위와 승인 조건을 확인합니다.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>실행 흐름</h2><p>읽기에서 검증까지의 기본 흐름입니다. 화살표는 실제 node에 닿도록 배치했습니다.</p></div>
+      <div class="two">
+        <div class="panel">
+          <svg viewBox="0 0 760 284" role="img" aria-label="transcript-polisher 실행 흐름">
+            <defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457c5"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="24" y="96" width="116" height="78" rx="8"></rect><rect x="174" y="96" width="116" height="78" rx="8"></rect><rect x="324" y="96" width="116" height="78" rx="8"></rect><rect x="474" y="96" width="116" height="78" rx="8"></rect><rect x="624" y="96" width="112" height="78" rx="8"></rect></g>
+            <g fill="none" stroke="#2457c5" stroke-width="2.4" marker-end="url(#flow-arrow)"><path d="M140 135 L174 135"></path><path d="M290 135 L324 135"></path><path d="M440 135 L474 135"></path><path d="M590 135 L624 135"></path></g>
+            <g text-anchor="middle" font-size="13" font-weight="700" fill="#151922"><text x="82" y="124">요청 읽기</text><text x="232" y="124">근거 확인</text><text x="382" y="124">경계 결정</text><text x="532" y="124">작업 수행</text><text x="680" y="124">검증</text></g>
+            <g text-anchor="middle" font-size="11" fill="#5f6876"><text x="82" y="145">사용자 의도</text><text x="82" y="159">현재 repo</text><text x="232" y="145">SKILL.md</text><text x="232" y="159">필요 문서</text><text x="382" y="145">허용 범위</text><text x="382" y="159">안전 조건</text><text x="532" y="145">최소 변경</text><text x="532" y="159">증거 남김</text><text x="680" y="145">validator</text><text x="680" y="159">보고</text></g>
+          </svg>
         </div>
-        <div class="cell combine">
-          <strong>함께 사용</strong>
-          <p>오디오 변환 뒤 source root와 output root를 보존하면서 Claude Code `/goal`처럼 완료 조건까지 반복 검증할 때.</p>
-        </div>
-        <div class="cell skip">
-          <strong>건너뜀</strong>
-          <p>단순 파일명 변경, 포맷 변환, 명확한 한두 글자 오타 수정만 필요할 때.</p>
-        </div>
-        <div class="cell stop">
-          <strong>중단/확인</strong>
-          <p>오디오 확인 없이는 확정할 수 없는 고유명사나 숫자가 핵심 의미일 때.</p>
+        <div class="steps">
+          <div class="step"><strong>1. 핵심 규칙</strong><span>텍스트 다듬기를 치환표, 정규식, 일괄 스크립트, 코드 기반 문자열 치환으로 해결하지 않는다. 에이전트가 텍스트를 직접 읽고, 앞뒤 문맥과 강의 흐름을 이해한 뒤 판단으로 수정한다.</span></div>
+          <div class="step"><strong>2. 작업 절차</strong><span>1. 대상 텍스트 파일을 확인하고 사용자의 요청에서 source root, output root, output mode, 출력 밀도, 완료 목표를 결정한다. - 원본 직접 수정: 기존 파일을 수정한다. - 병렬 출력: 요청된 출력 폴더 아래에 같은...</span></div>
+          <div class="step"><strong>3. 입력/출력 루트 결정</strong><span>긴 전사본 묶음을 처리할 때는 먼저 source root와 output root를 결정한다. 특정 repo의 디렉터리 이름을 스킬 규칙으로 고정하지 않고, 사용자의 명시값과 현재 폴더 구조를 보고 결정한다.</span></div>
+          <div class="step"><strong>4. 출력 밀도 결정</strong><span>전사본을 다듬을 때는 작업 시작 전에 output mode를 정한다. 사용자가 명시하지 않으면 polish를 기본값으로 둔다.</span></div>
         </div>
       </div>
     </section>
 
-    <section>
-      <h2>실행 흐름: 분할, 병렬 검토, 목표 감사</h2>
-      <div class="flow" aria-label="작업 흐름">
-        <div class="step"><span class="num">1</span><h3>루트 결정</h3><p>source root, output root, output mode를 먼저 고정한다.</p></div>
-        <div class="step"><span class="num">2</span><h3>전체 읽기</h3><p>파일과 강의 흐름을 먼저 파악한다.</p></div>
-        <div class="step"><span class="num">3</span><h3>용어 장부</h3><p>확정 용어와 불확실 용어를 나눠 둔다.</p></div>
-        <div class="step"><span class="num">4</span><h3>단위 분할</h3><p>문단, 구문, 주제 전환 기준으로 나눈다.</p></div>
-        <div class="step"><span class="num">5</span><h3>통합 편집</h3><p>메인 에이전트가 말투와 용어를 맞춘다.</p></div>
-        <div class="step"><span class="num">6</span><h3>목표 감사</h3><p>구조, 분량, 증거가 부족하면 다음 루프로 돌아간다.</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Claude Code `/goal` 접목: 완료 조건이 충족될 때까지 반복</h2>
-      <div class="goal-loop">
-        <svg class="loop-svg" viewBox="0 0 240 190" role="img" aria-label="목표 루프 다이어그램">
-          <defs>
-            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-              <path d="M0,0 L8,4 L0,8 Z" fill="#2563EB"></path>
-            </marker>
-          </defs>
-          <circle cx="120" cy="95" r="56" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2"></circle>
-          <path d="M120 39 A56 56 0 0 1 176 95" fill="none" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow)"></path>
-          <path d="M176 95 A56 56 0 0 1 120 151" fill="none" stroke="#1F7A52" stroke-width="3" marker-end="url(#arrow)"></path>
-          <path d="M120 151 A56 56 0 0 1 64 95" fill="none" stroke="#A16207" stroke-width="3" marker-end="url(#arrow)"></path>
-          <path d="M64 95 A56 56 0 0 1 120 39" fill="none" stroke="#B42318" stroke-width="3" marker-end="url(#arrow)"></path>
-          <text x="120" y="89" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">완료 조건</text>
-          <text x="120" y="109" text-anchor="middle" font-size="12" fill="#374151">평가자 증거</text>
-          <text x="120" y="24" text-anchor="middle" font-size="11" fill="#374151">정의</text>
-          <text x="205" y="99" text-anchor="middle" font-size="11" fill="#374151">수정</text>
-          <text x="120" y="174" text-anchor="middle" font-size="11" fill="#374151">감사</text>
-          <text x="35" y="99" text-anchor="middle" font-size="11" fill="#374151">반복</text>
-        </svg>
-        <div class="loop-list">
-          <div class="loop-item"><strong>완료 조건</strong><span>source/output root, output mode, 품질 기준, 최대 턴 조건을 한 문장으로 적는다.</span></div>
-          <div class="loop-item"><strong>증명 방법</strong><span>상대 경로, 파일 수, 분량 보존, 검증 결과처럼 평가자가 볼 증거를 정한다.</span></div>
-          <div class="loop-item"><strong>대화에 노출</strong><span>Claude Code 평가자는 도구를 쓰지 않으므로 증거를 보고에 남긴다.</span></div>
-          <div class="loop-item"><strong>개선 한계</strong><span>자가 개선 스킬이 아니라, 드러난 증거로 완료 여부를 감사하는 루프다.</span></div>
-          <div class="loop-item"><strong>계속/종료</strong><span>조건이 대화상 증거로 충족되지 않으면 다음 턴으로 이어간다.</span></div>
+    <section class="section">
+      <div class="section-head"><h2>입출력 구조</h2><p>입력은 사용자의 요청과 repo 근거이고, 출력은 검증 가능한 답변 또는 파일 변경입니다.</p></div>
+      <div class="two">
+        <div class="schema" aria-label="입출력 구조">
+          <div class="schema-stack"><div class="schema-node"><strong>입력</strong><span>사용자 요청, <code>SKILL.md</code>, 관련 repo 파일, 필요한 참조 문서.</span></div><div class="schema-node"><strong>제약</strong><span>한국어 문장 우선, 전역 설치 금지, 관련 없는 파일 보존.</span></div></div>
+          <div class="schema-arrow" aria-hidden="true">→</div>
+          <div class="schema-stack"><div class="schema-node"><strong>출력</strong><span>실행 결과, 변경 파일, 검증 명령, 남은 위험을 짧게 정리합니다.</span></div><div class="schema-node"><strong>증거</strong><span>필요한 validator, 테스트, 브라우저 확인, 파일 경로를 함께 남깁니다.</span></div></div>
+        </div>
+        <div class="chart" aria-label="위험과 검증 차트">
+          <div class="bar"><strong>요청 적합도</strong><span class="track"><span class="fill green" style="width:94%"></span></span><span>먼저</span></div>
+          <div class="bar"><strong>근거 확인</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>범위 통제</strong><span class="track"><span class="fill" style="width:82%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>검증 강도</strong><span class="track"><span class="fill amber" style="width:74%"></span></span><span>위험별</span></div>
+          <div class="bar"><strong>전역 변경</strong><span class="track"><span class="fill red" style="width:58%"></span></span><span>차단</span></div>
+          <p class="small">HTML은 PC desktop 기준으로 확인합니다. mobile/tablet 레이아웃은 이 재생성 범위가 아닙니다.</p>
         </div>
       </div>
     </section>
 
-    <section>
-      <h2>입력과 출력: 원문 의미는 보존</h2>
-      <div class="io-grid">
-        <div class="io">
-          <h3>입력</h3>
-          <ul>
-            <li>전사본 <code>.txt</code> 파일</li>
-            <li>source root 또는 파일 목록</li>
-            <li>output root</li>
-            <li><code>polish</code>, <code>lecture-notes</code>, <code>summary</code> mode</li>
-            <li>원본 수정 또는 병렬 출력 지시</li>
-          </ul>
+    <section class="section">
+      <div class="section-head"><h2>파일 관계도</h2><p>스킬 폴더 안의 원본, 사람용 가이드, 검증기, 참조 문서를 분리합니다.</p></div>
+      <div class="two">
+        <div class="resource">
+          <svg viewBox="0 0 620 310" role="img" aria-label="파일 관계도">
+            <defs><marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#8793a3"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="236" y="112" width="148" height="76" rx="8"></rect><rect x="34" y="42" width="150" height="64" rx="8"></rect><rect x="34" y="208" width="150" height="64" rx="8"></rect><rect x="436" y="42" width="150" height="64" rx="8"></rect><rect x="436" y="208" width="150" height="64" rx="8"></rect></g>
+            <g fill="none" stroke="#8793a3" stroke-width="2.2" marker-end="url(#map-arrow)"><path d="M184 74 L236 126"></path><path d="M184 240 L236 174"></path><path d="M384 126 L436 74"></path><path d="M384 174 L436 240"></path></g>
+            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">transcript-polisher</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
+            <g text-anchor="middle" font-size="10" fill="#5f6876"><text x="310" y="164">스킬 폴더</text><text x="109" y="88">원본 지시</text><text x="109" y="254">사람용 가이드</text><text x="511" y="88">세부 기준</text><text x="511" y="254">품질 확인</text></g>
+          </svg>
+          <div class="files">
+            <a class="resource-tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 지시문</span></a>
+            <a class="resource-tile" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 훑는 도표 가이드</span></a>
+            <a class="resource-tile" href="../../project-snippets/transcript-polisher.md"><strong>../../project-snippets/transcript-polisher.md</strong><span>프로젝트 연결 조각</span></a>
+          </div>
         </div>
-        <div class="io">
-          <h3>처리</h3>
-          <ul>
-            <li>직접 읽기</li>
-            <li>문맥 단위 분할</li>
-            <li>확정/불확실 용어 장부</li>
-            <li>서브 에이전트별 섹션 검토</li>
-            <li>메인 에이전트 최종 통합</li>
-            <li>Claude Code `/goal`식 완료 조건 루프</li>
-          </ul>
-        </div>
-        <div class="io">
-          <h3>출력</h3>
-          <ul>
-            <li>같은 상대 경로의 수정 전사본</li>
-            <li>불확실한 표현 목록</li>
-            <li>source/output 파일 수와 분량 검증</li>
-            <li>검증 결과</li>
-            <li>완료 조건 증거 목록</li>
-            <li>파일/라인 기준 요약</li>
-          </ul>
+        <div class="rules">
+          <div class="rule"><strong>한국어 문장 우선</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>정확한 파일명과 명령은 원문 유지</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>PC desktop 기준</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>외부 asset 없음</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
         </div>
       </div>
     </section>
 
-    <section>
-      <h2>파일 관계도: 공유 스킬 패키지 구성</h2>
-      <div class="resource-wrap">
-        <pre class="tree">skills/transcript-polisher/
-├── SKILL.md
-├── skill.html
-└── agents/
-    └── openai.yaml</pre>
-        <div>
-          <h3>연결 방식</h3>
-          <p>이 스킬은 공유 skills repo의 source instruction으로 둔다. 각 프로젝트에서는 필요한 경우 instruction 파일에서 이 경로를 명시해 연결한다.</p>
-          <p class="note">사용자가 요청하지 않으면 전역 <code>~/.codex/skills</code>에 설치하지 않고 프로젝트별 연결을 우선한다.</p>
-        </div>
+    <section class="section">
+      <div class="section-head"><h2>검증 표</h2><p>넓은 표는 전체 폭 section에 두어 2열 layout overflow를 피합니다.</p></div>
+      <div class="table" aria-label="검증 표">
+        <div class="table-cell table-head"><strong>검증 gate</strong></div><div class="table-cell table-head"><strong>명령 또는 대상</strong></div><div class="table-cell table-head"><strong>실패 신호</strong></div><div class="table-cell table-head"><strong>완료 기준</strong></div>
+        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/transcript-polisher</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
+        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span>전용 validator 없음</span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
+        <div class="table-cell"><strong>HTML 공통</strong></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div><div class="table-cell"><span>broken local link, 외부 asset, overflow, SVG arrow endpoint 오류.</span></div><div class="table-cell"><span>PC desktop 기준으로 읽힘.</span></div>
       </div>
     </section>
 
-    <section>
-      <h2>우선순위 차트: 무엇을 먼저 고치나</h2>
-      <div class="bars" aria-label="편집 우선순위">
-        <div class="bar-row"><span class="bar-label">문맥 흐름</span><div class="track"><div class="fill danger" style="width: 96%"></div></div><span class="score">최상</span></div>
-        <div class="bar-row"><span class="bar-label">STT 용어 오류</span><div class="track"><div class="fill warn" style="width: 88%"></div></div><span class="score">높음</span></div>
-        <div class="bar-row"><span class="bar-label">구조 보존</span><div class="track"><div class="fill ok" style="width: 86%"></div></div><span class="score">높음</span></div>
-        <div class="bar-row"><span class="bar-label">강의 톤 보존</span><div class="track"><div class="fill ok" style="width: 82%"></div></div><span class="score">높음</span></div>
-        <div class="bar-row"><span class="bar-label">문어체 미화</span><div class="track"><div class="fill" style="width: 34%"></div></div><span class="score">낮음</span></div>
+    <section class="section">
+      <div class="section-head"><h2>금지와 허용</h2><p>스킬은 요청된 작업을 돕는 도구이며, 범위 밖 자동화는 하지 않습니다.</p></div>
+      <div class="matrix" aria-label="금지와 허용">
+        <div class="matrix-cell use"><strong>허용</strong><p>관련 파일을 읽고, 요청된 범위 안에서 가장 작은 유효 변경을 수행합니다.</p></div>
+        <div class="matrix-cell combine"><strong>보고</strong><p>변경 파일, 검증 명령, 브라우저 확인 여부를 최종 답변에 남깁니다.</p></div>
+        <div class="matrix-cell skip"><strong>보류</strong><p>요청과 무관한 refactor, 문서 확장, 전역 설치는 하지 않습니다.</p></div>
+        <div class="matrix-cell stop"><strong>차단</strong><p>비밀값 노출, destructive command, 승인 없는 commit/push/deploy는 멈춥니다.</p></div>
       </div>
     </section>
 
-    <section>
-      <h2>검증 게이트: 끝내기 전에 다시 읽기</h2>
-      <div class="validation">
-        <div class="gate"><strong>조건</strong><span>Claude Code 평가자가 볼 수 있는 완료 조건인가.</span></div>
-        <div class="gate"><strong>범위</strong><span>source/output 파일 수와 상대 경로가 일치하는가.</span></div>
-        <div class="gate"><strong>보존</strong><span>source root는 원본이고 수정은 output root에만 있는가.</span></div>
-        <div class="gate"><strong>분량</strong><span><code>polish</code>가 요약본처럼 과도하게 줄지 않았는가.</span></div>
-        <div class="gate"><strong>증거</strong><span>불확실 용어와 검증 증거를 보고에 남겼는가.</span></div>
-      </div>
+    <section class="section">
+      <div class="section-head"><h2>프로젝트 연결 조각</h2><p>프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둡니다.</p></div>
+      <pre class="snippet">Use $transcript-polisher at skills/transcript-polisher/SKILL.md when the task matches this skill.
+Keep visible explanations Korean-first, preserve exact identifiers, and report validation evidence.
+Validate with node scripts/validate-skill.ts skills/transcript-polisher &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
     </section>
-
-    <section>
-      <h2>금지와 허용: 코드 치환으로 돌아가지 않기</h2>
-      <div class="guard-grid">
-        <div class="guard good">
-          <h3>해야 함</h3>
-          <ul>
-            <li>문단 단위로 직접 읽고 판단한다.</li>
-            <li>source/output root와 output mode를 먼저 고정한다.</li>
-            <li>Claude Code `/goal`처럼 완료 조건과 평가자용 증거를 유지한다.</li>
-            <li>허용된 경우에만 서브 에이전트 결과를 메인에서 다시 통합한다.</li>
-            <li>확정 용어와 불확실 용어를 분리한다.</li>
-            <li>불확실한 고유명사는 확인 대상으로 남긴다.</li>
-          </ul>
-        </div>
-        <div class="guard bad">
-          <h3>하지 말 것</h3>
-          <ul>
-            <li>치환표나 regex로 본문을 자동 수정하지 않는다.</li>
-            <li>평가자가 볼 증거 없이 완료라고 말하지 않는다.</li>
-            <li>서브 에이전트를 쓰지 않았는데 썼다고 말하지 않는다.</li>
-            <li>source root에 검토본 패치를 잘못 적용하지 않는다.</li>
-            <li>검토본을 단순 복사한 채 완료라고 말하지 않는다.</li>
-            <li>원문에 없는 설명이나 사실을 추가하지 않는다.</li>
-            <li>강의 예시의 의도적 어색함을 임의로 매끈하게 만들지 않는다.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-  </div>
+  </main>
 </body>
 </html>

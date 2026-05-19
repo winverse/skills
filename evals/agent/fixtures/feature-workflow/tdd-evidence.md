@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: TDD Evidence
+# Saved Feature Workflow Output: TDD Evidence
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Bug fix
 
 Spec authority

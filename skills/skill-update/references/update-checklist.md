@@ -37,7 +37,7 @@
 
 1. `docs/update-source-registry.md`를 읽고 source family를 정한다.
 2. vendored plugin/submodule 후보는 `.gitmodules`에서 path와 URL을 읽는다.
-3. workflow provenance-only primitive는 `skills/project-workflow/references/upstream-dependency-map.md` 또는 `skills/spec-workflow/references/upstream-dependency-map.md`에서 읽는다.
+3. workflow provenance-only primitive는 `skills/project-workflow/references/upstream-dependency-map.md` 또는 `skills/feature-workflow/references/upstream-dependency-map.md`에서 읽는다.
 4. `references/`, `history/skills.md`, project snippets, 기존 commit message에서 local provenance를 찾는다.
 5. `agents/openai.yaml`, `skill.html`의 source mention, git history까지 확인한다.
 6. 대상 skill이 plugin-bundled skill에서 온 경우에만 `.gitmodules`, plugin/submodule metadata, package manifest를 원본 후보 증거로 확인한다.

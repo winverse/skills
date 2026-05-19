@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>project-workflow 시각 가이드</title>
+  <title>feature-workflow 시각 가이드</title>
   <link rel="icon" href="data:,">
   <style>
     :root { --bg:#f6f7f9; --surface:#ffffff; --soft:#eef2f6; --text:#151922; --muted:#5f6876; --border:#cfd6df; --line:#8793a3; --blue:#2457c5; --green:#24724f; --amber:#93640d; --red:#aa2e25; --code:#111827; }
@@ -57,10 +57,10 @@
   <main class="shell">
     <header class="hero">
       <div class="identity">
-        <div class="mark">PRO</div>
+        <div class="mark">FEA</div>
         <div>
-          <h1>project-workflow</h1>
-          <p class="subtitle">새 프로젝트나 큰 기획의 초기 셋팅을 domain docs, 제품 검증, ADR, project structure, design.md, PRD, 이슈 목록, feature-workflow 인계까지 정리할 때 사용한다.</p>
+          <h1>feature-workflow</h1>
+          <p class="subtitle">기존 PRD, issue, spec, bug report, acceptance criteria, design.md, ADR을 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA, 문서 동기화까지 끝낼 때 사용한다.</p>
         </div>
       </div>
       <aside class="quick" aria-label="스킬 파일 쌍">
@@ -73,7 +73,7 @@
     <section class="section">
       <div class="section-head"><h2>사용 판단 매트릭스</h2><p>언제 쓰고, 언제 다른 스킬로 넘길지 먼저 판단합니다.</p></div>
       <div class="matrix" aria-label="사용 판단 매트릭스">
-        <div class="matrix-cell use"><strong>사용</strong><p>새 프로젝트나 큰 기획의 초기 셋팅을 domain docs, 제품 검증, ADR, project structure, design.md, PRD, 이슈 목록, feature-workflow 인계까지 정리할 때 사용한다.</p></div>
+        <div class="matrix-cell use"><strong>사용</strong><p>기존 PRD, issue, spec, bug report, acceptance criteria, design.md, ADR을 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA, 문서 동기화까지 끝낼 때 사용한다.</p></div>
         <div class="matrix-cell combine"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>처럼 전담 스킬과 연결합니다.</p></div>
         <div class="matrix-cell skip"><strong>건너뜀</strong><p>요청이 이 스킬의 호출 조건과 맞지 않거나 더 구체적인 스킬이 있으면 그 스킬을 우선합니다.</p></div>
         <div class="matrix-cell stop"><strong>확인</strong><p>비밀값, 파괴적 작업, 외부 쓰기, 전역 설치가 얽히면 먼저 범위와 승인 조건을 확인합니다.</p></div>
@@ -81,12 +81,12 @@
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>TypeScript module 정책</h2><p>초기 셋팅 단계에서도 TypeScript는 ESM 기준을 먼저 고정합니다.</p></div>
+      <div class="section-head"><h2>TypeScript module 정책</h2><p>구현 loop에서도 TypeScript production edit은 ESM 기준을 유지합니다.</p></div>
       <div class="matrix" aria-label="TypeScript module 정책">
-        <div class="matrix-cell use"><strong>ESM only</strong><p><code>package.json</code>에는 <code>type: "module"</code>을 두고, <code>import</code>/<code>export</code>와 ESM <code>tsconfig</code>를 기본값으로 기록합니다.</p></div>
-        <div class="matrix-cell combine"><strong>구조 인계</strong><p>folder/env/codegen 경계가 필요하면 이 정책을 <code>project-structure</code> handoff와 ADR/PRD에 함께 넘깁니다.</p></div>
-        <div class="matrix-cell skip"><strong>기존 코드</strong><p>이미 있는 CommonJS는 복사할 패턴이 아니라 migration boundary 또는 blocker로 표시합니다.</p></div>
-        <div class="matrix-cell stop"><strong>CommonJS 금지</strong><p><code>require</code>, <code>module.exports</code>, <code>.cjs</code>, <code>.cts</code>를 새 구조나 이슈에 넣지 않습니다.</p></div>
+        <div class="matrix-cell use"><strong>ESM only</strong><p><code>package.json</code> <code>type: "module"</code>, ESM <code>tsconfig</code>, <code>import</code>/<code>export</code>를 유지합니다.</p></div>
+        <div class="matrix-cell combine"><strong>Preflight</strong><p>plan 전에 module boundary와 migration owner를 확인하고 검증 명령에 포함합니다.</p></div>
+        <div class="matrix-cell skip"><strong>Migration boundary</strong><p>기존 CommonJS 파일을 확장해야 하면 blocker 또는 migration note를 먼저 남깁니다.</p></div>
+        <div class="matrix-cell stop"><strong>CommonJS 금지</strong><p><code>require</code>, <code>module.exports</code>, <code>.cjs</code>, <code>.cts</code>를 새 production change에 추가하지 않습니다.</p></div>
       </div>
     </section>
 
@@ -94,7 +94,7 @@
       <div class="section-head"><h2>실행 흐름</h2><p>읽기에서 검증까지의 기본 흐름입니다. 화살표는 실제 node에 닿도록 배치했습니다.</p></div>
       <div class="two">
         <div class="panel">
-          <svg viewBox="0 0 760 284" role="img" aria-label="project-workflow 실행 흐름">
+          <svg viewBox="0 0 760 284" role="img" aria-label="feature-workflow 실행 흐름">
             <defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457c5"></path></marker></defs>
             <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="24" y="96" width="116" height="78" rx="8"></rect><rect x="174" y="96" width="116" height="78" rx="8"></rect><rect x="324" y="96" width="116" height="78" rx="8"></rect><rect x="474" y="96" width="116" height="78" rx="8"></rect><rect x="624" y="96" width="112" height="78" rx="8"></rect></g>
             <g fill="none" stroke="#2457c5" stroke-width="2.4" marker-end="url(#flow-arrow)"><path d="M140 135 L174 135"></path><path d="M290 135 L324 135"></path><path d="M440 135 L474 135"></path><path d="M590 135 L624 135"></path></g>
@@ -103,10 +103,10 @@
           </svg>
         </div>
         <div class="steps">
-          <div class="step"><strong>1. dependency contract 기준</strong><span>Matt Pocock skills, GStack plugin, design-direction, repo-local custom helper에서 초기 셋팅에 필요한 primitive만 고른다. 전체 패키지를 전부 실행하지 않는다.</span></div>
-          <div class="step"><strong>2. provenance ledger 기준</strong><span>정확한 출처와 업데이트 규칙은 references/upstream-dependency-map.md를 먼저 본다. grill-me, office-hours, to-prd, project-structure, design.md처럼 외부 또는 custom에...</span></div>
-          <div class="step"><strong>3. 핵심 계약</strong><span>- local project instructions와 docs를 먼저 읽는다. - 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. code identifiers, 명령, 파일 경로, 제품명, API...</span></div>
-          <div class="step"><strong>4. mode router 기준</strong><span>| 요청 | lane | | --- | --- | | 초기 아이디어, 새 서비스, 새 앱 | discovery -&gt; domain -&gt; 제품 검증 | | project structure | domain/architecture 질문 후 project-s...</span></div>
+          <div class="step"><strong>1. dependency contract 기준</strong><span>Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local custom helper에서 spec 구현에 필요한 primitive만 고른다. 전체 패키지를 전부 실행하지 않는다.</span></div>
+          <div class="step"><strong>2. provenance ledger 기준</strong><span>정확한 출처와 업데이트 규칙은 references/upstream-dependency-map.md를 먼저 본다. brainstorming, writing-plans, tdd, subagent-driven-development, review, qa,...</span></div>
+          <div class="step"><strong>3. preflight 기준</strong><span>- local project instructions와 folder-local docs를 먼저 읽는다. - spec, issue, acceptance criteria, bug repro, or user-provided task가 있는지 확인한다. -...</span></div>
+          <div class="step"><strong>4. mode router 기준</strong><span>| 요청 | lane | | --- | --- | | 새 feature issue 구현 | spec preflight -&gt; 구현 계획 -&gt; TDD | | bug fix | reproduce/characterization -&gt; minimal fix -...</span></div>
         </div>
       </div>
     </section>
@@ -138,24 +138,24 @@
             <defs><marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#8793a3"></path></marker></defs>
             <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="236" y="112" width="148" height="76" rx="8"></rect><rect x="34" y="42" width="150" height="64" rx="8"></rect><rect x="34" y="208" width="150" height="64" rx="8"></rect><rect x="436" y="42" width="150" height="64" rx="8"></rect><rect x="436" y="208" width="150" height="64" rx="8"></rect></g>
             <g fill="none" stroke="#8793a3" stroke-width="2.2" marker-end="url(#map-arrow)"><path d="M184 74 L236 126"></path><path d="M184 240 L236 174"></path><path d="M384 126 L436 74"></path><path d="M384 174 L436 240"></path></g>
-            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">project-workflow</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
+            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">feature-workflow</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
             <g text-anchor="middle" font-size="10" fill="#5f6876"><text x="310" y="164">스킬 폴더</text><text x="109" y="88">원본 지시</text><text x="109" y="254">사람용 가이드</text><text x="511" y="88">세부 기준</text><text x="511" y="254">품질 확인</text></g>
           </svg>
           <div class="files">
             <a class="resource-tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 지시문</span></a>
             <a class="resource-tile" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 훑는 도표 가이드</span></a>
-            <a class="resource-tile" href="scripts/validate-project-workflow.ts"><strong>scripts/validate-project-workflow.ts</strong><span>스킬 전용 검증기</span></a>
-            <a class="resource-tile" href="../../project-snippets/project-workflow.md"><strong>../../project-snippets/project-workflow.md</strong><span>프로젝트 연결 조각</span></a>
-            <a class="resource-tile" href="references/project-workflow-playbook.md"><strong>references/project-workflow-playbook.md</strong><span>긴 기준과 세부 예시</span></a>
+            <a class="resource-tile" href="scripts/validate-feature-workflow.ts"><strong>scripts/validate-feature-workflow.ts</strong><span>스킬 전용 검증기</span></a>
+            <a class="resource-tile" href="../../project-snippets/feature-workflow.md"><strong>../../project-snippets/feature-workflow.md</strong><span>프로젝트 연결 조각</span></a>
+            <a class="resource-tile" href="references/feature-workflow-playbook.md"><strong>references/feature-workflow-playbook.md</strong><span>긴 기준과 세부 예시</span></a>
             <a class="resource-tile" href="references/upstream-dependency-map.md"><strong>references/upstream-dependency-map.md</strong><span>긴 기준과 세부 예시</span></a>
           </div>
         </div>
         <div class="rules">
-          <div class="rule"><strong>한국어 우선 문서</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>TypeScript ESM only</strong><p>TypeScript 초기 셋팅은 <code>type: "module"</code>과 <code>import</code>/<code>export</code>를 기준으로 남깁니다.</p></div>
+          <div class="rule"><strong>TypeScript ESM only</strong><p>TypeScript production edit은 <code>import</code>/<code>export</code>를 유지하고 CommonJS 패턴을 추가하지 않습니다.</p></div>
           <div class="rule"><strong>work-claims.md</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>claimed write set</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>integration owner</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>overlap block</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>shared/hotspot files</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>RED/GREEN/REFACTOR 증거</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
         </div>
       </div>
     </section>
@@ -164,8 +164,8 @@
       <div class="section-head"><h2>검증 표</h2><p>넓은 표는 전체 폭 section에 두어 2열 layout overflow를 피합니다.</p></div>
       <div class="table" aria-label="검증 표">
         <div class="table-cell table-head"><strong>검증 gate</strong></div><div class="table-cell table-head"><strong>명령 또는 대상</strong></div><div class="table-cell table-head"><strong>실패 신호</strong></div><div class="table-cell table-head"><strong>완료 기준</strong></div>
-        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/project-workflow</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
-        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span><code>node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow</code></span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
+        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/feature-workflow</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
+        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span><code>node skills/feature-workflow/scripts/validate-feature-workflow.ts skills/feature-workflow</code></span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
         <div class="table-cell"><strong>HTML 공통</strong></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div><div class="table-cell"><span>broken local link, 외부 asset, overflow, SVG arrow endpoint 오류.</span></div><div class="table-cell"><span>PC desktop 기준으로 읽힘.</span></div>
       </div>
     </section>
@@ -182,9 +182,9 @@
 
     <section class="section">
       <div class="section-head"><h2>프로젝트 연결 조각</h2><p>프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둡니다.</p></div>
-      <pre class="snippet">Use $project-workflow at skills/project-workflow/SKILL.md when the task matches this skill.
+      <pre class="snippet">Use $feature-workflow at skills/feature-workflow/SKILL.md when the task matches this skill.
 Keep visible explanations Korean-first, preserve exact identifiers, and report validation evidence.
-Validate with node scripts/validate-skill.ts skills/project-workflow &amp;&amp; node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
+Validate with node scripts/validate-skill.ts skills/feature-workflow &amp;&amp; node skills/feature-workflow/scripts/validate-feature-workflow.ts skills/feature-workflow &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
     </section>
   </main>
 </body>

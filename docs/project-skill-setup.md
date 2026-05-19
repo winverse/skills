@@ -40,7 +40,7 @@ Suggested verification report shape:
 ```json
 {
   "targetInstructionFile": "AGENTS.md",
-  "skills": ["project-workflow", "spec-workflow", "project-structure", "browser-qa"],
+  "skills": ["project-workflow", "feature-workflow", "project-structure", "browser-qa"],
   "linksValid": true,
   "globalInstallAllowed": false,
   "validation": ["node scripts/run-agent-evals.ts --scope cross_agent_portability"]
@@ -65,8 +65,8 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/atomic-committer.md`: only commit grouping and push rules.
 - `project-snippets/pull-request.md`: only GitHub PR preparation and creation rules.
 - `project-snippets/project-structure.md`: only project structure, default stack rules, selected DB provider options, and requested infra/deployment boundaries.
-- `project-snippets/project-workflow.md`: only the Workflow suite setup half, project bootstrap sequencing, domain/product/ADR/design/PRD/issue backlog setup, `workflow-state.md` cache, and `spec-workflow` handoff.
-- `project-snippets/spec-workflow.md`: only the Workflow suite implementation half, PRD/issue/spec based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
+- `project-snippets/project-workflow.md`: only the Workflow suite setup half, project bootstrap sequencing, domain/product/ADR/design/PRD/issue backlog setup, `workflow-state.md` cache, and `feature-workflow` handoff.
+- `project-snippets/feature-workflow.md`: only the Workflow suite feature/issue implementation half, PRD/issue/spec/bug based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.
 - `project-snippets/agent-eval-harness.md`: only initial agent eval harness setup, skill routing cases, cross-agent portability checks, guardrail checks, artifact hygiene, local runner wiring, and regression capture.

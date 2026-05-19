@@ -37,7 +37,7 @@ description: "에이전트 스킬 라우팅, 프롬프트 경계, cross-agent po
 
 ## workflow handoff seed case 기준
 
-`project-workflow`나 `spec-workflow`와 함께 쓸 때는 dependency inventory, `project-structure` 호출 시점, PRD settings, UI mockup selection, `workflow-state.md` cache, `work-claims.md` parallel lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate, fallback lane, project setup verification, spec implementation loop, completion mapping, document sync, artifact hygiene, improvement seed, goal condition quality를 seed case로 둔다.
+`project-workflow`나 `feature-workflow`와 함께 쓸 때는 dependency inventory, `project-structure` 호출 시점, PRD settings, UI mockup selection, `workflow-state.md` cache, `work-claims.md` parallel lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate, fallback lane, project setup verification, feature/issue implementation loop, completion mapping, document sync, artifact hygiene, improvement seed, goal condition quality를 seed case로 둔다.
 
 ## goal condition eval 기준
 

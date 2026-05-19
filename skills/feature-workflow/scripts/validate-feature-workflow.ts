@@ -4,22 +4,34 @@ import path from "node:path";
 import process from "node:process";
 import { validateSkillPackage } from "../../../scripts/validate-skill-package.ts";
 
-const skillRoot = process.argv[2] ?? "skills/spec-workflow";
+const skillRoot = process.argv[2] ?? "skills/feature-workflow";
 const repoRoot = path.resolve(skillRoot, "../..");
 
-validateSkillPackage("spec-workflow", skillRoot);
+validateSkillPackage("feature-workflow", skillRoot);
 
 const requiredChecks = [
   ["SKILL.md", "work-claims.md"],
   ["SKILL.md", "overlap block"],
   ["SKILL.md", "shared/hotspot files"],
-  ["references/spec-workflow-playbook.md", "work claim preflight 기준"],
-  ["references/spec-workflow-playbook.md", "overlap result: clear | blocked"],
+  ["SKILL.md", "ESM only"],
+  ["SKILL.md", "CommonJS"],
+  ["SKILL.md", "type: \"module\""],
+  ["references/feature-workflow-playbook.md", "work claim preflight 기준"],
+  ["references/feature-workflow-playbook.md", "overlap result: clear | blocked"],
+  ["references/feature-workflow-playbook.md", "TypeScript module policy preflight 기준"],
+  ["references/feature-workflow-playbook.md", "type: \"module\""],
   ["agents/openai.yaml", "stop with an overlap block"],
+  ["agents/openai.yaml", "ESM only"],
+  ["agents/openai.yaml", "CommonJS"],
   ["skill.html", "work-claims.md"],
   ["skill.html", "overlap block"],
-  ["../../project-snippets/spec-workflow.md", "work-claims.md"],
+  ["skill.html", "TypeScript module 정책"],
+  ["skill.html", "CommonJS 금지"],
+  ["../../project-snippets/feature-workflow.md", "work-claims.md"],
+  ["../../project-snippets/feature-workflow.md", "ESM only"],
+  ["../../project-snippets/feature-workflow.md", "CommonJS"],
   ["../../project-snippets/base.md", "overlap block"],
+  ["../../project-snippets/base.md", "ESM only"],
 ] as const;
 
 const failures: string[] = [];
@@ -34,7 +46,7 @@ for (const [relativePath, needle] of requiredChecks) {
 }
 
 if (failures.length) {
-  console.error("spec-workflow validation failed:");
+  console.error("feature-workflow validation failed:");
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }

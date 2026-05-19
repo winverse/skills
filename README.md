@@ -80,7 +80,7 @@ plugins/caveman/
 - `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, `web-research` 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 계약, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
-- `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 우선 diagram-rich `skill.html`을 만들거나 고치는 스킬. 산출물은 PC desktop 기준만 보고, mobile/tablet layout은 비대상으로 둔다.
+- `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 문장 우선, 도표 중심 `skill.html`을 만들거나 고치는 스킬. 산출물은 PC desktop 기준만 보고, mobile/tablet layout은 비대상으로 둔다.
   - Source instruction: `skills/skill-to-html/SKILL.md`
   - Human visual guide: `skills/skill-to-html/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
@@ -95,15 +95,15 @@ plugins/caveman/
 - `pull-request`: GitHub pull request의 branch/base/head 상태, title/body, reviewer/label/milestone/project, linked issue, `gh pr create` 실행 경계를 관리하는 스킬.
   - Source instruction: `skills/pull-request/SKILL.md`
   - Human visual guide: `skills/pull-request/skill.html`
-- `project-structure`: frontend, backend, full-stack monorepo, desktop app, infrastructure-aware 구조의 폴더 구조와 기본 stack/env/codegen 정책, folder-local `AGENTS.md` 목차, PostgreSQL/Drizzle, MongoDB Atlas, Supabase Postgres, psql/mongosh helper, Pulumi/Docker/AWS ECR/ECS/EC2 infra, backend logger/cache/security/observability, agent tool/MCP/API boundary, Redis DB boundary, migration/index sync, test surface를 일관되게 잡는 스킬.
+- `project-structure`: frontend, backend, full-stack monorepo, desktop app, infrastructure-aware 구조의 폴더 구조와 기본 stack/env/codegen 정책, TypeScript ESM-only module 정책, folder-local `AGENTS.md` 목차, PostgreSQL/Drizzle, MongoDB Atlas, Supabase Postgres, psql/mongosh helper, Pulumi/Docker/AWS ECR/ECS/EC2 infra, backend logger/cache/security/observability, agent tool/MCP/API boundary, Redis DB boundary, migration/index sync, test surface를 일관되게 잡는 스킬.
   - Source instruction: `skills/project-structure/SKILL.md`
   - Human visual guide: `skills/project-structure/skill.html`
-- `project-workflow`: Workflow suite의 초기 셋팅 절반이다. 새 프로젝트나 큰 initiative의 domain docs, product challenge, ADR, `design.md`, PRD, initial issue backlog, project setup verification, `spec-workflow` handoff까지 정리하고, 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. Matt Pocock skills `grill-me`, GStack plugin `office-hours`, repo-local `project-structure`, user custom `design.md`처럼 출처 라벨을 붙여 추적하고, `.scratch/<slug>/workflow-state.md` cache를 남긴다. 여러 session, agent, worktree가 병렬 구현할 수 있으면 `.scratch/<slug>/work-claims.md`에 lane owner와 claimed write set, shared/hotspot file의 integration owner를 기록한다.
+- `project-workflow`: 워크플로우 묶음의 초기 설정 구간이다. 새 프로젝트나 큰 기획의 도메인 문서, 제품 검증, ADR, `design.md`, PRD, 초기 이슈 목록, 프로젝트 설정 확인, `feature-workflow` 인계까지 정리하고, 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. TypeScript 프로젝트는 ESM only와 CommonJS 금지를 architecture constraint로 남긴다. Matt Pocock skills `grill-me`, GStack plugin `office-hours`, repo-local `project-structure`, user custom `design.md`처럼 출처 라벨을 붙여 추적하고, `.scratch/<slug>/workflow-state.md` cache를 남긴다. 여러 session, agent, worktree가 병렬 구현할 수 있으면 `.scratch/<slug>/work-claims.md`에 lane owner와 claimed write set, shared/hotspot file의 integration owner를 기록한다.
   - Source instruction: `skills/project-workflow/SKILL.md`
   - Human visual guide: `skills/project-workflow/skill.html`
-- `spec-workflow`: Workflow suite의 반복 개발 절반이다. 이미 있는 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`와 `workflow-state.md` cache를 기준으로 TDD, implementation plan, review, QA/runtime evidence, document sync, completion reporting을 반복한다. `work-claims.md`가 있으면 production edit 전에 현재 lane의 claimed write set을 확인하고, 다른 active lane과 겹치면 overlap block으로 멈춘다. 대상 코드 repo에서는 production code edit 전에 RED evidence를 강제하고, 이 shared skills repo에서는 hook을 설치하지 않고 target-project hook 계약만 문서화한다. Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, repo-local `code-review`/`browser-qa`/`sync-docs`의 출처를 분리해 추적하고, 실패/누락이 있으면 `agent-eval-harness` seed 후보를 남긴다.
-  - Source instruction: `skills/spec-workflow/SKILL.md`
-  - Human visual guide: `skills/spec-workflow/skill.html`
+- `feature-workflow`: 워크플로우 묶음의 반복 개발 구간이다. 이미 있는 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`와 `workflow-state.md` cache를 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA/runtime evidence, document sync, completion reporting까지 끝낸다. `work-claims.md`가 있으면 production edit 전에 현재 lane의 claimed write set을 확인하고, 다른 active lane과 겹치면 overlap block으로 멈춘다. TypeScript production edit은 ESM only를 유지하고 CommonJS 도입은 blocker 또는 migration boundary로 다룬다. 대상 코드 repo에서는 production code edit 전에 RED evidence를 강제하고, 이 shared skills repo에서는 hook을 설치하지 않고 target-project hook 계약만 문서화한다. Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, repo-local `code-review`/`browser-qa`/`sync-docs`의 출처를 분리해 추적하고, 실패/누락이 있으면 `agent-eval-harness` seed 후보를 남긴다.
+  - Source instruction: `skills/feature-workflow/SKILL.md`
+  - Human visual guide: `skills/feature-workflow/skill.html`
 - `sync-docs`: README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.
   - Source instruction: `skills/sync-docs/SKILL.md`
   - Human visual guide: `skills/sync-docs/skill.html`
@@ -113,7 +113,7 @@ plugins/caveman/
 - `agent-improvement-loop`: 소진형 실행 전 `남은 토큰을 최대한 사용해서 안전한 backlog를 처리할까요? (예/아니오)`를 묻고, 답에 따라 safe backlog multi-agent batch 또는 단계별 ceiling review로 skill 호출성, validator, 문서 정합성, 일반 repo 품질을 개선하는 스킬.
   - Source instruction: `skills/agent-improvement-loop/SKILL.md`
   - Human visual guide: `skills/agent-improvement-loop/skill.html`
-- `agent-eval-harness`: agent skill routing, cross-agent instruction portability, workflow, safety boundary, artifact hygiene, output quality, regression capture를 검증하는 초기 repo-local eval harness를 세팅하는 스킬. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check를 우선 쓰고, `project-workflow`나 `spec-workflow`에서 호출될 때는 routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, `work-claims.md` lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate decisions, fallback lane, project setup verification, completion mapping, document sync, artifact hygiene seed case를 만든다.
+- `agent-eval-harness`: agent skill routing, cross-agent instruction portability, workflow, safety boundary, artifact hygiene, output quality, regression capture를 검증하는 초기 repo-local eval harness를 세팅하는 스킬. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check를 우선 쓰고, `project-workflow`나 `feature-workflow`에서 호출될 때는 routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, `work-claims.md` lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate decisions, fallback lane, project setup verification, completion mapping, document sync, artifact hygiene seed case를 만든다.
   - Source instruction: `skills/agent-eval-harness/SKILL.md`
   - Human visual guide: `skills/agent-eval-harness/skill.html`
 - `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하고 종료 시 browser/server를 정리하는 스킬.
@@ -205,7 +205,7 @@ export SKILLS_ROOT="$PWD"
 - 사용자가 주는 입력과 스킬이 내는 출력을 보여주는 input/output schema
 - 하면 되는 것과 하면 안 되는 것을 대비하는 do/don't matrix
 
-`skill-to-html`을 사용할 때는 `skills/skill-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 빠르게 읽히는 정적인 HTML이어야 하며, mobile/tablet layout이나 responsive breakpoint는 신경 쓰지 않는다. 화면 라벨은 한국어 우선으로 작성하고 외부 CDN이나 빌드 도구에 의존하지 않는다. SVG arrow는 실제 node나 box에 닿아야 하고, 넓은 scope table이나 matrix는 좁은 2열 layout 안에 넣지 않는다.
+`skill-to-html`을 사용할 때는 `skills/skill-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 빠르게 읽히는 정적인 HTML이어야 하며, mobile/tablet layout이나 responsive breakpoint는 신경 쓰지 않는다. 화면 설명은 한국어 문장 우선으로 작성하고, 영어 설명어를 쉼표로 길게 나열하지 않는다. 파일 경로, 명령, 제품명, `TDD`, `QA`, `API`, `MCP`, `PRD` 같은 정확성이 필요한 식별자만 원문으로 둔다. SVG arrow는 실제 node나 box에 닿아야 하고, 넓은 scope table이나 matrix는 좁은 2열 layout 안에 넣지 않는다.
 
 ## 생성과 검증
 
@@ -276,7 +276,7 @@ node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-
 node skills/pull-request/scripts/validate-pull-request.ts skills/pull-request
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
 node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow
-node skills/spec-workflow/scripts/validate-spec-workflow.ts skills/spec-workflow
+node skills/feature-workflow/scripts/validate-feature-workflow.ts skills/feature-workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
 node skills/agent-eval-harness/scripts/validate-agent-eval-harness.ts skills/agent-eval-harness
@@ -295,7 +295,7 @@ node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사하고, wide scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 문제를 실패로 처리한다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `spec-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/spec-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable static HTML, desktop-centered layout, diagram-rich sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사하고, wide scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 문제를 실패로 처리한다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `feature-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/feature-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
 
 Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 

@@ -1,6 +1,6 @@
-# Saved Spec Workflow Output: Project Setup Missing
+# Saved Feature Workflow Output: Project Setup Missing
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Preflight
 
 Missing prior gate: project setup

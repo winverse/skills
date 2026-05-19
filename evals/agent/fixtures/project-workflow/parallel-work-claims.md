@@ -33,6 +33,6 @@ Work Claims
   evidence path: `.scratch/new-product/lane-auth-session/evidence.md`
 
 Handoff
-- `spec-workflow` must read this file before implementation.
+- `feature-workflow` must read this file before implementation.
 - If a lane needs a shared/hotspot file, it leaves an integration request instead of editing the file directly.
 - This does not let every session edit shared files freely.

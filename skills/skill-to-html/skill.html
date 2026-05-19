@@ -3,635 +3,177 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>skill-to-html visual guide</title>
+  <title>skill-to-html 시각 가이드</title>
   <link rel="icon" href="data:,">
   <style>
-    :root {
-      --bg: #f7f8fa;
-      --surface: #ffffff;
-      --soft: #eef2f6;
-      --text: #14171f;
-      --muted: #5f6876;
-      --border: #cfd6df;
-      --line: #8a95a5;
-      --accent: #2563eb;
-      --green: #1f7a52;
-      --amber: #a16207;
-      --red: #b42318;
-      --ink: #111827;
-    }
-
-    * { box-sizing: border-box; }
-
-    html,
-    body {
-      width: 100%;
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Pretendard, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.55;
-      letter-spacing: 0;
-    }
-
-    body { padding: 28px 0 48px; }
-
-    code,
-    .mono {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      overflow-wrap: anywhere;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      font-size: 30px;
-      line-height: 1.18;
-    }
-
-    h2 {
-      font-size: 18px;
-      line-height: 1.3;
-    }
-
-    h3 {
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    .shell {
-      width: 100%;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 0 28px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 24px;
-    }
-
-    .identity,
-    .trigger-panel,
-    .matrix,
-    .flow-panel,
-    .schema,
-    .resource-panel,
-    .chart,
-    .gate-list,
-    .table,
-    .snippet {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-    }
-
-    .identity {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: 64px minmax(0, 1fr);
-      gap: 16px;
-      align-items: center;
-    }
-
-    .mark {
-      width: 64px;
-      height: 64px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      color: var(--accent);
-      background: var(--soft);
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .subtitle {
-      margin-top: 6px;
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .trigger-panel {
-      padding: 16px;
-      display: grid;
-      gap: 10px;
-      align-content: center;
-    }
-
-    .trigger-panel strong {
-      display: block;
-      font-size: 13px;
-    }
-
-    .trigger-panel span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    .section {
-      margin-top: 22px;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: baseline;
-      margin-bottom: 10px;
-    }
-
-    .note {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .matrix {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      overflow: hidden;
-    }
-
-    .matrix-cell {
-      min-height: 150px;
-      padding: 14px;
-      border-right: 1px solid var(--border);
-      border-top: 4px solid var(--line);
-    }
-
-    .matrix-cell:last-child { border-right: 0; }
-    .matrix-cell.use { border-top-color: var(--green); }
-    .matrix-cell.revise { border-top-color: var(--accent); }
-    .matrix-cell.skip { border-top-color: var(--amber); }
-    .matrix-cell.block { border-top-color: var(--red); }
-
-    .matrix-cell strong,
-    .gate strong,
-    .schema-node strong,
-    .file-tile strong,
-    .table-cell strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 5px;
-    }
-
-    .matrix-cell p,
-    .gate span,
-    .schema-node span,
-    .file-tile span,
-    .table-cell span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .flow-grid,
-    .resource-grid,
-    .schema-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    .flow-panel,
-    .resource-panel,
-    .schema {
-      padding: 16px;
-      overflow: hidden;
-    }
-
-    svg {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .gate-list {
-      display: grid;
-      overflow: hidden;
-    }
-
-    .gate {
-      display: grid;
-      grid-template-columns: 150px minmax(0, 1fr);
-      gap: 12px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      align-items: start;
-    }
-
-    .gate:last-child { border-bottom: 0; }
-
-    .schema {
-      display: grid;
-      grid-template-columns: 1fr 56px 1fr;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .schema-stack {
-      display: grid;
-      gap: 10px;
-    }
-
-    .schema-node {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fbfcfe;
-      min-height: 76px;
-    }
-
-    .schema-arrow {
-      min-height: 170px;
-      display: grid;
-      place-items: center;
-      color: var(--accent);
-      font-weight: 800;
-    }
-
-    .chart {
-      display: grid;
-      gap: 10px;
-      padding: 16px;
-    }
-
-    .bar {
-      display: grid;
-      grid-template-columns: 168px minmax(0, 1fr) 82px;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
-
-    .track {
-      height: 14px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--soft);
-      overflow: hidden;
-    }
-
-    .fill {
-      display: block;
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .fill.green { background: var(--green); }
-    .fill.amber { background: var(--amber); }
-    .fill.red { background: var(--red); }
-
-    .files {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .file-tile {
-      min-height: 78px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #fbfcfe;
-      padding: 10px;
-    }
-
-    .table {
-      display: grid;
-      grid-template-columns: 180px repeat(3, minmax(0, 1fr));
-      overflow: hidden;
-    }
-
-    .table-cell {
-      min-height: 84px;
-      padding: 12px;
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .table-cell:nth-child(4n) { border-right: 0; }
-    .table-cell:nth-last-child(-n + 4) { border-bottom: 0; }
-    .table-head {
-      background: var(--soft);
-      font-weight: 700;
-    }
-
-    .rules {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .snippet {
-      margin: 0;
-      padding: 14px;
-      background: var(--ink);
-      color: #f8fafc;
-      overflow-x: auto;
-      white-space: pre;
-      font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    }
-
-    .small {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    @media (max-width: 860px) {
-      body { padding-top: 18px; }
-      .shell { padding: 0 16px; }
-      .hero,
-      .flow-grid,
-      .resource-grid,
-      .schema-grid,
-      .rules {
-        grid-template-columns: 1fr;
-      }
-      .identity {
-        grid-template-columns: 52px minmax(0, 1fr);
-        padding: 16px;
-      }
-      .mark {
-        width: 52px;
-        height: 52px;
-        font-size: 15px;
-      }
-      h1 { font-size: 25px; }
-      .matrix { grid-template-columns: 1fr; }
-      .matrix-cell {
-        min-height: 0;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
-      }
-      .matrix-cell:last-child { border-bottom: 0; }
-      .schema {
-        grid-template-columns: 1fr;
-      }
-      .schema-arrow {
-        min-height: 34px;
-      }
-      .bar {
-        grid-template-columns: 128px minmax(0, 1fr) 54px;
-      }
-      .files {
-        grid-template-columns: 1fr;
-      }
-      .table {
-        grid-template-columns: 1fr;
-      }
-      .table-cell,
-      .table-cell:nth-child(4n),
-      .table-cell:nth-last-child(-n + 4) {
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
-      }
-      .table-cell:last-child { border-bottom: 0; }
-      .gate {
-        grid-template-columns: 1fr;
-        gap: 4px;
-      }
-    }
+    :root { --bg:#f6f7f9; --surface:#ffffff; --soft:#eef2f6; --text:#151922; --muted:#5f6876; --border:#cfd6df; --line:#8793a3; --blue:#2457c5; --green:#24724f; --amber:#93640d; --red:#aa2e25; --code:#111827; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; margin:0; background:var(--bg); color:var(--text); font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; line-height:1.55; }
+    body { padding:28px 0 52px; }
+    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
+    a { color:inherit; text-decoration:none; }
+    h1, h2, h3, p { margin:0; }
+    h1 { font-size:30px; line-height:1.18; }
+    h2 { font-size:18px; line-height:1.3; }
+    h3 { font-size:14px; line-height:1.35; }
+    .shell { width:100%; max-width:1180px; margin:0 auto; padding:0 28px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:16px; align-items:stretch; margin-bottom:24px; }
+    .identity, .quick, .matrix, .panel, .schema, .chart, .resource, .table, .rule, .snippet, .catalog-section { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .identity { min-height:154px; padding:20px; display:grid; grid-template-columns:68px minmax(0,1fr); gap:16px; align-items:center; }
+    .mark { width:68px; height:68px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:17px; font-weight:800; }
+    .subtitle { max-width:780px; margin-top:7px; color:var(--muted); font-size:14px; }
+    .quick { padding:16px; display:grid; gap:10px; align-content:center; }
+    .quick strong, .matrix-cell strong, .step strong, .schema-node strong, .resource-tile strong, .table-cell strong, .rule strong, .catalog-item strong { display:block; margin-bottom:5px; font-size:13px; }
+    .quick span, .matrix-cell p, .step span, .schema-node span, .resource-tile span, .table-cell span, .rule p, .catalog-item span { color:var(--muted); font-size:13px; }
+    .section { margin-top:22px; }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:baseline; margin-bottom:10px; }
+    .section-head p, .small { color:var(--muted); font-size:13px; }
+    .matrix { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; }
+    .matrix-cell { min-height:148px; padding:14px; border-right:1px solid var(--border); border-top:4px solid var(--line); }
+    .matrix-cell:last-child { border-right:0; }
+    .matrix-cell.use { border-top-color:var(--green); } .matrix-cell.combine { border-top-color:var(--blue); } .matrix-cell.skip { border-top-color:var(--amber); } .matrix-cell.stop { border-top-color:var(--red); }
+    .two { display:grid; grid-template-columns:minmax(0,1.14fr) minmax(300px,.86fr); gap:16px; align-items:stretch; }
+    .panel, .resource { padding:16px; overflow:hidden; }
+    svg { display:block; width:100%; height:auto; }
+    .steps, .rules { display:grid; gap:10px; }
+    .step, .rule { padding:12px 14px; }
+    .schema { display:grid; grid-template-columns:1fr 56px 1fr; gap:12px; padding:16px; align-items:center; }
+    .schema-stack { display:grid; gap:10px; }
+    .schema-node { min-height:82px; border:1px solid var(--border); border-radius:8px; padding:12px; background:#fbfcfe; }
+    .schema-arrow { display:grid; place-items:center; min-height:184px; color:var(--blue); font-size:22px; font-weight:800; }
+    .chart { display:grid; gap:10px; padding:16px; }
+    .bar { display:grid; grid-template-columns:170px minmax(0,1fr) 78px; gap:10px; align-items:center; font-size:13px; }
+    .track { height:14px; border:1px solid var(--border); border-radius:4px; background:var(--soft); overflow:hidden; }
+    .fill { display:block; height:100%; background:var(--blue); } .fill.green{background:var(--green);} .fill.amber{background:var(--amber);} .fill.red{background:var(--red);}
+    .files, .catalog-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .resource-tile, .catalog-item { min-height:78px; border:1px solid var(--border); border-radius:8px; background:#fbfcfe; padding:10px; }
+    .table { display:grid; grid-template-columns:172px repeat(3,minmax(0,1fr)); overflow:hidden; }
+    .table-cell { min-height:84px; padding:12px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .table-cell:nth-child(4n) { border-right:0; } .table-cell:nth-last-child(-n+4) { border-bottom:0; } .table-head { background:var(--soft); }
+    .snippet { margin:0; padding:14px; background:var(--code); color:#f8fafc; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="hero">
       <div class="identity">
-        <div class="mark">S2H</div>
+        <div class="mark">SKI</div>
         <div>
           <h1>skill-to-html</h1>
-          <p class="subtitle">`SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 diagram-rich `skill.html`을 만든다. 설명 문단보다 decision matrix, workflow, resource map, input/output schema, risk chart처럼 판단 가능한 구조를 우선한다.</p>
+          <p class="subtitle">SKILL.md 옆에 사람이 빠르게 이해할 수 있는 도표 중심 skill.html을 만들거나 갱신할 때 사용한다.</p>
         </div>
       </div>
-      <div class="trigger-panel" aria-label="first viewport trigger and guardrail">
-        <div>
-          <strong>호출 조건</strong>
-          <span>스킬이 created, installed, forked, updated 되었거나 adjacent visual guide가 stale 또는 missing인 경우.</span>
-        </div>
-        <div>
-          <strong>오용 방지</strong>
-          <span>`SKILL.md`, references, docs, snippets, validators를 고치지 말라는 요청이 있으면 target `skill.html`만 갱신한다.</span>
-        </div>
-      </div>
+      <aside class="quick" aria-label="스킬 파일 쌍">
+        <div><strong>에이전트 원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
+        <div><strong>사람용 가이드</strong><span><a href="skill.html"><code>skill.html</code></a></span></div>
+        <div><strong>언어 기준</strong><span>화면 설명은 한국어 문장 우선이며, 정확한 식별자만 원문으로 둡니다.</span></div>
+      </aside>
     </header>
 
     <section class="section">
-      <div class="section-head">
-        <h2>사용 판단 매트릭스</h2>
-        <p class="note">언제 만들고, 언제 멈추고, 무엇을 확인할지 먼저 결정한다.</p>
-      </div>
-      <div class="matrix" aria-label="decision matrix">
-        <div class="matrix-cell use">
-          <strong>바로 생성</strong>
-          <p>`skill.html`이 없고 `SKILL.md`가 현재 source of truth인 경우. 새 HTML은 self-contained static file이어야 한다.</p>
-        </div>
-        <div class="matrix-cell revise">
-          <strong>갱신</strong>
-          <p>HTML이 오래됐거나 카드 요약에 머물러 trigger, workflow, guardrail, output shape가 보이지 않는 경우.</p>
-        </div>
-        <div class="matrix-cell skip">
-          <strong>건너뜀</strong>
-          <p>source instruction이 바뀌지 않았고 diagram, validation command, PC desktop layout이 최신인 경우.</p>
-        </div>
-        <div class="matrix-cell block">
-          <strong>범위 차단</strong>
-          <p>hook이나 사용자 요청이 adjacent `skill.html`만 허용하면 다른 파일 동기화는 하지 않는다.</p>
-        </div>
+      <div class="section-head"><h2>사용 판단 매트릭스</h2><p>언제 쓰고, 언제 다른 스킬로 넘길지 먼저 판단합니다.</p></div>
+      <div class="matrix" aria-label="사용 판단 매트릭스">
+        <div class="matrix-cell use"><strong>사용</strong><p>SKILL.md 옆에 사람이 빠르게 이해할 수 있는 도표 중심 skill.html을 만들거나 갱신할 때 사용한다.</p></div>
+        <div class="matrix-cell combine"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>처럼 전담 스킬과 연결합니다.</p></div>
+        <div class="matrix-cell skip"><strong>건너뜀</strong><p>요청이 이 스킬의 호출 조건과 맞지 않거나 더 구체적인 스킬이 있으면 그 스킬을 우선합니다.</p></div>
+        <div class="matrix-cell stop"><strong>확인</strong><p>비밀값, 파괴적 작업, 외부 쓰기, 전역 설치가 얽히면 먼저 범위와 승인 조건을 확인합니다.</p></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>생성 흐름</h2>
-        <p class="note">SVG arrow endpoint가 실제 node에 닿도록 배치하고, 넓은 표는 full-width section에 둔다.</p>
-      </div>
-      <div class="flow-grid">
-        <div class="flow-panel">
-          <svg viewBox="0 0 760 270" role="img" aria-label="skill to html workflow">
-            <defs>
-              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-                <path d="M0,0 L9,3.5 L0,7 Z" fill="#2563eb"></path>
-              </marker>
-            </defs>
-            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2">
-              <rect x="24" y="92" width="112" height="74" rx="8"></rect>
-              <rect x="170" y="92" width="112" height="74" rx="8"></rect>
-              <rect x="316" y="92" width="112" height="74" rx="8"></rect>
-              <rect x="462" y="92" width="112" height="74" rx="8"></rect>
-              <rect x="608" y="92" width="128" height="74" rx="8"></rect>
-            </g>
-            <g stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrow)">
-              <line x1="136" y1="129" x2="168" y2="129"></line>
-              <line x1="282" y1="129" x2="314" y2="129"></line>
-              <line x1="428" y1="129" x2="460" y2="129"></line>
-              <line x1="574" y1="129" x2="606" y2="129"></line>
-            </g>
-            <g text-anchor="middle" font-size="13" font-weight="700" fill="#14171f">
-              <text x="80" y="119">읽기</text>
-              <text x="226" y="119">추출</text>
-              <text x="372" y="119">설계</text>
-              <text x="518" y="119">작성</text>
-              <text x="672" y="119">검증</text>
-            </g>
-            <g text-anchor="middle" font-size="11" fill="#5f6876">
-              <text x="80" y="140">SKILL.md</text>
-              <text x="80" y="154">필요 references</text>
-              <text x="226" y="140">호출 조건</text>
-              <text x="226" y="154">실행 흐름</text>
-              <text x="372" y="140">시각 구조 4+</text>
-              <text x="372" y="154">PC desktop grid</text>
-              <text x="518" y="140">내장 CSS</text>
-              <text x="518" y="154">내장 SVG</text>
-              <text x="672" y="140">검증기</text>
-              <text x="672" y="154">브라우저 확인</text>
-            </g>
+      <div class="section-head"><h2>실행 흐름</h2><p>읽기에서 검증까지의 기본 흐름입니다. 화살표는 실제 node에 닿도록 배치했습니다.</p></div>
+      <div class="two">
+        <div class="panel">
+          <svg viewBox="0 0 760 284" role="img" aria-label="skill-to-html 실행 흐름">
+            <defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457c5"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="24" y="96" width="116" height="78" rx="8"></rect><rect x="174" y="96" width="116" height="78" rx="8"></rect><rect x="324" y="96" width="116" height="78" rx="8"></rect><rect x="474" y="96" width="116" height="78" rx="8"></rect><rect x="624" y="96" width="112" height="78" rx="8"></rect></g>
+            <g fill="none" stroke="#2457c5" stroke-width="2.4" marker-end="url(#flow-arrow)"><path d="M140 135 L174 135"></path><path d="M290 135 L324 135"></path><path d="M440 135 L474 135"></path><path d="M590 135 L624 135"></path></g>
+            <g text-anchor="middle" font-size="13" font-weight="700" fill="#151922"><text x="82" y="124">요청 읽기</text><text x="232" y="124">근거 확인</text><text x="382" y="124">경계 결정</text><text x="532" y="124">작업 수행</text><text x="680" y="124">검증</text></g>
+            <g text-anchor="middle" font-size="11" fill="#5f6876"><text x="82" y="145">사용자 의도</text><text x="82" y="159">현재 repo</text><text x="232" y="145">SKILL.md</text><text x="232" y="159">필요 문서</text><text x="382" y="145">허용 범위</text><text x="382" y="159">안전 조건</text><text x="532" y="145">최소 변경</text><text x="532" y="159">증거 남김</text><text x="680" y="145">validator</text><text x="680" y="159">보고</text></g>
           </svg>
         </div>
-        <div class="gate-list">
-          <div class="gate"><strong>1. 읽기</strong><span>대상 `SKILL.md`와 필요한 `references/`만 읽고 trigger와 guardrail을 확정한다.</span></div>
-          <div class="gate"><strong>2. 설계</strong><span>decision matrix, workflow, resource map, input/output schema, risk/guardrail chart를 배치한다.</span></div>
-          <div class="gate"><strong>3. 검증</strong><span>arrow endpoint, table width, overflow, text overlap을 확인하고 `node scripts/validate-skill-html.ts .`를 실행한다.</span></div>
+        <div class="steps">
+          <div class="step"><strong>1. required outcome 기준</strong><span>- 각 skill folder에는 SKILL.md와 skill.html이 함께 있어야 한다. - 화면에 보이는 설명은 한국어 문장 우선으로 작성한다. - 영어 설명어를 쉼표로 길게 나열하지 않는다. TDD, QA, API, MCP, PRD, 파일명,...</span></div>
+          <div class="step"><strong>2. design contract 기준</strong><span>- visual guide는 설명 문단보다 구조를 우선한다. - diagram은 브라우저에서 읽히는 geometry를 기준으로 검토한다. - layout 판단은 PC desktop을 기준으로 한다. mobile/tablet 최적화, touch int...</span></div>
+          <div class="step"><strong>3. creation 작업 흐름 기준</strong><span>1. 대상 SKILL.md와 필요한 references/만 읽는다. 2. 호출 조건, 실행 흐름, 안전 경계, 출력 형태를 추출한다. 3. 최소 4개 이상의 시각 구조를 설계한다. 4. skill.html을 self-contained static H...</span></div>
+          <div class="step"><strong>4. quality bar 기준</strong><span>HTML만 봐도 이 스킬을 언제 쓰고 언제 쓰지 말아야 하는지 알 수 있어야 한다.</span></div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>입출력 스키마</h2>
-        <p class="note">입력은 agent-readable source, 출력은 human-readable adjacent guide다.</p>
-      </div>
-      <div class="schema-grid">
-        <div class="schema" aria-label="input output schema">
-          <div class="schema-stack">
-            <div class="schema-node"><strong>입력 source</strong><span>`SKILL.md`, 필요한 `references/`, 기존 `skill.html`의 유지 가능한 구조.</span></div>
-            <div class="schema-node"><strong>제약</strong><span>한국어 우선 copy, 외부 asset 없음, static HTML, embedded CSS/SVG.</span></div>
-          </div>
+      <div class="section-head"><h2>입출력 구조</h2><p>입력은 사용자의 요청과 repo 근거이고, 출력은 검증 가능한 답변 또는 파일 변경입니다.</p></div>
+      <div class="two">
+        <div class="schema" aria-label="입출력 구조">
+          <div class="schema-stack"><div class="schema-node"><strong>입력</strong><span>사용자 요청, <code>SKILL.md</code>, 관련 repo 파일, 필요한 참조 문서.</span></div><div class="schema-node"><strong>제약</strong><span>한국어 문장 우선, 전역 설치 금지, 관련 없는 파일 보존.</span></div></div>
           <div class="schema-arrow" aria-hidden="true">→</div>
-          <div class="schema-stack">
-            <div class="schema-node"><strong>출력 파일</strong><span>`skills/&lt;skill-name&gt;/skill.html` 한 파일. trigger, workflow, validation, misuse가 보여야 한다.</span></div>
-            <div class="schema-node"><strong>완료 증거</strong><span>validator 결과와 필요 시 PC desktop viewport 확인. mobile/tablet 확인은 생략한다. hook 범위가 좁으면 HTML 변경만 보고한다.</span></div>
-          </div>
+          <div class="schema-stack"><div class="schema-node"><strong>출력</strong><span>실행 결과, 변경 파일, 검증 명령, 남은 위험을 짧게 정리합니다.</span></div><div class="schema-node"><strong>증거</strong><span>필요한 validator, 테스트, 브라우저 확인, 파일 경로를 함께 남깁니다.</span></div></div>
         </div>
-        <div class="chart" aria-label="risk guardrail chart">
-          <div class="bar"><strong>diagram-rich 구조</strong><span class="track"><span class="fill green" style="width: 94%"></span></span><span>필수</span></div>
-          <div class="bar"><strong>PC desktop 무결성</strong><span class="track"><span class="fill green" style="width: 88%"></span></span><span>필수</span></div>
-          <div class="bar"><strong>local-only asset</strong><span class="track"><span class="fill" style="width: 82%"></span></span><span>필수</span></div>
-          <div class="bar"><strong>넓은 표 배치</strong><span class="track"><span class="fill amber" style="width: 72%"></span></span><span>주의</span></div>
-          <div class="bar"><strong>범위 외 동기화</strong><span class="track"><span class="fill red" style="width: 60%"></span></span><span>차단</span></div>
-          <p class="small">도표 무결성은 장식보다 중요하다. `marker-end`가 있는 SVG arrow는 보이는 node, box, lane에 닿아야 한다.</p>
+        <div class="chart" aria-label="위험과 검증 차트">
+          <div class="bar"><strong>요청 적합도</strong><span class="track"><span class="fill green" style="width:94%"></span></span><span>먼저</span></div>
+          <div class="bar"><strong>근거 확인</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>범위 통제</strong><span class="track"><span class="fill" style="width:82%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>검증 강도</strong><span class="track"><span class="fill amber" style="width:74%"></span></span><span>위험별</span></div>
+          <div class="bar"><strong>전역 변경</strong><span class="track"><span class="fill red" style="width:58%"></span></span><span>차단</span></div>
+          <p class="small">HTML은 PC desktop 기준으로 확인합니다. mobile/tablet 레이아웃은 이 재생성 범위가 아닙니다.</p>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>파일 관계 지도</h2>
-        <p class="note">사람은 `skill.html`을 읽고, agent는 `SKILL.md`와 필요한 references를 읽는다.</p>
-      </div>
-      <div class="resource-grid">
-        <div class="resource-panel">
-          <svg viewBox="0 0 620 300" role="img" aria-label="skill folder resource map">
-            <defs>
-              <marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
-                <path d="M0,0 L9,3.5 L0,7 Z" fill="#8a95a5"></path>
-              </marker>
-            </defs>
-            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2">
-              <rect x="236" y="108" width="148" height="76" rx="8"></rect>
-              <rect x="34" y="38" width="150" height="62" rx="8"></rect>
-              <rect x="34" y="200" width="150" height="62" rx="8"></rect>
-              <rect x="436" y="38" width="150" height="62" rx="8"></rect>
-              <rect x="436" y="200" width="150" height="62" rx="8"></rect>
-            </g>
-            <g stroke="#8a95a5" stroke-width="2.2" marker-end="url(#map-arrow)">
-              <line x1="184" y1="69" x2="234" y2="122"></line>
-              <line x1="184" y1="231" x2="234" y2="170"></line>
-              <line x1="384" y1="122" x2="434" y2="69"></line>
-              <line x1="384" y1="170" x2="434" y2="231"></line>
-            </g>
-            <g text-anchor="middle" font-size="12" font-weight="700" fill="#14171f">
-              <text x="310" y="141">스킬 폴더</text>
-              <text x="109" y="66">SKILL.md</text>
-              <text x="109" y="228">skill.html</text>
-              <text x="511" y="66">참조 문서</text>
-              <text x="511" y="228">검증기</text>
-            </g>
-            <g text-anchor="middle" font-size="10" fill="#5f6876">
-              <text x="310" y="160">인접 파일 쌍</text>
-              <text x="109" y="81">agent source 원문</text>
-              <text x="109" y="243">사람용 guide</text>
-              <text x="511" y="81">상세 기준</text>
-              <text x="511" y="243">품질 게이트</text>
-            </g>
+      <div class="section-head"><h2>파일 관계도</h2><p>스킬 폴더 안의 원본, 사람용 가이드, 검증기, 참조 문서를 분리합니다.</p></div>
+      <div class="two">
+        <div class="resource">
+          <svg viewBox="0 0 620 310" role="img" aria-label="파일 관계도">
+            <defs><marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#8793a3"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="236" y="112" width="148" height="76" rx="8"></rect><rect x="34" y="42" width="150" height="64" rx="8"></rect><rect x="34" y="208" width="150" height="64" rx="8"></rect><rect x="436" y="42" width="150" height="64" rx="8"></rect><rect x="436" y="208" width="150" height="64" rx="8"></rect></g>
+            <g fill="none" stroke="#8793a3" stroke-width="2.2" marker-end="url(#map-arrow)"><path d="M184 74 L236 126"></path><path d="M184 240 L236 174"></path><path d="M384 126 L436 74"></path><path d="M384 174 L436 240"></path></g>
+            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">skill-to-html</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
+            <g text-anchor="middle" font-size="10" fill="#5f6876"><text x="310" y="164">스킬 폴더</text><text x="109" y="88">원본 지시</text><text x="109" y="254">사람용 가이드</text><text x="511" y="88">세부 기준</text><text x="511" y="254">품질 확인</text></g>
           </svg>
           <div class="files">
-            <a class="file-tile" href="SKILL.md"><strong>SKILL.md</strong><span>trigger, required outcome, workflow, quality bar.</span></a>
-            <a class="file-tile" href="skill.html"><strong>skill.html</strong><span>diagram-rich human guide beside source.</span></a>
-            <a class="file-tile" href="references/visual-guide-standards.md"><strong>visual-guide-standards.md</strong><span>render integrity와 required visual grammar 기준.</span></a>
-            <a class="file-tile" href="scripts/validate-skill-to-html.ts"><strong>validate-skill-to-html.ts</strong><span>스킬별 source와 HTML 검사.</span></a>
+            <a class="resource-tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 지시문</span></a>
+            <a class="resource-tile" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 훑는 도표 가이드</span></a>
+            <a class="resource-tile" href="scripts/validate-skill-to-html.ts"><strong>scripts/validate-skill-to-html.ts</strong><span>스킬 전용 검증기</span></a>
+            <a class="resource-tile" href="../../project-snippets/skill-to-html.md"><strong>../../project-snippets/skill-to-html.md</strong><span>프로젝트 연결 조각</span></a>
+            <a class="resource-tile" href="references/visual-guide-standards.md"><strong>references/visual-guide-standards.md</strong><span>긴 기준과 세부 예시</span></a>
           </div>
         </div>
-        <div class="gate-list">
-          <div class="gate"><strong>외부 의존성</strong><span>CDN, external image, web font, external script, build tool 없이 동작해야 한다.</span></div>
-          <div class="gate"><strong>레이아웃</strong><span>wide scope table, matrix, checklist table은 좁은 2열 layout에 넣지 않는다.</span></div>
-          <div class="gate"><strong>copy</strong><span>visible copy는 한국어 우선이며 file path, command, product name은 원문을 유지한다.</span></div>
-          <div class="gate"><strong>mobile/tablet 제외</strong><span>mobile/tablet viewport, responsive breakpoint, touch target은 이 스킬의 완료 조건이 아니다.</span></div>
+        <div class="rules">
+          <div class="rule"><strong>도표 무결성</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>한국어 문장 우선</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>PC desktop</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>mobile/tablet 제외</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+          <div class="rule"><strong>넓은 표는 전체 폭 section에 배치</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>검증 표</h2>
-        <p class="note">넓은 표는 full-width section에 두어 2열 layout overflow를 피한다.</p>
-      </div>
-      <div class="table" aria-label="validation and render integrity table">
-        <div class="table-cell table-head"><strong>검증 gate</strong></div>
-        <div class="table-cell table-head"><strong>확인 대상</strong></div>
-        <div class="table-cell table-head"><strong>실패 신호</strong></div>
-        <div class="table-cell table-head"><strong>완료 기준</strong></div>
-        <div class="table-cell"><strong>정적 검증</strong></div>
-        <div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div>
-        <div class="table-cell"><span>필수 section, broken local link, wide table 위치 위반.</span></div>
-        <div class="table-cell"><span>오류 없이 통과.</span></div>
-        <div class="table-cell"><strong>렌더 무결성</strong></div>
-        <div class="table-cell"><span>PC desktop viewport의 arrow endpoint, table width, overflow, text overlap.</span></div>
-        <div class="table-cell"><span>화살표가 빈 공간을 가리키거나 code path가 잘림.</span></div>
-        <div class="table-cell"><span>node 연결과 text wrapping이 눈으로 확인됨.</span></div>
-        <div class="table-cell"><strong>범위 제어</strong></div>
-        <div class="table-cell"><span>hook target과 사용자 제한.</span></div>
-        <div class="table-cell"><span>`SKILL.md`, docs, history 등 범위 밖 파일 수정.</span></div>
-        <div class="table-cell"><span>허용된 adjacent `skill.html`만 수정.</span></div>
+      <div class="section-head"><h2>검증 표</h2><p>넓은 표는 전체 폭 section에 두어 2열 layout overflow를 피합니다.</p></div>
+      <div class="table" aria-label="검증 표">
+        <div class="table-cell table-head"><strong>검증 gate</strong></div><div class="table-cell table-head"><strong>명령 또는 대상</strong></div><div class="table-cell table-head"><strong>실패 신호</strong></div><div class="table-cell table-head"><strong>완료 기준</strong></div>
+        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/skill-to-html</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
+        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span><code>node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html</code></span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
+        <div class="table-cell"><strong>HTML 공통</strong></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div><div class="table-cell"><span>broken local link, 외부 asset, overflow, SVG arrow endpoint 오류.</span></div><div class="table-cell"><span>PC desktop 기준으로 읽힘.</span></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>프로젝트 연결 snippet</h2>
-        <p class="note">프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둔다.</p>
+      <div class="section-head"><h2>금지와 허용</h2><p>스킬은 요청된 작업을 돕는 도구이며, 범위 밖 자동화는 하지 않습니다.</p></div>
+      <div class="matrix" aria-label="금지와 허용">
+        <div class="matrix-cell use"><strong>허용</strong><p>관련 파일을 읽고, 요청된 범위 안에서 가장 작은 유효 변경을 수행합니다.</p></div>
+        <div class="matrix-cell combine"><strong>보고</strong><p>변경 파일, 검증 명령, 브라우저 확인 여부를 최종 답변에 남깁니다.</p></div>
+        <div class="matrix-cell skip"><strong>보류</strong><p>요청과 무관한 refactor, 문서 확장, 전역 설치는 하지 않습니다.</p></div>
+        <div class="matrix-cell stop"><strong>차단</strong><p>비밀값 노출, destructive command, 승인 없는 commit/push/deploy는 멈춥니다.</p></div>
       </div>
-      <pre class="snippet">- Use $skill-to-html at skills/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a diagram-rich skill.html beside SKILL.md.
-- Keep output static HTML with embedded CSS/SVG and no external assets.
-- Validate with node scripts/validate-skill-html.ts . and inspect arrow endpoint, table width, overflow, text overlap in PC desktop viewport when the visual structure materially changes.
-- Ignore mobile/tablet layout, responsive breakpoint tuning, and touch interaction for this skill.</pre>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>프로젝트 연결 조각</h2><p>프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둡니다.</p></div>
+      <pre class="snippet">Use $skill-to-html at skills/skill-to-html/SKILL.md when the task matches this skill.
+Keep visible explanations Korean-first, preserve exact identifiers, and report validation evidence.
+Validate with node scripts/validate-skill.ts skills/skill-to-html &amp;&amp; node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
     </section>
   </main>
 </body>

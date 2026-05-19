@@ -36,11 +36,28 @@ domain language, target user, first usable slice, product challenge, ADR, PRD �
 
 ### substantial UI 기준
 
-`design.md` 또는 design token 기준을 만든 뒤 2-3 mock direction을 제시하고 사용자가 선택한다. 선택 전 대규모 UI coding을 하지 않는다. 실제 구현 loop는 `spec-workflow`가 맡는다.
+`design.md` 또는 design token 기준을 만든 뒤 2-3 mock direction을 제시하고 사용자가 선택한다. 선택 전 대규모 UI coding을 하지 않는다. 실제 구현 loop는 `feature-workflow`가 맡는다.
 
 ### CLI/no-browser 프로젝트 기준
 
 browser evidence를 요구하지 않는다. setup 단계에서는 command/API boundary, fixture path, runtime evidence 방식만 정한다.
+
+### TypeScript module policy 기준
+
+TypeScript를 쓰는 프로젝트를 초기 셋팅하면 ESM only를 기본 architecture constraint로 기록한다. `package.json`에는 `type: "module"`을 두고, `tsconfig`는 ESM import/export와 NodeNext 또는 Bundler 계열 module resolution을 전제로 정리한다.
+
+새 파일, scaffolding, PRD, issue backlog, ADR에는 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`를 새 기본 패턴으로 넣지 않는다. 기존 repo가 CommonJS를 이미 쓰고 있으면 새 작업에서 복사할 패턴이 아니라 migration boundary로 표시한다.
+
+`project-workflow`가 직접 구조를 생성하지 않고 `project-structure`로 넘길 때도 handoff에 아래를 포함한다.
+
+```text
+TypeScript Module Policy
+- module system: ESM only
+- package boundary: package.json type: "module"
+- allowed imports: import/export
+- blocked patterns: CommonJS, require, module.exports, .cjs, .cts
+- migration boundary: <existing CommonJS path or none>
+```
 
 ### MCP/API/file-write automation 기준
 
@@ -97,20 +114,21 @@ PRD에는 problem, user, first usable slice, included scope, excluded scope, acc
 
 ## local implementation fallback lane 기준
 
-`project-workflow`는 local implementation fallback을 직접 실행하지 않는다. implementation helper가 없거나 TDD 계획이 필요한 상황은 `spec-workflow`로 넘기고, setup 단계에서는 spec/issue, acceptance criteria, validation command, evidence plan만 준비한다.
+`project-workflow`는 local implementation fallback을 직접 실행하지 않는다. implementation helper가 없거나 TDD 계획이 필요한 상황은 `feature-workflow`로 넘기고, setup 단계에서는 spec/issue, acceptance criteria, validation command, evidence plan만 준비한다.
 
 ## completion/ship 기준
 
-`project-workflow`의 completion은 project setup 완료와 `spec-workflow` handoff 완료를 뜻한다. code review, QA, document sync, atomic commit, push/deploy는 구현 spec이 끝난 뒤 `spec-workflow`나 관련 helper가 맡으며, release prep은 release publishing이 아니다.
+`project-workflow`의 completion은 project setup 완료와 `feature-workflow` handoff 완료를 뜻한다. code review, QA, document sync, atomic commit, push/deploy는 구현 spec이 끝난 뒤 `feature-workflow`나 관련 helper가 맡으며, release prep은 release publishing이 아니다.
 
-## spec-workflow handoff 기준
+## feature-workflow handoff 기준
 
-`spec-workflow`는 project setup 이후 반복 개발을 맡는다. 넘길 때는 아래 정보를 남긴다.
+`feature-workflow`는 project setup 이후 반복 개발을 맡는다. 넘길 때는 아래 정보를 남긴다.
 
 ```text
 Spec handoff
 - spec or issue:
 - acceptance criteria:
+- TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - design reference:
 - architecture reference:
 - tool/security gate:
@@ -127,19 +145,20 @@ Spec handoff
 Workflow State
 - source primitives:
 - document language: Korean-first unless target project says otherwise
+- TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - authority docs:
 - decisions:
 - skipped questions:
 - open questions:
 - tool/security gate:
-- next spec-workflow target:
+- next feature-workflow target:
 ```
 
 캐시는 source of truth를 대체하지 않는다. `CONTEXT.md`, ADR, PRD, `design.md`, issue가 authority이고, `workflow-state.md`는 다음 agent가 빠르게 찾는 색인이다.
 
 ## work-claims coordination 기준
 
-`work-claims.md`는 병렬 session의 쓰기 충돌을 줄이는 장부다. source of truth는 아니므로 spec 내용, architecture decision, product scope는 이 파일에만 두지 않는다. `spec-workflow`는 이 파일을 읽고 현재 lane의 claimed write set 밖 production file을 수정하지 않아야 한다.
+`work-claims.md`는 병렬 session의 쓰기 충돌을 줄이는 장부다. source of truth는 아니므로 spec 내용, architecture decision, product scope는 이 파일에만 두지 않는다. `feature-workflow`는 이 파일을 읽고 현재 lane의 claimed write set 밖 production file을 수정하지 않아야 한다.
 
 ## workflow log 기준
 
@@ -148,12 +167,12 @@ YYYY-MM-DD | <stage>
 - decision:
 - artifact:
 - validation:
-- next: spec-workflow / project-workflow
+- next: feature-workflow / project-workflow
 ```
 
 ## completion gate 기준
 
-context, ADR, PRD or issue backlog, design baseline, project setup verification, spec handoff가 맞아야 완료한다. commit, push, deploy는 사용자가 명시적으로 요청한 경우에만 연결한다.
+context, ADR, PRD or issue backlog, design baseline, project setup verification, feature handoff가 맞아야 완료한다. commit, push, deploy는 사용자가 명시적으로 요청한 경우에만 연결한다.
 
 Project Setup Verification은 연결된 skill path, snippet, no-global-install 조건을 확인한다.
 
@@ -163,4 +182,4 @@ Project Setup Verification은 연결된 skill path, snippet, no-global-install �
 /goal <measurable project setup end state> and <stated check evidence appears in transcript>; constraints: <scope and forbidden changes>; stop after <turn/time bound>
 ```
 
-좋은 조건은 agent가 출력으로 증명할 수 있는 상태여야 한다. 예: `CONTEXT.md exists`, `docs/adr/0001-*.md is written`, `project-snippets/project-workflow.md is linked`, `spec handoff is reported`. 나쁜 조건은 `좋아질 때까지`, `완벽할 때까지`처럼 증거와 종료 기준이 없는 문장이다.
+좋은 조건은 agent가 출력으로 증명할 수 있는 상태여야 한다. 예: `CONTEXT.md exists`, `docs/adr/0001-*.md is written`, `project-snippets/project-workflow.md is linked`, `feature handoff is reported`. 나쁜 조건은 `좋아질 때까지`, `완벽할 때까지`처럼 증거와 종료 기준이 없는 문장이다.

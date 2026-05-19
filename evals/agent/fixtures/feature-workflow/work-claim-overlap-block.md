@@ -1,4 +1,4 @@
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: work claim preflight
 
 Spec authority

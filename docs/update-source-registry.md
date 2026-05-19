@@ -17,7 +17,7 @@
 | --- | --- | --- | --- |
 | Vendored external plugin/repo | `.gitmodules` | `docs/plugin-catalog.md`, plugin 내부 manifest | submodule path와 URL을 업데이트 후보로 읽고, 대상 skill과 관련 있을 때 version/commit/source ledger를 기록한다. |
 | Plugin manifest detail | plugin 내부 manifest, 예: `.codex-plugin/plugin.json`, `.mcp.json`, `pyproject.toml` | `docs/plugin-catalog.md` | version, repository, MCP entrypoint, bundled skill 위치를 확인한다. |
-| Workflow provenance-only primitive | `skills/project-workflow/references/upstream-dependency-map.md`, `skills/spec-workflow/references/upstream-dependency-map.md` | 각 workflow `SKILL.md`, eval fixture | 출처 라벨과 exact primitive name을 읽되, submodule처럼 취급하지 않는다. |
+| Workflow provenance-only primitive | `skills/project-workflow/references/upstream-dependency-map.md`, `skills/feature-workflow/references/upstream-dependency-map.md` | 각 workflow `SKILL.md`, eval fixture | 출처 라벨과 exact primitive name을 읽되, submodule처럼 취급하지 않는다. |
 | Repo-owned shared skill | `skills/<skill>/SKILL.md`, `history/skills.md` | README, AGENTS, snippets, `skill.html` | local package update 범위와 lifecycle/event 기록 여부를 판단한다. |
 | Project setup snippet | `project-snippets/*.md` | README, AGENTS, `docs/project-skill-setup.md` | target project에 전달되는 instruction drift를 확인한다. |
 

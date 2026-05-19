@@ -1,11 +1,11 @@
 ## Project Skills
 
-- Use $spec-workflow at `<skills-root>/skills/spec-workflow/SKILL.md` when an existing PRD, issue, spec, bug report, acceptance criteria, ADR, or `design.md` should be turned into a verified implementation slice with planning, TDD or characterization checks, review, QA/runtime evidence, document sync, and completion reporting.
+- Use $feature-workflow at `<skills-root>/skills/feature-workflow/SKILL.md` when an existing PRD, issue, spec, bug report, acceptance criteria, ADR, or `design.md` should be turned into a verified implementation slice with planning, TDD or characterization checks, review, QA/runtime evidence, document sync, and completion reporting.
 
 ## Project Skill Overrides
 
-- Treat `spec-workflow` as the repeated implementation loop half of the Workflow suite. It is called after `project-workflow` or equivalent project setup has produced enough domain, architecture, design, and acceptance criteria.
-- Do not use `spec-workflow` for raw product discovery, project structure selection, initial design system setup, or PRD creation. Hand those back to `project-workflow`.
+- Treat `feature-workflow` as the repeated implementation loop half of the Workflow suite. It is called after `project-workflow` or equivalent project setup has produced enough domain, architecture, design, and acceptance criteria.
+- Do not use `feature-workflow` for raw product discovery, project structure selection, initial design system setup, or PRD creation. Hand those back to `project-workflow`.
 - Before running it, inventory selected implementation primitives from Superpowers plugin, GStack plugin, Matt Pocock skills, and repo-local helpers as `selected`, `skipped`, or `fallback`; do not run whole upstream packages by default.
 - Label borrowed primitives with their source package, for example Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, and repo-local custom `code-review`/`browser-qa`/`sync-docs`.
 - Read the target spec, issue, bug report, acceptance criteria, ADR, PRD, `design.md`, testing docs, and current diff before planning implementation.
@@ -13,6 +13,7 @@
 - Read `.scratch/<project-or-feature-slug>/work-claims.md` when present. Before production edits, confirm the current lane owns the intended write set, respect read-only paths, and stop with an overlap block if another active lane owns the same file or module.
 - Shared/hotspot files should be changed only by the integration owner named in `work-claims.md`; other lanes should leave dependent patch notes or issues instead of editing those files directly.
 - If acceptance criteria are missing, write a light spec or ask a focused question before changing production code.
+- For TypeScript production edits, keep ESM only: `package.json` `type: "module"`, ESM `tsconfig`, `import`/`export`, and no CommonJS, `require`, `module.exports`, `.cjs`, or `.cts`. If the spec requires CommonJS, stop with a blocker or migration boundary before editing.
 - For target code repos, treat TDD as mandatory before production code edits: RED evidence first, characterization evidence second, and an explicit TDD exception record only when neither is practical.
 - Do not install or run TDD hooks from this shared skills repo. If enforcement is needed, wire a project-local hook in the target code repo and keep it scoped to that repo.
 - Use `subagent-driven-development` only for large implementation work with disjoint write sets and clear review ownership.

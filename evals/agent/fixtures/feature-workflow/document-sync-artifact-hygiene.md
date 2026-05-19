@@ -1,6 +1,6 @@
 # Saved Workflow Output: Completion Gate
 
-Skill: spec-workflow
+Skill: feature-workflow
 Mode: Completion
 Next step: Use document-sync before completion
 
