@@ -86,6 +86,9 @@ const jsonOutput = args.includes("--json");
 const casesDir = path.join(repoRoot, "evals/agent/cases");
 const errors: string[] = [];
 const externalSystemSkills = new Set(["imagegen", "openai-docs", "plugin-creator", "skill-creator", "skill-installer"]);
+const pluginBundledSkillPaths = new Map<string, string>([
+  ["project-workflow", "plugins/project-workflow/skills/project-workflow/SKILL.md"],
+]);
 
 function valueFor(flag: string): string | undefined {
   const index = args.indexOf(flag);
@@ -99,6 +102,10 @@ function rel(filePath: string): string {
 
 function readRepo(relativePath: string): string {
   return readFileSync(path.join(repoRoot, relativePath), "utf8");
+}
+
+function instructionPathForSkill(skill: string): string {
+  return pluginBundledSkillPaths.get(skill) ?? `skills/${skill}/SKILL.md`;
 }
 
 function repoPath(relativePath: string): string {
@@ -424,7 +431,7 @@ function runCheck(check: Check): string | null {
     for (const file of check.files) {
       const fullPath = repoPath(file);
       if (!existsSync(fullPath)) return `${file} does not exist`;
-      if (!readFileSync(fullPath, "utf8").includes(`skills/${check.skill}/SKILL.md`)) {
+      if (!readFileSync(fullPath, "utf8").includes(instructionPathForSkill(check.skill))) {
         return `${file} does not list ${check.skill}`;
       }
     }
@@ -452,7 +459,7 @@ function runCheck(check: Check): string | null {
 function validateCaseReferences(testCase: EvalCase, allSkills: Set<string>): string[] {
   const failures: string[] = [];
   for (const skill of [...testCase.expectedSkills, ...(testCase.forbiddenSkills ?? [])]) {
-    if (!allSkills.has(skill) && !externalSystemSkills.has(skill)) {
+    if (!allSkills.has(skill) && !externalSystemSkills.has(skill) && !pluginBundledSkillPaths.has(skill)) {
       failures.push(`referenced skill does not exist: ${skill}`);
     }
   }

@@ -29,7 +29,7 @@ Primitive Invocation
 - output artifact:
 ```
 
-upstream이 바뀌면 전체 내용을 복사하지 않는다. `upstream-dependency-map.md`에서 source package, exact name, 채택 역할, handoff 조건, artifact path, validator/eval 경계를 갱신하고, 같은 변경을 `SKILL.md`, `skill.html`, project snippet, history에 반영한다.
+upstream이 바뀌면 전체 내용을 복사하지 않는다. `docs/update-source-registry.md`에서 source id, source package, exact name, checked ledger를 먼저 갱신하고, `upstream-dependency-map.md`에는 채택 역할, handoff 조건, artifact path, validator/eval 경계만 반영한다. 같은 변경을 `SKILL.md`, `skill.html`, project snippet, history에 반영한다.
 
 ## document language 기준
 

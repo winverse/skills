@@ -140,8 +140,8 @@
       },
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/upstream-dependency-map.md",
-        "value": "| GStack plugin | `office-hours` |"
+        "file": "plugins/project-workflow/skills/project-workflow/references/upstream-dependency-map.md",
+        "value": "| `gstack.office-hours` | GStack plugin | `office-hours` |"
       },
       {
         "type": "required_text",
@@ -172,7 +172,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "raw idea discovery 중에는 호출하지 않는다"
       },
       {
@@ -224,7 +224,7 @@
       },
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "CONTEXT.md or ADR"
       }
     ]
@@ -320,7 +320,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/SKILL.md",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
         "value": "Agent Tool And Security Risk Gate"
       },
       {
@@ -361,7 +361,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "existing backend/API cleanup 기준"
       },
       {
@@ -402,7 +402,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "Project Setup Verification"
       },
       {
@@ -439,7 +439,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "Docker/AWS/Pulumi"
       },
       {
@@ -474,7 +474,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "Agent Tool And Security Risk Gate"
       },
       {
@@ -509,7 +509,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/SKILL.md",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
         "value": "measurable end state"
       },
       {
@@ -556,7 +556,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/SKILL.md",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
         "value": "workflow-state.md"
       },
       {
@@ -603,12 +603,12 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/SKILL.md",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
         "value": "work-claims.md"
       },
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "one active owner per claimed write path"
       },
       {
@@ -655,7 +655,7 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/SKILL.md",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
         "value": "phase/step handoff gate"
       },
       {
@@ -729,12 +729,12 @@
     "checks": [
       {
         "type": "required_text",
-        "file": "skills/project-workflow/SKILL.md",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
         "value": "ESM only"
       },
       {
         "type": "required_text",
-        "file": "skills/project-workflow/references/project-workflow-playbook.md",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
         "value": "TypeScript module policy 기준"
       },
       {

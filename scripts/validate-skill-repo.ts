@@ -118,6 +118,8 @@ requireFile("project-snippets/claude-base.md");
 requireFile("scripts/validate-skill-html.ts");
 requireFile("scripts/validate-korean-markdown.ts");
 requireFile("scripts/validate-plugins.ts");
+requireFile("scripts/validate-source-registry.ts");
+requireFile("plugins/project-workflow/scripts/validate-project-workflow.ts");
 requireFile("scripts/run-agent-evals.ts");
 requireFile("evals/agent/README.md");
 requireFile("evals/agent/cases/skill-routing.json");
@@ -126,14 +128,19 @@ requireFile("evals/agent/cases/output-shape.json");
 requireText("README.md", "node scripts/validate-skill-html.ts .", "common skill HTML validator command");
 requireText("README.md", "node scripts/validate-korean-markdown.ts .", "Korean Markdown validator command");
 requireText("README.md", "node scripts/validate-plugins.ts .", "plugin validator command");
+requireText("README.md", "node scripts/validate-source-registry.ts .", "source registry validator command");
+requireText("README.md", "node plugins/project-workflow/scripts/validate-project-workflow.ts plugins/project-workflow/skills/project-workflow", "project-workflow plugin validator command");
 requireText("README.md", "node scripts/run-agent-evals.ts", "agent eval harness command");
 requireText("README.md", "docs/update-source-registry.md", "update source registry document");
 requireText("AGENTS.md", "skills/**/*.md", "Korean Markdown rule for skill docs");
 requireText("AGENTS.md", "node scripts/validate-korean-markdown.ts .", "Korean Markdown validator command");
 requireText("AGENTS.md", "node scripts/run-agent-evals.ts", "agent eval harness command");
+requireText("AGENTS.md", "node scripts/validate-source-registry.ts .", "source registry validator command");
+requireText("AGENTS.md", "node plugins/project-workflow/scripts/validate-project-workflow.ts plugins/project-workflow/skills/project-workflow", "project-workflow plugin validator command");
 requireText("AGENTS.md", "docs/update-source-registry.md", "update source registry instruction");
 requireText("docs/update-source-registry.md", ".gitmodules", "canonical submodule source");
 requireText("docs/update-source-registry.md", "workflow provenance-only primitive", "workflow primitive boundary");
+requireText("docs/update-source-registry.md", "scripts/validate-source-registry.ts", "source registry validator");
 
 if (nodeMajor < 22) {
   errors.push(`Node 22+ is required for direct .ts validator execution; current Node is ${process.versions.node}`);
@@ -152,7 +159,17 @@ const history = existsSync(path.join(root, "history/skills.md"))
   ? readText("history/skills.md")
   : "";
 const skills = skillDirs();
-const skillNames = new Set(skills.map((skill) => path.basename(skill)));
+const pluginBundledSkills = [
+  {
+    name: "project-workflow",
+    path: "plugins/project-workflow/skills/project-workflow",
+    validatorCommand: "node plugins/project-workflow/scripts/validate-project-workflow.ts plugins/project-workflow/skills/project-workflow",
+  },
+] as const;
+const skillNames = new Set([
+  ...skills.map((skill) => path.basename(skill)),
+  ...pluginBundledSkills.map((skill) => skill.name),
+]);
 
 for (const skill of skills) {
   const skillName = path.basename(skill);
@@ -219,6 +236,62 @@ for (const skill of skills) {
       `default_prompt mentioning $${skillName}`,
     );
   }
+}
+
+for (const { name: skillName, path: skill, validatorCommand } of pluginBundledSkills) {
+  requireFile(`${skill}/SKILL.md`);
+  requireFile(`${skill}/skill.html`);
+  requireFile(`${skill}/agents/openai.yaml`);
+  requireFile(`project-snippets/${skillName}.md`);
+
+  requirePattern(
+    "history/skills.md",
+    new RegExp("^\\| `" + escapeRegExp(skillName) + "` \\|", "m"),
+    `current registry row for ${skillName}`,
+  );
+  requireText("README.md", `- \`${skillName}\`:`, `current skill entry for ${skillName}`);
+  requireText("README.md", `${skill}/SKILL.md`, `source path for ${skillName}`);
+  requireText("README.md", `${skill}/skill.html`, `HTML guide path for ${skillName}`);
+  requireText("AGENTS.md", `${skill}/SKILL.md`, `repo-local project skill link for ${skillName}`);
+  requireText(
+    "project-snippets/base.md",
+    `<skills-root>/${skill}/SKILL.md`,
+    `base snippet link for ${skillName}`,
+  );
+  requireText(
+    "project-snippets/claude-base.md",
+    `<skills-root>/${skill}/SKILL.md`,
+    `Claude base snippet link for ${skillName}`,
+  );
+  requireText(
+    `project-snippets/${skillName}.md`,
+    `<skills-root>/${skill}/SKILL.md`,
+    `skill snippet link for ${skillName}`,
+  );
+  requireText(
+    "docs/project-skill-setup.md",
+    `project-snippets/${skillName}.md`,
+    `project setup snippet source for ${skillName}`,
+  );
+  requireText("README.md", validatorCommand, `validator command for ${skillName}`);
+
+  const agentMetadataPath = `${skill}/agents/openai.yaml`;
+  requireText(agentMetadataPath, "interface:", `OpenAI metadata interface for ${skillName}`);
+  requirePattern(
+    agentMetadataPath,
+    /^\s*display_name:\s*["'][^"']+["']\s*$/m,
+    `non-empty display_name for ${skillName}`,
+  );
+  requirePattern(
+    agentMetadataPath,
+    /^\s*short_description:\s*["'][^"']+["']\s*$/m,
+    `non-empty short_description for ${skillName}`,
+  );
+  requirePattern(
+    agentMetadataPath,
+    new RegExp("^\\s*default_prompt:\\s*[\"'][^\"']*\\$" + escapeRegExp(skillName) + "[^\"']*[\"']\\s*$", "m"),
+    `default_prompt mentioning $${skillName}`,
+  );
 }
 
 for (const filePath of walkSourceFiles()) {

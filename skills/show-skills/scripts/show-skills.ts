@@ -25,6 +25,7 @@ const skillPathPrefix = catalog.pathPrefix;
 const compact = args.includes("--compact");
 const formatArg = valueFor("--format") ?? "markdown";
 const categoryFilter = valueFor("--category");
+const pluginBundledSkillPaths = ["plugins/project-workflow/skills/project-workflow"];
 
 const categoryOrder = [
   "탐색",
@@ -65,7 +66,7 @@ const summaryBySkill: Record<string, string> = {
   "agent-eval-harness": "routing, cross-agent portability, safety, artifact hygiene를 검증하는 초기 eval harness",
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
   "project-structure": "frontend, backend, monorepo, desktop app, infra-aware 구조와 기본 stack 결정",
-  "project-workflow": "Workflow suite setup: domain, PRD, issue backlog, workflow-state cache",
+  "project-workflow": "plugin-bundled 초기 설정: domain, PRD, issue backlog, workflow-state cache",
   "feature-workflow": "Workflow suite loop: feature/issue/bug를 TDD, QA, docs sync로 구현",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
@@ -200,7 +201,7 @@ function discoverSkills(): SkillInfo[] {
   const history = parseHistory();
   if (!existsSync(skillsRoot)) return [];
 
-  return readdirSync(skillsRoot)
+  const topLevelSkills = readdirSync(skillsRoot)
     .filter((name) => {
       const fullPath = path.join(skillsRoot, name);
       return statSync(fullPath).isDirectory() && existsSync(path.join(fullPath, "SKILL.md"));
@@ -227,7 +228,38 @@ function discoverSkills(): SkillInfo[] {
         htmlPath,
         snippetPath,
       };
+    });
+
+  const discoveredNames = new Set(topLevelSkills.map((skill) => skill.name));
+  const pluginBundledSkills = pluginBundledSkillPaths
+    .filter((skill) => existsSync(path.join(repoRoot, skill, "SKILL.md")))
+    .map((skill) => {
+      const folder = path.basename(skill);
+      const skillPath = `${skill}/SKILL.md`;
+      const htmlPath = `${skill}/skill.html`;
+      const snippetPath = `project-snippets/${folder}.md`;
+      const frontmatter = parseFrontmatter(read(skillPath));
+      const name = frontmatter.name ?? folder;
+      const registry = history.get(name);
+      return {
+        name,
+        category: categoryBySkill[name] ?? "기타",
+        description: frontmatter.description ?? "",
+        shortDescription:
+          summaryBySkill[name] ||
+          parseShortDescription(`${skill}/agents/openai.yaml`) ||
+          summarize(frontmatter.description ?? ""),
+        state: registry?.state ?? "unknown",
+        risk: registry?.risk ?? "unknown",
+        reviewed: registry?.reviewed ?? "unknown",
+        skillPath,
+        htmlPath,
+        snippetPath,
+      };
     })
+    .filter((skill) => !discoveredNames.has(skill.name));
+
+  return [...topLevelSkills, ...pluginBundledSkills]
     .filter((skill) => !categoryFilter || skill.category === categoryFilter || skill.name === categoryFilter)
     .sort((a, b) => {
       const categoryDelta = categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
@@ -244,7 +276,7 @@ function markdown(skills: SkillInfo[]): string {
   const lines: string[] = [];
   lines.push("# 현재 스킬 목록");
   lines.push("");
-  lines.push(`총 ${skills.length}개 스킬. Source: \`${skillPathPrefix || "./"}*/SKILL.md\`${existsSync(path.join(repoRoot, "history/skills.md")) ? ", `history/skills.md`" : ""}.`);
+  lines.push(`총 ${skills.length}개 스킬. Source: \`${skillPathPrefix || "./"}*/SKILL.md\`, plugin-bundled \`plugins/*/skills/*/SKILL.md\`${existsSync(path.join(repoRoot, "history/skills.md")) ? ", `history/skills.md`" : ""}.`);
   lines.push("");
 
   for (const category of categoryOrder) {

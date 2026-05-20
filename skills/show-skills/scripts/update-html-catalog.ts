@@ -7,6 +7,8 @@ type SkillTile = {
   folder: string;
   name: string;
   description: string;
+  skillHref: string;
+  htmlHref: string;
 };
 
 const startMarker = "        <!-- skill-catalog:start -->";
@@ -18,6 +20,7 @@ const skillRoot = path.resolve(skillRootArg ?? "skills/show-skills");
 const repoRoot = path.resolve(skillRoot, "../..");
 const skillsRoot = path.join(repoRoot, "skills");
 const htmlPath = path.join(skillRoot, "skill.html");
+const pluginBundledSkillPaths = ["plugins/project-workflow/skills/project-workflow"];
 
 const summaryBySkill: Record<string, string> = {
   "show-skills": "현재 스킬 목록을 카테고리별로 보여주고 조합을 추천",
@@ -30,7 +33,7 @@ const summaryBySkill: Record<string, string> = {
   "agent-eval-harness": "routing, portability, safety, artifact hygiene를 검증하는 eval harness",
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
   "project-structure": "frontend, backend, monorepo, desktop app, ESM TypeScript 구조 결정",
-  "project-workflow": "워크플로우 묶음 초기 설정: 도메인, PRD, ESM TypeScript 정책, workflow-state cache",
+  "project-workflow": "plugin-bundled 초기 설정: 도메인, PRD, ESM TypeScript 정책, workflow-state cache",
   "feature-workflow": "워크플로우 묶음 반복 구현: feature/issue/bug를 ESM TypeScript, TDD, QA로 구현",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
@@ -82,7 +85,7 @@ function escapeHtml(value: string): string {
 }
 
 function displayName(skill: SkillTile): string {
-  if (skill.name === "project-workflow") return "project-workflow 스킬";
+  if (skill.name === "project-workflow") return "project-workflow plugin skill";
   if (skill.name === "feature-workflow") return "feature-workflow 스킬";
   return skill.name;
 }
@@ -97,7 +100,7 @@ function discoverSkills(): SkillTile[] {
     throw new Error(`Missing skills root: ${path.relative(repoRoot, skillsRoot)}`);
   }
 
-  return readdirSync(skillsRoot)
+  const topLevelSkills = readdirSync(skillsRoot)
     .filter((folder) => {
       const fullPath = path.join(skillsRoot, folder);
       return statSync(fullPath).isDirectory() && existsSync(path.join(fullPath, "SKILL.md"));
@@ -116,8 +119,29 @@ function discoverSkills(): SkillTile[] {
         folder,
         name,
         description: summaryBySkill[name] || summarize(frontmatter.description || `${name} skill guide`),
+        skillHref: relativeHref(folder, "SKILL.md"),
+        htmlHref: relativeHref(folder, "skill.html"),
       };
     });
+
+  const discoveredNames = new Set(topLevelSkills.map((skill) => skill.name));
+  const pluginBundledSkills = pluginBundledSkillPaths
+    .filter((folder) => existsSync(path.join(repoRoot, folder, "SKILL.md")))
+    .map((folder) => {
+      const skillPath = path.join(repoRoot, folder, "SKILL.md");
+      const frontmatter = parseFrontmatter(read(skillPath));
+      const name = frontmatter.name || path.basename(folder);
+      return {
+        folder,
+        name,
+        description: summaryBySkill[name] || summarize(frontmatter.description || `${name} skill guide`),
+        skillHref: `../../${folder}/SKILL.md`,
+        htmlHref: `../../${folder}/skill.html`,
+      };
+    })
+    .filter((skill) => !discoveredNames.has(skill.name));
+
+  return [...topLevelSkills, ...pluginBundledSkills].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function renderCatalog(skills: SkillTile[]): string {
@@ -128,7 +152,7 @@ function renderCatalog(skills: SkillTile[]): string {
     lines.push(`            <strong>${escapeHtml(displayName(skill))}</strong>`);
     lines.push(`            <em>${escapeHtml(skill.description)}</em>`);
     lines.push(
-      `            <span class="skill-links"><a href="${escapeHtml(relativeHref(skill.folder, "skill.html"))}">skill.html</a><a href="${escapeHtml(relativeHref(skill.folder, "SKILL.md"))}">SKILL.md</a></span>`,
+      `            <span class="skill-links"><a href="${escapeHtml(skill.htmlHref)}">skill.html</a><a href="${escapeHtml(skill.skillHref)}">SKILL.md</a></span>`,
     );
     lines.push("          </div>");
   }

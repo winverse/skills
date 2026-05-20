@@ -33,9 +33,9 @@ node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phas
 
 `project-structure`, `design-review`, `browser-qa`, `sync-docs`, `code-review`도 이 plugin에 넣지 않는다. 이들은 초기 셋팅 중 필요할 때 호출하는 specialist skill이다.
 
-## 호환 경로
+## 정본 경로
 
-기존 프로젝트가 `skills/project-workflow/SKILL.md`를 직접 링크할 수 있으므로 top-level `skills/project-workflow` 경로는 compatibility entry로 유지한다. 새 통합에서는 plugin 경로를 canonical source로 본다.
+새 프로젝트와 snippet은 `plugins/project-workflow/skills/project-workflow/SKILL.md`를 직접 링크한다. 기존 top-level `skills/project-workflow` 경로는 제거됐고, plugin-bundled skill만 canonical source로 본다.
 
 ```text
 plugins/project-workflow/skills/project-workflow/SKILL.md

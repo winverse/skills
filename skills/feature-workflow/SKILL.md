@@ -21,7 +21,7 @@ Superpowers plugin, GStack plugin, Matt Pocock skills, repo-local custom helper�
 
 ## provenance ledger 기준
 
-정확한 출처와 업데이트 규칙은 `references/upstream-dependency-map.md`를 먼저 본다. `brainstorming`, `writing-plans`, `tdd`, `subagent-driven-development`, `review`, `qa`, `diagnose`처럼 외부에서 온 이름은 항상 출처 패키지와 함께 적는다.
+정확한 upstream source와 checked ledger는 `docs/update-source-registry.md`를 단일 진실원으로 본다. `references/upstream-dependency-map.md`는 이 workflow 안에서 source id를 어떤 순서와 handoff로 쓰는지 적는 usage map이다. `brainstorming`, `writing-plans`, `tdd`, `subagent-driven-development`, `review`, `qa`, `diagnose`처럼 외부에서 온 이름은 항상 출처 패키지와 함께 적는다.
 
 - Superpowers plugin: `brainstorming`, `writing-plans`, `subagent-driven-development`, `tdd` 또는 `test-driven-development`, `verification-before-completion`
 - GStack plugin: `plan-eng-review`, `plan-design-review`, `browse`, `review`, `qa`, `ship`, `retro`

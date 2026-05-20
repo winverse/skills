@@ -1,6 +1,6 @@
 ## Project Skills
 
-- Use $project-workflow at `<skills-root>/skills/project-workflow/SKILL.md` when asked to start a new project, shape a raw product idea, prepare domain docs, run product challenge, choose architecture boundaries, create `design.md`, write ADR/PRD, create an initial issue backlog, verify cross-agent project setup, or hand off a ready spec to `feature-workflow`.
+- Use $project-workflow at `<skills-root>/plugins/project-workflow/skills/project-workflow/SKILL.md` when asked to start a new project, shape a raw product idea, prepare domain docs, run product challenge, choose architecture boundaries, create `design.md`, write ADR/PRD, create an initial issue backlog, verify cross-agent project setup, or hand off a ready spec to `feature-workflow`.
 
 ## Project Skill Overrides
 

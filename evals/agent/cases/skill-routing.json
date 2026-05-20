@@ -185,7 +185,12 @@
       {
         "type": "required_text",
         "file": "skills/skill-update/SKILL.md",
-        "value": "`project-workflow`와 `feature-workflow`의 `upstream-dependency-map.md`"
+        "value": "`docs/update-source-registry.md`의 workflow primitive lane"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/skill-update/SKILL.md",
+        "value": "usage map"
       },
       {
         "type": "required_text",
@@ -206,6 +211,44 @@
         "type": "required_text",
         "file": "skills/skill-update/references/update-checklist.md",
         "value": "plugin update lane과 workflow primitive lane을 둘 다 실행"
+      }
+    ]
+  },
+  {
+    "id": "source-registry-single-truth-guard",
+    "title": "Workflow source provenance stays in the central registry",
+    "prompt": "project-workflow에서 쓰는 grill-with-docs와 GStack primitive 원본을 업데이트하고 source of truth가 중복되지 않게 해줘",
+    "scope": "regression",
+    "expectedSkills": ["skill-update"],
+    "forbiddenSkills": ["skill-creator"],
+    "agentSurfaces": ["codex", "claude"],
+    "assumptionDate": "2026-05-20",
+    "exampleType": "edge",
+    "risk": "high",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "docs/update-source-registry.md",
+        "value": "workflow usage map의 `source id` 컬럼"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/project-workflow/skills/project-workflow/references/upstream-dependency-map.md",
+        "value": "| `matt-pocock.grill-with-docs` | Matt Pocock skills | `grill-with-docs` |"
+      },
+      {
+        "type": "required_text",
+        "file": "skills/feature-workflow/references/upstream-dependency-map.md",
+        "value": "| `superpowers.writing-plans` | Superpowers plugin | `writing-plans` |"
+      },
+      {
+        "type": "command_passed",
+        "command": ["node", "scripts/validate-source-registry.ts", "."]
+      },
+      {
+        "type": "command_passed",
+        "command": ["node", "plugins/project-workflow/scripts/validate-project-workflow.ts", "plugins/project-workflow/skills/project-workflow"]
       }
     ]
   },

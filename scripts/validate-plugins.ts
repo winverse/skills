@@ -292,7 +292,7 @@ requireText("plugins/project-workflow/scripts/execute-phase.ts", "--agent-arg");
 requireText("plugins/project-workflow/scripts/execute-phase.ts", "--project-root");
 requireText("plugins/project-workflow/scripts/execute-phase.ts", "shell: false");
 requireText("plugins/project-workflow/scripts/validate-execute-phase.ts", "completed dry-run must not mutate index.json");
-requireText("skills/project-workflow/SKILL.md", "plugins/project-workflow/skills/project-workflow/SKILL.md");
+requireText("plugins/project-workflow/skills/project-workflow/SKILL.md", "canonical source");
 
 const manifest = readJson<CodexPluginManifest>("plugins/context-mode/.codex-plugin/plugin.json");
 if (manifest) {

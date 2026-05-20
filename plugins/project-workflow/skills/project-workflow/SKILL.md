@@ -5,7 +5,7 @@ description: "새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs
 
 # project-workflow
 
-이 plugin-bundled skill은 `project-workflow`의 canonical source다. Top-level `skills/project-workflow/SKILL.md`는 기존 프로젝트가 직접 링크할 수 있도록 같은 실행 계약을 유지하는 compatibility entry다.
+이 plugin-bundled skill은 `project-workflow`의 canonical source다. 기존 top-level `skills/project-workflow` entry는 제거됐으므로 새 프로젝트와 snippet은 `plugins/project-workflow/skills/project-workflow/SKILL.md`를 직접 링크한다.
 
 이 스킬은 `workflow suite`의 초기 셋팅 orchestration이다. 프로젝트가 기능 개발을 받을 준비가 됐는지 만들고, raw idea를 바로 코드로 넘기지 않고, domain language, product reason, architecture boundary, design direction, PRD, issue backlog를 먼저 고정한다.
 
@@ -33,7 +33,7 @@ Matt Pocock skills, GStack plugin, Superpowers plugin, design-direction, repo-lo
 
 ## provenance ledger 기준
 
-정확한 출처와 업데이트 규칙은 `references/upstream-dependency-map.md`를 먼저 본다. `grill-with-docs`, `office-hours`, `to-prd`, `project-structure`, `design.md`처럼 외부 또는 custom에서 온 이름은 항상 출처 패키지와 함께 적는다.
+정확한 upstream source와 checked ledger는 `docs/update-source-registry.md`를 단일 진실원으로 본다. `references/upstream-dependency-map.md`는 이 workflow 안에서 source id를 어떤 순서와 handoff로 쓰는지 적는 usage map이다. `grill-with-docs`, `office-hours`, `to-prd`, `project-structure`, `design.md`처럼 외부 또는 custom에서 온 이름은 항상 출처 패키지와 함께 적는다.
 
 - Matt Pocock skills: `setup-matt-pocock-skills`, `grill-with-docs`, `to-prd`, `to-issues`, `triage`. `grill-me`는 출처 장부에는 남기지만, project setup 기본 질문 gate에서는 `grill-with-docs`가 대체한다.
 - GStack plugin: `office-hours`, `plan-ceo-review`, `plan-design-review`
