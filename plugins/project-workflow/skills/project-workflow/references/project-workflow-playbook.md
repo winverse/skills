@@ -37,9 +37,11 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. `docs/update-sour
 
 한국어 우선 대상은 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, workflow log, `workflow-state.md`, `work-claims.md`다. `code identifiers`, 명령, 파일 경로, 제품명, protocol, API 이름, upstream skill/plugin 이름은 원문 표기를 유지한다.
 
-Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 제목, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
+Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 제목, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 영어 중심 heading이나 영어-only field label도 실패로 본다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
 
 허용되는 영어는 exact identifier, command, file path, API name, package name, source package name, status keyword처럼 번역하면 정확성이 떨어지는 값이다. 문서의 자연어 설명을 영어로 남기는 것은 사용자가 명시적으로 영어 문서를 요청했을 때만 허용한다.
+
+`work-claims.md`와 phase step file은 조정 문서이지만 사람이 읽는 setup artifact다. exact field name은 괄호나 backtick 안에 보조 표기로만 두고, section heading과 field label은 한국어 우선으로 쓴다.
 
 ## scenario lanes 기준
 
@@ -92,24 +94,24 @@ Codex, Claude Code, Cursor, Windsurf, Copilot 같은 agent별 instruction surfac
 
 `project-workflow`는 `.scratch/<slug>/work-claims.md`를 생성하거나 갱신한다. 이 파일은 coordination artifact이며 authority가 아니다. authority는 `CONTEXT.md`, ADR, PRD, issue, `design.md`에 둔다.
 
-```text
-Work Claims
-- coordination file: .scratch/<slug>/work-claims.md
-- owner policy: one active owner per claimed write path
-- read policy: read is allowed, write requires claim
+owner policy는 one active owner per claimed write path다. 읽기는 허용하지만 쓰기는 claim이 필요하다.
 
-Lane
+```text
+# work-claims
+
+## 도메인 lane
+
 - lane id:
-- owner/session:
-- branch or worktree:
-- spec/issue:
-- claimed write set:
-- read-only paths:
-- shared/hotspot files:
-- integration owner:
-- status: planned | active | blocked | ready-for-integration | done
-- validation command:
-- evidence path:
+- 담당자/session:
+- branch 또는 worktree:
+- 대상 spec/issue:
+- 수정 소유 범위(claimed write set):
+- 읽기 전용 경로(read-only paths):
+- 공유/hotspot 파일:
+- 통합 담당자(integration owner):
+- 상태(status): planned | active | blocked | ready-for-integration | done
+- 검증 명령:
+- 증거 경로:
 ```
 
 `claimed write set`은 파일, 디렉터리, 모듈 단위로 쓰되 너무 넓게 잡지 않는다. `shared/hotspot files`에는 route registry, schema, generated type entrypoint, central config, lockfile, migration index, public API barrel처럼 여러 lane이 건드리기 쉬운 파일을 적는다. 이런 파일은 한 lane의 integration owner가 맡고, 다른 lane은 dependent patch, note, issue, 또는 integration request로 남긴다.
@@ -250,16 +252,18 @@ phases/
 
 `index.json`은 `project`, `phase`, `steps`를 담고, 각 step은 `pending`, `completed`, `error`, `blocked` 중 하나의 상태를 가진다. step metadata는 `step`/`name`을 기본으로 쓰되, 생성 agent가 `id`/`title`/`file`을 만든 경우 `execute-phase.ts`가 이를 정상화해서 읽을 수 있어야 한다. `blocked`는 실패가 아니라 API key, 계정 권한, 외부 승인, 수동 설정처럼 사용자 개입이 필요한 상태다.
 
-각 `step<N>.md`는 독립 Codex session이 읽어도 실행 가능해야 한다.
+`index.json`의 `title`이나 `name`은 dry-run header에 노출되므로 한국어 우선 또는 한국어+identifier 병기로 쓴다.
 
-- read files: 먼저 읽을 authority 문서와 기존 코드 경로
-- purpose: 이 step이 해결하는 문제와 제외 범위
-- claimed write set: 수정 가능한 파일/디렉토리
-- read-only paths: 읽기만 허용되는 경로
-- acceptance commands: 실제 실행 가능한 검증 명령
-- blocked conditions: 사용자 개입이 필요한 조건
-- summary field: 완료 뒤 다음 step에 넘길 한 줄 산출물
-- forbidden changes: 하지 말아야 할 작업과 이유
+각 `step<N>.md`는 독립 Codex session이 읽어도 실행 가능해야 하며, section heading은 한국어 우선으로 둔다.
+
+- 읽을 파일(read files): 먼저 읽을 authority 문서와 기존 코드 경로
+- 작업 목적(purpose): 이 step이 해결하는 문제와 제외 범위
+- 수정 소유 범위(claimed write set): 수정 가능한 파일/디렉토리
+- 읽기 전용 경로(read-only paths): 읽기만 허용되는 경로
+- 검증 명령(acceptance commands): 실제 실행 가능한 검증 명령
+- 차단 조건(blocked conditions): 사용자 개입이 필요한 조건
+- 완료 요약(summary field): 완료 뒤 다음 step에 넘길 한 줄 산출물
+- 금지 변경(forbidden changes): 하지 말아야 할 작업과 이유
 
 ## TypeScript execute runner boundary 기준
 

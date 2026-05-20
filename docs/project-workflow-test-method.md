@@ -159,7 +159,7 @@ codex exec resume \
    - phase handoff가 있으면 `execute-phase.ts`를 dry-run으로 실행한다.
    - dry-run prompt에 `Step undefined`나 `undefined` step title이 나오면 실패로 판정한다.
    - `node_modules`는 검증 중 생긴 generated artifact로 허용하되 `.gitignore` 또는 file-tree summary exclusion으로 처리한다. 산출물 품질 판단에는 포함하지 않는다.
-   - target project가 다른 언어를 명시하지 않았으면 durable setup docs의 자연어 제목/본문/목록이 한국어 우선인지 확인한다. 영어 중심이면 target validation이 통과해도 실패다.
+   - target project가 다른 언어를 명시하지 않았으면 durable setup docs의 자연어 제목/본문/목록/필드 라벨이 한국어 우선인지 확인한다. 영어 중심 heading, 영어-only field label, 영어 중심 phase step 설명이 있으면 target validation이 통과해도 실패다. exact identifier, command, file path, package name, status keyword는 허용한다.
    - shared workspace guard를 다시 확인한다.
    - 결과는 `runs/cycle-NNN/output/`과 `cycle-summary.md`에 남긴다.
 
@@ -179,6 +179,7 @@ codex exec resume \
 - 외부 agent가 local shared workspace를 수정했는데 pass로 처리하지 않는다.
 - 한 번 pass했다고 `/goal`을 완료 처리하지 않는다. 마지막 수정 이후 fresh clone cycle 통과와 남은 개선점 여부를 같이 본다.
 - target project가 영어 문서를 명시하지 않았는데 영어 중심 setup docs가 생성된 cycle을 pass로 처리하지 않는다.
+- `work-claims.md`의 사람이 읽는 lane/field label과 `phases/step<N>.md`의 section heading/body가 영어 중심이면 pass로 처리하지 않는다. exact field name은 괄호나 backtick 안의 보조 표기로만 허용한다.
 
 ## 기록 템플릿
 

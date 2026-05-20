@@ -132,7 +132,9 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 초기 셋팅 산출물은 사용자가 다른 언어를 지정하지 않는 한 한국어 우선이다. 여기에는 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 포함된다. 코드 식별자, 명령, 경로, 제품명, 외부 API 이름은 원문을 유지한다.
 
-Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름에만 남긴다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
+Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 제목, 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름, status keyword에만 남긴다. 영어 중심 heading이나 영어-only field label이 남으면 이 gate는 실패다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
+
+`work-claims.md`는 조정 문서지만 사람도 읽는 산출물이므로 라벨도 한국어 우선으로 쓴다. 예시는 `## 도메인 lane`, `- 담당자/session:`, `- branch 또는 worktree:`, `- 대상 spec/issue:`, `- 수정 소유 범위(claimed write set):`, `- 읽기 전용 경로(read-only paths):`, `- 공유/hotspot 파일:`, `- 통합 담당자(integration owner):`, `- 상태(status):`, `- 검증 명령:`, `- 증거 경로:`처럼 쓴다.
 
 `workflow-state.md`를 같은 위치에 두고, 이후 `feature-workflow`가 반복 질문 없이 이어받을 수 있는 최소 상태를 남긴다.
 
@@ -154,6 +156,8 @@ Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의
 - validation command와 evidence path
 
 큰 구현 handoff를 준비하면 `.scratch/<slug>/phases/` 또는 target project의 동등한 workflow area에 phase/step handoff plan을 둔다. `project-workflow`는 이 plan을 만들 수 있지만, 기본적으로 구현 runner를 실행하지 않는다. 실제 production edit은 `feature-workflow`의 work-claim preflight, TDD/characterization, QA/runtime evidence 규칙을 따른다.
+
+phase step Markdown도 한국어 우선 산출물이다. `step<N>.md`의 제목, 작업 범위, 차단 조건, 요약 지시 같은 사람이 읽는 문장은 한국어로 쓰고, runner나 cross-agent 호환에 필요한 exact field name은 괄호나 backtick 안에 보조 표기로만 둔다. 예시는 `## 읽을 파일(read files)`, `## 작업 범위`, `## 수정 소유 범위(claimed write set)`, `## 검증 명령(acceptance commands)`, `## 차단 조건(blocked conditions)`, `## 완료 요약(summary field)`처럼 쓴다. `index.json`의 `title`이나 `name`도 dry-run에서 보이므로 한국어 우선 또는 한국어+identifier 병기로 둔다.
 
 - `index.json`: project, phase, steps, status를 담는다.
 - `step<N>.md`: read files, 작업 범위, claimed write set, acceptance commands, blocked conditions, 금지사항을 담는다.
