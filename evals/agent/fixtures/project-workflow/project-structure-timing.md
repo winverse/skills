@@ -4,7 +4,7 @@ Skill: project-workflow
 Mode: Discovery
 Blocked specialist: project-structure
 Current authority: raw idea only; domain language not stable
-Next step: ask domain/product questions or run grill-me fallback
+Next step: ask domain/product questions or run grill-with-docs fallback
 
 Artifacts
 - Create/update: CONTEXT.md draft, not a folder tree

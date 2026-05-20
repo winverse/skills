@@ -14,7 +14,7 @@
 
 ## dependency invocation 기준
 
-dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기 셋팅에 채택한 primitive 호출 장부다. 각 항목은 `Matt Pocock skills: grill-me -> invoked`, `GStack plugin: office-hours -> fallback`, `repo-local custom: project-structure -> deferred`처럼 source package, exact skill/plugin name, selected/invoked/skipped/fallback/deferred 상태를 함께 쓴다.
+dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기 셋팅에 채택한 primitive 호출 장부다. 각 항목은 `Matt Pocock skills: grill-with-docs -> invoked`, `GStack plugin: office-hours -> fallback`, `repo-local custom: project-structure -> deferred`처럼 source package, exact skill/plugin name, selected/invoked/skipped/fallback/deferred 상태를 함께 쓴다.
 
 선택된 upstream primitive는 가능한 경우 실제 skill/plugin 호출로 넘긴다. 현재 runtime에 호출 surface가 없으면 조용히 흉내 내지 않고 `fallback`으로 표시한 뒤, 아래 fallback interview gate만 수행한다.
 
@@ -41,7 +41,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. `upstream-depende
 
 ### raw new SaaS/service 기준
 
-domain language, target user, first usable slice, product challenge, Superpowers setup gap check, ADR, PRD 순서로 간다. 먼저 Matt Pocock skills `grill-me` 또는 `grill-with-docs`를 실제 호출하고, 이어서 GStack plugin `office-hours`를 실제 호출한다. 그 다음 Superpowers plugin `brainstorming`을 실제 호출하거나 fallback setup gap check 질문으로 빠진 가정, 너무 넓은 첫 slice, 인계 위험을 확인한다. 호출 surface가 없으면 각 primitive를 `fallback`으로 표시하고 local 질문을 끝낸 뒤 다음 단계로 간다. Docker/AWS/Pulumi가 필요한 새 서비스는 service boundary와 secret boundary를 먼저 확인한 뒤 `project-structure`로 넘긴다.
+domain language, target user, first usable slice, product challenge, Superpowers setup gap check, ADR, PRD 순서로 간다. 먼저 Matt Pocock skills `grill-with-docs`를 실제 호출해 기존 `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, 코드와 문서 용어를 확인하고, 없으면 첫 용어가 확정될 때 root `CONTEXT.md`를 lazy artifact로 제안한다. 이어서 GStack plugin `office-hours`를 실제 호출한다. 그 다음 Superpowers plugin `brainstorming`을 실제 호출하거나 fallback setup gap check 질문으로 빠진 가정, 너무 넓은 첫 slice, 인계 위험을 확인한다. 호출 surface가 없으면 각 primitive를 `fallback`으로 표시하고 local 질문을 끝낸 뒤 다음 단계로 간다. Docker/AWS/Pulumi가 필요한 새 서비스는 service boundary와 secret boundary를 먼저 확인한 뒤 `project-structure`로 넘긴다.
 
 ### existing backend/API cleanup 기준
 
@@ -119,17 +119,19 @@ Lane
 
 ## project-structure handoff 기준
 
-folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다. 특히 `grill-me`/`grill-with-docs`, `office-hours`, Superpowers `brainstorming` setup gap check가 끝나기 전 호출하지 않는다.
+folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다. 특히 `grill-with-docs`, `office-hours`, Superpowers `brainstorming` setup gap check가 끝나기 전 호출하지 않는다.
 
 ## fallback interview gate 기준
 
 원본 호출이 불가능하면 fallback 질문을 실행한다. fallback은 원본 전문 복제가 아니라 setup에 필요한 최소 질문이다.
 
 ```text
-Domain interview fallback
+Grill with Docs fallback
+- 기존 `CONTEXT.md` 또는 `CONTEXT-MAP.md`가 있는가?
 - 이 프로젝트에서 사용자가 부르는 핵심 객체는 무엇인가?
-- 헷갈리면 안 되는 비슷한 용어는 무엇인가?
+- 헷갈리면 안 되는 비슷한 용어와 피해야 할 alias는 무엇인가?
 - 이미 있는 문서나 코드가 쓰는 용어 중 바꾸면 안 되는 것은 무엇인가?
+- 되돌리기 어렵고 맥락 없이는 의외이며 실제 trade-off가 있는 ADR 후보가 있는가?
 
 Product challenge fallback
 - 이 프로젝트가 줄이는 고통은 무엇인가?

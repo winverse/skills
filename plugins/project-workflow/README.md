@@ -21,6 +21,10 @@ node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phas
 
 실행 command는 prompt를 stdin으로 받는다. Target project 문서는 `--project-root` 기준으로 읽고, 생략하면 현재 작업 디렉터리를 쓴다. 이 script는 Claude 전용 flag나 권한 우회 flag를 hard-code하지 않고, 알려진 권한 우회 flag는 거부한다. 실제 production edit은 `feature-workflow` step 실행으로 다룬다.
 
+## 반복 테스트
+
+`project-workflow` 계약을 바꾼 뒤에는 [프로젝트 워크플로우 테스트 방법](../../docs/project-workflow-test-method.md)에 따라 GitHub fresh clone 기반 cycle을 돌린다. 테스트는 local workspace 파일을 직접 읽지 않고, cycle마다 `current/`를 지운 뒤 새 clone에서 첫 응답 순서와 실제 project setup 산출물을 확인한다.
+
 ## 제외 범위
 
 `feature-workflow`는 이 plugin에 넣지 않는다. `feature-workflow`는 초기 셋팅 이후 기존 PRD, issue, spec, bug, ADR, `design.md`를 구현하는 별도 반복 개발 스킬이다.

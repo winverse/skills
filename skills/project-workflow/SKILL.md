@@ -33,9 +33,9 @@ Matt Pocock skills, GStack plugin, Superpowers plugin, design-direction, repo-lo
 
 ## provenance ledger 기준
 
-정확한 출처와 업데이트 규칙은 `references/upstream-dependency-map.md`를 먼저 본다. `grill-me`, `office-hours`, `to-prd`, `project-structure`, `design.md`처럼 외부 또는 custom에서 온 이름은 항상 출처 패키지와 함께 적는다.
+정확한 출처와 업데이트 규칙은 `references/upstream-dependency-map.md`를 먼저 본다. `grill-with-docs`, `office-hours`, `to-prd`, `project-structure`, `design.md`처럼 외부 또는 custom에서 온 이름은 항상 출처 패키지와 함께 적는다.
 
-- Matt Pocock skills: `setup-matt-pocock-skills`, `grill-me`, `grill-with-docs`, `to-prd`, `to-issues`, `triage`
+- Matt Pocock skills: `setup-matt-pocock-skills`, `grill-with-docs`, `to-prd`, `to-issues`, `triage`. `grill-me`는 출처 장부에는 남기지만, project setup 기본 질문 gate에서는 `grill-with-docs`가 대체한다.
 - GStack plugin: `office-hours`, `plan-ceo-review`, `plan-design-review`
 - Superpowers plugin: `brainstorming`은 raw idea 첫 응답에서 `office-hours` 뒤 setup gap check로 처리하고, `writing-plans`는 큰 phase/step handoff plan의 빈틈 보강에만 쓴다. `tdd`, `subagent-driven-development` 같은 구현 primitive는 `feature-workflow`로 넘긴다.
 - user custom / design direction: `design.md` / design token setup, mock direction selection
@@ -51,7 +51,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. `code identifiers`, 명령, 파일 경로, 제품명, API 이름은 원문 표기를 유지한다.
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
-- raw idea나 새 프로젝트에서는 `grill-me`/`grill-with-docs` -> `office-hours` -> Superpowers plugin `brainstorming` setup gap check 순서가 끝나기 전 `design.md`, `project-structure`, PRD, issue backlog, architecture handoff를 진행하지 않는다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 fallback으로 진행한다.
+- raw idea나 새 프로젝트에서는 Matt Pocock skills `grill-with-docs` -> GStack plugin `office-hours` -> Superpowers plugin `brainstorming` setup gap check 순서가 끝나기 전 `design.md`, `project-structure`, PRD, issue backlog, architecture handoff를 진행하지 않는다. `grill-with-docs`는 기존 `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, 코드와 문서의 용어를 먼저 확인하고, 문서가 없으면 첫 용어가 확정될 때 `CONTEXT.md`를 lazily 제안한다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 fallback으로 진행한다.
 - architecture decision은 PRD/issues 전에 ADR로 기록한다.
 - TypeScript 프로젝트를 초기 셋팅하면 ESM only를 architecture constraint로 고정한다. `package.json`의 `type: "module"`, ESM `tsconfig`, `import`/`export`를 기본값으로 두고 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`는 새 구조나 이슈에 넣지 않는다.
 - 기존 코드가 CommonJS면 새 패턴으로 복사하지 말고 migration boundary, blocker, 또는 `project-structure` handoff 질문으로 남긴다.
@@ -70,7 +70,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 - active instruction surface와 canonical skill path
 - primitive inventory: `selected`, `invoked`, `skipped`, `fallback`, `deferred`와 reason/timing
 - project setup state: 현재 authority, readiness, proposed artifact path를 구분
-- `grill-me`/`grill-with-docs` fallback domain interview 질문
+- `grill-with-docs` fallback domain docs interview 질문
 - `office-hours` fallback product challenge 질문
 - Superpowers plugin `brainstorming` fallback setup gap check 질문. 이 질문은 `design.md`, `project-structure`, PRD, issue backlog보다 먼저 나온다.
 - substantial UI면 `design.md`와 2-3 mock direction은 `deferred`로 표시하고, domain/product 답변 뒤 요청한다고 밝힘
@@ -97,7 +97,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 2. runtime invocation surface 확인: repo-local skill, enabled plugin, command slash, MCP/tool, agent-specific workflow surface
 3. document language를 한국어 우선으로 고정하고, target project가 이미 다른 언어 규칙을 갖고 있으면 그 규칙을 명시
 4. source-labeled primitive inventory를 만들고 각 항목을 `selected`, `invoked`, `skipped`, `fallback`, `deferred`로 추적
-5. Matt Pocock skills `grill-me`/`grill-with-docs`를 호출하거나 fallback 질문으로 domain language와 `CONTEXT.md` 정리
+5. Matt Pocock skills `grill-with-docs`를 호출하거나 fallback 질문으로 domain language, `CONTEXT.md`, `CONTEXT-MAP.md`, ADR 후보를 정리
 6. GStack plugin `office-hours`를 호출하거나 fallback 질문으로 product challenge와 가장 좁은 진입점 확인
 7. Superpowers plugin `brainstorming`을 호출하거나 fallback setup gap check 질문으로 빠진 가정, 너무 넓은 slice, 인계 위험만 보강하고, 구현 primitive는 선택하지 않음
 8. TypeScript를 쓰는 프로젝트면 ESM only와 CommonJS 금지를 architecture constraint로 기록
@@ -112,9 +112,11 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 ## interview gate 기준
 
-원본 `grill-me`/`office-hours`/Superpowers `brainstorming` setup gap check를 호출했거나 fallback 질문을 끝내기 전에는 setup 산출물을 확정하지 않는다. 최소 질문은 아래와 같다.
+원본 `grill-with-docs`/`office-hours`/Superpowers `brainstorming` setup gap check를 호출했거나 fallback 질문을 끝내기 전에는 setup 산출물을 확정하지 않는다. 최소 질문은 아래와 같다.
 
-- domain: 사용자가 부르는 핵심 객체, 사용자가 피하고 싶은 오해, 기존 용어와 새 용어의 경계
+- domain docs: 기존 `CONTEXT.md`나 `CONTEXT-MAP.md`가 있는지, 없으면 어떤 root `CONTEXT.md`를 첫 용어 확정 뒤 만들지
+- domain language: 사용자가 부르는 핵심 객체, 사용자가 피하고 싶은 오해, 기존 코드/문서 용어와 새 용어의 경계
+- ADR candidate: 되돌리기 어렵고, 맥락 없이는 의외이며, 실제 trade-off가 있는 결정인지
 - product: 이 프로젝트가 해결하는 고통, 첫 번째 사용자, 지금 당장 쓸 수 있는 가장 좁은 성공 장면
 - setup gap: 첫 slice가 너무 넓은지, 빠진 가정이 있는지, 병렬/인계 위험이 있는지, 지금 디자인/구조로 넘어갈 조건이 충분한지
 - scope: 이번 setup에 포함할 것, 제외할 것, 나중으로 미룰 것

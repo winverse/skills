@@ -11,5 +11,5 @@ State cache:
 - Updated open questions: none for this slice
 
 Validation
-- Do not re-run office-hours or grill-me when authority is already present.
+- Do not re-run office-hours or grill-with-docs when authority is already present.
 - Append only new evidence and decisions to workflow-state.md.

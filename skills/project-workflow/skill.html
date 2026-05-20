@@ -109,7 +109,7 @@
       <div class="section-head"><h2>핵심 계약</h2><p>실행을 바꾸는 5개 계약만 첫 화면에서 확인합니다.</p></div>
       <div class="contracts">
         <div class="contract"><strong>정본과 호환</strong><span>top-level skill은 plugin 정본으로 이동한 계약을 그대로 유지하고, 기존 project instruction 링크를 깨지 않습니다.</span></div>
-        <div class="contract gate"><strong>질문 gate 우선</strong><span><code>grill-me</code>/<code>grill-with-docs</code>, <code>office-hours</code>, <code>brainstorming</code> setup gap check 전에는 PRD와 구조 인계를 확정하지 않습니다.</span></div>
+        <div class="contract gate"><strong>질문 gate 우선</strong><span>raw idea에서는 <code>grill-with-docs</code>, <code>office-hours</code>, <code>brainstorming</code> setup gap check 전에는 PRD와 구조 인계를 확정하지 않습니다.</span></div>
         <div class="contract"><strong>실제 호출 우선</strong><span>선택한 primitive는 호출면을 확인해 실제 호출하고, 불가능하면 <code>fallback</code> 상태와 local 질문을 남깁니다.</span></div>
         <div class="contract route"><strong>책임 분리</strong><span>구조는 <code>project-structure</code>, 반복 구현과 TDD와 QA는 <code>feature-workflow</code>, 문서 drift는 <code>sync-docs</code>로 넘깁니다.</span></div>
         <div class="contract stop"><strong>위험 gate</strong><span>tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 먼저 기록합니다.</span></div>
@@ -121,7 +121,7 @@
       <div class="matrix" aria-label="사용 판단 매트릭스">
         <div class="cell use"><strong>사용</strong><p>새 서비스, 새 앱, 큰 기획, raw idea를 도메인 문서, 제품 검증, ADR, PRD, 이슈 목록으로 정리할 때 사용합니다.</p></div>
         <div class="cell route"><strong>연결</strong><p>폴더와 인프라 경계는 <code>project-structure</code>, 문서 동기화는 <code>sync-docs</code>, 반복 구현은 <code>feature-workflow</code>에 넘깁니다.</p></div>
-        <div class="cell wait"><strong>대기</strong><p><code>grill-me</code>/<code>grill-with-docs</code>, <code>office-hours</code>, Superpowers <code>brainstorming</code> setup gap check가 끝나지 않았으면 PRD와 이슈 목록을 확정하지 않습니다.</p></div>
+        <div class="cell wait"><strong>대기</strong><p>raw idea나 새 프로젝트에서 <code>grill-with-docs</code>, <code>office-hours</code>, Superpowers <code>brainstorming</code> setup gap check가 끝나지 않았으면 PRD와 이슈 목록을 확정하지 않습니다.</p></div>
         <div class="cell stop"><strong>차단</strong><p>비밀값, 외부 쓰기, MCP, API, 네트워크, 파일 쓰기 자동화가 있으면 Agent Tool And Security Risk Gate를 먼저 기록합니다.</p></div>
       </div>
     </section>
@@ -173,7 +173,7 @@
       <div class="section-head"><h2>Primitive 출처 장부</h2><p>이름만 빌리지 않고 출처와 상태를 함께 남깁니다.</p></div>
       <div class="ledger" aria-label="Primitive 출처 장부">
         <div class="table-cell head"><strong>출처</strong></div><div class="table-cell head"><strong>핵심 primitive</strong></div><div class="table-cell head"><strong>채택 역할</strong></div><div class="table-cell head"><strong>상태 표현</strong></div><div class="table-cell head"><strong>인계 경계</strong></div>
-        <div class="table-cell"><strong>Matt Pocock skills</strong></div><div class="table-cell"><span><code>grill-me</code>, <code>grill-with-docs</code>, <code>to-prd</code>, <code>to-issues</code></span></div><div class="table-cell"><span>도메인 질문, PRD, 이슈 분할</span></div><div class="table-cell"><span class="pill core">invoked 우선</span></div><div class="table-cell"><span>가능하면 실제 호출하고, 불가능하면 fallback 질문으로 대체합니다.</span></div>
+        <div class="table-cell"><strong>Matt Pocock skills</strong></div><div class="table-cell"><span><code>grill-with-docs</code>, <code>to-prd</code>, <code>to-issues</code>, <code>triage</code></span></div><div class="table-cell"><span>문서 기반 도메인 질문, PRD, 이슈 분할</span></div><div class="table-cell"><span class="pill core">invoked 우선</span></div><div class="table-cell"><span><code>grill-me</code>는 출처 장부에 남기지만 기본 질문 gate는 <code>grill-with-docs</code>가 대체합니다.</span></div>
         <div class="table-cell"><strong>GStack plugin</strong></div><div class="table-cell"><span><code>office-hours</code>, <code>plan-ceo-review</code>, <code>plan-design-review</code></span></div><div class="table-cell"><span>제품 가치, 수요, 범위와 디자인 검토</span></div><div class="table-cell"><span class="pill core">invoked 우선</span></div><div class="table-cell"><span>제품 검증 후 PRD 입력으로만 사용합니다.</span></div>
         <div class="table-cell"><strong>Superpowers plugin</strong></div><div class="table-cell"><span><code>brainstorming</code>, <code>writing-plans</code></span></div><div class="table-cell"><span><code>brainstorming</code>은 첫 응답 setup gap check, <code>writing-plans</code>는 큰 phase handoff 보강</span></div><div class="table-cell"><span class="pill cond">조건부 호출</span></div><div class="table-cell"><span><code>tdd</code>, <code>subagent-driven-development</code>는 구현 인계 대상입니다.</span></div>
         <div class="table-cell"><strong>repo-local custom</strong></div><div class="table-cell"><span><code>project-structure</code>, <code>sync-docs</code>, <code>agent-eval-harness</code>, security gate</span></div><div class="table-cell"><span>구조, 문서 drift, 회귀 방지, 도구 위험 판단</span></div><div class="table-cell"><span class="pill gate">필요 시</span></div><div class="table-cell"><span>각 전담 스킬의 책임을 침범하지 않습니다.</span></div>
@@ -188,6 +188,17 @@
         <div class="node"><strong>범위</strong><span>이번 셋팅에 포함할 것, 제외할 것, 나중으로 미룰 것을 나눕니다.</span></div>
         <div class="node"><strong>확신도</strong><span>확정된 답, 추정한 답, 반드시 다시 물어야 할 답을 분리합니다.</span></div>
         <div class="node"><strong>대기 조건</strong><span>사용자가 “추정해서 진행”이라고 명시하지 않으면 질문이 끝나기 전 PRD, issue backlog, architecture handoff를 확정하지 않습니다.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>첫 응답 상태판</h2><p>raw idea나 새 서비스 요청의 첫 응답은 파일을 만든 것처럼 말하지 않고, 상태와 질문을 먼저 보여줍니다.</p></div>
+      <div class="artifact-table" aria-label="첫 응답 상태판">
+        <div class="table-cell head"><strong>블록</strong></div><div class="table-cell head"><strong>반드시 보일 내용</strong></div><div class="table-cell head"><strong>아직 쓰지 않을 것</strong></div><div class="table-cell head"><strong>다음 조건</strong></div>
+        <div class="table-cell"><strong>Runtime adapter</strong></div><div class="table-cell"><span>active instruction surface와 canonical skill path를 밝힙니다.</span></div><div class="table-cell"><span>호출면 확인 없이 primitive를 호출한 것처럼 쓰지 않습니다.</span></div><div class="table-cell"><span>skill, plugin, slash command, MCP/tool surface 증거를 남깁니다.</span></div>
+        <div class="table-cell"><strong>Primitive inventory</strong></div><div class="table-cell"><span><code>selected</code>, <code>invoked</code>, <code>skipped</code>, <code>fallback</code>, <code>deferred</code>와 reason/timing을 표시합니다.</span></div><div class="table-cell"><span>이름만 라벨링하고 실제 호출을 흉내 내지 않습니다.</span></div><div class="table-cell"><span>원본 호출면이 없으면 fallback 질문으로 좁게 대체합니다.</span></div>
+        <div class="table-cell"><strong>Project setup state</strong></div><div class="table-cell"><span>authority, readiness, proposed artifact path를 구분합니다.</span></div><div class="table-cell"><span><code>workflow-state.md</code>, <code>work-claims.md</code>, ADR, PRD, <code>design.md</code>를 생성한 것처럼 말하지 않습니다.</span></div><div class="table-cell"><span>실제 파일 쓰기 전에는 <code>target path</code>, <code>proposed path</code>, <code>not created yet</code>로 표시합니다.</span></div>
+        <div class="table-cell"><strong>질문 묶음</strong></div><div class="table-cell"><span><code>grill-with-docs</code> fallback domain docs interview, <code>office-hours</code> product challenge, <code>brainstorming</code> setup gap check를 순서대로 냅니다.</span></div><div class="table-cell"><span>질문 gate 전 <code>project-structure</code>, PRD, issue backlog, implementation을 진행하지 않습니다.</span></div><div class="table-cell"><span>domain/product 답변 뒤 필요한 항목만 <code>deferred</code>에서 실행으로 옮깁니다.</span></div>
       </div>
     </section>
 
@@ -327,8 +338,8 @@ Next workflow step
       <div class="check-table" aria-label="실제 확인 결과">
         <div class="table-cell head"><strong>확인 항목</strong></div><div class="table-cell head"><strong>상태</strong></div><div class="table-cell head"><strong>증거</strong></div>
         <div class="table-cell"><strong>HTML validator</strong></div><div class="table-cell"><span class="pill core">통과</span></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code> 실행 결과 통과했습니다.</span></div>
-        <div class="table-cell"><strong>스킬 전용 validator</strong></div><div class="table-cell"><span class="pill gate">범위 제외</span></div><div class="table-cell"><span>hook 요청이 adjacent <code>skill.html</code>만 허용하므로 HTML validator 중심으로 확인합니다.</span></div>
-        <div class="table-cell"><strong>PC viewport</strong></div><div class="table-cell"><span class="pill gate">미확인</span></div><div class="table-cell"><span>in-app browser가 <code>file://</code> 접근을 차단했고, 로컬 Playwright package가 없어 런타임 viewport 확인은 남았습니다.</span></div>
+        <div class="table-cell"><strong>스킬 전용 validator</strong></div><div class="table-cell"><span class="pill core">통과</span></div><div class="table-cell"><span><code>node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow</code> 실행 결과 통과했습니다.</span></div>
+        <div class="table-cell"><strong>PC viewport</strong></div><div class="table-cell"><span class="pill core">통과</span></div><div class="table-cell"><span><code>1440x1000</code> viewport에서 overflow, tiny text, empty SVG가 없음을 확인했습니다.</span></div>
         <div class="table-cell"><strong>외부 자산</strong></div><div class="table-cell"><span class="pill core">통과</span></div><div class="table-cell"><span>CSS와 SVG는 문서 안에 있고 외부 CDN, 이미지, script를 쓰지 않습니다.</span></div>
       </div>
     </section>

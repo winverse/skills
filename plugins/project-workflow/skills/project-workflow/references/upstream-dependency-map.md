@@ -4,7 +4,7 @@
 
 이 파일은 `project-workflow`가 참고하는 초기 셋팅 primitive의 출처 장부다. `project-workflow`는 Matt Pocock skills, GStack plugin, user custom design-direction, repo-local custom helper를 통째로 복제하지 않고, 프로젝트 시작에 필요한 최소 primitive만 채택한다.
 
-외부에서 온 이름은 항상 `출처 패키지`와 `정확한 skill/plugin 이름`을 함께 적는다. 예: `Matt Pocock skills / grill-me`, `GStack plugin / office-hours`, `repo-local custom / project-structure`.
+외부에서 온 이름은 항상 `출처 패키지`와 `정확한 skill/plugin 이름`을 함께 적는다. 예: `Matt Pocock skills / grill-with-docs`, `GStack plugin / office-hours`, `repo-local custom / project-structure`.
 
 ## 채택 원칙
 
@@ -23,8 +23,8 @@
 | 출처 패키지 | 정확한 skill/plugin 이름 | 채택 역할 | 로컬 산출물과 handoff | 기본 상태 |
 | --- | --- | --- | --- | --- |
 | Matt Pocock skills | `setup-matt-pocock-skills` | project skill setup, issue tracker, domain docs 준비 | project instruction links, issue tracker notes | 선택 |
-| Matt Pocock skills | `grill-me` | 새 아이디어나 설계의 domain interview | 가능하면 실제 호출, 아니면 fallback domain interview, `CONTEXT.md`, domain glossary, open questions | 핵심 |
-| Matt Pocock skills | `grill-with-docs` | 기존 docs/code가 있을 때 domain interview | 가능하면 실제 호출, 아니면 fallback docs-aware interview, `CONTEXT.md` update, current docs gap list | 핵심 |
+| Matt Pocock skills | `grill-with-docs` | 프로젝트 셋팅의 기본 domain docs interview | 가능하면 실제 호출, 아니면 fallback docs-aware interview, `CONTEXT.md`, `CONTEXT-MAP.md`, ADR 후보, current docs gap list | 핵심 |
+| Matt Pocock skills | `grill-me` | 일반 계획이나 비코드 설계의 standalone pressure interview | project setup에서는 기본 선택하지 않고, docs/code/domain doc 흐름이 전혀 맞지 않는 비코드 요청이면 fallback 후보로만 기록 | 보조 |
 | Matt Pocock skills | `to-prd` | product challenge 이후 PRD 작성 | 가능하면 실제 호출, 아니면 local PRD skeleton, `.scratch/<slug>/PRD.md` | 조건부 |
 | Matt Pocock skills | `to-issues` | PRD를 vertical issue backlog로 분할 | 가능하면 실제 호출, 아니면 local issue split, `.scratch/<slug>/issues/` | 조건부 |
 | Matt Pocock skills | `triage` | issue ready/block/split 판단 | 가능하면 실제 호출, 아니면 local triage note, issue state notes | 조건부 |
@@ -54,6 +54,7 @@
 
 2026-05-20 확인 기준:
 
+- Matt Pocock skills: `https://github.com/mattpocock/skills`, raw `skills/engineering/grill-with-docs/SKILL.md`, `CONTEXT-FORMAT.md`, `ADR-FORMAT.md`, `https://www.aihero.dev/grill-with-docs`, `https://www.aihero.dev/skills-domain-model`, `https://www.aihero.dev/skills/skills-changelog-ubiquitous-language-grill-with-docs`를 확인했다. Local 판단은 `adapt`: project setup에서는 `grill-me`를 기본 gate로 쓰지 않고 `grill-with-docs`를 기본 gate로 채택한다. 기존 문서가 없더라도 첫 용어가 확정될 때 `CONTEXT.md`를 lazy artifact로 제안하고, ADR은 되돌리기 어렵고 의외이며 실제 trade-off가 있을 때만 제안한다.
 - Harness framework: `https://github.com/jha0313/harness_framework`의 `scripts/execute.py` (`execute.py`), `.claude/commands/harness.md`, `docs/` 템플릿과 사용자가 제공한 Notion tutorial을 확인했다. Local 판단은 `adapt`: Python 실행 엔진과 Claude 전용 headless 실행은 직접 채택하지 않고, phase/step status, 자기완결 step 파일, executable acceptance command, `blocked` 상태 분리만 `project-workflow` handoff 규칙으로 채택한다. 선택 실행 도구는 TypeScript `plugins/project-workflow/scripts/execute-phase.ts`로 두고 Codex/Claude 모두 가능한 stdin 기반 agent command boundary를 사용한다.
 
 upstream source가 바뀌면 아래 순서로 추적한다.
@@ -82,8 +83,8 @@ upstream source가 바뀌면 아래 순서로 추적한다.
 
 | 작업 규모 | 선택할 primitive | 호출 방식 | 건너뛰는 것 |
 | --- | --- | --- | --- |
-| tiny project setup | `grill-me`, short ADR, issue seed | invoke if available, fallback questions if not | full PRD, infra tree, implementation loop |
-| new product | `grill-me`, `office-hours`, PRD, vertical issue backlog | invoke `grill-me`/`office-hours` before PRD | TDD and code changes |
+| tiny project setup | `grill-with-docs`, short ADR, issue seed | invoke if available, fallback docs-aware questions if not | full PRD, infra tree, implementation loop |
+| new product | `grill-with-docs`, `office-hours`, PRD, vertical issue backlog | invoke `grill-with-docs`/`office-hours` before PRD | TDD and code changes |
 | existing cleanup | `grill-with-docs`, boundary audit, ADR, staged issues | invoke docs-aware interview if available | full product discovery unless behavior changes |
 | substantial UI | `design.md`, mock directions, `plan-design-review`, optional `brainstorming` | invoke review/brainstorming if available | UI coding before direction selection |
 | infra-aware service | tool/security gate, `project-structure`, ADR | invoke setup primitives before structure | cloud writes or deploy without explicit request |

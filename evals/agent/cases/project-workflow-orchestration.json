@@ -46,6 +46,16 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
+        "value": "Matt Pocock skills / `grill-with-docs`: selected"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
+        "value": "Matt Pocock skills / `grill-me`: skipped"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
         "value": "Superpowers plugin / `brainstorming`: selected"
       },
       {
@@ -97,6 +107,16 @@
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
         "value": "Superpowers plugin: selected | invoked | skipped | fallback | deferred"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
+        "value": "`grill-with-docs`: project setup domain docs interview"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
+        "value": "`grill-me`: skipped for project setup by default"
       },
       {
         "type": "required_text",

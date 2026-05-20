@@ -5,7 +5,8 @@ Mode: Discovery
 
 Dependencies
 - Matt Pocock skills: selected | invoked | skipped | fallback | deferred
-  - `grill-me` / `grill-with-docs`: domain interview; invoke original if available, fallback questions if unavailable
+  - `grill-with-docs`: project setup domain docs interview; invoke original if available, fallback docs-aware questions if unavailable
+  - `grill-me`: skipped for project setup by default; non-code standalone fallback only
   - `to-prd` / `to-issues`: PRD and backlog setup
 - GStack plugin: selected | invoked | skipped | fallback | deferred
   - `office-hours`: product challenge; invoke original if available, fallback questions if unavailable
