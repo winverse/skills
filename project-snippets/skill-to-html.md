@@ -9,6 +9,9 @@
 - The first viewport should start with an interactive visual scene, animated diagram, mode switch, or click-driven 판단 보드 before long explanatory text.
 - Prefer 판단 매트릭스, 흐름도, 순위 차트, 파일 관계도, 입출력 구조, mode switch, stepper, toggle, and progressive disclosure.
 - Keep skill explanations consistent across skills: 목적, 사용/건너뜀, 실행 흐름, 입력/출력, 파일 관계, 검증, 오용 방지.
+- Treat `SKILL.md` as the Markdown source of truth and `skill.html` as a visual view. Read Markdown meaning, extract `skill IR`, map it to visual components, then render standalone HTML.
+- Do not derive layout from Markdown line wrapping. Use heading, list, table, code fence, blockquote, and link meaning to choose 판단 보드, 흐름도, 파일 관계도, 검증 표, and evidence reveal.
+- Do not pass Markdown `raw HTML`, event handlers, `javascript:` links, external scripts, or external assets through. Put interaction in the trusted template's CSS/SVG/Web Animations API/short inline JavaScript.
 - Use 한국어 문장 우선 화면 문구 in `skill.html`; keep English only for coding terms, exact file names, commands, products, protocols, libraries, or copyable instruction snippets.
 - Do not list English explanation terms with commas. Translate terms such as workflow suite, setup, initiative, domain language, architecture boundary, issue backlog, handoff, orchestration, and source-labeled primitive into Korean unless they are exact identifiers.
 - Follow the shared quiet operational visual rules: shallow borders, restrained color, stable dimensions, no decorative hero treatment, and dark surfaces only for code or terminal snippets.

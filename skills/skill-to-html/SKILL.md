@@ -31,6 +31,16 @@ description: "SKILL.md 옆에 사람이 빠르게 이해할 수 있는 그림 �
 - `실제 확인` section에는 실행한 validator, browser/viewport 확인, 링크 확인, 남은 미확인 항목을 표로 남긴다.
 - 도표와 애니메이션은 장식이 아니라 의사결정, 실행 순서, 금지 경계, 증거 연결을 보여야 한다. 텍스트를 박스로 예쁘게 쪼갠 것만으로는 완료가 아니다.
 
+## Markdown-to-HTML 변환 모델 기준
+
+- `SKILL.md`는 의미 있는 Markdown 원본이고, `skill.html`은 그 원본을 사람이 조작하는 시각 view로 렌더링한 산출물이다. `skill.html`을 새로운 source of truth로 만들지 않는다.
+- 변환은 `SKILL.md` 원문 읽기 -> Markdown 의미 구조 파악 -> `skill IR` 추출 -> component mapping -> standalone HTML 렌더링 -> 검증 순서로 생각한다.
+- Markdown 의미 구조는 heading, list, table, code fence, blockquote, link, front matter가 무엇을 뜻하는지 보는 단계다. 원문 줄바꿈이나 문단 순서를 그대로 화면 layout으로 복사하지 않는다.
+- `skill IR`은 `{name, description, triggers, contracts, workflow, files, validators, risks, evidence}` 같은 중간 구조다. 이 구조를 만든 뒤 판단 보드, 흐름도, 파일 관계도, 검증 표, 근거 reveal로 매핑한다.
+- `unified/remark/rehype`의 `remark-rehype`, `Pandoc` template, `MDX`, `Markdoc` 같은 도구는 참고 모델이다. 이 repo의 standalone `skill.html`은 React/Vue/MDX runtime을 요구하지 않고, 필요한 component mapping 원칙만 가져온다.
+- `raw HTML`은 신뢰된 repo-authored template에서만 나온다. Markdown 원문에 들어 있는 HTML, event handler, `javascript:` link, 외부 script는 그대로 통과시키지 않는다.
+- 상호작용은 Markdown 안에 script를 숨기는 방식이 아니라 template의 닫힌 CSS/SVG/Web Animations API/짧은 inline JavaScript controller에서 만든다.
+
 ## design contract 기준
 
 - visual guide는 설명 문단보다 구조와 증거를 우선한다.
@@ -47,15 +57,17 @@ description: "SKILL.md 옆에 사람이 빠르게 이해할 수 있는 그림 �
 ## creation workflow 기준
 
 1. 대상 `SKILL.md`와 필요한 `references/`만 읽는다.
-2. 핵심 계약 3-5개를 추출하고, 이를 먼저 조작 가능한 화면 상태로 바꾼다.
-3. 텍스트 구조가 아니라 interactive storyboard를 먼저 잡는다. 최소 하나의 mode switch, 하나의 animated flow, 하나의 evidence reveal이 있어야 한다.
-4. 4개 이상의 카드, matrix, 표가 필요하면 먼저 전체 폭 배치를 잡고, side panel에는 다열 카드 grid를 두지 않는다.
-5. 호출 조건, 실행 흐름, 안전 경계, 출력 형태를 핵심 계약과 원문 근거에 연결한다.
-6. 실제 확인 표를 만든다. 최소한 공통 HTML validator와 해당 스킬 validator, browser viewport 확인, interaction check 여부가 있어야 한다.
-7. 최소 4개 이상의 시각 구조를 설계하되, 첫 구조는 정적인 카드가 아니라 interactive hero 또는 animated diagram이어야 한다.
-8. `skill.html`을 self-contained HTML로 작성한다. 필요한 경우 짧은 inline JavaScript를 허용하되 network call, external script, 외부 asset은 금지한다.
-9. `node scripts/validate-skill-html.ts .`를 실행한다.
-10. material visual change면 PC desktop viewport에서 click interaction, keyboard focus, animation state, arrow endpoint, table width, overflow, text overlap, card readable width를 확인한다.
+2. Markdown heading, list, table, code fence, link를 의미 단위로 읽고 `skill IR`을 만든다.
+3. 핵심 계약 3-5개를 추출하고, 이를 먼저 조작 가능한 화면 상태로 바꾼다.
+4. 텍스트 구조가 아니라 interactive storyboard를 먼저 잡는다. 최소 하나의 mode switch, 하나의 animated flow, 하나의 evidence reveal이 있어야 한다.
+5. 4개 이상의 카드, matrix, 표가 필요하면 먼저 전체 폭 배치를 잡고, side panel에는 다열 카드 grid를 두지 않는다.
+6. 호출 조건, 실행 흐름, 안전 경계, 출력 형태를 핵심 계약과 원문 근거에 연결한다.
+7. 실제 확인 표를 만든다. 최소한 공통 HTML validator와 해당 스킬 validator, browser viewport 확인, interaction check 여부가 있어야 한다.
+8. 최소 4개 이상의 시각 구조를 설계하되, 첫 구조는 정적인 카드가 아니라 interactive hero 또는 animated diagram이어야 한다.
+9. `skill.html`을 self-contained HTML로 작성한다. 필요한 경우 짧은 inline JavaScript를 허용하되 network call, external script, 외부 asset은 금지한다.
+10. Markdown의 `raw HTML`을 직접 신뢰하지 않았는지, component mapping이 원문 계약과 validator 근거를 잃지 않았는지 확인한다.
+11. `node scripts/validate-skill-html.ts .`를 실행한다.
+12. material visual change면 PC desktop viewport에서 click interaction, keyboard focus, animation state, arrow endpoint, table width, overflow, text overlap, card readable width를 확인한다.
 
 ## quality bar 기준
 

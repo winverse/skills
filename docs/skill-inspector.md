@@ -15,6 +15,8 @@
 - `SKILL.md` 본문이 과하게 길지 않고, 세부 내용은 `references/`로 분리되어 있는가
 - `skill.html`이 단순 카드형 요약이 아니라 decision matrix, workflow, chart, resource map, input/output schema 같은 시각 구조를 제공하는가
 - `skill-to-html` 산출물은 첫 화면에서 텍스트 카드보다 interactive visual scene, animated diagram, mode switch, progressive disclosure가 먼저 보이는가
+- `skill-to-html` 산출물은 `SKILL.md` Markdown의 heading/list/table/code/link 의미를 `skill IR`로 추출한 뒤 visual component에 매핑했는가
+- `skill-to-html` 산출물은 Markdown `raw HTML`, event handler, `javascript:` link, 외부 script를 그대로 통과시키지 않는가
 - `skill-to-html` 산출물은 4개 이상 계약 카드나 prose card를 좁은 side panel의 다열 grid로 만들지 않고, 전체 폭 matrix, wrap grid, 또는 읽기 폭이 있는 single-column control로 처리하는가
 - `skill.html`의 화면 라벨이 한국어 우선인지 확인한다. `commit`, `push`, `repo`, `SKILL.md`, `GraphQL`, `TypeScript`, `Playwright`처럼 코드 맥락의 고유어는 허용하지만 `Decision Matrix`, `Workflow`, `Resource Map`, `Do Not` 같은 일반 UI 라벨은 한국어로 쓴다.
 - `agents/openai.yaml`과 `project-snippets/`가 실제 스킬 목적과 맞는가
@@ -68,7 +70,7 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 
 `scripts/run-agent-evals.ts`는 `evals/agent/cases/`의 대표 prompt 계약을 검사한다. 정적 validator가 파일 정합성을 보는 동안, 이 runner는 skill routing, safety boundary, output shape 같은 agent behavior regression을 빠르게 확인한다.
 
-`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript는 network call, external import, eval 없이 self-contained interaction controller일 때만 허용한다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
+`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript는 network call, external import, eval 없이 self-contained interaction controller일 때만 허용한다. `skill-to-html` 산출물은 Markdown 의미 구조를 `skill IR`과 visual component로 매핑하고, Markdown `raw HTML`이나 event handler를 통과시키지 않는지도 함께 본다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
 
 ## 판정 등급
 
@@ -86,6 +88,7 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 - 긴 취향, 예시, 평가 prompt, source rule은 `references/`로 분리한다.
 - `skill.html`은 최소 4개 이상의 시각 구조를 포함한다.
 - `skill-to-html` 산출물은 첫 viewport에 조작 가능한 visual scene, animated diagram, mode switch, 또는 evidence reveal을 둔다.
+- `skill-to-html` 산출물은 `SKILL.md`를 source of truth로 유지하고 `skill IR`과 component mapping으로 화면을 만든다.
 - `skill-to-html` 산출물은 좁은 side panel에 4개 이상 계약 카드를 다열 grid로 배치하지 않는다.
 - `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다. Self-contained inline JavaScript는 짧은 상호작용 구현에만 쓴다.
 - `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.

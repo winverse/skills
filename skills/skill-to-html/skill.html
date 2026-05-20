@@ -73,6 +73,20 @@
     .decision-card:hover, .decision-card:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.24); outline-offset:2px; }
     .decision-card.active { background:var(--soft-amber); border-top-color:var(--amber); }
     .decision-card strong, .tile strong, .source-cell strong, .verify strong, .metric strong { display:block; margin-bottom:5px; font-size:13px; }
+    .model-board { display:grid; grid-template-columns:280px 1fr; gap:16px; align-items:stretch; }
+    .step-rail { display:grid; gap:10px; align-content:start; }
+    .step-button { width:100%; min-height:72px; padding:12px; text-align:left; border:1px solid var(--border); border-left:5px solid var(--line); border-radius:8px; background:#fff; cursor:pointer; transition:background .18s ease, transform .18s ease, border-color .18s ease; }
+    .step-button:hover, .step-button:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.24); outline-offset:2px; }
+    .step-button[aria-pressed="true"] { background:var(--soft-green); border-left-color:var(--green); }
+    .step-button strong { display:block; font-size:13px; margin-bottom:4px; }
+    .step-button span { color:var(--muted); font-size:12px; }
+    .model-panel { display:grid; grid-template-columns:1.2fr .8fr; gap:14px; }
+    .model-evidence { border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:14px; display:grid; align-content:space-between; gap:14px; }
+    .model-evidence strong { display:block; font-size:14px; margin-bottom:5px; }
+    .model-evidence p { color:var(--muted); font-size:13px; }
+    .model-evidence code { color:var(--ink); }
+    .model-step { opacity:.36; transition:opacity .2s ease, transform .2s ease; transform-origin:center; }
+    .model-step.active { opacity:1; transform:scale(1.03); }
     .metrics { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; }
     .metric { min-height:104px; padding:13px; background:#fff; }
     .meter { height:12px; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--soft); margin-top:10px; }
@@ -97,6 +111,19 @@
     .guard-grid .tile { border-radius:0; border-left:0; border-top:0; }
     .guard-grid .tile:nth-child(4n) { border-right:0; }
     .guard-grid .tile:nth-last-child(-n+4) { border-bottom:0; }
+    .mapping-board { display:grid; grid-template-columns:1fr 270px; gap:16px; align-items:stretch; }
+    .mapping-steps { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:8px; margin-top:12px; }
+    .mapping-step { min-height:88px; padding:12px; border:1px solid var(--border); border-radius:8px; background:#fff; position:relative; }
+    .mapping-step::after { content:""; position:absolute; top:42px; right:-9px; width:9px; height:2px; background:var(--green); }
+    .mapping-step:last-child::after { display:none; }
+    .mapping-step strong { display:block; font-size:12px; margin-bottom:5px; }
+    .mapping-step span { display:block; color:var(--muted); font-size:11px; }
+    .trust-panel { display:grid; gap:10px; align-content:start; }
+    .trust-item { border:1px solid var(--border); border-radius:8px; padding:12px; background:var(--panel); }
+    .trust-item.block { background:var(--soft-red); border-color:#e1aaa3; }
+    .trust-item.allow { background:var(--soft-green); border-color:#a9d8bd; }
+    .trust-item strong { display:block; font-size:13px; margin-bottom:4px; }
+    .trust-item span { display:block; color:var(--muted); font-size:12px; }
     .verify-grid { display:grid; grid-template-columns:170px 1fr 220px 210px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface); }
     .verify { min-height:86px; padding:12px; border:0; border-right:1px solid var(--border); border-bottom:1px solid var(--border); border-radius:0; }
     .verify:nth-child(4n) { border-right:0; }
@@ -108,7 +135,7 @@
     @keyframes softFloat { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
     @media (prefers-reduced-motion: reduce) {
       .flow-line, .pulse, .float { animation:none; }
-      .control, .decision-card, .fill, .mode-node { transition:none; }
+      .control, .decision-card, .fill, .mode-node, .step-button, .model-step { transition:none; }
     }
   </style>
 </head>
@@ -130,8 +157,8 @@
             </div>
           </div>
           <div class="mode-panel" role="group" aria-label="보기 모드">
-            <button class="control" type="button" data-view="shape" aria-pressed="true"><strong>형태 먼저</strong><span>글보다 화면 구조를 먼저 만듭니다.</span></button>
-            <button class="control" type="button" data-view="motion" aria-pressed="false"><strong>움직임 연결</strong><span>계약과 근거를 움직이는 경로로 연결합니다.</span></button>
+            <button class="control" type="button" data-view="shape" aria-pressed="true"><strong>의미 구조</strong><span>Markdown 구조를 먼저 읽습니다.</span></button>
+            <button class="control" type="button" data-view="motion" aria-pressed="false"><strong>IR 변환</strong><span>계약을 중간 구조로 뽑습니다.</span></button>
             <button class="control" type="button" data-view="evidence" aria-pressed="false"><strong>근거 펼치기</strong><span>원문과 validator를 클릭으로 드러냅니다.</span></button>
           </div>
         </div>
@@ -163,14 +190,14 @@
               </g>
               <g text-anchor="middle" font-size="14" font-weight="800" fill="#161b24">
                 <text x="110" y="118">SKILL.md</text>
-                <text x="380" y="88">시각 장면</text>
-                <text x="380" y="220">상태 전환</text>
+                <text x="380" y="88">의미 구조</text>
+                <text x="380" y="220">skill IR</text>
                 <text x="650" y="118">skill.html</text>
               </g>
               <g text-anchor="middle" font-size="11" fill="#606b78">
                 <text x="110" y="140">원문 계약</text>
-                <text x="380" y="110">도표 무결성</text>
-                <text x="380" y="242">클릭과 focus</text>
+                <text x="380" y="110">heading/list/link</text>
+                <text x="380" y="242">component mapping</text>
                 <text x="650" y="140">사람용 확인 화면</text>
               </g>
               <circle class="pulse" cx="650" cy="126" r="9" fill="#2458b8"></circle>
@@ -179,12 +206,12 @@
           </div>
           <aside class="caption" aria-live="polite">
             <div>
-              <strong id="mode-title">형태 먼저</strong>
-              <p id="mode-copy">첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다.</p>
+              <strong id="mode-title">의미 구조</strong>
+              <p id="mode-copy">원문 줄바꿈을 복사하지 않고 heading, list, table, code fence, link의 뜻을 먼저 읽습니다.</p>
             </div>
             <div class="evidence-note" id="evidence-note">
               <b>원문 근거</b>
-              <span><code>SKILL.md</code> required outcome: 첫 화면은 움직이는 도표, 판단 보드, 상태 전환으로 시작합니다.</span>
+              <span><code>SKILL.md</code> Markdown-to-HTML 변환 모델: Markdown 의미 구조를 파악한 뒤 <code>skill IR</code>로 옮깁니다.</span>
             </div>
             <p class="hint">모드를 누르면 도표 node, caption, 근거가 함께 바뀝니다. 긴 설명은 아래 원문 근거와 실제 확인으로 내려갑니다.</p>
           </aside>
@@ -195,10 +222,10 @@
         <div class="section-head"><h2>핵심 계약</h2><p>첫 화면 노출</p></div>
         <div class="contract-grid" role="group" aria-label="핵심 계약 선택">
           <button class="contract-tile" type="button" data-contract="pair" aria-pressed="true"><strong>인접 쌍 유지</strong><span><code>SKILL.md</code> 옆에 <code>skill.html</code>을 둡니다.</span></button>
-          <button class="contract-tile" type="button" data-contract="visual" aria-pressed="false"><strong>그림 우선</strong><span>긴 설명보다 조작 가능한 시각 장면을 먼저 만듭니다.</span></button>
-          <button class="contract-tile" type="button" data-contract="bounds" aria-pressed="false"><strong>금지 경계</strong><span>외부 CDN, 외부 script, 외부 image를 쓰지 않습니다.</span></button>
-          <button class="contract-tile" type="button" data-contract="wide" aria-pressed="false"><strong>읽기 폭</strong><span>4개 이상 계약은 좁은 다열 grid가 아니라 전체 폭이나 single-column으로 둡니다.</span></button>
-          <button class="contract-tile" type="button" data-contract="verify" aria-pressed="false"><strong>실제 확인</strong><span>PC desktop click, focus, animation state를 기록합니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="ir" aria-pressed="false"><strong>IR 먼저</strong><span>원문 의미를 <code>skill IR</code>로 추출한 뒤 화면에 배치합니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="visual" aria-pressed="false"><strong>그림 우선</strong><span>긴 설명보다 조작 가능한 시각 장면을 먼저 만들고 읽기 폭을 지킵니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="bounds" aria-pressed="false"><strong>신뢰 경계</strong><span>Markdown의 raw HTML과 외부 script를 그대로 통과시키지 않습니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="verify" aria-pressed="false"><strong>실제 확인</strong><span>읽기 폭, click, focus, animation state를 기록합니다.</span></button>
         </div>
       </aside>
     </header>
@@ -213,6 +240,125 @@
         <button class="decision-card" type="button"><strong>먼저 그리기</strong><p>첫 viewport는 그림 먼저, 텍스트는 caption으로 줄입니다.</p></button>
         <button class="decision-card" type="button"><strong>조작 연결</strong><p>mode, toggle, stepper, reveal이 계약과 근거를 바꿉니다.</p></button>
         <button class="decision-card" type="button"><strong>검증</strong><p>PC desktop에서 click, focus, animation state를 확인합니다.</p></button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>변환 모델 보드</h2>
+        <p><code>SKILL.md</code>를 새 원본으로 만들지 않고 사람용 시각 view로 매핑합니다.</p>
+      </div>
+      <div class="model-board">
+        <div class="step-rail" role="group" aria-label="Markdown-to-HTML 변환 단계">
+          <button class="step-button" type="button" data-step="meaning" aria-pressed="true"><strong>의미 구조 읽기</strong><span>heading, list, table, code fence, link의 역할을 봅니다.</span></button>
+          <button class="step-button" type="button" data-step="ir" aria-pressed="false"><strong>중간 구조 추출</strong><span><code>{contracts, workflow, files, validators}</code> 같은 구조를 만듭니다.</span></button>
+          <button class="step-button" type="button" data-step="mapping" aria-pressed="false"><strong>화면 구성 매핑</strong><span>판단 보드, 흐름도, 파일 관계도, 검증 표로 옮깁니다.</span></button>
+          <button class="step-button" type="button" data-step="closed" aria-pressed="false"><strong>닫힌 템플릿</strong><span>Markdown 안의 raw HTML이나 외부 script를 그대로 통과시키지 않습니다.</span></button>
+        </div>
+        <div class="model-panel">
+          <div class="panel">
+            <svg viewBox="0 0 700 330" role="img" aria-label="Markdown 의미 구조에서 skill.html로 가는 변환 모델">
+              <defs><marker id="modelArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2458b8"></path></marker></defs>
+              <g fill="#ffffff" stroke="#cbd4df" stroke-width="2">
+                <rect x="28" y="84" width="132" height="86" rx="8"></rect>
+                <rect x="214" y="48" width="132" height="86" rx="8"></rect>
+                <rect x="214" y="194" width="132" height="86" rx="8"></rect>
+                <rect x="400" y="84" width="132" height="86" rx="8"></rect>
+                <rect x="560" y="84" width="112" height="86" rx="8"></rect>
+              </g>
+              <g class="model-step active" data-model-node="meaning"><rect x="28" y="84" width="132" height="86" rx="8" fill="#eef3f8" stroke="#2458b8" stroke-width="3"></rect></g>
+              <g class="model-step" data-model-node="ir"><rect x="214" y="48" width="132" height="86" rx="8" fill="#edf7f1" stroke="#25724d" stroke-width="3"></rect></g>
+              <g class="model-step" data-model-node="mapping"><rect x="400" y="84" width="132" height="86" rx="8" fill="#fff6df" stroke="#92650d" stroke-width="3"></rect></g>
+              <g class="model-step" data-model-node="closed"><rect x="214" y="194" width="132" height="86" rx="8" fill="#fff0ee" stroke="#a83a30" stroke-width="3"></rect></g>
+              <g fill="none" stroke="#2458b8" stroke-width="2.5" marker-end="url(#modelArrow)">
+                <path class="flow-line" d="M160 127 C184 127 188 91 214 91"></path>
+                <path class="flow-line" d="M346 91 C372 91 374 127 400 127"></path>
+                <path class="flow-line" d="M532 127 L560 127"></path>
+                <path class="flow-line" d="M280 194 C306 170 362 150 400 140"></path>
+              </g>
+              <g text-anchor="middle" font-size="13" font-weight="800" fill="#161b24">
+                <text x="94" y="116">Markdown</text>
+                <text x="280" y="82">skill IR</text>
+                <text x="280" y="228">안전 경계</text>
+                <text x="466" y="116">구성 요소</text>
+                <text x="616" y="116">HTML</text>
+              </g>
+              <g text-anchor="middle" font-size="11" fill="#606b78">
+                <text x="94" y="139">의미 구조</text>
+                <text x="280" y="105">계약/흐름/검증</text>
+                <text x="280" y="251">raw HTML 차단</text>
+                <text x="466" y="139">board/flow/table</text>
+                <text x="616" y="139">닫힌 파일</text>
+              </g>
+            </svg>
+          </div>
+          <aside class="model-evidence" aria-live="polite">
+            <div>
+              <strong id="step-title">의미 구조 읽기</strong>
+              <p id="step-copy">원문 줄바꿈을 복사하지 않고 heading, list, table, code fence, link가 무엇을 뜻하는지 읽습니다.</p>
+            </div>
+            <p id="step-evidence"><code>SKILL.md</code> Markdown-to-HTML 변환 모델: 원문 읽기에서 의미 구조 파악으로 넘어갑니다.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Markdown 변환 모델</h2>
+        <p><code>skill.html</code>은 새 원본이 아니라 <code>SKILL.md</code>를 조작 가능한 화면으로 렌더링한 view입니다.</p>
+      </div>
+      <div class="mapping-board">
+        <div class="panel">
+          <svg viewBox="0 0 860 230" role="img" aria-label="Markdown 의미 구조에서 standalone HTML까지 이어지는 변환 모델">
+            <defs>
+              <marker id="mapArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#25724d"></path></marker>
+            </defs>
+            <g fill="#ffffff" stroke="#cbd4df" stroke-width="2">
+              <rect x="28" y="78" width="130" height="72" rx="8"></rect>
+              <rect x="196" y="78" width="130" height="72" rx="8"></rect>
+              <rect x="364" y="78" width="130" height="72" rx="8"></rect>
+              <rect x="532" y="78" width="130" height="72" rx="8"></rect>
+              <rect x="700" y="78" width="130" height="72" rx="8"></rect>
+            </g>
+            <g fill="none" stroke="#25724d" stroke-width="2.6" marker-end="url(#mapArrow)">
+              <path class="flow-line" d="M158 114 L196 114"></path>
+              <path class="flow-line" d="M326 114 L364 114"></path>
+              <path class="flow-line" d="M494 114 L532 114"></path>
+              <path class="flow-line" d="M662 114 L700 114"></path>
+            </g>
+            <g text-anchor="middle" font-size="13" font-weight="800" fill="#161b24">
+              <text x="93" y="106">원문 읽기</text>
+              <text x="261" y="106">의미 구조</text>
+              <text x="429" y="106">skill IR</text>
+              <text x="597" y="106">component</text>
+              <text x="765" y="106">standalone</text>
+            </g>
+            <g text-anchor="middle" font-size="11" fill="#606b78">
+              <text x="93" y="128">SKILL.md</text>
+              <text x="261" y="128">heading/list/table</text>
+              <text x="429" y="128">contracts/evidence</text>
+              <text x="597" y="128">board/flow/reveal</text>
+              <text x="765" y="128">닫힌 HTML</text>
+            </g>
+            <g fill="#fff0ee" stroke="#a83a30" stroke-width="2">
+              <rect x="196" y="174" width="466" height="34" rx="8"></rect>
+            </g>
+            <text x="429" y="196" text-anchor="middle" font-size="12" font-weight="800" fill="#a83a30">Markdown raw HTML, event handler, javascript: link는 그대로 통과 금지</text>
+          </svg>
+          <div class="mapping-steps" aria-label="변환 단계">
+            <div class="mapping-step"><strong>1 원문</strong><span><code>SKILL.md</code>와 필요한 <code>references/</code>만 읽습니다.</span></div>
+            <div class="mapping-step"><strong>2 의미</strong><span>heading, list, table, code fence, link의 역할을 분리합니다.</span></div>
+            <div class="mapping-step"><strong>3 IR</strong><span><code>{name, contracts, workflow, evidence}</code>로 줄입니다.</span></div>
+            <div class="mapping-step"><strong>4 매핑</strong><span>판단 보드, 흐름도, 파일 관계도, reveal로 바꿉니다.</span></div>
+            <div class="mapping-step"><strong>5 검증</strong><span>validator와 PC desktop 상호작용 증거를 남깁니다.</span></div>
+          </div>
+        </div>
+        <aside class="trust-panel" aria-label="raw HTML 신뢰 경계">
+          <div class="trust-item allow"><strong>신뢰</strong><span>repo-authored template의 닫힌 CSS, SVG, 짧은 inline JavaScript controller.</span></div>
+          <div class="trust-item block"><strong>차단</strong><span>Markdown 안의 raw HTML, event handler, <code>javascript:</code> link, 외부 script.</span></div>
+          <div class="trust-item"><strong>목표</strong><span>원문 계약을 잃지 않고 사람이 조작하는 visual view로 보여줍니다.</span></div>
+        </aside>
       </div>
     </section>
 
@@ -292,6 +438,10 @@
         <div class="source-cell"><span>mode switch, stepper, reveal 중 하나 이상을 둡니다.</span></div>
         <div class="source-cell"><span>click/focus state를 브라우저에서 확인합니다.</span></div>
         <div class="source-cell"><span>모든 section이 정적 표로만 구성됩니다.</span></div>
+        <div class="source-cell"><strong>변환 모델</strong><span><code>SKILL.md</code> Markdown-to-HTML 변환 모델</span></div>
+        <div class="source-cell"><span>원문 읽기, 의미 구조 파악, 중간 구조 추출, 구성 요소 매핑, standalone HTML 렌더링 순서로 봅니다.</span></div>
+        <div class="source-cell"><span>계약과 화면 구성 요소가 서로 연결되는지 확인합니다.</span></div>
+        <div class="source-cell"><span><code>skill.html</code>이 새 source of truth처럼 원문과 어긋납니다.</span></div>
         <div class="source-cell"><strong>도표 무결성</strong><span><code>references/visual-guide-standards.md</code></span></div>
         <div class="source-cell"><span>SVG arrow는 보이는 node에 닿고, 넓은 표는 2열 layout 밖에 둡니다.</span></div>
         <div class="source-cell"><span>arrow endpoint, table width, overflow를 확인합니다.</span></div>
@@ -300,6 +450,10 @@
         <div class="source-cell"><span>영어 설명어 나열 대신 한국어 label과 caption을 씁니다.</span></div>
         <div class="source-cell"><span>공통 HTML validator와 전용 validator를 실행합니다.</span></div>
         <div class="source-cell"><span>일반 UI label이 영어-only로 남습니다.</span></div>
+        <div class="source-cell"><strong>닫힌 템플릿</strong><span><code>SKILL.md</code> Markdown-to-HTML 변환 모델</span></div>
+        <div class="source-cell"><span>Markdown raw HTML, event handler, <code>javascript:</code> link, 외부 script를 그대로 통과시키지 않습니다.</span></div>
+        <div class="source-cell"><span>HTML validator와 눈검수로 외부 의존과 위험한 링크를 확인합니다.</span></div>
+        <div class="source-cell"><span>원문 Markdown의 HTML 조각이 실행 가능한 코드로 남습니다.</span></div>
       </div>
     </section>
 
@@ -320,7 +474,7 @@
         </div>
         <div class="file-grid">
           <a class="tile" href="SKILL.md"><strong>SKILL.md</strong><span>핵심 계약과 생성 workflow입니다.</span></a>
-          <a class="tile" href="references/visual-guide-standards.md"><strong>visual-guide-standards.md</strong><span>interaction and animation, library policy, render integrity 기준입니다.</span></a>
+          <a class="tile" href="references/visual-guide-standards.md"><strong>visual-guide-standards.md</strong><span>상호작용, 애니메이션, 도표 무결성, 닫힌 파일 기준입니다.</span></a>
           <a class="tile" href="scripts/validate-skill-to-html.ts"><strong>validate-skill-to-html.ts</strong><span>그림 먼저, 인터랙티브, 애니메이션 문구를 검사합니다.</span></a>
         </div>
       </div>
@@ -359,22 +513,25 @@
         <p>프로젝트 instruction에는 호출 조건과 완료 기준만 둡니다.</p>
       </div>
       <pre class="snippet">Use $skill-to-html at skills/skill-to-html/SKILL.md when a skill is created or materially updated.
+Treat SKILL.md as the source of truth and skill.html as a visual view.
+Read Markdown meaning, extract skill IR, map to visual components, then render standalone HTML.
 Start skill.html with a visual, interactive, animated first viewport before long text.
 Use self-contained CSS/SVG/Web Animations API or short inline JavaScript; no external CDN/script/image.
+Do not pass Markdown raw HTML, event handlers, javascript: links, or external scripts through.
 Validate with node scripts/validate-skill-html.ts . and the target skill's validator.</pre>
     </section>
   </main>
   <script>
     const modeCopy = {
       shape: {
-        title: "형태 먼저",
-        copy: "첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다.",
-        evidence: "<code>SKILL.md</code> required outcome: 첫 화면은 움직이는 도표, 판단 보드, 상태 전환으로 시작합니다."
+        title: "의미 구조",
+        copy: "원문 줄바꿈을 복사하지 않고 heading, list, table, code fence, link의 뜻을 먼저 읽습니다.",
+        evidence: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: Markdown 의미 구조를 파악한 뒤 <code>skill IR</code>로 옮깁니다."
       },
       motion: {
-        title: "움직임 연결",
-        copy: "애니메이션은 장식이 아니라 원문 계약이 화면 상태로 바뀌는 과정을 보여줍니다.",
-        evidence: "<code>SKILL.md</code> design contract: 도표와 애니메이션은 의사결정, 실행 순서, 금지 경계, 증거 연결을 보여야 합니다."
+        title: "IR 변환",
+        copy: "계약, 실행 흐름, 파일, validator, 위험, 근거를 중간 구조로 줄인 뒤 화면 구성 요소에 매핑합니다.",
+        evidence: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: <code>{name, description, triggers, contracts, workflow, files, validators, risks, evidence}</code> 같은 IR을 만듭니다."
       },
       evidence: {
         title: "근거 펼치기",
@@ -385,10 +542,33 @@ Validate with node scripts/validate-skill-html.ts . and the target skill's valid
 
     const contractCopy = {
       pair: "<code>SKILL.md</code> required outcome: 각 skill folder에는 <code>SKILL.md</code>와 <code>skill.html</code>이 함께 있어야 합니다.",
+      ir: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: 원문 읽기, 의미 구조 파악, <code>skill IR</code> 추출, component mapping 순서로 렌더링합니다.",
       visual: "<code>SKILL.md</code> quality bar: 첫 화면만 봐도 판단 구조가 그림으로 먼저 보여야 합니다.",
-      bounds: "<code>SKILL.md</code> required outcome: 외부 CDN, 외부 이미지, 외부 script에 의존하지 않습니다.",
-      wide: "<code>SKILL.md</code> required outcome: 4개 이상 핵심 계약은 좁은 다열 grid에 넣지 않고 읽기 폭을 확보합니다.",
-      verify: "<code>SKILL.md</code> creation workflow: validator와 PC desktop viewport 확인을 실제 확인 표에 남깁니다."
+      bounds: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: raw HTML, event handler, <code>javascript:</code> link, 외부 script는 그대로 통과시키지 않습니다.",
+      verify: "<code>SKILL.md</code> creation workflow: 읽기 폭, validator, PC desktop viewport 확인을 실제 확인 표에 남깁니다."
+    };
+
+    const stepCopy = {
+      meaning: {
+        title: "의미 구조 읽기",
+        copy: "원문 줄바꿈을 복사하지 않고 heading, list, table, code fence, link가 무엇을 뜻하는지 읽습니다.",
+        evidence: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: 원문 읽기에서 의미 구조 파악으로 넘어갑니다."
+      },
+      ir: {
+        title: "중간 구조 추출",
+        copy: "<code>{name, triggers, contracts, workflow, files, validators, risks, evidence}</code> 같은 중간 구조를 만든 뒤 화면으로 옮깁니다.",
+        evidence: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: skill IR을 먼저 만들고 판단 보드와 흐름도로 매핑합니다."
+      },
+      mapping: {
+        title: "화면 구성 매핑",
+        copy: "판단 보드, 흐름도, 파일 관계도, 검증 표, 근거 reveal로 나누어 사람이 조작하는 view를 만듭니다.",
+        evidence: "<code>SKILL.md</code> design contract: 구조와 증거를 설명 문단보다 먼저 보여줍니다."
+      },
+      closed: {
+        title: "닫힌 템플릿",
+        copy: "Markdown 안의 raw HTML, event handler, <code>javascript:</code> link, 외부 script는 그대로 실행하지 않습니다.",
+        evidence: "<code>SKILL.md</code> Markdown-to-HTML 변환 모델: raw HTML은 신뢰된 repo-authored template에서만 나옵니다."
+      }
     };
 
     const controls = document.querySelectorAll("[data-view]");
@@ -420,6 +600,21 @@ Validate with node scripts/validate-skill-html.ts . and the target skill's valid
       card.addEventListener("click", () => {
         document.querySelectorAll(".decision-card").forEach((item) => item.classList.remove("active"));
         card.classList.add("active");
+      });
+    });
+
+    const stepTitle = document.querySelector("#step-title");
+    const stepCopyTarget = document.querySelector("#step-copy");
+    const stepEvidence = document.querySelector("#step-evidence");
+
+    document.querySelectorAll("[data-step]").forEach((step) => {
+      step.addEventListener("click", () => {
+        const selected = step.getAttribute("data-step");
+        document.querySelectorAll("[data-step]").forEach((item) => item.setAttribute("aria-pressed", String(item === step)));
+        document.querySelectorAll("[data-model-node]").forEach((node) => node.classList.toggle("active", node.getAttribute("data-model-node") === selected));
+        stepTitle.textContent = stepCopy[selected].title;
+        stepCopyTarget.innerHTML = stepCopy[selected].copy;
+        stepEvidence.innerHTML = stepCopy[selected].evidence;
       });
     });
   </script>

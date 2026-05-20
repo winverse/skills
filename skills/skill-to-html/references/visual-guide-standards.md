@@ -33,6 +33,15 @@
 
 첫 화면에서 skill name, 호출 조건, 오용 방지 경계가 보여야 한다. 하지만 첫 화면의 중심은 문장 카드가 아니라 interactive hero 또는 animated diagram이어야 한다. 이어서 작업 흐름과 검증 명령이 보여야 한다.
 
+## Markdown 변환 pipeline 기준
+
+- `SKILL.md`는 source of truth이고 `skill.html`은 사람이 조작하는 view다. HTML을 보강하더라도 Markdown 계약과 다른 새 규칙을 만들지 않는다.
+- 변환은 Markdown 원문 -> 의미 구조 -> `skill IR` -> component mapping -> standalone HTML -> browser QA 순서로 본다.
+- Markdown 의미 구조는 heading, list, table, code fence, blockquote, link가 수행하는 역할이다. 원문 순서와 줄바꿈을 그대로 layout으로 복사하지 않는다.
+- `skill IR`에는 skill name, trigger, 핵심 계약, workflow, 관련 파일, validator, 위험 경계, 원문 근거를 넣고, 화면에서는 판단 보드, animated flow, file map, evidence reveal, verify table로 나눈다.
+- `unified/remark/rehype`, `remark-rehype`, `Pandoc`, `MDX`, `Markdoc`에서 배울 점은 parse/transform/render 분리와 component mapping이다. 이 repo의 standalone guide는 runtime dependency를 추가하지 않는다.
+- Markdown의 `raw HTML`, event handler, `javascript:` link, 외부 script는 그대로 통과시키지 않는다. 상호작용 코드는 repo-authored template의 닫힌 CSS/SVG/Web Animations API/짧은 inline JavaScript에서만 만든다.
+
 ## readability and card grid 기준
 
 - 핵심 계약 카드가 4개 이상이면 좁은 side panel, status panel, 2열 layout의 보조 영역 안에서 다열 grid로 넣지 않는다.
