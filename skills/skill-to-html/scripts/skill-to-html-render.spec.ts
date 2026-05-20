@@ -32,6 +32,9 @@ test.describe("skill-to-html skill.html render", () => {
     expect(h2Titles).not.toContain("애니메이션 흐름");
     expect(h2Titles).not.toContain("도구 선택 레일");
     expect(h2Titles.length).toBeLessThanOrEqual(7);
+    await expect(page.getByRole("heading", { name: "닫힌 템플릿 경계" })).toBeVisible();
+    await expect(page.locator(".safety-boundary")).toBeVisible();
+    await expect(page.locator(".guard-grid")).toHaveCount(0);
 
     const layout = await page.evaluate(() => {
       const html = document.documentElement;
@@ -45,6 +48,7 @@ test.describe("skill-to-html skill.html render", () => {
       const decisionWidths = Array.from(document.querySelectorAll<HTMLElement>(".decision-card")).map(
         (item) => item.getBoundingClientRect().width,
       );
+      const safetyBoundary = document.querySelector<HTMLElement>(".safety-boundary");
       const visible = Array.from(document.querySelectorAll<HTMLElement>("body *")).filter((item) => {
         const box = item.getBoundingClientRect();
         const style = getComputedStyle(item);
@@ -66,6 +70,7 @@ test.describe("skill-to-html skill.html render", () => {
         heroLineDash: heroLines.map((line) => getComputedStyle(line).strokeDasharray),
         minContractWidth: Math.min(...contractWidths),
         minDecisionWidth: Math.min(...decisionWidths),
+        safetyBoundaryColumns: safetyBoundary ? getComputedStyle(safetyBoundary).gridTemplateColumns.split(" ").length : 0,
         overflowingCount: overflowing.length,
         offscreenCount: offscreen.length,
       };
@@ -80,6 +85,7 @@ test.describe("skill-to-html skill.html render", () => {
     expect(layout.heroLineDash.every((dash) => dash === "none" || dash === "0px")).toBe(true);
     expect(layout.minContractWidth).toBeGreaterThanOrEqual(220);
     expect(layout.minDecisionWidth).toBeGreaterThanOrEqual(260);
+    expect(layout.safetyBoundaryColumns).toBe(3);
     expect(layout.overflowingCount).toBe(0);
     expect(layout.offscreenCount).toBe(0);
 

@@ -286,14 +286,47 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>금지와 허용</h2>
-        <p>상호작용은 허용하되 외부 의존은 닫습니다.</p>
+        <h2>금지와 허용: 닫힌 템플릿 경계</h2>
+        <p>상호작용은 template 안에서만 만들고 외부 의존은 boundary 밖에서 막습니다.</p>
       </div>
-      <div class="guard-grid" aria-label="금지와 허용">
-        <div class="tile"><strong>허용</strong><span>CSS/SVG animation, Web Animations API, 짧은 inline JavaScript.</span></div>
-        <div class="tile"><strong>허용</strong><span>PC desktop의 click, hover, focus, keyboard state 확인.</span></div>
-        <div class="tile"><strong>금지</strong><span>외부 CDN, 외부 script, 외부 image, network call.</span></div>
-        <div class="tile"><strong>금지</strong><span>의미 없는 장식 animation, 긴 설명 카드로 첫 화면 채우기.</span></div>
+      <div class="safety-boundary" aria-label="닫힌 템플릿 안전 경계">
+        <div class="safety-lane allow">
+          <span class="lane-label">안으로 들이는 것</span>
+          <div class="safety-card"><strong>허용</strong><span>CSS/SVG animation, Web Animations API.</span></div>
+          <div class="safety-card"><strong>허용</strong><span>짧은 inline JavaScript controller와 PC desktop click/focus state.</span></div>
+        </div>
+        <div class="boundary-core">
+          <svg viewBox="0 0 420 210" role="img" aria-label="닫힌 템플릿 경계도">
+            <defs>
+              <marker id="safeArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
+                <path d="M0,0 L9,3.5 L0,7 Z" fill="#25724d"></path>
+              </marker>
+            </defs>
+            <rect x="122" y="42" width="176" height="92" rx="8" fill="#edf7f1" stroke="#25724d" stroke-width="3"></rect>
+            <rect x="306" y="56" width="80" height="64" rx="8" fill="#ffffff" stroke="#cbd4df" stroke-width="2"></rect>
+            <rect x="122" y="154" width="176" height="34" rx="8" fill="#fff0ee" stroke="#a83a30" stroke-width="2"></rect>
+            <path d="M34 88 L122 88" fill="none" stroke="#25724d" stroke-width="2.6" marker-end="url(#safeArrow)"></path>
+            <path d="M298 88 L306 88" fill="none" stroke="#25724d" stroke-width="2.6" marker-end="url(#safeArrow)"></path>
+            <path d="M34 171 L122 171" fill="none" stroke="#a83a30" stroke-width="2.6" stroke-dasharray="6 6"></path>
+            <path d="M112 158 L132 184 M132 158 L112 184" stroke="#a83a30" stroke-width="3"></path>
+            <g text-anchor="middle" font-size="13" font-weight="800" fill="#161b24">
+              <text x="210" y="80">repo-authored</text>
+              <text x="210" y="101">template</text>
+              <text x="346" y="88">skill.html</text>
+              <text x="210" y="176">raw HTML 차단</text>
+            </g>
+            <g text-anchor="middle" font-size="11" fill="#606b78">
+              <text x="78" y="76">허용된 motion</text>
+              <text x="342" y="76">닫힌 skill.html</text>
+              <text x="78" y="158">외부 의존</text>
+            </g>
+          </svg>
+        </div>
+        <div class="safety-lane block">
+          <span class="lane-label">밖에서 막는 것</span>
+          <div class="safety-card"><strong>금지</strong><span>외부 CDN, 외부 script, 외부 image, network call.</span></div>
+          <div class="safety-card"><strong>금지</strong><span>의미 없는 장식 animation, 긴 설명 카드로 첫 화면 채우기.</span></div>
+        </div>
       </div>
     </section>
 
