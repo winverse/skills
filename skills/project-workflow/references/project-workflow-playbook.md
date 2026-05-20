@@ -41,7 +41,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. `upstream-depende
 
 ### raw new SaaS/service 기준
 
-domain language, target user, first usable slice, product challenge, ADR, PRD 순서로 간다. 먼저 Matt Pocock skills `grill-me` 또는 `grill-with-docs`를 실제 호출하고, 이어서 GStack plugin `office-hours`를 실제 호출한다. 호출 surface가 없으면 fallback 질문으로 domain/product interview를 끝낸 뒤 다음 단계로 간다. Docker/AWS/Pulumi가 필요한 새 서비스는 service boundary와 secret boundary를 먼저 확인한 뒤 `project-structure`로 넘긴다.
+domain language, target user, first usable slice, product challenge, Superpowers setup gap check, ADR, PRD 순서로 간다. 먼저 Matt Pocock skills `grill-me` 또는 `grill-with-docs`를 실제 호출하고, 이어서 GStack plugin `office-hours`를 실제 호출한다. 그 다음 Superpowers plugin `brainstorming`을 실제 호출하거나 fallback setup gap check 질문으로 빠진 가정, 너무 넓은 첫 slice, 인계 위험을 확인한다. 호출 surface가 없으면 각 primitive를 `fallback`으로 표시하고 local 질문을 끝낸 뒤 다음 단계로 간다. Docker/AWS/Pulumi가 필요한 새 서비스는 service boundary와 secret boundary를 먼저 확인한 뒤 `project-structure`로 넘긴다.
 
 ### existing backend/API cleanup 기준
 
@@ -51,7 +51,7 @@ domain language, target user, first usable slice, product challenge, ADR, PRD �
 
 `design.md` 또는 design token 기준을 만든 뒤 2-3 mock direction을 제시하고 사용자가 선택한다. 선택 전 대규모 UI coding을 하지 않는다. 실제 구현 loop는 `feature-workflow`가 맡는다.
 
-Superpowers plugin `brainstorming`이나 `writing-plans`가 현재 runtime에서 가능하면 setup 질문, scope gap, plan gap을 보강하는 데만 호출한다. 구현 계획 실행, TDD, subagent-driven implementation은 `feature-workflow`로 넘긴다.
+Superpowers plugin `brainstorming`은 raw idea 첫 응답에서 `office-hours` 뒤 setup gap check로 처리한다. `writing-plans`는 큰 phase/step handoff plan이 생긴 뒤 계획 빈틈을 보강할 때만 조건부로 쓴다. 구현 계획 실행, TDD, subagent-driven implementation은 `feature-workflow`로 넘긴다.
 
 ### CLI/no-browser 프로젝트 기준
 
@@ -119,7 +119,7 @@ Lane
 
 ## project-structure handoff 기준
 
-folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다.
+folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다. 특히 `grill-me`/`grill-with-docs`, `office-hours`, Superpowers `brainstorming` setup gap check가 끝나기 전 호출하지 않는다.
 
 ## fallback interview gate 기준
 
@@ -136,6 +136,12 @@ Product challenge fallback
 - 첫 번째 사용자는 누구인가?
 - 오늘 완성되면 바로 쓸 수 있는 가장 좁은 장면은 무엇인가?
 - 이번 setup에서 제외할 것은 무엇인가?
+
+Superpowers setup gap fallback
+- 방금 정한 첫 slice가 아직 너무 넓은가?
+- PRD, `design.md`, `project-structure`로 넘어가기 전에 빠진 가정은 무엇인가?
+- 병렬 session이나 `feature-workflow` handoff에서 충돌할 위험은 무엇인가?
+- 지금 확정하지 말고 open question으로 남겨야 할 것은 무엇인가?
 ```
 
 답이 없으면 추정하지 않고 `workflow-state.md`의 open questions에 남긴다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 추정값을 `assumption`으로 표시하고 PRD/issues에 반영한다.

@@ -8,7 +8,7 @@ Dependencies: invocation inventory required before specialist calls
 Primitive invocation
 - Matt Pocock skills / `grill-me`: selected -> invoke original if available; fallback interview if unavailable
 - GStack plugin / `office-hours`: selected -> invoke original if available; fallback product challenge if unavailable
-- Superpowers plugin / `brainstorming`: deferred until setup questions reveal a plan gap
+- Superpowers plugin / `brainstorming`: selected -> invoke original if available; fallback setup gap check before design or structure if unavailable
 - user custom / `design.md`: deferred until domain/product answers define the first usable UI slice
 Document language: Korean-first unless target project says otherwise
 Next step: Discovery
@@ -18,7 +18,7 @@ Artifacts
 - Preserve: no generated project tree yet
 
 Validation
-- Done when: `grill-me` or fallback domain interview and `office-hours` or fallback product challenge make user/product/domain language clear enough to ask architecture questions
+- Done when: `grill-me` or fallback domain interview, `office-hours` or fallback product challenge, and Superpowers `brainstorming` or fallback setup gap check make user/product/domain language clear enough to ask architecture and design questions
 
 Open
 - Do not call project-structure yet; structure choices are not constrained.

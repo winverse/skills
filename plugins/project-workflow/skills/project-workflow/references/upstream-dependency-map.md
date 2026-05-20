@@ -31,8 +31,8 @@
 | GStack plugin | `office-hours` | 제품 가치, 수요, 가장 좁은 진입점 검증 | 가능하면 실제 호출, 아니면 fallback product challenge, PRD input | 핵심 |
 | GStack plugin | `plan-ceo-review` | scope, premise, product decision review | 가능하면 실제 호출, 아니면 local CEO/spec review notes | 조건부 |
 | GStack plugin | `plan-design-review` | UI/UX scope의 design review | 가능하면 실제 호출, 아니면 local mock direction review, `design.md` gap | UI 조건부 |
-| Superpowers plugin | `brainstorming` | setup 질문과 scope gap 보강 | 가능하면 실제 호출, 구현 scope는 `feature-workflow`로 넘김 | 조건부 |
-| Superpowers plugin | `writing-plans` | setup handoff plan gap 보강 | 가능하면 실제 호출, production plan execution은 `feature-workflow`로 넘김 | 조건부 |
+| Superpowers plugin | `brainstorming` | raw idea 첫 응답의 setup gap check | `office-hours` 뒤 가능하면 실제 호출, 아니면 fallback setup gap 질문, 구현 scope는 `feature-workflow`로 넘김 | 핵심 |
+| Superpowers plugin | `writing-plans` | 큰 phase/step handoff plan gap 보강 | 가능하면 실제 호출, production plan execution은 `feature-workflow`로 넘김 | 조건부 |
 | user custom / design direction | `design.md` / design token setup | AI-slop 방지, visual system 고정 | `design.md`, tokens, mock directions | UI 핵심 |
 | repo-local custom | `project-structure` | folder/env/codegen/db/infra boundary | ADR, folder tree, app boundary | 구조 필요 시 |
 | repo-local custom | `sync-docs` | setup docs/snippet/history drift 방지 | setup docs sync report | 완료 시 |
@@ -50,7 +50,7 @@
 
 - Matt Pocock skills: `https://www.aihero.dev/skills`와 `https://www.aihero.dev/skills-domain-model`에서 `grill-me`, `grill-with-docs`, `to-prd`, `to-issues`, `tdd`, `triage` 계열을 확인했다. Local 판단은 `adopt`: setup 단계에서는 domain/product interview와 PRD/issues handoff만 채택한다.
 - GStack plugin: `https://github.com/garrytan/gstack`와 `office-hours/SKILL.md`에서 `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review` 등 skill surface를 확인했다. Local 판단은 `adopt`: setup 단계에서는 `office-hours`와 review primitive만 조건부 채택한다.
-- Superpowers plugin: `https://github.com/obra/superpowers`에서 `brainstorming`, `writing-plans`, `test-driven-development`, `subagent-driven-development` 등 composable skills를 확인했다. Local 판단은 `adapt`: `brainstorming`과 `writing-plans`는 setup gap check에만 조건부 채택하고, TDD와 subagent-driven implementation은 `feature-workflow`로 넘긴다.
+- Superpowers plugin: `https://github.com/obra/superpowers`에서 `brainstorming`, `writing-plans`, `test-driven-development`, `subagent-driven-development` 등 composable skills를 확인했다. Local 판단은 `adapt`: `brainstorming`은 raw idea 첫 응답에서 `office-hours` 뒤 setup gap check로 채택하고, `writing-plans`는 큰 phase/step handoff plan gap에만 조건부 채택한다. TDD와 subagent-driven implementation은 `feature-workflow`로 넘긴다.
 
 2026-05-20 확인 기준:
 

@@ -11,7 +11,8 @@ Dependencies
   - `office-hours`: product challenge; invoke original if available, fallback questions if unavailable
   - `plan-ceo-review` / `plan-design-review`: setup review
 - Superpowers plugin: selected | invoked | skipped | fallback | deferred
-  - `brainstorming` / `writing-plans`: setup gap checks only
+  - `brainstorming`: raw idea first response setup gap check after `office-hours`
+  - `writing-plans`: large phase/step handoff gap check only
 - Design direction: selected | skipped | fallback | deferred
 - Repo-local helpers: selected | skipped | fallback | deferred
   - `project-structure`, `design.md`, `sync-docs`, `agent-eval-harness`

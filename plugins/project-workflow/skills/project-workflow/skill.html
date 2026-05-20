@@ -30,6 +30,13 @@
     .quick strong, .cell strong, .node strong, .gate strong, .lane strong, .metric strong, .file strong, .table-cell strong { display:block; margin-bottom:5px; font-size:13px; }
     .quick span, .cell p, .node span, .gate p, .lane span, .metric span, .file span, .table-cell span, .hint { color:var(--muted); font-size:13px; }
     .section { margin-top:22px; }
+    .contracts { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-top:12px; }
+    .contract { min-height:122px; padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); border-top:4px solid var(--blue); }
+    .contract strong { display:block; margin-bottom:6px; font-size:13px; }
+    .contract span { display:block; color:var(--muted); font-size:12px; }
+    .contract.stop { border-top-color:var(--red); }
+    .contract.gate { border-top-color:var(--amber); }
+    .contract.route { border-top-color:var(--green); }
     .section-head { display:flex; justify-content:space-between; align-items:baseline; gap:20px; margin-bottom:10px; }
     .section-head p { color:var(--muted); font-size:13px; max-width:660px; text-align:right; }
     .matrix { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; }
@@ -70,6 +77,13 @@
     .fill.red { background:var(--red); }
     .files { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
     .file { padding:12px; min-height:88px; background:var(--panel); }
+    .evidence-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .source-table { display:grid; grid-template-columns:210px minmax(0,1fr) 190px; overflow:hidden; }
+    .source-table .table-cell:nth-child(3n) { border-right:0; }
+    .source-table .table-cell:nth-last-child(-n+3) { border-bottom:0; }
+    .check-table { display:grid; grid-template-columns:180px 150px minmax(0,1fr); overflow:hidden; }
+    .check-table .table-cell:nth-child(3n) { border-right:0; }
+    .check-table .table-cell:nth-last-child(-n+3) { border-bottom:0; }
     .snippet { margin:0; padding:14px; background:var(--code); color:#f8fafc; white-space:pre; overflow-x:auto; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
@@ -80,22 +94,34 @@
         <div class="mark">PW</div>
         <div>
           <h1>project-workflow</h1>
-          <p class="subtitle">새 프로젝트와 큰 기획을 바로 구현하지 않고, 도메인 언어, 제품 검증, 구조 결정, 디자인 기준, PRD, 이슈 목록, 구현 인계 조건으로 정리하는 초기 셋팅 스킬입니다.</p>
+          <p class="subtitle">새 프로젝트와 큰 기획을 바로 구현하지 않고, 도메인 언어, 제품 검증, 구조 결정, 디자인 기준, PRD, 이슈 목록, 구현 인계 조건으로 정리하는 초기 셋팅 스킬입니다. 이 파일은 project-workflow plugin의 canonical source입니다.</p>
         </div>
       </div>
       <aside class="quick" aria-label="스킬 파일 쌍">
         <div><strong>에이전트 원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
+        <div><strong>정본 위치</strong><span><a href="SKILL.md"><code>plugins/project-workflow/skills/project-workflow/SKILL.md</code></a></span></div>
         <div><strong>출처 장부</strong><span><a href="references/upstream-dependency-map.md"><code>references/upstream-dependency-map.md</code></a></span></div>
         <div><strong>핵심 경계</strong><span>한국어 우선 초기 셋팅은 이 스킬이 맡고, 반복 구현은 <code>feature-workflow</code>로 넘깁니다.</span></div>
       </aside>
     </header>
+
+    <section class="section" aria-label="핵심 계약">
+      <div class="section-head"><h2>핵심 계약</h2><p>실행을 바꾸는 5개 계약만 첫 화면에서 확인합니다.</p></div>
+      <div class="contracts">
+        <div class="contract"><strong>정본과 호환</strong><span>top-level skill은 plugin 정본으로 이동한 계약을 그대로 유지하고, 기존 project instruction 링크를 깨지 않습니다.</span></div>
+        <div class="contract gate"><strong>질문 gate 우선</strong><span><code>grill-me</code>/<code>grill-with-docs</code>, <code>office-hours</code>, <code>brainstorming</code> setup gap check 전에는 PRD와 구조 인계를 확정하지 않습니다.</span></div>
+        <div class="contract"><strong>실제 호출 우선</strong><span>선택한 primitive는 호출면을 확인해 실제 호출하고, 불가능하면 <code>fallback</code> 상태와 local 질문을 남깁니다.</span></div>
+        <div class="contract route"><strong>책임 분리</strong><span>구조는 <code>project-structure</code>, 반복 구현과 TDD와 QA는 <code>feature-workflow</code>, 문서 drift는 <code>sync-docs</code>로 넘깁니다.</span></div>
+        <div class="contract stop"><strong>위험 gate</strong><span>tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 먼저 기록합니다.</span></div>
+      </div>
+    </section>
 
     <section class="section">
       <div class="section-head"><h2>사용 판단 매트릭스</h2><p>요청이 초기 셋팅인지, 구조 인계인지, 구현 인계인지 먼저 나눕니다.</p></div>
       <div class="matrix" aria-label="사용 판단 매트릭스">
         <div class="cell use"><strong>사용</strong><p>새 서비스, 새 앱, 큰 기획, raw idea를 도메인 문서, 제품 검증, ADR, PRD, 이슈 목록으로 정리할 때 사용합니다.</p></div>
         <div class="cell route"><strong>연결</strong><p>폴더와 인프라 경계는 <code>project-structure</code>, 문서 동기화는 <code>sync-docs</code>, 반복 구현은 <code>feature-workflow</code>에 넘깁니다.</p></div>
-        <div class="cell wait"><strong>대기</strong><p><code>grill-me</code> 또는 <code>office-hours</code> 질문이 끝나지 않았으면 PRD와 이슈 목록을 확정하지 않습니다.</p></div>
+        <div class="cell wait"><strong>대기</strong><p><code>grill-me</code>/<code>grill-with-docs</code>, <code>office-hours</code>, Superpowers <code>brainstorming</code> setup gap check가 끝나지 않았으면 PRD와 이슈 목록을 확정하지 않습니다.</p></div>
         <div class="cell stop"><strong>차단</strong><p>비밀값, 외부 쓰기, MCP, API, 네트워크, 파일 쓰기 자동화가 있으면 Agent Tool And Security Risk Gate를 먼저 기록합니다.</p></div>
       </div>
     </section>
@@ -135,8 +161,8 @@
           </svg>
         </div>
         <div class="gates">
-          <div class="gate"><strong>1. 호출면 확인</strong><p>repo-local skill, enabled plugin, command slash, MCP/tool, agent별 실행 표면을 확인하고 실제 호출 가능 여부를 기록합니다.</p></div>
-          <div class="gate"><strong>2. 질문 gate</strong><p>도메인, 제품 고통, 첫 사용자, 가장 좁은 성공 장면, 포함과 제외 범위를 묻습니다.</p></div>
+          <div class="gate"><strong>1. 호출면 확인</strong><p>현재 session의 skill list, enabled plugin list, slash command, MCP/tool, project instruction 링크 순서로 실제 호출 가능 여부를 기록합니다.</p></div>
+          <div class="gate"><strong>2. 질문 gate</strong><p>도메인 질문, 제품 challenge, Superpowers <code>brainstorming</code> setup gap check를 순서대로 처리합니다.</p></div>
           <div class="gate"><strong>3. 결정 gate</strong><p>ADR, TypeScript ESM only, 디자인 방향, tool/security decision을 PRD와 이슈보다 먼저 둡니다.</p></div>
           <div class="gate"><strong>4. 인계 gate</strong><p><code>workflow-state.md</code>와 필요한 경우 <code>work-claims.md</code>를 남긴 뒤 구현 단위만 <code>feature-workflow</code>로 보냅니다.</p></div>
         </div>
@@ -149,7 +175,7 @@
         <div class="table-cell head"><strong>출처</strong></div><div class="table-cell head"><strong>핵심 primitive</strong></div><div class="table-cell head"><strong>채택 역할</strong></div><div class="table-cell head"><strong>상태 표현</strong></div><div class="table-cell head"><strong>인계 경계</strong></div>
         <div class="table-cell"><strong>Matt Pocock skills</strong></div><div class="table-cell"><span><code>grill-me</code>, <code>grill-with-docs</code>, <code>to-prd</code>, <code>to-issues</code></span></div><div class="table-cell"><span>도메인 질문, PRD, 이슈 분할</span></div><div class="table-cell"><span class="pill core">invoked 우선</span></div><div class="table-cell"><span>가능하면 실제 호출하고, 불가능하면 fallback 질문으로 대체합니다.</span></div>
         <div class="table-cell"><strong>GStack plugin</strong></div><div class="table-cell"><span><code>office-hours</code>, <code>plan-ceo-review</code>, <code>plan-design-review</code></span></div><div class="table-cell"><span>제품 가치, 수요, 범위와 디자인 검토</span></div><div class="table-cell"><span class="pill core">invoked 우선</span></div><div class="table-cell"><span>제품 검증 후 PRD 입력으로만 사용합니다.</span></div>
-        <div class="table-cell"><strong>Superpowers plugin</strong></div><div class="table-cell"><span><code>brainstorming</code>, <code>writing-plans</code></span></div><div class="table-cell"><span>질문과 setup 계획의 빈틈 보강</span></div><div class="table-cell"><span class="pill cond">조건부 호출</span></div><div class="table-cell"><span><code>tdd</code>, <code>subagent-driven-development</code>는 구현 인계 대상입니다.</span></div>
+        <div class="table-cell"><strong>Superpowers plugin</strong></div><div class="table-cell"><span><code>brainstorming</code>, <code>writing-plans</code></span></div><div class="table-cell"><span><code>brainstorming</code>은 첫 응답 setup gap check, <code>writing-plans</code>는 큰 phase handoff 보강</span></div><div class="table-cell"><span class="pill cond">조건부 호출</span></div><div class="table-cell"><span><code>tdd</code>, <code>subagent-driven-development</code>는 구현 인계 대상입니다.</span></div>
         <div class="table-cell"><strong>repo-local custom</strong></div><div class="table-cell"><span><code>project-structure</code>, <code>sync-docs</code>, <code>agent-eval-harness</code>, security gate</span></div><div class="table-cell"><span>구조, 문서 drift, 회귀 방지, 도구 위험 판단</span></div><div class="table-cell"><span class="pill gate">필요 시</span></div><div class="table-cell"><span>각 전담 스킬의 책임을 침범하지 않습니다.</span></div>
       </div>
     </section>
@@ -161,7 +187,7 @@
         <div class="node"><strong>제품</strong><span>해결할 고통, 첫 사용자, 지금 당장 쓸 수 있는 가장 좁은 성공 장면을 묻습니다.</span></div>
         <div class="node"><strong>범위</strong><span>이번 셋팅에 포함할 것, 제외할 것, 나중으로 미룰 것을 나눕니다.</span></div>
         <div class="node"><strong>확신도</strong><span>확정된 답, 추정한 답, 반드시 다시 물어야 할 답을 분리합니다.</span></div>
-        <div class="node"><strong>대기 조건</strong><span>질문이 끝나기 전에는 PRD, issue backlog, architecture handoff를 확정하지 않습니다.</span></div>
+        <div class="node"><strong>대기 조건</strong><span>사용자가 “추정해서 진행”이라고 명시하지 않으면 질문이 끝나기 전 PRD, issue backlog, architecture handoff를 확정하지 않습니다.</span></div>
       </div>
     </section>
 
@@ -282,6 +308,29 @@ Project setup state
 Next workflow step
 - project-workflow: &lt;remaining setup gate&gt;
 - or feature-workflow: &lt;spec/issue path and acceptance criteria&gt;</pre>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>원문 근거</h2><p>핵심 계약이 어느 source heading에서 왔는지 바로 확인합니다.</p></div>
+      <div class="source-table" aria-label="원문 근거 연결">
+        <div class="table-cell head"><strong>계약</strong></div><div class="table-cell head"><strong>원문 근거</strong></div><div class="table-cell head"><strong>확인 방법</strong></div>
+        <div class="table-cell"><strong>정본과 호환</strong></div><div class="table-cell"><span><code>SKILL.md</code> 첫 문단, plugin 정본 경로 문장</span></div><div class="table-cell"><span>파일 관계와 링크 확인</span></div>
+        <div class="table-cell"><strong>실제 호출 우선</strong></div><div class="table-cell"><span><code>dependency invocation contract 기준</code>, <code>핵심 계약</code>의 호출면 증거 문장</span></div><div class="table-cell"><span>primitive inventory에 상태 표시</span></div>
+        <div class="table-cell"><strong>질문 gate 우선</strong></div><div class="table-cell"><span><code>첫 응답 기준</code>, <code>interview gate 기준</code>, raw idea 순서 문장</span></div><div class="table-cell"><span>PRD 전에 질문 상태 확인</span></div>
+        <div class="table-cell"><strong>책임 분리</strong></div><div class="table-cell"><span><code>provenance ledger 기준</code>, <code>feature-workflow handoff 기준</code>, upstream dependency map</span></div><div class="table-cell"><span>다음 스킬과 handoff 조건 확인</span></div>
+        <div class="table-cell"><strong>위험 gate</strong></div><div class="table-cell"><span><code>핵심 계약</code>과 <code>default flow 기준</code>의 Agent Tool And Security Risk Gate 문장</span></div><div class="table-cell"><span>tool/API/MCP 작업 전 decision 기록</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>실제 확인</h2><p>이 HTML 갱신에서 실행한 검증과 남은 수동 확인 항목입니다.</p></div>
+      <div class="check-table" aria-label="실제 확인 결과">
+        <div class="table-cell head"><strong>확인 항목</strong></div><div class="table-cell head"><strong>상태</strong></div><div class="table-cell head"><strong>증거</strong></div>
+        <div class="table-cell"><strong>HTML validator</strong></div><div class="table-cell"><span class="pill core">통과</span></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code> 실행 결과 통과했습니다.</span></div>
+        <div class="table-cell"><strong>스킬 전용 validator</strong></div><div class="table-cell"><span class="pill gate">범위 제외</span></div><div class="table-cell"><span>hook 요청이 adjacent <code>skill.html</code>만 허용하므로 HTML validator 중심으로 확인합니다.</span></div>
+        <div class="table-cell"><strong>PC viewport</strong></div><div class="table-cell"><span class="pill gate">미확인</span></div><div class="table-cell"><span>in-app browser가 <code>file://</code> 접근을 차단했고, 로컬 Playwright package가 없어 런타임 viewport 확인은 남았습니다.</span></div>
+        <div class="table-cell"><strong>외부 자산</strong></div><div class="table-cell"><span class="pill core">통과</span></div><div class="table-cell"><span>CSS와 SVG는 문서 안에 있고 외부 CDN, 이미지, script를 쓰지 않습니다.</span></div>
+      </div>
     </section>
   </main>
 </body>

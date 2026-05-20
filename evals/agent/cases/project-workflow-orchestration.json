@@ -44,6 +44,16 @@
         "value": "Document language: Korean-first unless target project says otherwise"
       },
       {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
+        "value": "Superpowers plugin / `brainstorming`: selected"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
+        "value": "fallback setup gap check before design or structure"
+      },
+      {
         "type": "forbidden_text",
         "file": "evals/agent/fixtures/project-workflow/new-project-routing.md",
         "value": "Call project-structure now"
@@ -87,6 +97,11 @@
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
         "value": "Superpowers plugin: selected | invoked | skipped | fallback | deferred"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
+        "value": "`brainstorming`: raw idea first response setup gap check after `office-hours`"
       },
       {
         "type": "required_text",
