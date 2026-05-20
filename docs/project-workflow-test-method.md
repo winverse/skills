@@ -72,6 +72,7 @@ skill-test/
 6. 검증을 실행한다.
    - target project 자체 검증 명령을 실행한다.
    - phase handoff가 있으면 `execute-phase.ts`를 dry-run으로 실행한다.
+   - dry-run prompt에 `Step undefined`나 `undefined` step title이 나오면 실패로 판정한다.
    - 결과는 `runs/cycle-NNN/output/`과 `cycle-summary.md`에 남긴다.
 
 7. 판정한다.

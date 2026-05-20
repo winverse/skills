@@ -30,6 +30,24 @@ function makePhase(status: "pending" | "completed"): string {
   return dir;
 }
 
+function makeIdTitlePhase(): string {
+  const dir = mkdtempSync(path.join(tmpdir(), "project-workflow-phase-"));
+  writeFileSync(path.join(dir, "index.json"), `${JSON.stringify({
+    project: "smoke",
+    phase: "handoff",
+    steps: [
+      {
+        id: "step1",
+        title: "Domain model and fixtures",
+        file: "step1.md",
+        status: "pending",
+      },
+    ],
+  }, null, 2)}\n`);
+  writeFileSync(path.join(dir, "step1.md"), "# step1\n\nRun id/title schema smoke step.\n");
+  return dir;
+}
+
 function run(args: string[]) {
   return spawnSync("node", [runner, ...args], {
     cwd: repoRoot,
@@ -50,6 +68,12 @@ assert(pendingDryRun.status === 0, "pending dry-run should exit 0");
 assert(pendingDryRun.stdout.includes("feature-workflow step 실행 agent"), "pending dry-run should build feature-workflow adapter prompt");
 assert(pendingDryRun.stdout.includes("Target project root:"), "pending dry-run should include project root");
 assert(pendingBefore === pendingAfter, "pending dry-run must not mutate index.json");
+
+const idTitle = makeIdTitlePhase();
+const idTitleDryRun = run([idTitle, "--dry-run"]);
+assert(idTitleDryRun.status === 0, "id/title dry-run should exit 0");
+assert(idTitleDryRun.stdout.includes("Step step1: Domain model and fixtures"), "id/title dry-run should use id and title in prompt header");
+assert(!idTitleDryRun.stdout.includes("Step undefined"), "id/title dry-run must not print undefined step metadata");
 
 const completed = makePhase("completed");
 const completedBefore = readFileSync(path.join(completed, "index.json"), "utf8");

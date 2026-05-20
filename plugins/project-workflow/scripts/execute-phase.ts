@@ -7,8 +7,11 @@ import { spawnSync } from "node:child_process";
 type StepStatus = "pending" | "completed" | "error" | "blocked";
 
 type PhaseStep = {
-  step: number;
-  name: string;
+  step?: number;
+  id?: string;
+  name?: string;
+  title?: string;
+  file?: string;
   status: StepStatus;
   summary?: string;
   error_message?: string;
@@ -167,8 +170,42 @@ function loadDocs(projectRoot: string): string {
 function completedSummary(index: PhaseIndex): string {
   const lines = index.steps
     .filter((step) => step.status === "completed" && step.summary)
-    .map((step) => `- Step ${step.step} (${step.name}): ${step.summary}`);
+    .map((step, position) => `- Step ${stepLabel(step, position)} (${stepName(step, position)}): ${step.summary}`);
   return lines.length ? `## 완료된 이전 step\n\n${lines.join("\n")}` : "";
+}
+
+function stepLabel(step: PhaseStep, position: number): string {
+  if (typeof step.step === "number") return String(step.step);
+  if (step.id) return step.id;
+  return String(position + 1);
+}
+
+function stepName(step: PhaseStep, position: number): string {
+  return step.name ?? step.title ?? step.id ?? `step ${position + 1}`;
+}
+
+function stepFileName(step: PhaseStep, position: number): string {
+  if (step.file) return step.file;
+  if (typeof step.step === "number") return `step${step.step}.md`;
+  if (step.id) return `${step.id}.md`;
+  return `step${position + 1}.md`;
+}
+
+function stepOutputStem(step: PhaseStep, position: number): string {
+  const stem = typeof step.step === "number" ? `step${step.step}` : step.id ?? `step${position + 1}`;
+  return stem.replace(/[^a-zA-Z0-9._-]/g, "-");
+}
+
+function findMatchingStep(steps: PhaseStep[], original: PhaseStep, originalPosition: number): PhaseStep | undefined {
+  if (typeof original.step === "number") {
+    const byNumber = steps.find((candidate) => candidate.step === original.step);
+    if (byNumber) return byNumber;
+  }
+  if (original.id) {
+    const byId = steps.find((candidate) => candidate.id === original.id);
+    if (byId) return byId;
+  }
+  return steps[originalPosition];
 }
 
 function buildPrompt(
@@ -176,9 +213,10 @@ function buildPrompt(
   phaseDir: string,
   index: PhaseIndex,
   step: PhaseStep,
+  stepPosition: number,
   previousError?: string,
 ): string {
-  const stepFile = path.join(phaseDir, `step${step.step}.md`);
+  const stepFile = path.join(phaseDir, stepFileName(step, stepPosition));
   const stepBody = existsSync(stepFile) ? readFileSync(stepFile, "utf8") : "";
   const docs = loadDocs(projectRoot);
   const prior = completedSummary(index);
@@ -187,7 +225,7 @@ function buildPrompt(
     : "";
 
   return [
-    `# ${index.project} / ${index.phase} / Step ${step.step}: ${step.name}`,
+    `# ${index.project} / ${index.phase} / Step ${stepLabel(step, stepPosition)}: ${stepName(step, stepPosition)}`,
     `Target project root: ${projectRoot}`,
     "당신은 이 target project의 feature-workflow step 실행 agent다. 현재 agent runtime은 Claude일 수도 Codex일 수도 있으므로, 특정 제품 전용 명령을 가정하지 마라.",
     docs,
@@ -227,20 +265,22 @@ function main(): void {
   const indexFile = path.join(phaseDir, "index.json");
   const index = readJson<PhaseIndex>(indexFile);
 
-  const blocked = index.steps.find((candidate) => candidate.status === "blocked");
-  if (blocked) {
-    console.error(`BLOCKED: Step ${blocked.step} ${blocked.name}: ${blocked.blocked_reason ?? "reason missing"}`);
+  const blockedIndex = index.steps.findIndex((candidate) => candidate.status === "blocked");
+  if (blockedIndex >= 0) {
+    const blocked = index.steps[blockedIndex];
+    console.error(`BLOCKED: Step ${stepLabel(blocked, blockedIndex)} ${stepName(blocked, blockedIndex)}: ${blocked.blocked_reason ?? "reason missing"}`);
     process.exit(2);
   }
 
-  const failed = index.steps.find((candidate) => candidate.status === "error");
-  if (failed) {
-    console.error(`ERROR: Step ${failed.step} ${failed.name}: ${failed.error_message ?? "message missing"}`);
+  const failedIndex = index.steps.findIndex((candidate) => candidate.status === "error");
+  if (failedIndex >= 0) {
+    const failed = index.steps[failedIndex];
+    console.error(`ERROR: Step ${stepLabel(failed, failedIndex)} ${stepName(failed, failedIndex)}: ${failed.error_message ?? "message missing"}`);
     process.exit(1);
   }
 
-  const step = index.steps.find((candidate) => candidate.status === "pending");
-  if (!step) {
+  const stepIndex = index.steps.findIndex((candidate) => candidate.status === "pending");
+  if (stepIndex < 0) {
     if (!options.run) {
       console.log(`Phase completed: ${index.phase}`);
       return;
@@ -251,7 +291,8 @@ function main(): void {
     return;
   }
 
-  const prompt = buildPrompt(options.projectRoot, phaseDir, index, step);
+  const step = index.steps[stepIndex];
+  const prompt = buildPrompt(options.projectRoot, phaseDir, index, step, stepIndex);
   if (!options.run) {
     console.log(prompt);
     return;
@@ -265,10 +306,10 @@ function main(): void {
 
   for (let attempt = 1; attempt <= options.maxRetries; attempt += 1) {
     const result = runAgent(options.agentBin!, options.agentArgs, prompt);
-    const outputFile = path.join(phaseDir, `step${step.step}-output.json`);
+    const outputFile = path.join(phaseDir, `${stepOutputStem(step, stepIndex)}-output.json`);
     writeJson(outputFile, {
-      step: step.step,
-      name: step.name,
+      step: stepLabel(step, stepIndex),
+      name: stepName(step, stepIndex),
       agent: options.agent,
       command: [options.agentBin, ...options.agentArgs].join(" "),
       argv: [options.agentBin, ...options.agentArgs],
@@ -280,17 +321,17 @@ function main(): void {
     });
 
     const updated = readJson<PhaseIndex>(indexFile);
-    const current = updated.steps.find((candidate) => candidate.step === step.step);
+    const current = findMatchingStep(updated.steps, step, stepIndex);
     if (current?.status === "completed") {
       current.completed_at = current.completed_at ?? stamp();
       writeJson(indexFile, updated);
-      console.log(`completed: step ${step.step} ${step.name}`);
+      console.log(`completed: step ${stepLabel(step, stepIndex)} ${stepName(step, stepIndex)}`);
       return;
     }
     if (current?.status === "blocked") {
       current.blocked_at = current.blocked_at ?? stamp();
       writeJson(indexFile, updated);
-      console.error(`blocked: step ${step.step} ${step.name}`);
+      console.error(`blocked: step ${stepLabel(step, stepIndex)} ${stepName(step, stepIndex)}`);
       process.exit(2);
     }
     if (attempt === options.maxRetries) {
@@ -300,7 +341,7 @@ function main(): void {
         current.failed_at = stamp();
       }
       writeJson(indexFile, updated);
-      console.error(`failed: step ${step.step} ${step.name}`);
+      console.error(`failed: step ${stepLabel(step, stepIndex)} ${stepName(step, stepIndex)}`);
       process.exit(1);
     }
   }

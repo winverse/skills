@@ -217,7 +217,7 @@ phases/
 └── step2.md
 ```
 
-`index.json`은 `project`, `phase`, `steps`를 담고, 각 step은 `pending`, `completed`, `error`, `blocked` 중 하나의 상태를 가진다. `blocked`는 실패가 아니라 API key, 계정 권한, 외부 승인, 수동 설정처럼 사용자 개입이 필요한 상태다.
+`index.json`은 `project`, `phase`, `steps`를 담고, 각 step은 `pending`, `completed`, `error`, `blocked` 중 하나의 상태를 가진다. step metadata는 `step`/`name`을 기본으로 쓰되, 생성 agent가 `id`/`title`/`file`을 만든 경우 `execute-phase.ts`가 이를 정상화해서 읽을 수 있어야 한다. `blocked`는 실패가 아니라 API key, 계정 권한, 외부 승인, 수동 설정처럼 사용자 개입이 필요한 상태다.
 
 각 `step<N>.md`는 독립 Codex 또는 Claude session이 읽어도 실행 가능해야 한다.
 
