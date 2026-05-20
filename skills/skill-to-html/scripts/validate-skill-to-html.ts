@@ -57,6 +57,7 @@ const requiredChecks = [
   ["skill.html", "skill IR"],
   ["skill.html", "component mapping"],
   ["skill.html", "raw HTML"],
+  ["skill.html", "validate-skill-to-html-render.ts"],
   ["../../project-snippets/skill-to-html.md", "한국어 문장 우선"],
   ["../../project-snippets/skill-to-html.md", "그림 우선"],
   ["../../project-snippets/skill-to-html.md", "인터랙티브"],
@@ -73,6 +74,11 @@ const requiredChecks = [
   ["agents/openai.yaml", "Markdown source of truth"],
   ["agents/openai.yaml", "skill IR"],
   ["agents/openai.yaml", "Markdown raw HTML"],
+  ["scripts/skill-to-html-render.spec.ts", "@playwright/test"],
+  ["scripts/skill-to-html-render.spec.ts", "hero-line"],
+  ["scripts/skill-to-html-render.spec.ts", "변환 모델 보드"],
+  ["scripts/validate-skill-to-html-render.ts", "playwright"],
+  ["scripts/validate-skill-to-html-render.ts", "SKILL_TO_HTML_ROOT"],
 ] as const;
 
 const failures: string[] = [];

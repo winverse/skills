@@ -1,5 +1,7 @@
 /images/*
 .DS_Store
+node_modules/
+test-results/
 /.playwright-mcp/
 /inspector/*
 !/inspector/.gitkeep

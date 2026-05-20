@@ -62,6 +62,7 @@ repo 전체 lifecycle, history, portable path, 문서 정합성 기준도 확인
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
+node skills/skill-to-html/scripts/validate-skill-to-html-render.ts skills/skill-to-html
 ```
 
 Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상에서 `node <file>.ts`로 직접 실행하는 것을 기준으로 하고, 새 validator를 `.py`로 추가하지 않는다. Codex hook처럼 다른 실행 환경과의 호환성이 중요한 파일은 예외적으로 `.mjs`를 유지할 수 있다.
@@ -70,7 +71,7 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 
 `scripts/run-agent-evals.ts`는 `evals/agent/cases/`의 대표 prompt 계약을 검사한다. 정적 validator가 파일 정합성을 보는 동안, 이 runner는 skill routing, safety boundary, output shape 같은 agent behavior regression을 빠르게 확인한다.
 
-`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript는 network call, external import, eval 없이 self-contained interaction controller일 때만 허용한다. `skill-to-html` 산출물은 Markdown 의미 구조를 `skill IR`과 visual component로 매핑하고, Markdown `raw HTML`이나 event handler를 통과시키지 않는지도 함께 본다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
+`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript는 network call, external import, eval 없이 self-contained interaction controller일 때만 허용한다. `skill-to-html` 산출물은 Markdown 의미 구조를 `skill IR`과 visual component로 매핑하고, Markdown `raw HTML`이나 event handler를 통과시키지 않는지도 함께 본다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. `skill-to-html` 자체 HTML은 `validate-skill-to-html-render.ts` Playwright 검사를 추가로 실행해 중복 section, hero arrow line, overflow, 읽기 폭, click state를 본다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
 
 ## 판정 등급
 

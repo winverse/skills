@@ -1,0 +1,11 @@
+{
+  "name": "agents-skills",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:skill-to-html-render": "node skills/skill-to-html/scripts/validate-skill-to-html-render.ts skills/skill-to-html"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

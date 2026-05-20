@@ -16,6 +16,7 @@ const ignoredDirs = new Set<string>([
   "inspector",
   "node_modules",
   "plugins",
+  "test-results",
 ]);
 const sourceExtensions = new Set<string>([
   ".html",
