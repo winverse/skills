@@ -40,6 +40,7 @@ type CodexPluginManifest = {
   mcpServers?: string;
   hooks?: string;
   skills?: string;
+  scripts?: string;
   interface?: {
     displayName?: string;
     category?: string;
@@ -212,6 +213,8 @@ for (const relativePath of ["docs/plugin-catalog.md", "docs/update-source-regist
 requireFile("plugins/project-workflow/.codex-plugin/plugin.json");
 requireFile("plugins/project-workflow/README.md");
 requireFile("plugins/project-workflow/references/plugin-boundary-review.md");
+requireFile("plugins/project-workflow/scripts/execute-phase.ts");
+requireFile("plugins/project-workflow/scripts/validate-execute-phase.ts");
 requireFile(path.posix.join("plugins/project-workflow/skills", "project-workflow", "SKILL.md"));
 requireFile(path.posix.join("plugins/project-workflow/skills", "project-workflow", "references", "project-workflow-playbook.md"));
 requireText(".gitmodules", "path = plugins/context-mode");
@@ -265,6 +268,7 @@ if (projectWorkflowManifest) {
     [projectWorkflowManifest.repository === "https://github.com/winverse/agents-skills", "project-workflow repository URL"],
     [projectWorkflowManifest.license === "MIT", "project-workflow license"],
     [projectWorkflowManifest.skills === "./skills/", "project-workflow bundled skills path"],
+    [projectWorkflowManifest.scripts === "./scripts/", "project-workflow scripts path"],
     [projectWorkflowManifest.interface?.displayName === "Project Workflow", "project-workflow display name"],
     [projectWorkflowManifest.interface?.category === "Productivity", "project-workflow category"],
   ];
@@ -275,9 +279,19 @@ if (projectWorkflowManifest) {
 
 requireText("plugins/project-workflow/README.md", "feature-workflow`는 이 plugin에 넣지 않는다");
 requireText("plugins/project-workflow/README.md", "agent-eval-harness");
+requireText("plugins/project-workflow/README.md", "execute-phase.ts");
+requireText("plugins/project-workflow/README.md", "--agent-bin");
+requireText("plugins/project-workflow/README.md", "--project-root");
 requireText("plugins/project-workflow/references/plugin-boundary-review.md", "`project-workflow` | plugin core");
 requireText("plugins/project-workflow/references/plugin-boundary-review.md", "`feature-workflow` | 별도 skill 유지");
 requireText("plugins/project-workflow/references/plugin-boundary-review.md", "`agent-eval-harness` | companion skill 유지");
+requireText("plugins/project-workflow/references/plugin-boundary-review.md", "execute-phase.ts");
+requireText("plugins/project-workflow/scripts/execute-phase.ts", "agent-neutral");
+requireText("plugins/project-workflow/scripts/execute-phase.ts", "--agent-bin");
+requireText("plugins/project-workflow/scripts/execute-phase.ts", "--agent-arg");
+requireText("plugins/project-workflow/scripts/execute-phase.ts", "--project-root");
+requireText("plugins/project-workflow/scripts/execute-phase.ts", "shell: false");
+requireText("plugins/project-workflow/scripts/validate-execute-phase.ts", "completed dry-run must not mutate index.json");
 requireText("skills/project-workflow/SKILL.md", "plugins/project-workflow/skills/project-workflow/SKILL.md");
 
 const manifest = readJson<CodexPluginManifest>("plugins/context-mode/.codex-plugin/plugin.json");

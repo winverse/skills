@@ -39,6 +39,7 @@
 | repo-local custom | `agent-eval-harness` | project workflow routing regression guard | eval case + fixture | behavior 변경 시 |
 | repo-local custom | Agent Tool And Security Risk Gate | tool/MCP/API/file-write/network 위험 평가 | `approved`, `dev-only`, `needs-info`, `blocked` decision | tool 작업 전 |
 | repo-local custom | `workflow-state.md` cache | setup 결과와 skipped/open question 색인 | `.scratch/<slug>/workflow-state.md` | handoff 전 |
+| observed workflow | `harness_framework execute.py` | phase/step 상태와 자기완결 handoff 구조 | TypeScript 선택 runner, `.scratch/<slug>/phases/index.json`, `step<N>.md` | 조건부 |
 | handoff target | `feature-workflow` | feature/issue 단위 반복 구현 | feature handoff block | setup 완료 후 |
 
 ## 업데이트 규칙
@@ -50,6 +51,10 @@
 - Matt Pocock skills: `https://www.aihero.dev/skills`와 `https://www.aihero.dev/skills-domain-model`에서 `grill-me`, `grill-with-docs`, `to-prd`, `to-issues`, `tdd`, `triage` 계열을 확인했다. Local 판단은 `adopt`: setup 단계에서는 domain/product interview와 PRD/issues handoff만 채택한다.
 - GStack plugin: `https://github.com/garrytan/gstack`와 `office-hours/SKILL.md`에서 `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review` 등 skill surface를 확인했다. Local 판단은 `adopt`: setup 단계에서는 `office-hours`와 review primitive만 조건부 채택한다.
 - Superpowers plugin: `https://github.com/obra/superpowers`에서 `brainstorming`, `writing-plans`, `test-driven-development`, `subagent-driven-development` 등 composable skills를 확인했다. Local 판단은 `adapt`: `brainstorming`과 `writing-plans`는 setup gap check에만 조건부 채택하고, TDD와 subagent-driven implementation은 `feature-workflow`로 넘긴다.
+
+2026-05-20 확인 기준:
+
+- Harness framework: `https://github.com/jha0313/harness_framework`의 `scripts/execute.py` (`execute.py`), `.claude/commands/harness.md`, `docs/` 템플릿과 사용자가 제공한 Notion tutorial을 확인했다. Local 판단은 `adapt`: Python 실행 엔진과 Claude 전용 headless 실행은 직접 채택하지 않고, phase/step status, 자기완결 step 파일, executable acceptance command, `blocked` 상태 분리만 `project-workflow` handoff 규칙으로 채택한다. 선택 실행 도구는 TypeScript `plugins/project-workflow/scripts/execute-phase.ts`로 두고 Codex/Claude 모두 가능한 stdin 기반 agent command boundary를 사용한다.
 
 upstream source가 바뀌면 아래 순서로 추적한다.
 
@@ -64,9 +69,9 @@ upstream source가 바뀌면 아래 순서로 추적한다.
    - 수정하지 않을 것: upstream skill 전문 복사, global install 정책, 사용자가 요청하지 않은 구현 loop 편입
 4. eval을 추가하거나 갱신한다.
    - 새 primitive가 routing에 영향을 주면 `evals/agent/cases/project-workflow-orchestration.json`에 deterministic check를 둔다.
-   - saved output fixture에는 `source package`, `exact skill/plugin name`, `selected/skipped/fallback`이 보여야 한다.
+   - saved output fixture에는 `source package`, `exact skill/plugin name`, `selected/skipped/fallback/deferred`가 보여야 한다.
 5. 검증한다.
-   - `node scripts/validate-skill.ts skills/project-workflow`
+   - `node scripts/validate-skill.ts plugins/project-workflow/skills/project-workflow skills/project-workflow`
    - `node skills/project-workflow/scripts/validate-project-workflow.ts skills/project-workflow`
    - `node scripts/validate-korean-markdown.ts .`
    - `node scripts/validate-skill-html.ts .`

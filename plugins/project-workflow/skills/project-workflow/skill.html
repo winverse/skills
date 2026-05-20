@@ -189,12 +189,12 @@
             <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922">
               <text x="380" y="157">workflow-state.md</text><text x="380" y="178">최소 상태 cache</text>
               <text x="121" y="63">CONTEXT.md</text><text x="121" y="168">ADR</text><text x="121" y="273">design.md</text>
-              <text x="639" y="63">PRD.md</text><text x="639" y="168">issues/</text><text x="639" y="273">work-claims.md</text>
+              <text x="639" y="63">PRD.md</text><text x="639" y="168">issues/</text><text x="639" y="273">phases/</text>
             </g>
             <g text-anchor="middle" font-size="10" fill="#596271">
               <text x="380" y="194">authority path와 열린 질문</text>
               <text x="121" y="80">도메인 경계</text><text x="121" y="185">구조 결정</text><text x="121" y="290">UI 방향</text>
-              <text x="639" y="80">문제와 기준</text><text x="639" y="185">세로 기능 단위</text><text x="639" y="290">병렬 lane 조정</text>
+              <text x="639" y="80">문제와 기준</text><text x="639" y="185">세로 기능 단위</text><text x="639" y="290">큰 구현 인계</text>
             </g>
           </svg>
         </div>
@@ -231,14 +231,35 @@
     </section>
 
     <section class="section">
+      <div class="section-head"><h2>큰 구현 인계</h2><p>여러 단계로 나뉘는 구현은 실행기가 아니라 agent-neutral 인계 계획으로 먼저 고정합니다.</p></div>
+      <div class="lanes" aria-label="phase step handoff 구조">
+        <div class="lane"><strong><code>phases/index.json</code></strong><span>project, phase, steps, status를 담고 상태값은 <code>pending</code>, <code>completed</code>, <code>error</code>, <code>blocked</code>로 제한합니다.</span></div>
+        <div class="lane"><strong><code>step&lt;N&gt;.md</code></strong><span>read files, 작업 범위, claimed write set, acceptance commands, blocked conditions, 금지사항을 각 단계에 적습니다.</span></div>
+        <div class="lane"><strong>실행 경계</strong><span><code>plugins/project-workflow/scripts/execute-phase.ts</code>는 dry-run이 기본이며, 실제 실행은 사용자가 <code>--agent-bin</code>과 필요한 <code>--agent-arg</code>를 명시했을 때만 허용합니다.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>완료 조건</h2><p>Claude Code에서는 <code>/goal</code>, 다른 runtime에서는 같은 내용을 completion checklist로 남깁니다.</p></div>
+      <div class="flow-grid" aria-label="goal condition 구성">
+        <div class="node"><strong>판단 가능한 끝</strong><span><code>CONTEXT.md</code>, ADR, PRD, issue backlog, <code>design.md</code>, setup validation처럼 확인 가능한 산출물을 지정합니다.</span></div>
+        <div class="node"><strong>검증 증거</strong><span>agent가 transcript에 남길 명령, 파일 경로, evidence path를 미리 정합니다.</span></div>
+        <div class="node"><strong>제약</strong><span>건드리면 안 되는 파일, secret, destructive action, scope 바깥 작업을 명시합니다.</span></div>
+        <div class="node"><strong>한계</strong><span><code>8 turns 후 중단</code>처럼 시간, turn, 항목 수의 상한을 둡니다.</span></div>
+        <div class="node"><strong>평가 방식</strong><span><code>/goal</code> evaluator가 파일을 직접 읽지 않는다고 보고, 필요한 증거를 출력에 남기게 합니다.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="section-head"><h2>파일 관계</h2><p>이 스킬 폴더에서 사람이 확인할 주요 파일입니다.</p></div>
       <div class="files">
         <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 따르는 호출 조건과 실행 계약입니다.</span></a>
+        <a class="file" href="SKILL.md"><strong>canonical SKILL.md</strong><span>plugin 안의 정본 실행 계약입니다.</span></a>
         <a class="file" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 읽는 도표 중심 가이드입니다.</span></a>
         <a class="file" href="references/upstream-dependency-map.md"><strong>references/upstream-dependency-map.md</strong><span>primitive 출처, 채택 역할, 업데이트 규칙입니다.</span></a>
         <a class="file" href="references/project-workflow-playbook.md"><strong>references/project-workflow-playbook.md</strong><span>긴 운영 기준과 세부 예시를 둡니다.</span></a>
         <a class="file" href="scripts/validate-project-workflow.ts"><strong>scripts/validate-project-workflow.ts</strong><span>스킬 전용 검증기를 둡니다.</span></a>
-        <a class="file" href="../../project-snippets/project-workflow.md"><strong>project-snippets/project-workflow.md</strong><span>프로젝트 instruction에 연결할 조각입니다.</span></a>
+        <a class="file" href="../../scripts/execute-phase.ts"><strong>execute-phase.ts</strong><span>큰 구현 인계 계획의 선택적 TypeScript dry-run 도구입니다.</span></a>
       </div>
     </section>
 
@@ -248,7 +269,7 @@
 - &lt;active instruction surface&gt;
 
 Primitive inventory
-- &lt;source package&gt;: &lt;exact name&gt; -&gt; selected | invoked | skipped | fallback
+- &lt;source package&gt;: &lt;exact name&gt; -&gt; selected | invoked | skipped | fallback | deferred
 
 Project setup state
 - domain/product/architecture/design/PRD/issues readiness
@@ -256,6 +277,7 @@ Project setup state
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - state cache: &lt;workflow-state.md path&gt;
 - work claims: &lt;work-claims.md path or none&gt;
+- phase handoff: &lt;phases/index.json path or none&gt;
 
 Next workflow step
 - project-workflow: &lt;remaining setup gate&gt;

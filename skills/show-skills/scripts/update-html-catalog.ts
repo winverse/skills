@@ -23,7 +23,7 @@ const summaryBySkill: Record<string, string> = {
   "show-skills": "현재 스킬 목록을 카테고리별로 보여주고 조합을 추천",
   "web-research": "최신 정보, 출처 검증, 추천, 기술 문서 조사",
   "skill-to-html": "스킬의 사람용 도표 중심 HTML guide 생성",
-  "skill-update": "기존 스킬 패키지를 references, validator, docs까지 함께 유지보수",
+  "skill-update": "기존 스킬과 외부 dependency sweep을 references, validator, docs까지 함께 유지보수",
   "sync-docs": "README, AGENTS, docs, snippets, history 충돌과 stale 설명 정리",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
   "agent-improvement-loop": "스킬 호출성, 검증, 문서 정합성, repo 품질 개선 루프",

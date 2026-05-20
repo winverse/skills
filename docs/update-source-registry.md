@@ -11,6 +11,7 @@
 - workflow가 참고만 하는 외부 primitive는 `.gitmodules`에 넣지 않는다. 이런 항목은 workflow provenance-only primitive이며, 각 workflow의 `references/upstream-dependency-map.md`가 canonical source다.
 - repo-owned shared skill 목록은 `skills/*/SKILL.md`와 `history/skills.md`가 canonical source다.
 - 원본 후보를 찾았다고 해서 `skill-update`가 plugin package, MCP config, submodule 자체를 업데이트할 권한을 갖는 것은 아니다. plugin bump나 submodule update는 사용자가 명시적으로 요청해야 한다.
+- 사용자가 전체 업데이트, 외부 dependency 업데이트, plugin과 workflow primitive 업데이트를 요청하면 dependency update sweep으로 보고 `.gitmodules`, repo-owned plugin list, workflow provenance-only primitive map을 모두 자동 점검한다.
 
 ## Source Families
 
@@ -22,6 +23,18 @@
 | Workflow provenance-only primitive | `skills/project-workflow/references/upstream-dependency-map.md`, `skills/feature-workflow/references/upstream-dependency-map.md` | 각 workflow `SKILL.md`, eval fixture | 출처 라벨과 exact primitive name을 읽되, submodule처럼 취급하지 않는다. |
 | Repo-owned shared skill | `skills/<skill>/SKILL.md`, `history/skills.md` | README, AGENTS, snippets, `skill.html` | local package update 범위와 lifecycle/event 기록 여부를 판단한다. |
 | Project setup snippet | `project-snippets/*.md` | README, AGENTS, `docs/project-skill-setup.md` | target project에 전달되는 instruction drift를 확인한다. |
+
+## Dependency update sweep
+
+사용자가 외부 dependency 전체 갱신을 요청하면 `skill-update`는 아래 범위를 하나의 sweep으로 다룬다.
+
+| Lane | 포함 범위 | 자동 확인 | 변경 조건 |
+| --- | --- | --- | --- |
+| Vendored plugin lane | `.gitmodules`의 모든 submodule: `context-mode`, `code-review-graph`, `caveman` | upstream release/changelog, current submodule commit/tag, plugin manifest, bundled skills, `docs/plugin-catalog.md`, `Plugin update list` | 최신 tag/commit으로 bump하거나 local manifest/catalog drift가 있으면 갱신 |
+| Repo-owned plugin lane | `Repo-owned plugin list`의 `project-workflow` | `.codex-plugin/plugin.json`, bundled `plugins/project-workflow/skills/`, top-level compatibility entry | bundle boundary나 compatibility entry가 drift 나면 갱신 |
+| Workflow primitive lane | `skills/project-workflow/references/upstream-dependency-map.md`, `skills/feature-workflow/references/upstream-dependency-map.md` | Matt Pocock skills, GStack plugin, Superpowers plugin source, exact primitive names, adopted role, handoff boundary | upstream 이름, command, output, boundary가 바뀌면 local ledger/snippet/eval/history 갱신 |
+
+Sweep 결과는 source ledger에 source URL, checked date, upstream version/commit, compared files/release notes, `adopt`/`adapt`/`reject`/`defer` 판단을 남긴다. 변경이 없으면 `defer` 또는 `reject` 이유를 적고 검증 결과만 보고한다.
 
 ## `.gitmodules` 사용법
 
@@ -49,7 +62,7 @@ git config --file .gitmodules --get-regexp '^submodule\\..*\\.(path|url)$'
 
 | Plugin | Path | Manifest | Bundled skills | Boundary |
 | --- | --- | --- | --- | --- |
-| `project-workflow` | `plugins/project-workflow` | `plugins/project-workflow/.codex-plugin/plugin.json` | `plugins/project-workflow/skills/project-workflow/SKILL.md` | `feature-workflow`는 별도 반복 개발 스킬로 유지하고 bundle core에 넣지 않는다. |
+| `project-workflow` | `plugins/project-workflow` | `plugins/project-workflow/.codex-plugin/plugin.json` | `plugins/project-workflow/skills/project-workflow/SKILL.md`, `plugins/project-workflow/scripts/execute-phase.ts` | `feature-workflow`는 별도 반복 개발 스킬로 유지하고 bundle core에 넣지 않는다. |
 
 `skill-update`가 이 표의 항목에서 submodule bump, plugin manifest 수정, MCP config 수정, bundled plugin skill 수정을 발견했지만 사용자가 plugin update를 명시하지 않았다면 local shared skill update 범위를 멈추고 별도 plugin update 요청이 필요하다고 보고한다. 사용자가 plugin update를 명시했거나 현재 요청에 plugin update를 포함했다면 plugin update lane으로 계속 진행하고, 해당 submodule의 tag/commit, upstream release note, package metadata, manifest, bundled skill 경로를 함께 확인한 뒤 `.gitmodules`, `docs/plugin-catalog.md`, 이 목록, validator, history를 맞춘다.
 
@@ -71,6 +84,7 @@ node scripts/validate-plugins.ts .
 8. plugin package, MCP config, submodule bump가 필요하면 `Plugin update list`의 path, upstream URL, 점검 파일을 확인한다.
    - 사용자가 plugin update를 명시했으면 plugin update lane으로 계속 진행한다.
    - 명시하지 않았으면 `skill-update` 범위를 멈추고 별도 plugin update 요청이 필요한지 사용자에게 보고한다.
+9. dependency update sweep이면 plugin update lane과 workflow primitive lane을 모두 실행한다.
 
 ## Drift Checks
 

@@ -14,7 +14,7 @@
 
 ## dependency invocation 기준
 
-dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기 셋팅에 채택한 primitive 호출 장부다. 각 항목은 `Matt Pocock skills: grill-me -> invoked`, `GStack plugin: office-hours -> fallback`, `repo-local custom: project-structure -> skipped`처럼 source package, exact skill/plugin name, selected/invoked/skipped/fallback 상태를 함께 쓴다.
+dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기 셋팅에 채택한 primitive 호출 장부다. 각 항목은 `Matt Pocock skills: grill-me -> invoked`, `GStack plugin: office-hours -> fallback`, `repo-local custom: project-structure -> deferred`처럼 source package, exact skill/plugin name, selected/invoked/skipped/fallback/deferred 상태를 함께 쓴다.
 
 선택된 upstream primitive는 가능한 경우 실제 skill/plugin 호출로 넘긴다. 현재 runtime에 호출 surface가 없으면 조용히 흉내 내지 않고 `fallback`으로 표시한 뒤, 아래 fallback interview gate만 수행한다.
 
@@ -22,7 +22,8 @@ dependency inventory는 전체 skill family를 켜는 목록이 아니라 초기
 Primitive Invocation
 - source package:
 - exact name:
-- status: selected | invoked | skipped | fallback
+- status: selected | invoked | skipped | fallback | deferred
+- timing: now | after domain/product gate | after design gate | after tool/security gate | not applicable
 - invocation surface: repo-local skill | plugin command | slash command | MCP/tool | agent workflow | unavailable
 - fallback reason:
 - output artifact:
@@ -174,11 +175,13 @@ Spec handoff
 
 `workflow-state.md`는 자가개선 엔진이 아니라 반복 질문을 줄이는 handoff cache다. setup 단계에서 아래 내용을 남긴다.
 
+첫 응답이나 시뮬레이션에서는 파일을 쓴 것처럼 말하지 않는다. Artifact 경로는 `target path`, `proposed path`, `not created yet`으로 표시하고, 실제 생성은 사용자가 진행을 승인했거나 질문 답변이 준비된 뒤에만 한다.
+
 ```text
 Workflow State
 - source primitives:
 - document language: Korean-first unless target project says otherwise
-- primitive invocation: selected/invoked/skipped/fallback with fallback reason
+- primitive invocation: selected/invoked/skipped/fallback/deferred with fallback reason and timing
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - authority docs:
 - decisions:
@@ -193,6 +196,45 @@ Workflow State
 ## work-claims coordination 기준
 
 `work-claims.md`는 병렬 session의 쓰기 충돌을 줄이는 장부다. source of truth는 아니므로 spec 내용, architecture decision, product scope는 이 파일에만 두지 않는다. `feature-workflow`는 이 파일을 읽고 현재 lane의 claimed write set 밖 production file을 수정하지 않아야 한다.
+
+## phase/step handoff gate 기준
+
+`harness_framework`의 `execute.py`에서 차용할 부분은 자동 실행 자체가 아니라 step 상태 관리와 자기완결 handoff 구조다. `project-workflow`는 큰 구현을 바로 실행하지 않고, 필요하면 `.scratch/<slug>/phases/` 또는 target project의 동등한 workflow area에 아래 산출물을 만든다. 이 산출물은 `feature-workflow`가 실행 단계에서 읽는 handoff다.
+
+```text
+phases/
+├── index.json
+├── step0.md
+├── step1.md
+└── step2.md
+```
+
+`index.json`은 `project`, `phase`, `steps`를 담고, 각 step은 `pending`, `completed`, `error`, `blocked` 중 하나의 상태를 가진다. `blocked`는 실패가 아니라 API key, 계정 권한, 외부 승인, 수동 설정처럼 사용자 개입이 필요한 상태다.
+
+각 `step<N>.md`는 독립 Codex 또는 Claude session이 읽어도 실행 가능해야 한다.
+
+- read files: 먼저 읽을 authority 문서와 기존 코드 경로
+- purpose: 이 step이 해결하는 문제와 제외 범위
+- claimed write set: 수정 가능한 파일/디렉토리
+- read-only paths: 읽기만 허용되는 경로
+- acceptance commands: 실제 실행 가능한 검증 명령
+- blocked conditions: 사용자 개입이 필요한 조건
+- summary field: 완료 뒤 다음 step에 넘길 한 줄 산출물
+- forbidden changes: 하지 말아야 할 작업과 이유
+
+## TypeScript execute runner boundary 기준
+
+Python `execute.py`를 repo에 들여오지 않는다. 선택 실행 도구가 필요하면 TypeScript로 작성하고, `plugins/project-workflow/scripts/execute-phase.ts`를 기준으로 둔다.
+
+- 기본 동작은 dry-run prompt 출력이며 index file을 수정하지 않는다.
+- 실제 실행은 사용자가 `--run`과 `--agent-bin`을 명시했을 때만 한다.
+- agent command는 `--agent-bin`과 반복 `--agent-arg`로 구성하고 prompt를 stdin으로 받아야 한다.
+- target project 문서는 `--project-root` 기준으로 읽으며, 생략하면 현재 작업 디렉터리를 쓴다.
+- 알려진 권한 우회 flag는 사용자 입력으로도 거부한다.
+- Claude 전용 `--dangerously-skip-permissions` 같은 권한 우회 flag를 hard-code하지 않는다.
+- Codex와 Claude 모두 가능한 agent-neutral boundary로 둔다.
+- 자동 branch checkout, commit, push는 하지 않는다. publish는 `atomic-committer`가 맡는다.
+- production code edit 책임은 `feature-workflow`가 맡는다. runner prompt는 `project-workflow` 실행이 아니라 `feature-workflow` step 실행 adapter로 해석한다.
 
 ## workflow log 기준
 

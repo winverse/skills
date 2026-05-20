@@ -30,6 +30,7 @@
 - Codex manifest: `plugins/project-workflow/.codex-plugin/plugin.json`
 - Bundled skills: `plugins/project-workflow/skills/`
 - Primary setup skill: `plugins/project-workflow/skills/project-workflow/SKILL.md`
+- Optional TypeScript runner: `plugins/project-workflow/scripts/execute-phase.ts`
 - Boundary review: `plugins/project-workflow/references/plugin-boundary-review.md`
 - Top-level compatibility entry: `skills/project-workflow/SKILL.md`
 - Companion validation skill: `skills/agent-eval-harness/SKILL.md`

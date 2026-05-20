@@ -14,6 +14,7 @@
 - When the original source can be edited and the user has the right scope, prepare or apply the original change first, then apply its delta to this shared skills repo.
 - If the original cannot be edited directly, leave the source ledger, checked date, and local delta reason in references or history.
 - Do not update plugin packages, MCP config, or submodules incidentally through `skill-update`; when the user explicitly includes plugin updates, use the plugin update lane and keep `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, validators, and history aligned.
+- Treat requests for "all external dependency updates", "plugin and workflow primitive updates", or similar repo-wide source refresh as a dependency update sweep; automatically check all `.gitmodules` vendored plugins, repo-owned plugins, and workflow `upstream-dependency-map.md` files.
 - Use `skill-to-html` after material skill changes.
 - When `skill.html` changes, verify static HTML validation plus PC viewport rendering for wide tables, SVG arrow endpoints, overflow, and text overlap.
 - Run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills` after skill add, remove, rename, archive, or restore operations.

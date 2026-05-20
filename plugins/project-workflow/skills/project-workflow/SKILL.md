@@ -5,7 +5,7 @@ description: "새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs
 
 # project-workflow
 
-이 top-level skill은 `project-workflow` plugin으로 이동한 compatibility entry다. Canonical plugin source는 `plugins/project-workflow/skills/project-workflow/SKILL.md`다. 기존 프로젝트가 `skills/project-workflow/SKILL.md`를 직접 링크할 수 있으므로 같은 실행 계약을 유지한다.
+이 plugin-bundled skill은 `project-workflow`의 canonical source다. Top-level `skills/project-workflow/SKILL.md`는 기존 프로젝트가 직접 링크할 수 있도록 같은 실행 계약을 유지하는 compatibility entry다.
 
 이 스킬은 `workflow suite`의 초기 셋팅 orchestration이다. 프로젝트가 기능 개발을 받을 준비가 됐는지 만들고, raw idea를 바로 코드로 넘기지 않고, domain language, product reason, architecture boundary, design direction, PRD, issue backlog를 먼저 고정한다.
 
@@ -17,10 +17,10 @@ Matt Pocock skills, GStack plugin, Superpowers plugin, design-direction, repo-lo
 
 선택된 primitive는 현재 agent/runtime에서 실제 호출할 수 있으면 먼저 호출한다. 단순히 이름만 라벨링하고 같은 동작을 흉내 내지 않는다. 호출할 수 없으면 `fallback`으로 표시하고, 원본 primitive의 목적을 좁게 복제한 질문 루프를 실행한다.
 
-출력에는 각 primitive의 출처와 상태를 함께 표시한다.
+출력에는 각 primitive의 출처와 상태, 실행 시점을 함께 표시한다.
 
 ```text
-<source package>: <exact skill/plugin name> -> selected | invoked | skipped | fallback
+<source package>: <exact skill/plugin name> -> selected | invoked | skipped | fallback | deferred
 ```
 
 상태 기준은 아래와 같다.
@@ -29,6 +29,7 @@ Matt Pocock skills, GStack plugin, Superpowers plugin, design-direction, repo-lo
 - `invoked`: 해당 skill/plugin/command를 실제로 호출했거나, 현재 runtime의 명시적 skill invocation surface로 넘겼다.
 - `skipped`: 이 setup에는 필요하지 않다.
 - `fallback`: 현재 session에 해당 원본 skill/plugin이 없거나 호출 surface가 없어 local interview 질문으로 대체했다.
+- `deferred`: 필요하지만 domain/product/design/tool gate 답변 뒤에 실행해야 하므로 지금은 보류한다.
 
 ## provenance ledger 기준
 
@@ -46,7 +47,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 ## 핵심 계약
 
 - local project instructions와 docs를 먼저 읽는다.
-- 현재 runtime에서 Matt Pocock, GStack, Superpowers 호출 surface를 확인하고, 선택된 primitive는 가능하면 실제 호출한다. 호출 surface가 없으면 그 사실을 `fallback`으로 남긴다.
+- 현재 runtime에서 Matt Pocock, GStack, Superpowers 호출 surface를 확인하고, 선택된 primitive는 가능하면 실제 호출한다. 호출 surface가 없으면 그 사실을 `fallback`으로 남긴다. 호출 surface 확인은 현재 session의 skill list, enabled plugin list, slash command 또는 command surface, MCP/tool surface, project instruction 링크 순서로 증거를 남긴다.
 - 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. `code identifiers`, 명령, 파일 경로, 제품명, API 이름은 원문 표기를 유지한다.
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
@@ -56,9 +57,25 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - 기존 코드가 CommonJS면 새 패턴으로 복사하지 말고 migration boundary, blocker, 또는 `project-structure` handoff 질문으로 남긴다.
 - `project-structure`는 domain language와 concrete architecture questions가 생긴 뒤 호출한다.
 - substantial UI는 구현 전 `design.md`와 2-3 mock direction 선택을 거친다.
+- 구현 handoff가 여러 단계로 쪼개지면 `phase/step handoff gate`를 만들고, 각 step은 이후 `feature-workflow` 실행 session이 이어받을 수 있도록 read files, claimed write set, acceptance command, blocked condition, summary field를 포함한다.
+- `harness_framework`의 `execute.py` 아이디어는 Python 실행 엔진이 아니라 TypeScript 기반 선택 도구와 phase/step handoff 규칙으로만 채택한다. Claude 전용 flag를 쓰지 않고 Codex와 Claude 모두 받을 수 있는 agent-neutral command boundary를 둔다. 선택 runner는 `project-workflow` 산출물을 실행하는 기본 경로가 아니라, 사용자가 명시했을 때 `feature-workflow` step 실행을 돕는 adapter다.
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다.
 - 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
+
+## 첫 응답 기준
+
+Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들지 않는다. 먼저 아래를 출력하고 질문 답변을 기다린다.
+
+- active instruction surface와 canonical skill path
+- primitive inventory: `selected`, `invoked`, `skipped`, `fallback`, `deferred`와 reason/timing
+- project setup state: 현재 authority, readiness, proposed artifact path를 구분
+- `grill-me`/`grill-with-docs` fallback domain interview 질문
+- `office-hours` fallback product challenge 질문
+- substantial UI면 `design.md`와 2-3 mock direction은 `deferred`로 표시하고, domain/product 답변 뒤 요청한다고 밝힘
+- `project-structure`, PRD, issue backlog, implementation은 질문 gate 전에는 `deferred` 또는 `skipped for now`로 표시
+
+파일을 실제로 쓰지 않는 시뮬레이션, 검토, 첫 질문 응답에서는 `workflow-state.md`, `work-claims.md`, `phases/index.json`, `CONTEXT.md`, ADR, PRD, `design.md`를 생성한 것처럼 말하지 않는다. 경로는 `target path`, `proposed path`, `not created yet`으로 표시한다.
 
 ## mode router 기준
 
@@ -78,7 +95,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 1. context 읽기
 2. runtime invocation surface 확인: repo-local skill, enabled plugin, command slash, MCP/tool, agent-specific workflow surface
 3. document language를 한국어 우선으로 고정하고, target project가 이미 다른 언어 규칙을 갖고 있으면 그 규칙을 명시
-4. source-labeled primitive inventory를 만들고 각 항목을 `selected`, `invoked`, `skipped`, `fallback`으로 추적
+4. source-labeled primitive inventory를 만들고 각 항목을 `selected`, `invoked`, `skipped`, `fallback`, `deferred`로 추적
 5. Matt Pocock skills `grill-me`/`grill-with-docs`를 호출하거나 fallback 질문으로 domain language와 `CONTEXT.md` 정리
 6. GStack plugin `office-hours`를 호출하거나 fallback 질문으로 product challenge와 가장 좁은 진입점 확인
 7. 필요하면 Superpowers plugin `brainstorming` 또는 `writing-plans`를 호출해 setup 질문과 계획 gap만 보강하고, 구현 primitive는 선택하지 않음
@@ -88,8 +105,9 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 11. light spec과 PRD settings 확정
 12. vertical issue backlog 작성
 13. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
-14. `feature-workflow`가 받을 준비 상태를 점검
-15. document sync와 setup validation을 수행하고 다음 spec을 지정
+14. 구현 handoff가 크면 `.scratch/<slug>/phases/index.json`과 `step<N>.md` 초안을 만들거나 동등한 phase/step handoff plan을 남김
+15. `feature-workflow`가 받을 준비 상태를 점검
+16. document sync와 setup validation을 수행하고 다음 spec을 지정
 
 ## interview gate 기준
 
@@ -127,6 +145,15 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - status: `planned`, `active`, `blocked`, `ready-for-integration`, `done`
 - validation command와 evidence path
 
+큰 구현 handoff를 준비하면 `.scratch/<slug>/phases/` 또는 target project의 동등한 workflow area에 phase/step handoff plan을 둔다. `project-workflow`는 이 plan을 만들 수 있지만, 기본적으로 구현 runner를 실행하지 않는다. 실제 production edit은 `feature-workflow`의 work-claim preflight, TDD/characterization, QA/runtime evidence 규칙을 따른다.
+
+- `index.json`: project, phase, steps, status를 담는다.
+- `step<N>.md`: read files, 작업 범위, claimed write set, acceptance commands, blocked conditions, 금지사항을 담는다.
+- status vocabulary: `pending`, `completed`, `error`, `blocked`.
+- optional TypeScript runner: `plugins/project-workflow/scripts/execute-phase.ts`.
+- runner boundary: dry-run이 기본이고, 실제 실행은 사용자가 `--agent-bin`과 필요한 `--agent-arg`를 명시했을 때만 한다. 실행 prompt는 `feature-workflow` step 실행 adapter로 다룬다.
+- agent adapter: Claude와 Codex 모두 가능해야 하며, 특정 제품 전용 권한 우회 flag를 hard-code하지 않는다.
+
 ## feature-workflow handoff 기준
 
 `feature-workflow`로 넘기기 전에 아래가 있어야 한다.
@@ -139,6 +166,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - 구현 단위가 vertical slice 또는 명시적 enabling task로 나뉘어 있다.
 - `.scratch/<slug>/workflow-state.md` 또는 동등한 state cache에 위 authority와 open questions가 남아 있다.
 - 병렬 구현이면 `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact에 겹치지 않는 claimed write set과 shared/hotspot file의 integration owner가 남아 있다.
+- 큰 구현이면 `.scratch/<slug>/phases/index.json` 또는 동등한 phase/step handoff plan에 각 step의 read files, claimed write set, acceptance command, blocked condition, summary field가 남아 있다.
 
 ## goal condition 기준
 
@@ -158,7 +186,7 @@ Runtime adapter
 - <active instruction surface>
 
 Primitive inventory
-- <source package>: <exact name> -> selected | invoked | skipped | fallback
+- <source package>: <exact name> -> selected | invoked | skipped | fallback | deferred
 
 Project setup state
 - <domain/product/architecture/design/PRD/issues readiness>
@@ -166,6 +194,7 @@ Project setup state
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - state cache: <workflow-state.md path>
 - work claims: <work-claims.md path or none>
+- phase handoff: <phases/index.json path or none>
 
 Next workflow step
 - project-workflow: <remaining setup gate>

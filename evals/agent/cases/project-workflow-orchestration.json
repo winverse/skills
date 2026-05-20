@@ -76,22 +76,22 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "Matt Pocock skills: selected | invoked | skipped | fallback"
+        "value": "Matt Pocock skills: selected | invoked | skipped | fallback | deferred"
       },
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "GStack plugin: selected | invoked | skipped | fallback"
+        "value": "GStack plugin: selected | invoked | skipped | fallback | deferred"
       },
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "Superpowers plugin: selected | invoked | skipped | fallback"
+        "value": "Superpowers plugin: selected | invoked | skipped | fallback | deferred"
       },
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "Design direction: selected | skipped | fallback"
+        "value": "Design direction: selected | skipped | fallback | deferred"
       },
       {
         "type": "required_text",
@@ -111,7 +111,7 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "Spec handoff target: selected | skipped | fallback"
+        "value": "Spec handoff target: selected | skipped | fallback | deferred"
       }
     ]
   },
@@ -595,6 +595,80 @@
         "type": "forbidden_text",
         "file": "evals/agent/fixtures/project-workflow/parallel-work-claims.md",
         "value": "Let every session edit shared files freely"
+      }
+    ]
+  },
+  {
+    "id": "project-workflow-phase-step-handoff",
+    "title": "Project workflow converts execute.py pattern into TypeScript agent-neutral handoff",
+    "prompt": "harness_framework의 execute python 방식에서 가져올 건 가져오되 Codex와 Claude 둘 다 쓸 수 있게 프로젝트 워크플로우를 바꿔줘.",
+    "scope": "project-workflow",
+    "expectedSkills": [
+      "project-workflow"
+    ],
+    "forbiddenSkills": [
+      "feature-workflow"
+    ],
+    "agentSurfaces": [
+      "codex",
+      "claude-code"
+    ],
+    "assumptionDate": "2026-05-20",
+    "exampleType": "edge",
+    "risk": "high",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "skills/project-workflow/SKILL.md",
+        "value": "phase/step handoff gate"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/project-workflow/scripts/execute-phase.ts",
+        "value": "--agent-bin"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/project-workflow/scripts/execute-phase.ts",
+        "value": "stdin"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/project-workflow/scripts/execute-phase.ts",
+        "value": "--project-root"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/phase-step-handoff.md",
+        "value": "Path: `.scratch/new-product/phases/index.json`"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/phase-step-handoff.md",
+        "value": "Runner: `plugins/project-workflow/scripts/execute-phase.ts`"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/phase-step-handoff.md",
+        "value": "Agent command boundary: stdin"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/project-workflow/phase-step-handoff.md",
+        "value": "--dangerously-skip-permissions"
+      },
+      {
+        "type": "forbidden_text",
+        "file": "evals/agent/fixtures/project-workflow/phase-step-handoff.md",
+        "value": "Use Python execute.py directly"
+      },
+      {
+        "type": "command_passed",
+        "command": [
+          "node",
+          "plugins/project-workflow/scripts/validate-execute-phase.ts"
+        ]
       }
     ]
   },
