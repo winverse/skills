@@ -39,7 +39,7 @@
 | - | repo-local custom | `agent-eval-harness` | project workflow routing regression guard | eval case + fixture | behavior 변경 시 |
 | - | repo-local custom | Agent Tool And Security Risk Gate | tool/MCP/API/file-write/network 위험 평가 | `approved`, `dev-only`, `needs-info`, `blocked` decision | tool 작업 전 |
 | - | repo-local custom | `workflow-state.md` cache | setup 결과와 skipped/open question 색인 | `.scratch/<slug>/workflow-state.md` | handoff 전 |
-| `observed.harness-framework.execute-phase` | observed workflow | `harness_framework execute.py` | phase/step 상태와 자기완결 handoff 구조 | TypeScript 선택 runner, `.scratch/<slug>/phases/index.json`, `step<N>.md` | 조건부 |
+| `observed.harness-framework.execute-phase` | observed workflow | `harness_framework execute.py` / `test_execute.py` | phase/step 상태, 자기완결 handoff 구조, 리팩터링 안전망 테스트 의도 | TypeScript 선택 runner, `.scratch/<slug>/phases/index.json`, `step<N>.md`, `validate-execute-phase.ts` | 조건부 |
 | - | handoff target | `feature-workflow` | feature/issue 단위 반복 구현 | feature handoff block | setup 완료 후 |
 
 ## 업데이트 규칙

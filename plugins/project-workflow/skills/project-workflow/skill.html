@@ -269,11 +269,11 @@
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>큰 구현 인계</h2><p>여러 단계로 나뉘는 구현은 실행기가 아니라 agent-neutral 인계 계획으로 먼저 고정합니다.</p></div>
+      <div class="section-head"><h2>큰 구현 인계</h2><p>여러 단계로 나뉘는 구현은 실행기가 아니라 Codex-first 인계 계획으로 먼저 고정합니다.</p></div>
       <div class="lanes" aria-label="phase step handoff 구조">
         <div class="lane"><strong><code>phases/index.json</code></strong><span>project, phase, steps, status를 담고 상태값은 <code>pending</code>, <code>completed</code>, <code>error</code>, <code>blocked</code>로 제한합니다.</span></div>
         <div class="lane"><strong><code>step&lt;N&gt;.md</code></strong><span>read files, 작업 범위, claimed write set, acceptance commands, blocked conditions, 금지사항을 각 단계에 적습니다.</span></div>
-        <div class="lane"><strong>실행 경계</strong><span><code>plugins/project-workflow/scripts/execute-phase.ts</code>는 dry-run이 기본이며, 실제 실행은 사용자가 <code>--agent-bin</code>과 필요한 <code>--agent-arg</code>를 명시했을 때만 허용합니다.</span></div>
+        <div class="lane"><strong>실행 경계</strong><span><code>plugins/project-workflow/scripts/execute-phase.ts</code>는 Codex-first dry-run이 기본이며, 실제 실행은 사용자가 <code>--agent-bin</code>과 필요한 <code>--agent-arg</code>를 명시했을 때만 허용합니다.</span></div>
       </div>
     </section>
 

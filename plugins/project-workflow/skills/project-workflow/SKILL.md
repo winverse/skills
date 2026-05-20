@@ -58,7 +58,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - `project-structure`는 domain language와 concrete architecture questions가 생긴 뒤 호출한다.
 - substantial UI는 구현 전 `design.md`와 2-3 mock direction 선택을 거친다.
 - 구현 handoff가 여러 단계로 쪼개지면 `phase/step handoff gate`를 만들고, 각 step은 이후 `feature-workflow` 실행 session이 이어받을 수 있도록 read files, claimed write set, acceptance command, blocked condition, summary field를 포함한다.
-- `harness_framework`의 `execute.py` 아이디어는 Python 실행 엔진이 아니라 TypeScript 기반 선택 도구와 phase/step handoff 규칙으로만 채택한다. Claude 전용 flag를 쓰지 않고 Codex와 Claude 모두 받을 수 있는 agent-neutral command boundary를 둔다. 선택 runner는 `project-workflow` 산출물을 실행하는 기본 경로가 아니라, 사용자가 명시했을 때 `feature-workflow` step 실행을 돕는 adapter다.
+- `harness_framework`의 `execute.py` 아이디어는 Python 실행 엔진이 아니라 TypeScript 기반 선택 도구와 phase/step handoff 규칙으로만 채택한다. Codex-first command boundary를 두고, custom command는 사용자가 명시했을 때만 fallback으로 허용한다. 선택 runner는 `project-workflow` 산출물을 실행하는 기본 경로가 아니라, 사용자가 명시했을 때 `feature-workflow` step 실행을 돕는 adapter다.
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다.
 - 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
@@ -156,7 +156,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 - status vocabulary: `pending`, `completed`, `error`, `blocked`.
 - optional TypeScript runner: `plugins/project-workflow/scripts/execute-phase.ts`.
 - runner boundary: dry-run이 기본이고, 실제 실행은 사용자가 `--agent-bin`과 필요한 `--agent-arg`를 명시했을 때만 한다. 실행 prompt는 `feature-workflow` step 실행 adapter로 다룬다.
-- agent adapter: Claude와 Codex 모두 가능해야 하며, 특정 제품 전용 권한 우회 flag를 hard-code하지 않는다.
+- agent adapter: Codex를 기본 실행 대상으로 삼고, 특정 제품 전용 권한 우회 flag를 hard-code하지 않는다.
 
 ## feature-workflow handoff 기준
 

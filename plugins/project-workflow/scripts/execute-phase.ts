@@ -37,7 +37,7 @@ type Options = {
   phaseDir: string;
   projectRoot: string;
   run: boolean;
-  agent: "codex" | "claude" | "custom";
+  agent: "codex" | "custom";
   agentBin?: string;
   agentArgs: string[];
   maxRetries: number;
@@ -55,7 +55,6 @@ function usage(): never {
   node plugins/project-workflow/scripts/execute-phase.ts <phase-dir> [--dry-run]
   node plugins/project-workflow/scripts/execute-phase.ts <phase-dir> --project-root <target-project-root> [--dry-run]
   node plugins/project-workflow/scripts/execute-phase.ts <phase-dir> --run --agent codex --agent-bin codex --agent-arg exec
-  node plugins/project-workflow/scripts/execute-phase.ts <phase-dir> --run --agent claude --agent-bin claude --agent-arg -p
 
 Notes:
   - Default is dry-run. It prints the next prompt only.
@@ -63,7 +62,8 @@ Notes:
   - Pass each command argument with repeated --agent-arg.
   - Project docs are loaded from --project-root, defaulting to the current working directory.
   - The agent command receives the full prompt on stdin.
-  - This runner is agent-neutral; it rejects known permission-bypass flags.`);
+  - This runner is Codex-first; custom commands are explicit fallback only.
+  - Known permission-bypass flags are rejected.`);
   process.exit(2);
 }
 
@@ -86,7 +86,7 @@ function parseArgs(argv: string[]): Options {
     else if (arg === "--run") options.run = true;
     else if (arg === "--agent") {
       const value = rest[++i] as Options["agent"] | undefined;
-      if (!value || !["codex", "claude", "custom"].includes(value)) usage();
+      if (!value || !["codex", "custom"].includes(value)) usage();
       options.agent = value;
     } else if (arg === "--agent-bin") {
       options.agentBin = rest[++i];
@@ -151,7 +151,6 @@ function findPhaseDir(input: string): string {
 function loadDocs(projectRoot: string): string {
   const candidates = [
     "AGENTS.md",
-    "CLAUDE.md",
     "CONTEXT.md",
     "docs/PRD.md",
     "docs/ARCHITECTURE.md",
@@ -227,7 +226,7 @@ function buildPrompt(
   return [
     `# ${index.project} / ${index.phase} / Step ${stepLabel(step, stepPosition)}: ${stepName(step, stepPosition)}`,
     `Target project root: ${projectRoot}`,
-    "당신은 이 target project의 feature-workflow step 실행 agent다. 현재 agent runtime은 Claude일 수도 Codex일 수도 있으므로, 특정 제품 전용 명령을 가정하지 마라.",
+    "당신은 이 target project의 Codex feature-workflow step 실행 agent다. Codex instruction surface와 project docs를 기준으로 작업하라.",
     docs,
     prior,
     retry,

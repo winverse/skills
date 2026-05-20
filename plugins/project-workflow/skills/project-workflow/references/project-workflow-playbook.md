@@ -219,7 +219,7 @@ phases/
 
 `index.json`은 `project`, `phase`, `steps`를 담고, 각 step은 `pending`, `completed`, `error`, `blocked` 중 하나의 상태를 가진다. step metadata는 `step`/`name`을 기본으로 쓰되, 생성 agent가 `id`/`title`/`file`을 만든 경우 `execute-phase.ts`가 이를 정상화해서 읽을 수 있어야 한다. `blocked`는 실패가 아니라 API key, 계정 권한, 외부 승인, 수동 설정처럼 사용자 개입이 필요한 상태다.
 
-각 `step<N>.md`는 독립 Codex 또는 Claude session이 읽어도 실행 가능해야 한다.
+각 `step<N>.md`는 독립 Codex session이 읽어도 실행 가능해야 한다.
 
 - read files: 먼저 읽을 authority 문서와 기존 코드 경로
 - purpose: 이 step이 해결하는 문제와 제외 범위
@@ -239,8 +239,8 @@ Python `execute.py`를 repo에 들여오지 않는다. 선택 실행 도구가 �
 - agent command는 `--agent-bin`과 반복 `--agent-arg`로 구성하고 prompt를 stdin으로 받아야 한다.
 - target project 문서는 `--project-root` 기준으로 읽으며, 생략하면 현재 작업 디렉터리를 쓴다.
 - 알려진 권한 우회 flag는 사용자 입력으로도 거부한다.
-- Claude 전용 `--dangerously-skip-permissions` 같은 권한 우회 flag를 hard-code하지 않는다.
-- Codex와 Claude 모두 가능한 agent-neutral boundary로 둔다.
+- `--dangerously-skip-permissions` 같은 권한 우회 flag를 hard-code하지 않는다.
+- Codex-first command boundary로 둔다. 다른 command는 사용자가 명시한 custom fallback일 때만 허용한다.
 - 자동 branch checkout, commit, push는 하지 않는다. publish는 `atomic-committer`가 맡는다.
 - production code edit 책임은 `feature-workflow`가 맡는다. runner prompt는 `project-workflow` 실행이 아니라 `feature-workflow` step 실행 adapter로 해석한다.
 

@@ -5,7 +5,7 @@
 | 항목 | 판단 | 이유 |
 | --- | --- | --- |
 | `project-workflow` | plugin core | 단일 작업 skill이 아니라 Matt Pocock, GStack, Superpowers, `project-structure`, `design.md`, `work-claims.md`를 조율하는 초기 셋팅 orchestration이다. |
-| `execute-phase.ts` | plugin script | `harness_framework`의 `execute.py`를 Python이 아니라 TypeScript로 옮긴 선택 실행 도구다. Claude 전용이 아니라 stdin 기반 agent command로 Codex와 Claude 모두를 받을 수 있어야 한다. |
+| `execute-phase.ts` | plugin script | `harness_framework`의 `execute.py`를 Python이 아니라 TypeScript로 옮긴 선택 실행 도구다. Codex-first stdin 기반 command로 동작하고, custom command는 명시적 fallback으로만 허용한다. |
 
 ## plugin으로 옮기지 않는 항목
 

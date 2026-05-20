@@ -95,7 +95,7 @@ source id는 rename하지 않는다. 원본 이름이 바뀌면 새 source id를
 | `superpowers.subagent-driven-development` | Superpowers plugin | `subagent-driven-development` | `https://github.com/obra/superpowers` | 2026-05-19 | `adopt`: 큰 feature implementation에서만 조건부 채택 |
 | `superpowers.tdd` | Superpowers plugin | `test-driven-development`, `tdd` | `https://github.com/obra/superpowers` | 2026-05-19 | `adopt`: `feature-workflow`의 RED -> GREEN -> REFACTOR evidence loop |
 | `superpowers.verification-before-completion` | Superpowers plugin | `verification-before-completion` | `https://github.com/obra/superpowers` | 2026-05-19 | `adopt`: 완료 전 검증 누락 방지 checklist |
-| `observed.harness-framework.execute-phase` | observed workflow | `harness_framework execute.py` | `https://github.com/jha0313/harness_framework`, `scripts/execute.py`, `.claude/commands/harness.md`, user-provided Notion tutorial | 2026-05-20 | `adapt`: Python engine과 Claude-only flag는 버리고 phase/step status, blocked state, acceptance command만 TypeScript runner boundary로 채택 |
+| `observed.harness-framework.execute-phase` | observed workflow | `harness_framework execute.py` | `https://github.com/jha0313/harness_framework`, `scripts/execute.py`, `scripts/test_execute.py`, `.claude/commands/harness.md`, user-provided Notion tutorial | 2026-05-20 | `adapt`: Python engine, 자동 commit/push, 권한 우회 flag는 버리고 phase/step status, blocked state, acceptance command, 리팩터링 안전망 테스트 의도만 Codex-first TypeScript runner boundary와 `validate-execute-phase.ts`로 채택 |
 
 ## Dependency update sweep
 

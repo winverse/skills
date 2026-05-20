@@ -10,16 +10,15 @@
 
 ## 선택 실행 도구
 
-`scripts/execute-phase.ts`는 `harness_framework`의 `execute.py` 아이디어를 TypeScript와 agent-neutral 방식으로 옮긴 선택 도구다. 기본값은 dry-run이며 다음 step prompt만 출력한다.
+`scripts/execute-phase.ts`는 `harness_framework`의 `execute.py` 아이디어를 TypeScript와 Codex-first 방식으로 옮긴 선택 도구다. 기본값은 dry-run이며 다음 step prompt만 출력한다.
 
 ```bash
 node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phases
 node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phases --project-root /path/to/target-project
 node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phases --run --agent codex --agent-bin codex --agent-arg exec
-node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phases --run --agent claude --agent-bin claude --agent-arg -p
 ```
 
-실행 command는 prompt를 stdin으로 받는다. Target project 문서는 `--project-root` 기준으로 읽고, 생략하면 현재 작업 디렉터리를 쓴다. 이 script는 Claude 전용 flag나 권한 우회 flag를 hard-code하지 않고, 알려진 권한 우회 flag는 거부한다. 실제 production edit은 `feature-workflow` step 실행으로 다룬다.
+실행 command는 prompt를 stdin으로 받는다. Target project 문서는 `--project-root` 기준으로 읽고, 생략하면 현재 작업 디렉터리를 쓴다. 이 script는 Codex를 기본 실행 대상으로 보고, custom command는 사용자가 명시했을 때만 fallback으로 허용한다. 권한 우회 flag는 hard-code하지 않고, 알려진 권한 우회 flag는 거부한다. 실제 production edit은 `feature-workflow` step 실행으로 다룬다.
 
 ## 반복 테스트
 
