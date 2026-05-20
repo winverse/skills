@@ -28,7 +28,7 @@ Codex CLI로 실제 테스트할 때는 첫 응답과 `resume`을 모두 테스�
 
 이 테스트는 `/goal` 반복 개선 루프로 운영한다. 한 번 pass했다고 완료하지 않고, 실패 원인을 `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook`으로 분류해 수정한 뒤 commit/push하고 다음 fresh clone cycle을 다시 돌린다. 마지막 plugin/test-method/validator 수정 이후 fresh clone cycle이 통과하고 unresolved blocker가 없을 때만 완료로 본다.
 
-target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff는 Korean-first artifact gate를 통과해야 한다. durable setup docs가 영어 중심이면 프로젝트 검증 명령이 통과해도 fresh clone cycle은 실패다.
+target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff는 Korean-first artifact gate를 통과해야 한다. `workflow-state.md` risk-gate heading, `work-claims.md` lane/field label, phase step heading/body가 영어 중심이면 프로젝트 검증 명령이 통과해도 fresh clone cycle은 실패다. 예시는 `도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `API 작업 lane`처럼 한국어 heading 우선으로 쓴다.
 
 ## 제외 범위
 

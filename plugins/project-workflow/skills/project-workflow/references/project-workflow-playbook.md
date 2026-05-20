@@ -37,11 +37,11 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. `docs/update-sour
 
 한국어 우선 대상은 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, workflow log, `workflow-state.md`, `work-claims.md`다. `code identifiers`, 명령, 파일 경로, 제품명, protocol, API 이름, upstream skill/plugin 이름은 원문 표기를 유지한다.
 
-Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 제목, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 영어 중심 heading이나 영어-only field label도 실패로 본다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
+Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 제목, section heading, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 영어 중심 heading, 영어-only lane heading, 영어-only field label도 실패로 본다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
 
 허용되는 영어는 exact identifier, command, file path, API name, package name, source package name, status keyword처럼 번역하면 정확성이 떨어지는 값이다. 문서의 자연어 설명을 영어로 남기는 것은 사용자가 명시적으로 영어 문서를 요청했을 때만 허용한다.
 
-`work-claims.md`와 phase step file은 조정 문서이지만 사람이 읽는 setup artifact다. exact field name은 괄호나 backtick 안에 보조 표기로만 두고, section heading과 field label은 한국어 우선으로 쓴다.
+`workflow-state.md`, `work-claims.md`, phase step file은 조정 문서이지만 사람이 읽는 setup artifact다. exact field name과 gate name은 괄호나 backtick 안에 보조 표기로만 두고, section heading과 field label은 한국어 우선으로 쓴다. `## Agent Tool And Security Risk Gate`, `## API lane`처럼 영어-only heading이 남으면 실패다. 예시는 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `## API 작업 lane`처럼 쓴다.
 
 ## scenario lanes 기준
 
@@ -82,7 +82,7 @@ TypeScript Module Policy
 
 ### MCP/API/file-write automation 기준
 
-Agent Tool And Security Risk Gate를 작성한다. 권한, destructive action, secret, untrusted content를 분리한다.
+도구/보안 위험 게이트(Agent Tool And Security Risk Gate)를 작성한다. 권한, destructive action, secret, untrusted content를 분리한다. Markdown heading은 영어-only로 두지 않고 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`처럼 쓴다.
 
 ### cross-agent setup 기준
 
@@ -100,6 +100,10 @@ owner policy는 one active owner per claimed write path다. 읽기는 허용하�
 # work-claims
 
 ## 도메인 lane
+
+## API 작업 lane
+
+## 웹 화면 lane
 
 - lane id:
 - 담당자/session:

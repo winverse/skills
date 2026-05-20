@@ -49,7 +49,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - local project instructions와 docs를 먼저 읽는다.
 - 현재 runtime에서 Matt Pocock, GStack, Superpowers 호출 surface를 확인하고, 선택된 primitive는 가능하면 실제 호출한다. 호출 surface가 없으면 그 사실을 `fallback`으로 남긴다. 호출 surface 확인은 현재 session의 skill list, enabled plugin list, slash command 또는 command surface, MCP/tool surface, project instruction 링크 순서로 증거를 남긴다.
 - 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. `code identifiers`, 명령, 파일 경로, 제품명, API 이름은 원문 표기를 유지한다.
-- Korean-first artifact gate: 완료 보고 전에 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff의 자연어 제목/본문/목록을 확인한다. 대상 프로젝트가 영어를 명시하지 않았는데 durable setup docs가 영어 중심이면 pass가 아니라 그 자리에서 한국어 우선으로 고쳐 쓴 뒤 검증한다.
+- Korean-first artifact gate: 완료 보고 전에 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff의 자연어 제목/본문/목록/section heading을 확인한다. 대상 프로젝트가 영어를 명시하지 않았는데 durable setup docs가 영어 중심이면 pass가 아니라 그 자리에서 한국어 우선으로 고쳐 쓴 뒤 검증한다.
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
 - raw idea나 새 프로젝트에서는 Matt Pocock skills `grill-with-docs` -> GStack plugin `office-hours` -> Superpowers plugin `brainstorming` setup gap check 순서가 끝나기 전 `design.md`, `project-structure`, PRD, issue backlog, architecture handoff를 진행하지 않는다. `grill-with-docs`는 기존 `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, 코드와 문서의 용어를 먼저 확인하고, 문서가 없으면 첫 용어가 확정될 때 `CONTEXT.md`를 lazily 제안한다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 fallback으로 진행한다.
@@ -61,7 +61,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - substantial UI는 구현 전 `design.md`와 2-3 mock direction 선택을 거친다.
 - 구현 handoff가 여러 단계로 쪼개지면 `phase/step handoff gate`를 만들고, 각 step은 이후 `feature-workflow` 실행 session이 이어받을 수 있도록 read files, claimed write set, acceptance command, blocked condition, summary field를 포함한다.
 - `harness_framework`의 `execute.py` 아이디어는 Python 실행 엔진이 아니라 TypeScript 기반 선택 도구와 phase/step handoff 규칙으로만 채택한다. Codex-first command boundary를 두고, custom command는 사용자가 명시했을 때만 fallback으로 허용한다. 선택 runner는 `project-workflow` 산출물을 실행하는 기본 경로가 아니라, 사용자가 명시했을 때 `feature-workflow` step 실행을 돕는 adapter다.
-- tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다.
+- tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다. 문서 heading은 `## Agent Tool And Security Risk Gate`처럼 영어-only로 쓰지 말고 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`처럼 한국어 제목과 exact identifier를 병기한다.
 - 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
 - `project-workflow` 자체를 개선하거나 검증할 때는 `/goal`식 반복 개선 루프를 사용한다. 한 번의 fresh clone `pass`로 완료 선언하지 말고, 실패 원인을 plugin contract, runner, test method, target artifact, environment/hook 중 하나로 분류한 뒤 수정, 검증, commit/push, 다음 fresh clone cycle을 반복한다. Korean-first artifact gate 실패는 plugin contract 또는 target artifact 실패로 기록하고 다음 cycle 전에 계약을 보강한다.
@@ -104,7 +104,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 6. GStack plugin `office-hours`를 호출하거나 fallback 질문으로 product challenge와 가장 좁은 진입점 확인
 7. Superpowers plugin `brainstorming`을 호출하거나 fallback setup gap check 질문으로 빠진 가정, 너무 넓은 slice, 인계 위험만 보강하고, 구현 primitive는 선택하지 않음
 8. TypeScript를 쓰는 프로젝트면 ESM only와 CommonJS 금지를 architecture constraint로 기록
-9. 필요한 경우 Agent Tool And Security Risk Gate 기록
+9. 필요한 경우 도구/보안 위험 게이트(Agent Tool And Security Risk Gate) 기록
 10. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
 11. 구조가 확정된 뒤에는 `project-structure`를 실제 호출하거나 fallback으로 최소 shell을 만든다. fallback shell도 docs-only가 아니어야 하며, TypeScript면 `package.json` `type: "module"`, ESM `tsconfig`, `import`/`export`, CommonJS 금지를 실제 파일에 반영한다.
 12. light spec과 PRD settings 확정
@@ -134,9 +134,9 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 초기 셋팅 산출물은 사용자가 다른 언어를 지정하지 않는 한 한국어 우선이다. 여기에는 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 포함된다. 코드 식별자, 명령, 경로, 제품명, 외부 API 이름은 원문을 유지한다.
 
-Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 제목, 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름, status keyword에만 남긴다. 영어 중심 heading이나 영어-only field label이 남으면 이 gate는 실패다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
+Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 제목, section heading, 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름, status keyword에만 남긴다. `## Agent Tool And Security Risk Gate`, `## API lane`처럼 영어-only heading이나 영어-only field label이 남으면 이 gate는 실패다. 필요한 exact term은 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `## API 작업 lane`처럼 한국어 제목 뒤 괄호나 보조 단어로 둔다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
 
-`work-claims.md`는 조정 문서지만 사람도 읽는 산출물이므로 라벨도 한국어 우선으로 쓴다. 예시는 `## 도메인 lane`, `- 담당자/session:`, `- branch 또는 worktree:`, `- 대상 spec/issue:`, `- 수정 소유 범위(claimed write set):`, `- 읽기 전용 경로(read-only paths):`, `- 공유/hotspot 파일:`, `- 통합 담당자(integration owner):`, `- 상태(status):`, `- 검증 명령:`, `- 증거 경로:`처럼 쓴다.
+`work-claims.md`는 조정 문서지만 사람도 읽는 산출물이므로 lane heading과 field label도 한국어 우선으로 쓴다. 예시는 `## 도메인 lane`, `## API 작업 lane`, `## 웹 화면 lane`, `- 담당자/session:`, `- branch 또는 worktree:`, `- 대상 spec/issue:`, `- 수정 소유 범위(claimed write set):`, `- 읽기 전용 경로(read-only paths):`, `- 공유/hotspot 파일:`, `- 통합 담당자(integration owner):`, `- 상태(status):`, `- 검증 명령:`, `- 증거 경로:`처럼 쓴다. `## API lane`, `## domain lane`처럼 lane heading이 영어 단어와 `lane`만으로 끝나면 실패다.
 
 `workflow-state.md`를 같은 위치에 두고, 이후 `feature-workflow`가 반복 질문 없이 이어받을 수 있는 최소 상태를 남긴다.
 
@@ -144,12 +144,12 @@ Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의
 - invoked primitives와 실제 호출하지 못한 이유
 - domain/product/architecture/design authority 경로
 - 미해결 질문과 사용자가 이미 답한 질문
-- Agent Tool And Security Risk Gate decision
+- 도구/보안 위험 게이트(Agent Tool And Security Risk Gate) decision
 - 다음 `feature-workflow` handoff target
 
 병렬 구현을 계획하면 같은 위치에 `work-claims.md`를 둔다. 이 파일은 authority가 아니라 coordination artifact다. 각 lane은 아래 정보를 가진다.
 
-- lane id와 owner/session
+- lane id와 담당자/session
 - branch or worktree
 - spec/issue target
 - claimed write set과 read-only paths
@@ -186,7 +186,7 @@ setup에서 실제 project structure가 확정됐으면 `.scratch` 문서만 만
 - PRD 또는 issue가 problem, user, first usable slice, included/excluded scope, acceptance criteria를 갖는다.
 - UI 작업이면 `design.md` 또는 selected mock direction이 있다.
 - TypeScript 작업이면 ESM only, `type: "module"`, `import`/`export`, CommonJS 금지 constraint가 `CONTEXT.md`, ADR, PRD, issue, 또는 `workflow-state.md` 중 하나에 남아 있다.
-- tool/API/MCP 작업이면 Agent Tool And Security Risk Gate decision이 있다.
+- tool/API/MCP 작업이면 도구/보안 위험 게이트(Agent Tool And Security Risk Gate) decision이 있다.
 - 구현 단위가 vertical slice 또는 명시적 enabling task로 나뉘어 있다.
 - `.scratch/<slug>/workflow-state.md` 또는 동등한 state cache에 위 authority와 open questions가 남아 있다.
 - 병렬 구현이면 `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact에 겹치지 않는 claimed write set과 shared/hotspot file의 integration owner가 남아 있다.

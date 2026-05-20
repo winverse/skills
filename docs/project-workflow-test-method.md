@@ -24,7 +24,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 - 질문 gate 전에는 `design.md`, `project-structure`, PRD, issue backlog, implementation이 `deferred` 또는 `not created yet`로 남는다.
 - 질문 답변 뒤에는 실제 project structure, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation이 생성된다.
 - 사용자가 structure를 확정했으면 `.scratch` Markdown만 생성하는 것은 실패다. root `package.json`, ESM tsconfig, 선택한 `apps/`/`packages/` 또는 `src/` shell, 검증 script가 실제 파일로 있어야 한다.
-- target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다.
+- target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다. `workflow-state.md` risk-gate heading과 `work-claims.md` lane heading도 한국어 우선이어야 한다.
 - `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt를 만든다.
 - shared workspace guard가 cycle 전후 동일하다.
 - 마지막 plugin/test-method/validator 수정 이후 최소 1개 fresh clone cycle이 통과한다. 중요한 계약 변경 뒤에는 2개 연속 cycle 통과를 권장한다.
@@ -184,7 +184,7 @@ codex exec resume \
 - 외부 agent가 local shared workspace를 수정했는데 pass로 처리하지 않는다.
 - 한 번 pass했다고 `/goal`을 완료 처리하지 않는다. 마지막 수정 이후 fresh clone cycle 통과와 남은 개선점 여부를 같이 본다.
 - target project가 영어 문서를 명시하지 않았는데 영어 중심 setup docs가 생성된 cycle을 pass로 처리하지 않는다.
-- `work-claims.md`의 사람이 읽는 lane/field label과 `phases/step<N>.md`의 section heading/body가 영어 중심이면 pass로 처리하지 않는다. exact field name은 괄호나 backtick 안의 보조 표기로만 허용한다.
+- `workflow-state.md`의 사람이 읽는 risk-gate heading, `work-claims.md`의 lane/field label, `phases/step<N>.md`의 section heading/body가 영어 중심이면 pass로 처리하지 않는다. exact field name이나 gate name은 `도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `API 작업 lane`처럼 한국어 heading 뒤 괄호나 backtick 안의 보조 표기로만 허용한다.
 
 ## 기록 템플릿
 

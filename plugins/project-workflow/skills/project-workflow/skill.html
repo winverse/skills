@@ -112,10 +112,10 @@
         <div class="contract"><strong>정본 경로</strong><span>plugin-bundled skill만 정본 계약을 유지하고, 새 project instruction은 plugin 경로를 직접 링크합니다.</span></div>
         <div class="contract gate"><strong>질문 gate 우선</strong><span>raw idea에서는 <code>grill-with-docs</code>, <code>office-hours</code>, <code>brainstorming</code> setup gap check 전에는 PRD와 구조 인계를 확정하지 않습니다.</span></div>
         <div class="contract"><strong>실제 호출 우선</strong><span>선택한 primitive는 호출면을 확인해 실제 호출하고, 불가능하면 <code>fallback</code> 상태와 local 질문을 남깁니다.</span></div>
-        <div class="contract gate"><strong>Korean-first artifact gate</strong><span>영어 문서 요청이 없으면 durable setup docs의 제목, 본문, 목록, lane label, field label, phase step 설명은 한국어 우선이어야 합니다.</span></div>
+        <div class="contract gate"><strong>Korean-first artifact gate</strong><span>영어 문서 요청이 없으면 durable setup docs의 제목, 본문, 목록, 위험 gate heading, lane label, field label, phase step 설명은 한국어 우선이어야 합니다.</span></div>
         <div class="contract route"><strong>Actual project shell gate</strong><span>구조가 확정된 setup은 Markdown만 만들지 않고 root package config, ESM tsconfig, app/package shell, validation command를 만듭니다.</span></div>
         <div class="contract route"><strong>책임 분리</strong><span>구조는 <code>project-structure</code>, 반복 구현과 TDD와 QA는 <code>feature-workflow</code>, 문서 drift는 <code>sync-docs</code>로 넘깁니다.</span></div>
-        <div class="contract stop"><strong>위험 gate</strong><span>tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 먼저 기록합니다.</span></div>
+        <div class="contract stop"><strong>위험 gate</strong><span>tool, MCP, external API, file write, network, untrusted content는 <code>도구/보안 위험 게이트(Agent Tool And Security Risk Gate)</code>처럼 한국어 heading으로 기록합니다.</span></div>
       </div>
     </section>
 
@@ -125,7 +125,7 @@
         <div class="cell use"><strong>사용</strong><p>새 서비스, 새 앱, 큰 기획, raw idea를 도메인 문서, 제품 검증, ADR, PRD, 이슈 목록으로 정리할 때 사용합니다.</p></div>
         <div class="cell route"><strong>연결</strong><p>폴더와 인프라 경계는 <code>project-structure</code>, 문서 동기화는 <code>sync-docs</code>, 반복 구현은 <code>feature-workflow</code>에 넘깁니다.</p></div>
         <div class="cell wait"><strong>대기</strong><p>raw idea나 새 프로젝트에서 <code>grill-with-docs</code>, <code>office-hours</code>, Superpowers <code>brainstorming</code> setup gap check가 끝나지 않았으면 PRD와 이슈 목록을 확정하지 않습니다.</p></div>
-        <div class="cell stop"><strong>차단</strong><p>비밀값, 외부 쓰기, MCP, API, 네트워크, 파일 쓰기 자동화가 있으면 Agent Tool And Security Risk Gate를 먼저 기록합니다.</p></div>
+        <div class="cell stop"><strong>차단</strong><p>비밀값, 외부 쓰기, MCP, API, 네트워크, 파일 쓰기 자동화가 있으면 <code>도구/보안 위험 게이트(Agent Tool And Security Risk Gate)</code>를 먼저 기록합니다.</p></div>
       </div>
     </section>
 
@@ -257,14 +257,14 @@
         <div class="table-cell"><strong>PRD와 이슈</strong></div><div class="table-cell"><span>problem, user, first usable slice, scope, acceptance criteria</span></div><div class="table-cell"><span>추정 표시와 질문 목록</span></div><div class="table-cell"><span><code>feature-workflow</code></span></div>
         <div class="table-cell"><strong>UI 방향</strong></div><div class="table-cell"><span><code>design.md</code> 또는 선택된 2-3개 mock direction</span></div><div class="table-cell"><span>디자인 baseline 요청</span></div><div class="table-cell"><span><code>design-review</code> 또는 <code>feature-workflow</code></span></div>
         <div class="table-cell"><strong>TypeScript module 정책</strong></div><div class="table-cell"><span><code>type: "module"</code>, ESM <code>tsconfig</code>, <code>import</code>/<code>export</code>, CommonJS 금지</span></div><div class="table-cell"><span>기존 CommonJS는 migration boundary</span></div><div class="table-cell"><span><code>project-structure</code></span></div>
-        <div class="table-cell"><strong>도구와 API</strong></div><div class="table-cell"><span>Agent Tool And Security Risk Gate decision</span></div><div class="table-cell"><span><code>approved</code>, <code>dev-only</code>, <code>needs-info</code>, <code>blocked</code></span></div><div class="table-cell"><span>해당 전담 스킬</span></div>
+        <div class="table-cell"><strong>도구와 API</strong></div><div class="table-cell"><span>도구/보안 위험 게이트(Agent Tool And Security Risk Gate) decision</span></div><div class="table-cell"><span><code>approved</code>, <code>dev-only</code>, <code>needs-info</code>, <code>blocked</code></span></div><div class="table-cell"><span>해당 전담 스킬</span></div>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head"><h2>병렬 작업 조정</h2><p><code>work-claims.md</code>는 권위 문서가 아니라 겹침을 막는 조정 산출물입니다.</p></div>
       <div class="lanes" aria-label="work-claims lane 구조">
-        <div class="lane"><strong>lane 소유권</strong><span>lane id, owner/session, branch 또는 worktree, spec/issue target을 기록합니다.</span></div>
+        <div class="lane"><strong>lane 소유권</strong><span><code>API 작업 lane</code>처럼 한국어 heading을 쓰고, lane id, 담당자/session, branch 또는 worktree, spec/issue target을 기록합니다.</span></div>
         <div class="lane"><strong>쓰기 경계</strong><span>claimed write set, read-only paths, shared/hotspot files, integration owner를 분리합니다.</span></div>
         <div class="lane"><strong>완료 증거</strong><span>status, validation command, evidence path를 남기고 구현은 <code>feature-workflow</code>에서 진행합니다.</span></div>
       </div>
@@ -297,7 +297,7 @@
         <div class="table-cell head"><strong>단계</strong></div><div class="table-cell head"><strong>판단</strong></div><div class="table-cell head"><strong>다음 행동</strong></div>
         <div class="table-cell"><strong>fresh clone cycle</strong></div><div class="table-cell"><span>GitHub에서 새로 받은 copy로 첫 응답, setup 실행, phase dry-run, shared workspace guard를 확인합니다.</span></div><div class="table-cell"><span><code>runs/cycle-NNN/</code>에 prompt, history, output, summary를 남깁니다.</span></div>
         <div class="table-cell"><strong>failure class</strong></div><div class="table-cell"><span><code>plugin contract</code>, <code>runner</code>, <code>test method</code>, <code>target artifact</code>, <code>environment/hook</code>으로 실패 원인을 분류합니다.</span></div><div class="table-cell"><span>기록을 고쳐 pass로 만들지 않고 원인에 맞는 파일을 수정합니다.</span></div>
-        <div class="table-cell"><strong>language gate</strong></div><div class="table-cell"><span><code>work-claims.md</code> lane/field label이나 phase step heading이 영어 중심이면 validation이 통과해도 pass가 아닙니다.</span></div><div class="table-cell"><span>Korean-first artifact gate를 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
+        <div class="table-cell"><strong>language gate</strong></div><div class="table-cell"><span><code>workflow-state.md</code> 위험 gate heading, <code>work-claims.md</code> lane/field label, phase step heading이 영어 중심이면 validation이 통과해도 pass가 아닙니다.</span></div><div class="table-cell"><span>Korean-first artifact gate를 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
         <div class="table-cell"><strong>actual shell gate</strong></div><div class="table-cell"><span>구조가 확정됐는데 <code>package.json</code>, ESM tsconfig, app/package folder, source entrypoint, validation command가 없으면 pass가 아닙니다.</span></div><div class="table-cell"><span>project shell 계약을 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
         <div class="table-cell"><strong>개선 후 반복</strong></div><div class="table-cell"><span>validator를 통과시키고 <code>atomic-committer</code>로 commit/push한 뒤 다음 fresh clone cycle을 돕니다.</span></div><div class="table-cell"><span>마지막 수정 이후 cycle이 통과하고 blocker가 없을 때만 완료로 봅니다.</span></div>
       </div>
@@ -347,7 +347,7 @@ Next workflow step
         <div class="table-cell"><strong>실제 호출 우선</strong></div><div class="table-cell"><span><code>dependency invocation contract 기준</code>, <code>핵심 계약</code>의 호출면 증거 문장</span></div><div class="table-cell"><span>primitive inventory에 상태 표시</span></div>
         <div class="table-cell"><strong>질문 gate 우선</strong></div><div class="table-cell"><span><code>첫 응답 기준</code>, <code>interview gate 기준</code>, raw idea 순서 문장</span></div><div class="table-cell"><span>PRD 전에 질문 상태 확인</span></div>
         <div class="table-cell"><strong>책임 분리</strong></div><div class="table-cell"><span><code>provenance ledger 기준</code>, <code>feature-workflow handoff 기준</code>, upstream dependency map</span></div><div class="table-cell"><span>다음 스킬과 handoff 조건 확인</span></div>
-        <div class="table-cell"><strong>위험 gate</strong></div><div class="table-cell"><span><code>핵심 계약</code>과 <code>default flow 기준</code>의 Agent Tool And Security Risk Gate 문장</span></div><div class="table-cell"><span>tool/API/MCP 작업 전 decision 기록</span></div>
+        <div class="table-cell"><strong>위험 gate</strong></div><div class="table-cell"><span><code>핵심 계약</code>과 <code>default flow 기준</code>의 도구/보안 위험 게이트 문장</span></div><div class="table-cell"><span>tool/API/MCP 작업 전 한국어 heading으로 decision 기록</span></div>
       </div>
     </section>
 
