@@ -3,178 +3,392 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>skill-to-html 시각 가이드</title>
+  <title>skill-to-html 인터랙티브 가이드</title>
   <link rel="icon" href="data:,">
   <style>
-    :root { --bg:#f6f7f9; --surface:#ffffff; --soft:#eef2f6; --text:#151922; --muted:#5f6876; --border:#cfd6df; --line:#8793a3; --blue:#2457c5; --green:#24724f; --amber:#93640d; --red:#aa2e25; --code:#111827; }
+    :root {
+      --bg:#f5f7fa;
+      --surface:#ffffff;
+      --panel:#fbfcfe;
+      --soft:#eef3f8;
+      --soft-green:#edf7f1;
+      --soft-amber:#fff6df;
+      --soft-red:#fff0ee;
+      --text:#161b24;
+      --muted:#606b78;
+      --border:#cbd4df;
+      --line:#7f8b99;
+      --blue:#2458b8;
+      --green:#25724d;
+      --amber:#92650d;
+      --red:#a83a30;
+      --ink:#0f172a;
+    }
     * { box-sizing:border-box; }
-    html, body { width:100%; margin:0; background:var(--bg); color:var(--text); font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; line-height:1.55; }
-    body { padding:28px 0 52px; }
-    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
+    html, body { margin:0; width:100%; min-width:1120px; background:var(--bg); color:var(--text); font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:0; line-height:1.55; }
+    body { padding:28px 0 56px; }
     a { color:inherit; text-decoration:none; }
+    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
     h1, h2, h3, p { margin:0; }
     h1 { font-size:30px; line-height:1.18; }
-    h2 { font-size:18px; line-height:1.3; }
+    h2 { font-size:19px; line-height:1.3; }
     h3 { font-size:14px; line-height:1.35; }
-    .shell { width:100%; max-width:1180px; margin:0 auto; padding:0 28px; }
-    .hero { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:16px; align-items:stretch; margin-bottom:24px; }
-    .identity, .quick, .matrix, .panel, .schema, .chart, .resource, .table, .rule, .snippet, .catalog-section { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
-    .identity { min-height:154px; padding:20px; display:grid; grid-template-columns:68px minmax(0,1fr); gap:16px; align-items:center; }
-    .mark { width:68px; height:68px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:17px; font-weight:800; }
-    .subtitle { max-width:780px; margin-top:7px; color:var(--muted); font-size:14px; }
-    .quick { padding:16px; display:grid; gap:10px; align-content:center; }
-    .quick strong, .matrix-cell strong, .step strong, .schema-node strong, .resource-tile strong, .table-cell strong, .rule strong, .catalog-item strong { display:block; margin-bottom:5px; font-size:13px; }
-    .quick span, .matrix-cell p, .step span, .schema-node span, .resource-tile span, .table-cell span, .rule p, .catalog-item span { color:var(--muted); font-size:13px; }
+    button { font:inherit; letter-spacing:0; }
+    .shell { width:1200px; max-width:1200px; margin:0 auto; }
+    .stage-shell, .panel, .tile, .metric, .source-map, .source-cell, .verify, .snippet, .control, .decision-card { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .hero { display:grid; grid-template-columns:820px 1fr; gap:16px; align-items:stretch; margin-bottom:22px; }
+    .stage-shell { position:relative; min-height:468px; padding:18px; overflow:hidden; background:linear-gradient(180deg, #fff, #f8fbff); }
+    .stage-head { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:14px; }
+    .mark { width:70px; height:70px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:18px; font-weight:800; }
+    .subtitle { margin-top:7px; color:var(--muted); font-size:14px; max-width:560px; }
+    .badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .badge { border:1px solid var(--border); border-radius:999px; background:#fff; padding:5px 9px; color:var(--muted); font-size:12px; }
+    .stage { display:grid; grid-template-columns:1fr 220px; gap:14px; align-items:stretch; min-height:340px; }
+    .visual { border:1px solid var(--border); border-radius:8px; background:#ffffff; padding:14px; overflow:hidden; }
+    .caption { border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:14px; display:grid; align-content:space-between; gap:10px; }
+    .caption strong { display:block; font-size:15px; margin-bottom:4px; }
+    .caption p, .hint, .metric span, .source-cell span, .verify p, .tile span, .decision-card p { color:var(--muted); font-size:13px; }
+    .mode-panel { display:grid; gap:10px; align-content:start; }
+    .control { width:100%; padding:12px; text-align:left; background:#fff; cursor:pointer; border-top:4px solid var(--line); transition:transform .18s ease, background .18s ease, border-color .18s ease; }
+    .control:hover, .control:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.28); outline-offset:2px; }
+    .control[aria-pressed="true"] { background:var(--soft-green); border-color:var(--green); }
+    .control strong { display:block; font-size:13px; margin-bottom:3px; }
+    .control span { color:var(--muted); font-size:12px; }
     .section { margin-top:22px; }
-    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:baseline; margin-bottom:10px; }
-    .section-head p, .small { color:var(--muted); font-size:13px; }
-    .matrix { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:hidden; }
-    .matrix-cell { min-height:148px; padding:14px; border-right:1px solid var(--border); border-top:4px solid var(--line); }
-    .matrix-cell:last-child { border-right:0; }
-    .matrix-cell.use { border-top-color:var(--green); } .matrix-cell.combine { border-top-color:var(--blue); } .matrix-cell.skip { border-top-color:var(--amber); } .matrix-cell.stop { border-top-color:var(--red); }
-    .two { display:grid; grid-template-columns:minmax(0,1.14fr) minmax(300px,.86fr); gap:16px; align-items:stretch; }
-    .panel, .resource { padding:16px; overflow:hidden; }
+    .section-head { display:flex; align-items:baseline; justify-content:space-between; gap:20px; margin-bottom:10px; }
+    .section-head p { color:var(--muted); font-size:13px; }
     svg { display:block; width:100%; height:auto; }
-    .steps, .rules { display:grid; gap:10px; }
-    .step, .rule { padding:12px 14px; }
-    .schema { display:grid; grid-template-columns:1fr 56px 1fr; gap:12px; padding:16px; align-items:center; }
-    .schema-stack { display:grid; gap:10px; }
-    .schema-node { min-height:82px; border:1px solid var(--border); border-radius:8px; padding:12px; background:#fbfcfe; }
-    .schema-arrow { display:grid; place-items:center; min-height:184px; color:var(--blue); font-size:22px; font-weight:800; }
-    .chart { display:grid; gap:10px; padding:16px; }
-    .bar { display:grid; grid-template-columns:170px minmax(0,1fr) 78px; gap:10px; align-items:center; font-size:13px; }
-    .track { height:14px; border:1px solid var(--border); border-radius:4px; background:var(--soft); overflow:hidden; }
-    .fill { display:block; height:100%; background:var(--blue); } .fill.green{background:var(--green);} .fill.amber{background:var(--amber);} .fill.red{background:var(--red);}
-    .files, .catalog-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
-    .resource-tile, .catalog-item { min-height:78px; border:1px solid var(--border); border-radius:8px; background:#fbfcfe; padding:10px; }
-    .table { display:grid; grid-template-columns:172px repeat(3,minmax(0,1fr)); overflow:hidden; }
-    .table-cell { min-height:84px; padding:12px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
-    .table-cell:nth-child(4n) { border-right:0; } .table-cell:nth-last-child(-n+4) { border-bottom:0; } .table-head { background:var(--soft); }
-    .snippet { margin:0; padding:14px; background:var(--code); color:#f8fafc; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .flow-line { stroke-dasharray:520; stroke-dashoffset:520; animation:drawLine 3.2s ease-in-out infinite; }
+    .pulse { animation:pulseNode 2.4s ease-in-out infinite; transform-origin:center; }
+    .float { animation:softFloat 4s ease-in-out infinite; }
+    .mode-node { opacity:.34; transition:opacity .22s ease, transform .22s ease; transform-origin:center; }
+    .mode-node.active { opacity:1; transform:scale(1.03); }
+    .two { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; align-items:stretch; }
+    .panel { padding:16px; overflow:hidden; }
+    .decision-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; }
+    .decision-card { min-height:132px; padding:13px; border-top:4px solid var(--line); background:#fff; cursor:pointer; transition:background .18s ease, transform .18s ease; }
+    .decision-card:hover, .decision-card:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.24); outline-offset:2px; }
+    .decision-card.active { background:var(--soft-amber); border-top-color:var(--amber); }
+    .decision-card strong, .tile strong, .source-cell strong, .verify strong, .metric strong { display:block; margin-bottom:5px; font-size:13px; }
+    .metrics { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; }
+    .metric { min-height:104px; padding:13px; background:#fff; }
+    .meter { height:12px; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--soft); margin-top:10px; }
+    .fill { display:block; height:100%; width:var(--value); background:var(--blue); transition:width .24s ease; }
+    .fill.green { background:var(--green); }
+    .fill.amber { background:var(--amber); }
+    .fill.red { background:var(--red); }
+    .source-map { display:grid; grid-template-columns:190px 1fr 230px 230px; overflow:hidden; }
+    .source-cell { min-height:88px; padding:12px; border-radius:0; border-left:0; border-top:0; overflow-wrap:anywhere; }
+    .source-cell:nth-child(4n) { border-right:0; }
+    .source-cell:nth-last-child(-n+4) { border-bottom:0; }
+    .source-head { background:var(--soft); min-height:54px; }
+    .file-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; }
+    .tile { min-height:86px; padding:12px; background:var(--panel); overflow-wrap:anywhere; }
+    .guard-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); overflow:hidden; }
+    .guard-grid .tile { border-radius:0; border-left:0; border-top:0; }
+    .guard-grid .tile:nth-child(4n) { border-right:0; }
+    .guard-grid .tile:nth-last-child(-n+4) { border-bottom:0; }
+    .verify-grid { display:grid; grid-template-columns:170px 1fr 220px 210px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface); }
+    .verify { min-height:86px; padding:12px; border:0; border-right:1px solid var(--border); border-bottom:1px solid var(--border); border-radius:0; }
+    .verify:nth-child(4n) { border-right:0; }
+    .verify:nth-last-child(-n+4) { border-bottom:0; }
+    .verify.head { background:var(--soft); min-height:54px; }
+    .snippet { margin:0; padding:14px; background:var(--ink); color:#f8fafc; overflow-x:auto; white-space:pre; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    @keyframes drawLine { 0% { stroke-dashoffset:520; } 45%, 72% { stroke-dashoffset:0; } 100% { stroke-dashoffset:-520; } }
+    @keyframes pulseNode { 0%, 100% { transform:scale(1); } 50% { transform:scale(1.04); } }
+    @keyframes softFloat { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .flow-line, .pulse, .float { animation:none; }
+      .control, .decision-card, .fill, .mode-node { transition:none; }
+    }
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="hero">
-      <div class="identity">
-        <div class="mark">SKI</div>
-        <div>
-          <h1>skill-to-html</h1>
-          <p class="subtitle">SKILL.md 옆에 사람이 빠르게 이해할 수 있는 도표 중심 skill.html을 만들거나 갱신할 때 사용한다.</p>
+      <section class="stage-shell" aria-label="그림 먼저 인터랙티브 무대">
+        <div class="stage-head">
+          <div>
+            <div class="mark">HTML</div>
+            <h1>skill-to-html</h1>
+            <p class="subtitle">그림 먼저, 인터랙티브, 애니메이션 중심으로 <code>SKILL.md</code>를 사람이 조작하며 이해하는 <code>skill.html</code>로 바꿉니다.</p>
+            <div class="badge-row">
+              <span class="badge">그림 먼저</span>
+              <span class="badge">인터랙티브</span>
+              <span class="badge">애니메이션</span>
+              <span class="badge">PC desktop</span>
+              <span class="badge">mobile/tablet 제외</span>
+            </div>
+          </div>
+          <div class="mode-panel" role="group" aria-label="보기 모드">
+            <button class="control" type="button" data-view="shape" aria-pressed="true"><strong>형태 먼저</strong><span>글보다 화면 구조를 먼저 만듭니다.</span></button>
+            <button class="control" type="button" data-view="motion" aria-pressed="false"><strong>움직임 연결</strong><span>계약과 근거를 animated path로 연결합니다.</span></button>
+            <button class="control" type="button" data-view="evidence" aria-pressed="false"><strong>근거 펼치기</strong><span>원문과 validator를 클릭으로 드러냅니다.</span></button>
+          </div>
         </div>
-      </div>
-      <aside class="quick" aria-label="스킬 파일 쌍">
-        <div><strong>에이전트 원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
-        <div><strong>사람용 가이드</strong><span><a href="skill.html"><code>skill.html</code></a></span></div>
-        <div><strong>언어 기준</strong><span>화면 설명은 한국어 문장 우선이며, 정확한 식별자만 원문으로 둡니다.</span></div>
+        <div class="stage">
+          <div class="visual">
+            <svg viewBox="0 0 760 320" role="img" aria-label="상호작용형 skill.html 변환 장면">
+              <defs>
+                <marker id="heroArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2458b8"></path></marker>
+              </defs>
+              <g fill="#ffffff" stroke="#cbd4df" stroke-width="2">
+                <rect x="30" y="80" width="160" height="92" rx="8"></rect>
+                <rect x="300" y="52" width="160" height="92" rx="8"></rect>
+                <rect x="300" y="184" width="160" height="92" rx="8"></rect>
+                <rect x="570" y="80" width="160" height="92" rx="8"></rect>
+              </g>
+              <g class="mode-node active" data-node="shape">
+                <rect x="300" y="52" width="160" height="92" rx="8" fill="#edf7f1" stroke="#25724d" stroke-width="3"></rect>
+              </g>
+              <g class="mode-node" data-node="motion">
+                <rect x="300" y="184" width="160" height="92" rx="8" fill="#fff6df" stroke="#92650d" stroke-width="3"></rect>
+              </g>
+              <g class="mode-node" data-node="evidence">
+                <rect x="570" y="80" width="160" height="92" rx="8" fill="#eef3f8" stroke="#2458b8" stroke-width="3"></rect>
+              </g>
+              <g fill="none" stroke="#2458b8" stroke-width="2.6" marker-end="url(#heroArrow)">
+                <path class="flow-line" d="M190 126 C242 126 252 98 300 98"></path>
+                <path class="flow-line" d="M190 126 C246 126 250 230 300 230"></path>
+                <path class="flow-line" d="M460 98 C512 98 522 126 570 126"></path>
+              </g>
+              <g text-anchor="middle" font-size="14" font-weight="800" fill="#161b24">
+                <text x="110" y="118">SKILL.md</text>
+                <text x="380" y="88">시각 장면</text>
+                <text x="380" y="220">상태 전환</text>
+                <text x="650" y="118">skill.html</text>
+              </g>
+              <g text-anchor="middle" font-size="11" fill="#606b78">
+                <text x="110" y="140">원문 계약</text>
+                <text x="380" y="110">도표 무결성</text>
+                <text x="380" y="242">클릭과 focus</text>
+                <text x="650" y="140">사람용 확인 화면</text>
+              </g>
+              <circle class="pulse" cx="650" cy="126" r="9" fill="#2458b8"></circle>
+              <circle class="float" cx="380" cy="230" r="7" fill="#92650d"></circle>
+            </svg>
+          </div>
+          <aside class="caption" aria-live="polite">
+            <div>
+              <strong id="mode-title">형태 먼저</strong>
+              <p id="mode-copy">첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다.</p>
+            </div>
+            <p class="hint">모드를 누르면 도표 node, caption, evidence가 함께 바뀝니다. 긴 설명은 아래 원문 근거와 실제 확인으로 내려갑니다.</p>
+          </aside>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="핵심 파일">
+        <div class="section-head"><h2>핵심 파일</h2><p>인접 파일 쌍</p></div>
+        <div class="file-grid">
+          <a class="tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 계약입니다.</span></a>
+          <a class="tile" href="skill.html"><strong>skill.html</strong><span>사람이 조작하는 시각 가이드입니다.</span></a>
+          <a class="tile" href="references/visual-guide-standards.md"><strong>visual-guide-standards.md</strong><span>상호작용, animation library, render integrity 기준입니다.</span></a>
+          <a class="tile" href="scripts/validate-skill-to-html.ts"><strong>validate-skill-to-html.ts</strong><span>스킬 전용 문구와 상호작용 계약을 검사합니다.</span></a>
+          <a class="tile" href="../../scripts/validate-skill-html.ts"><strong>validate-skill-html.ts</strong><span>공통 HTML, inline script safety, SVG arrow endpoint를 검사합니다.</span></a>
+          <a class="tile" href="../../project-snippets/skill-to-html.md"><strong>project snippet</strong><span>프로젝트에 붙는 짧은 사용 규칙입니다.</span></a>
+        </div>
       </aside>
     </header>
 
     <section class="section">
-      <div class="section-head"><h2>사용 판단 매트릭스</h2><p>언제 쓰고, 언제 다른 스킬로 넘길지 먼저 판단합니다.</p></div>
-      <div class="matrix" aria-label="사용 판단 매트릭스">
-        <div class="matrix-cell use"><strong>사용</strong><p>SKILL.md 옆에 사람이 빠르게 이해할 수 있는 도표 중심 skill.html을 만들거나 갱신할 때 사용한다.</p></div>
-        <div class="matrix-cell combine"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>처럼 전담 스킬과 연결합니다.</p></div>
-        <div class="matrix-cell skip"><strong>건너뜀</strong><p>요청이 이 스킬의 호출 조건과 맞지 않거나 더 구체적인 스킬이 있으면 그 스킬을 우선합니다.</p></div>
-        <div class="matrix-cell stop"><strong>확인</strong><p>비밀값, 파괴적 작업, 외부 쓰기, 전역 설치가 얽히면 먼저 범위와 승인 조건을 확인합니다.</p></div>
+      <div class="section-head">
+        <h2>사용 판단 보드</h2>
+        <p>정적인 글 목록 대신 클릭 가능한 기준으로 시작합니다.</p>
+      </div>
+      <div class="decision-grid" role="list" aria-label="사용 판단">
+        <button class="decision-card active" type="button"><strong>사용</strong><p>스킬이 생성, fork, update 되었고 옆의 <code>skill.html</code>이 필요합니다.</p></button>
+        <button class="decision-card" type="button"><strong>먼저 그리기</strong><p>첫 viewport는 그림 먼저, 텍스트는 caption으로 줄입니다.</p></button>
+        <button class="decision-card" type="button"><strong>조작 연결</strong><p>mode, toggle, stepper, reveal이 계약과 근거를 바꿉니다.</p></button>
+        <button class="decision-card" type="button"><strong>검증</strong><p>PC desktop에서 click, focus, animation state를 확인합니다.</p></button>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>실행 흐름</h2><p>읽기에서 검증까지의 기본 흐름입니다. 화살표는 실제 node에 닿도록 배치했습니다.</p></div>
+      <div class="section-head">
+        <h2>애니메이션 흐름</h2>
+        <p>도표는 장식이 아니라 변환 순서를 보여줍니다.</p>
+      </div>
       <div class="two">
         <div class="panel">
-          <svg viewBox="0 0 760 284" role="img" aria-label="skill-to-html 실행 흐름">
-            <defs><marker id="flow-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457c5"></path></marker></defs>
-            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="24" y="96" width="116" height="78" rx="8"></rect><rect x="174" y="96" width="116" height="78" rx="8"></rect><rect x="324" y="96" width="116" height="78" rx="8"></rect><rect x="474" y="96" width="116" height="78" rx="8"></rect><rect x="624" y="96" width="112" height="78" rx="8"></rect></g>
-            <g fill="none" stroke="#2457c5" stroke-width="2.4" marker-end="url(#flow-arrow)"><path d="M140 135 L174 135"></path><path d="M290 135 L324 135"></path><path d="M440 135 L474 135"></path><path d="M590 135 L624 135"></path></g>
-            <g text-anchor="middle" font-size="13" font-weight="700" fill="#151922"><text x="82" y="124">요청 읽기</text><text x="232" y="124">근거 확인</text><text x="382" y="124">경계 결정</text><text x="532" y="124">작업 수행</text><text x="680" y="124">검증</text></g>
-            <g text-anchor="middle" font-size="11" fill="#5f6876"><text x="82" y="145">사용자 의도</text><text x="82" y="159">현재 repo</text><text x="232" y="145">SKILL.md</text><text x="232" y="159">필요 문서</text><text x="382" y="145">허용 범위</text><text x="382" y="159">안전 조건</text><text x="532" y="145">최소 변경</text><text x="532" y="159">증거 남김</text><text x="680" y="145">validator</text><text x="680" y="159">보고</text></g>
+          <svg viewBox="0 0 720 286" role="img" aria-label="애니메이션 변환 흐름">
+            <defs>
+              <marker id="flowArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#25724d"></path></marker>
+            </defs>
+            <g fill="#ffffff" stroke="#cbd4df" stroke-width="2">
+              <rect x="28" y="98" width="124" height="80" rx="8"></rect>
+              <rect x="192" y="98" width="124" height="80" rx="8"></rect>
+              <rect x="356" y="98" width="124" height="80" rx="8"></rect>
+              <rect x="520" y="98" width="156" height="80" rx="8"></rect>
+            </g>
+            <g fill="none" stroke="#25724d" stroke-width="2.6" marker-end="url(#flowArrow)">
+              <path class="flow-line" d="M152 138 L192 138"></path>
+              <path class="flow-line" d="M316 138 L356 138"></path>
+              <path class="flow-line" d="M480 138 L520 138"></path>
+            </g>
+            <g text-anchor="middle" font-size="13" font-weight="800" fill="#161b24">
+              <text x="90" y="126">읽기</text>
+              <text x="254" y="126">스토리보드</text>
+              <text x="418" y="126">상호작용</text>
+              <text x="598" y="126">검증</text>
+            </g>
+            <g text-anchor="middle" font-size="11" fill="#606b78">
+              <text x="90" y="148">원문 계약</text>
+              <text x="254" y="148">그림 먼저</text>
+              <text x="418" y="148">inline JS</text>
+              <text x="598" y="148">browser QA</text>
+            </g>
           </svg>
         </div>
-        <div class="steps">
-          <div class="step"><strong>1. required outcome 기준</strong><span>- 각 skill folder에는 SKILL.md와 skill.html이 함께 있어야 한다. - 화면에 보이는 설명은 한국어 문장 우선으로 작성한다. - 영어 설명어를 쉼표로 길게 나열하지 않는다. TDD, QA, API, MCP, PRD, 파일명,...</span></div>
-          <div class="step"><strong>2. design contract 기준</strong><span>- visual guide는 설명 문단보다 구조를 우선한다. - diagram은 브라우저에서 읽히는 geometry를 기준으로 검토한다. - layout 판단은 PC desktop을 기준으로 한다. mobile/tablet 최적화, touch int...</span></div>
-          <div class="step"><strong>3. creation 작업 흐름 기준</strong><span>1. 대상 SKILL.md와 필요한 references/만 읽는다. 2. 호출 조건, 실행 흐름, 안전 경계, 출력 형태를 추출한다. 3. 최소 4개 이상의 시각 구조를 설계한다. 4. skill.html을 self-contained static H...</span></div>
-          <div class="step"><strong>4. quality bar 기준</strong><span>HTML만 봐도 이 스킬을 언제 쓰고 언제 쓰지 말아야 하는지 알 수 있어야 한다.</span></div>
+        <div class="panel metrics" aria-label="검증 강도 차트">
+          <div class="metric"><strong>그림 우선</strong><span>첫 화면 중심</span><div class="meter"><span class="fill green" style="--value:96%"></span></div></div>
+          <div class="metric"><strong>인터랙티브</strong><span>mode와 reveal</span><div class="meter"><span class="fill" style="--value:88%"></span></div></div>
+          <div class="metric"><strong>애니메이션</strong><span>의미 있는 흐름</span><div class="meter"><span class="fill amber" style="--value:78%"></span></div></div>
+          <div class="metric"><strong>텍스트 밀도</strong><span>짧게 제한</span><div class="meter"><span class="fill red" style="--value:34%"></span></div></div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>입출력 구조</h2><p>입력은 사용자의 요청과 repo 근거이고, 출력은 검증 가능한 답변 또는 파일 변경입니다.</p></div>
-      <div class="two">
-        <div class="schema" aria-label="입출력 구조">
-          <div class="schema-stack"><div class="schema-node"><strong>입력</strong><span>사용자 요청, <code>SKILL.md</code>, 관련 repo 파일, 필요한 참조 문서.</span></div><div class="schema-node"><strong>제약</strong><span>한국어 문장 우선, 전역 설치 금지, 관련 없는 파일 보존.</span></div></div>
-          <div class="schema-arrow" aria-hidden="true">→</div>
-          <div class="schema-stack"><div class="schema-node"><strong>출력</strong><span>실행 결과, 변경 파일, 검증 명령, 남은 위험을 짧게 정리합니다.</span></div><div class="schema-node"><strong>증거</strong><span>필요한 validator, 테스트, 브라우저 확인, 파일 경로를 함께 남깁니다.</span></div></div>
-        </div>
-        <div class="chart" aria-label="위험과 검증 차트">
-          <div class="bar"><strong>요청 적합도</strong><span class="track"><span class="fill green" style="width:94%"></span></span><span>먼저</span></div>
-          <div class="bar"><strong>근거 확인</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
-          <div class="bar"><strong>범위 통제</strong><span class="track"><span class="fill" style="width:82%"></span></span><span>필수</span></div>
-          <div class="bar"><strong>검증 강도</strong><span class="track"><span class="fill amber" style="width:74%"></span></span><span>위험별</span></div>
-          <div class="bar"><strong>전역 변경</strong><span class="track"><span class="fill red" style="width:58%"></span></span><span>차단</span></div>
-          <p class="small">HTML은 PC desktop 기준으로 확인합니다. mobile/tablet 레이아웃은 이 재생성 범위가 아닙니다.</p>
-        </div>
+      <div class="section-head">
+        <h2>도구 선택 레일</h2>
+        <p>Framer 같은 도구는 좋지만, standalone HTML에서는 local bundle 없이는 쓰지 않습니다.</p>
+      </div>
+      <div class="guard-grid" aria-label="animation library 선택">
+        <div class="tile"><strong>CSS animation</strong><span>기본값. 작은 상태 변화, path drawing, pulse에 사용합니다.</span></div>
+        <div class="tile"><strong>Web Animations API</strong><span>inline JavaScript로 닫히는 상호작용에 사용합니다.</span></div>
+        <div class="tile"><strong>Framer Motion</strong><span>target project가 React build와 local dependency를 이미 가질 때만 씁니다.</span></div>
+        <div class="tile"><strong>Motion One / GSAP</strong><span>외부 CDN 없이 bundled local asset으로 닫힐 때만 선택합니다.</span></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>파일 관계도</h2><p>스킬 폴더 안의 원본, 사람용 가이드, 검증기, 참조 문서를 분리합니다.</p></div>
+      <div class="section-head">
+        <h2>핵심 계약과 원문 근거</h2>
+        <p>넓은 표는 전체 폭 section에 둡니다.</p>
+      </div>
+      <div class="source-map" aria-label="원문 근거 연결 표">
+        <div class="source-cell source-head"><strong>핵심 계약</strong></div>
+        <div class="source-cell source-head"><strong>원문 근거</strong></div>
+        <div class="source-cell source-head"><strong>확인 방법</strong></div>
+        <div class="source-cell source-head"><strong>실패 신호</strong></div>
+        <div class="source-cell"><strong>그림 먼저</strong><span><code>SKILL.md</code> required outcome</span></div>
+        <div class="source-cell"><span>첫 화면은 움직이는 도표, 판단 보드, 상태 전환으로 시작합니다.</span></div>
+        <div class="source-cell"><span>첫 viewport를 눈으로 확인합니다.</span></div>
+        <div class="source-cell"><span>긴 텍스트 카드가 화면 대부분을 차지합니다.</span></div>
+        <div class="source-cell"><strong>인터랙티브</strong><span><code>SKILL.md</code> creation workflow</span></div>
+        <div class="source-cell"><span>mode switch, stepper, reveal 중 하나 이상을 둡니다.</span></div>
+        <div class="source-cell"><span>click/focus state를 브라우저에서 확인합니다.</span></div>
+        <div class="source-cell"><span>모든 section이 정적 표로만 구성됩니다.</span></div>
+        <div class="source-cell"><strong>도표 무결성</strong><span><code>references/visual-guide-standards.md</code></span></div>
+        <div class="source-cell"><span>SVG arrow는 보이는 node에 닿고, 넓은 표는 2열 layout 밖에 둡니다.</span></div>
+        <div class="source-cell"><span>arrow endpoint, table width, overflow를 확인합니다.</span></div>
+        <div class="source-cell"><span>화살표가 빈 공간을 가리킵니다.</span></div>
+        <div class="source-cell"><strong>한국어 문장</strong><span><code>SKILL.md</code> language policy</span></div>
+        <div class="source-cell"><span>영어 설명어 나열 대신 한국어 label과 caption을 씁니다.</span></div>
+        <div class="source-cell"><span>공통 HTML validator와 전용 validator를 실행합니다.</span></div>
+        <div class="source-cell"><span>일반 UI label이 영어-only로 남습니다.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>파일 관계도</h2>
+        <p>원본, 사람용 화면, 기준, 검증기를 한 장면으로 연결합니다.</p>
+      </div>
       <div class="two">
-        <div class="resource">
-          <svg viewBox="0 0 620 310" role="img" aria-label="파일 관계도">
-            <defs><marker id="map-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#8793a3"></path></marker></defs>
-            <g fill="#ffffff" stroke="#cfd6df" stroke-width="2"><rect x="236" y="112" width="148" height="76" rx="8"></rect><rect x="34" y="42" width="150" height="64" rx="8"></rect><rect x="34" y="208" width="150" height="64" rx="8"></rect><rect x="436" y="42" width="150" height="64" rx="8"></rect><rect x="436" y="208" width="150" height="64" rx="8"></rect></g>
-            <g fill="none" stroke="#8793a3" stroke-width="2.2" marker-end="url(#map-arrow)"><path d="M184 74 L236 126"></path><path d="M184 240 L236 174"></path><path d="M384 126 L436 74"></path><path d="M384 174 L436 240"></path></g>
-            <g text-anchor="middle" font-size="12" font-weight="700" fill="#151922"><text x="310" y="145">skill-to-html</text><text x="109" y="72">SKILL.md</text><text x="109" y="238">skill.html</text><text x="511" y="72">참조 문서</text><text x="511" y="238">검증기</text></g>
-            <g text-anchor="middle" font-size="10" fill="#5f6876"><text x="310" y="164">스킬 폴더</text><text x="109" y="88">원본 지시</text><text x="109" y="254">사람용 가이드</text><text x="511" y="88">세부 기준</text><text x="511" y="254">품질 확인</text></g>
+        <div class="panel">
+          <svg viewBox="0 0 650 326" role="img" aria-label="파일 관계도">
+            <defs><marker id="fileArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#7f8b99"></path></marker></defs>
+            <g fill="#ffffff" stroke="#cbd4df" stroke-width="2"><rect x="244" y="124" width="162" height="78" rx="8"></rect><rect x="36" y="50" width="158" height="66" rx="8"></rect><rect x="36" y="212" width="158" height="66" rx="8"></rect><rect x="456" y="50" width="158" height="66" rx="8"></rect><rect x="456" y="212" width="158" height="66" rx="8"></rect></g>
+            <g fill="none" stroke="#7f8b99" stroke-width="2.2" marker-end="url(#fileArrow)"><path d="M194 83 L244 138"></path><path d="M194 245 L244 188"></path><path d="M406 138 L456 83"></path><path d="M406 188 L456 245"></path></g>
+            <g text-anchor="middle" font-size="13" font-weight="800" fill="#161b24"><text x="325" y="154">skill-to-html</text><text x="115" y="79">SKILL.md</text><text x="115" y="241">skill.html</text><text x="535" y="79">reference</text><text x="535" y="241">validator</text></g>
+            <g text-anchor="middle" font-size="11" fill="#606b78"><text x="325" y="174">스킬 폴더</text><text x="115" y="96">원본 계약</text><text x="115" y="258">인터랙티브 화면</text><text x="535" y="96">상호작용 기준</text><text x="535" y="258">품질 확인</text></g>
           </svg>
-          <div class="files">
-            <a class="resource-tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 지시문</span></a>
-            <a class="resource-tile" href="skill.html"><strong>skill.html</strong><span>사람이 빠르게 훑는 도표 가이드</span></a>
-            <a class="resource-tile" href="scripts/validate-skill-to-html.ts"><strong>scripts/validate-skill-to-html.ts</strong><span>스킬 전용 검증기</span></a>
-            <a class="resource-tile" href="../../project-snippets/skill-to-html.md"><strong>../../project-snippets/skill-to-html.md</strong><span>프로젝트 연결 조각</span></a>
-            <a class="resource-tile" href="references/visual-guide-standards.md"><strong>references/visual-guide-standards.md</strong><span>긴 기준과 세부 예시</span></a>
-          </div>
         </div>
-        <div class="rules">
-          <div class="rule"><strong>도표 무결성</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>한국어 문장 우선</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>PC desktop</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>mobile/tablet 제외</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
-          <div class="rule"><strong>넓은 표는 전체 폭 section에 배치</strong><p>이 기준은 새 HTML 재생성 뒤에도 화면에서 바로 확인할 수 있어야 합니다.</p></div>
+        <div class="file-grid">
+          <a class="tile" href="SKILL.md"><strong>SKILL.md</strong><span>핵심 계약과 생성 workflow입니다.</span></a>
+          <a class="tile" href="references/visual-guide-standards.md"><strong>visual-guide-standards.md</strong><span>interaction and animation, library policy, render integrity 기준입니다.</span></a>
+          <a class="tile" href="scripts/validate-skill-to-html.ts"><strong>validate-skill-to-html.ts</strong><span>그림 먼저, 인터랙티브, 애니메이션 문구를 검사합니다.</span></a>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>검증 표</h2><p>넓은 표는 전체 폭 section에 두어 2열 layout overflow를 피합니다.</p></div>
-      <div class="table" aria-label="검증 표">
-        <div class="table-cell table-head"><strong>검증 gate</strong></div><div class="table-cell table-head"><strong>명령 또는 대상</strong></div><div class="table-cell table-head"><strong>실패 신호</strong></div><div class="table-cell table-head"><strong>완료 기준</strong></div>
-        <div class="table-cell"><strong>스킬 패키지</strong></div><div class="table-cell"><span><code>node scripts/validate-skill.ts skills/skill-to-html</code></span></div><div class="table-cell"><span>frontmatter, 필수 파일, 한국어 설명 누락.</span></div><div class="table-cell"><span>오류 없이 통과.</span></div>
-        <div class="table-cell"><strong>전용 검증</strong></div><div class="table-cell"><span><code>node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html</code></span></div><div class="table-cell"><span>스킬별 핵심 문구 또는 연결 누락.</span></div><div class="table-cell"><span>필요 시 통과 결과 기록.</span></div>
-        <div class="table-cell"><strong>HTML 공통</strong></div><div class="table-cell"><span><code>node scripts/validate-skill-html.ts .</code></span></div><div class="table-cell"><span>broken local link, 외부 asset, overflow, SVG arrow endpoint 오류.</span></div><div class="table-cell"><span>PC desktop 기준으로 읽힘.</span></div>
+      <div class="section-head">
+        <h2>금지와 허용</h2>
+        <p>상호작용은 허용하되 외부 의존은 닫습니다.</p>
+      </div>
+      <div class="guard-grid" aria-label="금지와 허용">
+        <div class="tile"><strong>허용</strong><span>CSS/SVG animation, Web Animations API, 짧은 inline JavaScript.</span></div>
+        <div class="tile"><strong>허용</strong><span>PC desktop의 click, hover, focus, keyboard state 확인.</span></div>
+        <div class="tile"><strong>금지</strong><span>외부 CDN, 외부 script, 외부 image, network call.</span></div>
+        <div class="tile"><strong>금지</strong><span>의미 없는 장식 animation, 긴 설명 카드로 첫 화면 채우기.</span></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>금지와 허용</h2><p>스킬은 요청된 작업을 돕는 도구이며, 범위 밖 자동화는 하지 않습니다.</p></div>
-      <div class="matrix" aria-label="금지와 허용">
-        <div class="matrix-cell use"><strong>허용</strong><p>관련 파일을 읽고, 요청된 범위 안에서 가장 작은 유효 변경을 수행합니다.</p></div>
-        <div class="matrix-cell combine"><strong>보고</strong><p>변경 파일, 검증 명령, 브라우저 확인 여부를 최종 답변에 남깁니다.</p></div>
-        <div class="matrix-cell skip"><strong>보류</strong><p>요청과 무관한 refactor, 문서 확장, 전역 설치는 하지 않습니다.</p></div>
-        <div class="matrix-cell stop"><strong>차단</strong><p>비밀값 노출, destructive command, 승인 없는 commit/push/deploy는 멈춥니다.</p></div>
+      <div class="section-head">
+        <h2>실제 확인</h2>
+        <p>검증은 정적 구조와 browser interaction을 함께 봅니다.</p>
+      </div>
+      <div class="verify-grid" aria-label="실제 확인 표">
+        <div class="verify head"><strong>검증 항목</strong></div><div class="verify head"><strong>명령 또는 대상</strong></div><div class="verify head"><strong>확인 내용</strong></div><div class="verify head"><strong>기록 기준</strong></div>
+        <div class="verify"><strong>스킬 전용 validator</strong></div><div class="verify"><p><code>node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html</code></p></div><div class="verify"><p>그림 먼저, 인터랙티브, 애니메이션, PC desktop, mobile/tablet, 넓은 표.</p></div><div class="verify"><p>오류 없이 통과.</p></div>
+        <div class="verify"><strong>HTML 공통 validator</strong></div><div class="verify"><p><code>node scripts/validate-skill-html.ts .</code></p></div><div class="verify"><p>외부 자산, inline script safety, broken local link, SVG arrow endpoint.</p></div><div class="verify"><p>모든 skill HTML 통과.</p></div>
+        <div class="verify"><strong>PC desktop browser</strong></div><div class="verify"><p>local HTTP server page</p></div><div class="verify"><p>click, focus, animation state, overflow, text overlap, console error.</p></div><div class="verify"><p>mobile/tablet 검증은 비대상.</p></div>
+        <div class="verify"><strong>motion fallback</strong></div><div class="verify"><p><code>prefers-reduced-motion</code></p></div><div class="verify"><p>큰 반복 animation이 줄어드는지 확인합니다.</p></div><div class="verify"><p>motion-sensitive 사용자를 배려합니다.</p></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2>프로젝트 연결 조각</h2><p>프로젝트 instruction에는 스킬 링크와 최소 완료 조건만 둡니다.</p></div>
-      <pre class="snippet">Use $skill-to-html at skills/skill-to-html/SKILL.md when the task matches this skill.
-Keep visible explanations Korean-first, preserve exact identifiers, and report validation evidence.
-Validate with node scripts/validate-skill.ts skills/skill-to-html &amp;&amp; node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html &amp;&amp; node scripts/validate-skill-html.ts ..</pre>
+      <div class="section-head">
+        <h2>프로젝트 연결 조각</h2>
+        <p>프로젝트 instruction에는 호출 조건과 완료 기준만 둡니다.</p>
+      </div>
+      <pre class="snippet">Use $skill-to-html at skills/skill-to-html/SKILL.md when a skill is created or materially updated.
+Start skill.html with a visual, interactive, animated first viewport before long text.
+Use self-contained CSS/SVG/Web Animations API or short inline JavaScript; no external CDN/script/image.
+Validate with node scripts/validate-skill-html.ts . and the target skill's validator.</pre>
     </section>
   </main>
+  <script>
+    const modeCopy = {
+      shape: {
+        title: "형태 먼저",
+        copy: "첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다."
+      },
+      motion: {
+        title: "움직임 연결",
+        copy: "애니메이션은 장식이 아니라 원문 계약이 화면 상태로 바뀌는 과정을 보여줍니다."
+      },
+      evidence: {
+        title: "근거 펼치기",
+        copy: "클릭한 mode는 관련 node와 근거 caption을 함께 바꿔 검증 경로를 드러냅니다."
+      }
+    };
+
+    const controls = document.querySelectorAll("[data-view]");
+    const nodes = document.querySelectorAll("[data-node]");
+    const title = document.querySelector("#mode-title");
+    const copy = document.querySelector("#mode-copy");
+
+    controls.forEach((control) => {
+      control.addEventListener("click", () => {
+        const view = control.getAttribute("data-view");
+        controls.forEach((item) => item.setAttribute("aria-pressed", String(item === control)));
+        nodes.forEach((node) => node.classList.toggle("active", node.getAttribute("data-node") === view));
+        title.textContent = modeCopy[view].title;
+        copy.textContent = modeCopy[view].copy;
+      });
+    });
+
+    document.querySelectorAll(".decision-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".decision-card").forEach((item) => item.classList.remove("active"));
+        card.classList.add("active");
+      });
+    });
+  </script>
 </body>
 </html>

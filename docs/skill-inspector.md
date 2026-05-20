@@ -14,6 +14,7 @@
 - `skills/**/*.md`는 한국어 우선 문서인가. `SKILL.md`, `references/*.md`의 설명, 절차, 표 라벨은 한국어로 쓰고, 코드 식별자, 명령, 파일 경로, 제품명, 프로토콜명, 인용된 upstream skill 이름처럼 정확도가 필요한 용어만 원문 표기를 허용한다.
 - `SKILL.md` 본문이 과하게 길지 않고, 세부 내용은 `references/`로 분리되어 있는가
 - `skill.html`이 단순 카드형 요약이 아니라 decision matrix, workflow, chart, resource map, input/output schema 같은 시각 구조를 제공하는가
+- `skill-to-html` 산출물은 첫 화면에서 텍스트 카드보다 interactive visual scene, animated diagram, mode switch, progressive disclosure가 먼저 보이는가
 - `skill.html`의 화면 라벨이 한국어 우선인지 확인한다. `commit`, `push`, `repo`, `SKILL.md`, `GraphQL`, `TypeScript`, `Playwright`처럼 코드 맥락의 고유어는 허용하지만 `Decision Matrix`, `Workflow`, `Resource Map`, `Do Not` 같은 일반 UI 라벨은 한국어로 쓴다.
 - `agents/openai.yaml`과 `project-snippets/`가 실제 스킬 목적과 맞는가
 - `AGENTS.md`, `CLAUDE.md`, 또는 다른 에이전트 instruction 파일에서 연결 가능한 방식으로 문서화되어 있는가
@@ -34,8 +35,8 @@
 7. 문서끼리 최신화가 안 됐거나 서로 충돌하는 부분은 `skills/sync-docs/SKILL.md` 기준으로 대조한다.
 8. repo 기본 TypeScript validator를 실행한다.
 9. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
-10. 공통 HTML validator로 `skill.html`의 portable static HTML, desktop layout, visual structures, validation, misuse guardrails를 확인한다.
-11. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다. `skill-to-html` 산출물은 mobile/tablet viewport를 검사하지 않아도 된다.
+10. 공통 HTML validator로 `skill.html`의 portable self-contained HTML, desktop layout, visual structures, validation, misuse guardrails를 확인한다.
+11. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다. `skill-to-html` 산출물은 mobile/tablet viewport를 검사하지 않아도 되지만 desktop click, focus, animation state는 확인한다.
 12. 수정하기 전에 local-only `inspector/YYYY-MM-DD-<scope>.md` 파일을 만들고 findings, 근거 파일, 검증 명령, 해결 기준을 적는다.
 13. 그 검사 문서를 기준으로 수정한다.
 14. 이슈가 처리되면 해당 검사 파일은 삭제한다. 일부만 처리됐으면 해결된 항목을 제거하고 미해결 항목만 남긴다.
@@ -66,7 +67,7 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 
 `scripts/run-agent-evals.ts`는 `evals/agent/cases/`의 대표 prompt 계약을 검사한다. 정적 validator가 파일 정합성을 보는 동안, 이 runner는 skill routing, safety boundary, output shape 같은 agent behavior regression을 빠르게 확인한다.
 
-`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
+`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, diagram-rich section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript는 network call, external import, eval 없이 self-contained interaction controller일 때만 허용한다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
 
 ## 판정 등급
 
@@ -83,7 +84,8 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 - `SKILL.md`와 `references/*.md`의 본문은 한국어로 작성한다. 영어 섹션 라벨을 그대로 남겨 `skill.html`과 대조하기 어렵게 만들지 않는다.
 - 긴 취향, 예시, 평가 prompt, source rule은 `references/`로 분리한다.
 - `skill.html`은 최소 4개 이상의 시각 구조를 포함한다.
-- `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다.
+- `skill-to-html` 산출물은 첫 viewport에 조작 가능한 visual scene, animated diagram, mode switch, 또는 evidence reveal을 둔다.
+- `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다. Self-contained inline JavaScript는 짧은 상호작용 구현에만 쓴다.
 - `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.
 - `project-snippets/`의 문구가 실제 trigger와 맞다.
 - Codex용 `AGENTS.md`뿐 아니라 Claude용 `CLAUDE.md`에도 연결 가능한 trigger와 경로가 문서화되어 있다.

@@ -220,6 +220,39 @@ function validateLocalLinks(skillPath: string, html: string): void {
   }
 }
 
+function validateScriptSafety(skillPath: string, html: string): void {
+  for (const scriptMatch of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    const attributes = parseAttributes(scriptMatch[1] ?? "");
+    const body = scriptMatch[2] ?? "";
+
+    if (attributes.src) {
+      fail(skillPath, `external script src in skill.html: ${attributes.src}`);
+      continue;
+    }
+
+    const forbiddenPatterns = [
+      ["network fetch", /\bfetch\s*\(/],
+      ["XMLHttpRequest", /\bXMLHttpRequest\b/],
+      ["WebSocket", /\bWebSocket\b/],
+      ["EventSource", /\bEventSource\b/],
+      ["sendBeacon", /\bnavigator\.sendBeacon\b/],
+      ["dynamic import", /\bimport\s*\(/],
+      ["eval", /\beval\s*\(/],
+      ["Function constructor", /\bnew\s+Function\b/],
+      ["document.cookie", /\bdocument\.cookie\b/],
+      ["localStorage", /\blocalStorage\b/],
+      ["sessionStorage", /\bsessionStorage\b/],
+    ] as const;
+
+    for (const [label, pattern] of forbiddenPatterns) {
+      if (pattern.test(body)) {
+        fail(skillPath, `inline script should not use ${label}`);
+        break;
+      }
+    }
+  }
+}
+
 function validateWideVisualStructure(skillPath: string, html: string): void {
   if (/<div[^>]*class="[^"]*\btwo\b[^"]*"[^>]*>[\s\S]{0,4000}<div[^>]*class="[^"]*\bscope\b/.test(html)) {
     fail(skillPath, "wide scope table should not be nested inside a two-column layout");
@@ -286,11 +319,9 @@ function validateSkillHtml(skillPath: string): void {
     fail(skillPath, `skill.html should visibly name the skill: ${skillName}`);
   }
 
-  if (/<script\b/i.test(html)) {
-    fail(skillPath, "skill.html should not include scripts");
-  }
+  validateScriptSafety(skillPath, html);
 
-  if (/https?:\/\/|src="\/\//i.test(html)) {
+  if (/https?:\/\/(?!(?:127\.0\.0\.1|localhost|\[::1\]|0\.0\.0\.0)(?::|\/))|src="\/\//i.test(html)) {
     fail(skillPath, "skill.html should not depend on external URLs or assets");
   }
 
