@@ -35,12 +35,53 @@ skill-test/
 
 `current/`는 매 cycle 시작 전에 삭제하고 다시 만든다. `runs/`와 `cycles.md`는 누적 기록이므로 삭제하지 않는다. 실제 실행 history에는 사용자가 지정한 절대 경로를 기록해도 되지만, 공유 repo 문서에는 machine-specific 절대 경로를 쓰지 않는다.
 
+## 실행 guard
+
+외부 agent를 실제로 돌리는 테스트는 cwd와 resume 대상이 조금만 틀려도 local shared workspace를 수정할 수 있다. 따라서 모든 cycle은 아래 guard를 통과해야 한다.
+
+- 테스트 대상 project root는 `<skill-test-root>/current/example-projects/<project-slug>/`이고, 첫 응답과 이어진 setup 실행 모두 이 actual project root cwd에서 실행한다.
+- wrapper directory나 `<skill-test-root>/current`에서 실행한 뒤 sibling `example-projects/<project-slug>`에 쓰게 하지 않는다. sibling target write가 필요해지는 실행 방식은 실패로 판정한다.
+- Codex CLI를 쓰면 첫 실행의 JSON event log에서 explicit session id를 추출하고, 이어지는 `codex exec resume`에는 그 id를 직접 넘긴다. `--last`는 다른 cwd의 마지막 session을 잡을 수 있으므로 쓰지 않는다.
+- resume도 첫 실행과 같은 actual project root cwd에서 실행한다.
+- non-git scratch project에서 Codex CLI를 쓸 때는 필요하면 `--skip-git-repo-check`를 명시한다. 이 flag는 테스트 scratch project에 대한 repo check 우회일 뿐, shared workspace를 target으로 삼는 허가가 아니다.
+- shared workspace guard를 매 외부 agent 실행 전후로 확인한다. 예시는 아래와 같다.
+
+```bash
+git -C <local-workspace> status --short
+```
+
+위 결과는 테스트 시작 전과 종료 후가 같아야 한다. 테스트 session이 `<skill-test-root>/current` 밖, 특히 local shared workspace를 수정하면 즉시 process를 중단하고 테스트가 만든 변경만 되돌린 뒤 cycle을 `fail`로 기록한다. 이 경우 나중에 history를 고쳐 pass로 만들지 않고, 테스트 방법이나 `project-workflow` 계약을 수정한 뒤 다음 cycle로 넘어간다.
+
+권장 실행 shape는 아래처럼 project root를 cwd로 고정하는 방식이다.
+
+```bash
+cd <skill-test-root>/current/example-projects/<project-slug>
+
+codex exec \
+  --skip-git-repo-check \
+  --json \
+  -o <skill-test-root>/runs/cycle-NNN/history/first-response.md \
+  - < <skill-test-root>/runs/cycle-NNN/prompts/first-response.md \
+  > <skill-test-root>/runs/cycle-NNN/output/first-response-events.jsonl
+
+# first-response-events.jsonl에서 explicit session id를 추출한다.
+
+codex exec resume \
+  --skip-git-repo-check \
+  --json \
+  -o <skill-test-root>/runs/cycle-NNN/history/project-run-final.md \
+  <explicit-session-id> \
+  - < <skill-test-root>/runs/cycle-NNN/prompts/project-setup-answers.md \
+  > <skill-test-root>/runs/cycle-NNN/output/project-run-events.jsonl
+```
+
 ## Cycle 절차
 
 1. repo preflight를 실행한다.
    - `git status --short --branch`
    - 현재 작업 중인 변경과 unrelated dirty file을 분리한다.
    - 테스트에 반영할 변경은 먼저 검증하고 commit/push한다.
+   - shared workspace guard baseline을 기록한다.
 
 2. 테스트 루트를 초기화한다.
    - `<skill-test-root>/current`를 삭제한다.
@@ -56,6 +97,8 @@ skill-test/
    - plugin entrypoint는 `current/_github/agents-skills/plugins/project-workflow/skills/project-workflow/SKILL.md`다.
    - prompt에는 기대 순서를 주입하지 않는다.
    - raw idea나 새 서비스 요청만 준 뒤 첫 응답을 그대로 `runs/cycle-NNN/history/first-response.md`에 저장한다.
+   - agent 실행 cwd는 actual project root cwd다.
+   - Codex CLI를 쓰면 JSON event log에서 explicit session id를 추출해 기록한다.
    - 통과 조건은 아래다.
      - Matt Pocock skills / `grill-with-docs`가 첫 domain docs gate로 나온다.
      - GStack plugin / `office-hours`가 그 다음 product challenge로 나온다.
@@ -67,17 +110,21 @@ skill-test/
    - 사람이 답하는 것처럼 domain/product/tool/design 질문에 순서대로 답한다.
    - agent가 만든 전체 대화와 결정을 `runs/cycle-NNN/history/project-run-history.md`에 남긴다.
    - 실제 프로젝트는 `current/example-projects/<project-slug>/` 아래에 만든다.
-   - 단순 Markdown만 만들면 실패다. 최소한 `apps/`, `packages/`, `docs/`, `.scratch/`, 검증 script 같은 project structure가 실제 파일로 있어야 한다.
+   - 이어진 실행이 필요하면 첫 응답에서 얻은 explicit session id로 같은 actual project root cwd에서 resume한다.
+   - `--last` 기반 resume, 다른 cwd 기반 resume, wrapper cwd에서 sibling project를 쓰는 방식은 실패다.
+   - 단순 Markdown만 만들면 실패다. 선택한 구조에 맞는 `apps/`/`packages/` 또는 `src/` 같은 실제 project structure, `docs/`, `.scratch/`, 검증 script가 실제 파일로 있어야 한다.
 
 6. 검증을 실행한다.
    - target project 자체 검증 명령을 실행한다.
    - phase handoff가 있으면 `execute-phase.ts`를 dry-run으로 실행한다.
    - dry-run prompt에 `Step undefined`나 `undefined` step title이 나오면 실패로 판정한다.
+   - `node_modules`는 검증 중 생긴 generated artifact로 허용하되 `.gitignore` 또는 file-tree summary exclusion으로 처리한다. 산출물 품질 판단에는 포함하지 않는다.
+   - shared workspace guard를 다시 확인한다.
    - 결과는 `runs/cycle-NNN/output/`과 `cycle-summary.md`에 남긴다.
 
 7. 판정한다.
    - `pass`: 첫 응답 순서, 실제 파일 생성, 검증 명령, history 기록이 모두 맞다.
-   - `fail`: 하나라도 틀리면 원인을 `cycle-summary.md`에 쓰고, 이 repo의 `project-workflow`를 수정한 뒤 commit/push하고 다음 cycle로 반복한다.
+   - `fail`: 하나라도 틀리면 원인을 `cycle-summary.md`에 쓰고, 필요한 경우 이 repo의 테스트 방법, validator, 또는 `project-workflow`를 수정한 뒤 commit/push하고 다음 cycle로 반복한다.
 
 ## 금지
 
@@ -86,6 +133,8 @@ skill-test/
 - 실제 응답과 다른 history를 나중에 손으로 꾸미지 않는다.
 - 이전 cycle의 `current/` 프로젝트를 재사용하지 않는다.
 - 첫 응답 테스트에서 파일을 만든 것처럼 기록하지 않는다.
+- `codex exec resume --last`로 다른 cwd의 session을 이어받지 않는다.
+- 외부 agent가 local shared workspace를 수정했는데 pass로 처리하지 않는다.
 
 ## 기록 템플릿
 
@@ -101,6 +150,9 @@ skill-test/
 - downloaded commit:
 - plugin entrypoint:
 - project:
+- agent cwd:
+- explicit session id:
+- shared workspace guard:
 - verdict:
 
 ## 0. Source download
@@ -136,6 +188,8 @@ File tree summary:
 Commands:
 
 Results:
+
+Generated artifacts excluded from summary:
 
 ## 5. Cycle decision
 
