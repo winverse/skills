@@ -37,13 +37,13 @@
     .shell { width:1200px; max-width:1200px; margin:0 auto; }
     .stage-shell, .panel, .tile, .metric, .source-map, .source-cell, .verify, .snippet, .control, .decision-card { border:1px solid var(--border); border-radius:8px; background:var(--surface); }
     .hero { display:grid; grid-template-columns:820px 1fr; gap:16px; align-items:stretch; margin-bottom:22px; }
-    .stage-shell { position:relative; min-height:468px; padding:18px; overflow:hidden; background:linear-gradient(180deg, #fff, #f8fbff); }
+    .stage-shell { position:relative; min-height:388px; padding:18px; overflow:hidden; background:linear-gradient(180deg, #fff, #f8fbff); }
     .stage-head { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:14px; }
     .mark { width:70px; height:70px; border:1px solid var(--border); border-radius:8px; display:grid; place-items:center; background:var(--soft); color:var(--blue); font-size:18px; font-weight:800; }
     .subtitle { margin-top:7px; color:var(--muted); font-size:14px; max-width:560px; }
     .badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
     .badge { border:1px solid var(--border); border-radius:999px; background:#fff; padding:5px 9px; color:var(--muted); font-size:12px; }
-    .stage { display:grid; grid-template-columns:1fr 220px; gap:14px; align-items:stretch; min-height:340px; }
+    .stage { display:grid; grid-template-columns:1fr 220px; gap:14px; align-items:stretch; min-height:248px; }
     .visual { border:1px solid var(--border); border-radius:8px; background:#ffffff; padding:14px; overflow:hidden; }
     .caption { border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:14px; display:grid; align-content:space-between; gap:10px; }
     .caption strong { display:block; font-size:15px; margin-bottom:4px; }
@@ -62,6 +62,7 @@
     .section-head p { color:var(--muted); font-size:13px; }
     svg { display:block; width:100%; height:auto; }
     .flow-line { stroke-dasharray:520; stroke-dashoffset:520; animation:drawLine 3.2s ease-in-out infinite; }
+    .hero-line { stroke-dasharray:none; stroke-dashoffset:0; animation:none; }
     .pulse { animation:pulseNode 2.4s ease-in-out infinite; transform-origin:center; }
     .float { animation:softFloat 4s ease-in-out infinite; }
     .mode-node { opacity:.34; transition:opacity .22s ease, transform .22s ease; transform-origin:center; }
@@ -73,20 +74,6 @@
     .decision-card:hover, .decision-card:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.24); outline-offset:2px; }
     .decision-card.active { background:var(--soft-amber); border-top-color:var(--amber); }
     .decision-card strong, .tile strong, .source-cell strong, .verify strong, .metric strong { display:block; margin-bottom:5px; font-size:13px; }
-    .model-board { display:grid; grid-template-columns:280px 1fr; gap:16px; align-items:stretch; }
-    .step-rail { display:grid; gap:10px; align-content:start; }
-    .step-button { width:100%; min-height:72px; padding:12px; text-align:left; border:1px solid var(--border); border-left:5px solid var(--line); border-radius:8px; background:#fff; cursor:pointer; transition:background .18s ease, transform .18s ease, border-color .18s ease; }
-    .step-button:hover, .step-button:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.24); outline-offset:2px; }
-    .step-button[aria-pressed="true"] { background:var(--soft-green); border-left-color:var(--green); }
-    .step-button strong { display:block; font-size:13px; margin-bottom:4px; }
-    .step-button span { color:var(--muted); font-size:12px; }
-    .model-panel { display:grid; grid-template-columns:1.2fr .8fr; gap:14px; }
-    .model-evidence { border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:14px; display:grid; align-content:space-between; gap:14px; }
-    .model-evidence strong { display:block; font-size:14px; margin-bottom:5px; }
-    .model-evidence p { color:var(--muted); font-size:13px; }
-    .model-evidence code { color:var(--ink); }
-    .model-step { opacity:.36; transition:opacity .2s ease, transform .2s ease; transform-origin:center; }
-    .model-step.active { opacity:1; transform:scale(1.03); }
     .metrics { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; }
     .metric { min-height:104px; padding:13px; background:#fff; }
     .meter { height:12px; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--soft); margin-top:10px; }
@@ -111,19 +98,6 @@
     .guard-grid .tile { border-radius:0; border-left:0; border-top:0; }
     .guard-grid .tile:nth-child(4n) { border-right:0; }
     .guard-grid .tile:nth-last-child(-n+4) { border-bottom:0; }
-    .mapping-board { display:grid; grid-template-columns:1fr 270px; gap:16px; align-items:stretch; }
-    .mapping-steps { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:8px; margin-top:12px; }
-    .mapping-step { min-height:88px; padding:12px; border:1px solid var(--border); border-radius:8px; background:#fff; position:relative; }
-    .mapping-step::after { content:""; position:absolute; top:42px; right:-9px; width:9px; height:2px; background:var(--green); }
-    .mapping-step:last-child::after { display:none; }
-    .mapping-step strong { display:block; font-size:12px; margin-bottom:5px; }
-    .mapping-step span { display:block; color:var(--muted); font-size:11px; }
-    .trust-panel { display:grid; gap:10px; align-content:start; }
-    .trust-item { border:1px solid var(--border); border-radius:8px; padding:12px; background:var(--panel); }
-    .trust-item.block { background:var(--soft-red); border-color:#e1aaa3; }
-    .trust-item.allow { background:var(--soft-green); border-color:#a9d8bd; }
-    .trust-item strong { display:block; font-size:13px; margin-bottom:4px; }
-    .trust-item span { display:block; color:var(--muted); font-size:12px; }
     .verify-grid { display:grid; grid-template-columns:170px 1fr 220px 210px; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--surface); }
     .verify { min-height:86px; padding:12px; border:0; border-right:1px solid var(--border); border-bottom:1px solid var(--border); border-radius:0; }
     .verify:nth-child(4n) { border-right:0; }
@@ -135,7 +109,7 @@
     @keyframes softFloat { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
     @media (prefers-reduced-motion: reduce) {
       .flow-line, .pulse, .float { animation:none; }
-      .control, .decision-card, .fill, .mode-node, .step-button, .model-step { transition:none; }
+      .control, .decision-card, .fill, .mode-node { transition:none; }
     }
   </style>
 </head>
@@ -164,44 +138,46 @@
         </div>
         <div class="stage">
           <div class="visual">
-            <svg viewBox="0 0 760 320" role="img" aria-label="상호작용형 skill.html 변환 장면">
+            <svg viewBox="0 0 760 240" role="img" aria-label="상호작용형 skill.html 변환 장면">
               <defs>
                 <marker id="heroArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2458b8"></path></marker>
               </defs>
               <g fill="#ffffff" stroke="#cbd4df" stroke-width="2">
-                <rect x="30" y="80" width="160" height="92" rx="8"></rect>
-                <rect x="300" y="52" width="160" height="92" rx="8"></rect>
-                <rect x="300" y="184" width="160" height="92" rx="8"></rect>
-                <rect x="570" y="80" width="160" height="92" rx="8"></rect>
+                <rect x="30" y="76" width="138" height="78" rx="8"></rect>
+                <rect x="214" y="76" width="138" height="78" rx="8"></rect>
+                <rect x="398" y="76" width="138" height="78" rx="8"></rect>
+                <rect x="582" y="76" width="138" height="78" rx="8"></rect>
+                <rect x="214" y="176" width="322" height="34" rx="8" fill="#fff0ee" stroke="#d7a39d"></rect>
               </g>
               <g class="mode-node active" data-node="shape">
-                <rect x="300" y="52" width="160" height="92" rx="8" fill="#edf7f1" stroke="#25724d" stroke-width="3"></rect>
+                <rect x="214" y="76" width="138" height="78" rx="8" fill="#edf7f1" stroke="#25724d" stroke-width="3"></rect>
               </g>
               <g class="mode-node" data-node="motion">
-                <rect x="300" y="184" width="160" height="92" rx="8" fill="#fff6df" stroke="#92650d" stroke-width="3"></rect>
+                <rect x="398" y="76" width="138" height="78" rx="8" fill="#fff6df" stroke="#92650d" stroke-width="3"></rect>
               </g>
               <g class="mode-node" data-node="evidence">
-                <rect x="570" y="80" width="160" height="92" rx="8" fill="#eef3f8" stroke="#2458b8" stroke-width="3"></rect>
+                <rect x="582" y="76" width="138" height="78" rx="8" fill="#eef3f8" stroke="#2458b8" stroke-width="3"></rect>
               </g>
               <g fill="none" stroke="#2458b8" stroke-width="2.6" marker-end="url(#heroArrow)">
-                <path class="flow-line" d="M190 126 C242 126 252 98 300 98"></path>
-                <path class="flow-line" d="M190 126 C246 126 250 230 300 230"></path>
-                <path class="flow-line" d="M460 98 C512 98 522 126 570 126"></path>
+                <path class="hero-line" d="M168 115 L214 115"></path>
+                <path class="hero-line" d="M352 115 L398 115"></path>
+                <path class="hero-line" d="M536 115 L582 115"></path>
               </g>
               <g text-anchor="middle" font-size="14" font-weight="800" fill="#161b24">
-                <text x="110" y="118">SKILL.md</text>
-                <text x="380" y="88">의미 구조</text>
-                <text x="380" y="220">skill IR</text>
-                <text x="650" y="118">skill.html</text>
+                <text x="99" y="107">SKILL.md</text>
+                <text x="283" y="107">의미 구조</text>
+                <text x="467" y="107">skill IR</text>
+                <text x="651" y="107">skill.html</text>
               </g>
               <g text-anchor="middle" font-size="11" fill="#606b78">
-                <text x="110" y="140">원문 계약</text>
-                <text x="380" y="110">heading/list/link</text>
-                <text x="380" y="242">component mapping</text>
-                <text x="650" y="140">사람용 확인 화면</text>
+                <text x="99" y="130">원문 계약</text>
+                <text x="283" y="130">heading/list/link</text>
+                <text x="467" y="130">component mapping</text>
+                <text x="651" y="130">사람용 화면</text>
+                <text x="375" y="198" fill="#a83a30">raw HTML, event handler, 외부 script 통과 금지</text>
               </g>
-              <circle class="pulse" cx="650" cy="126" r="9" fill="#2458b8"></circle>
-              <circle class="float" cx="380" cy="230" r="7" fill="#92650d"></circle>
+              <circle class="pulse" cx="651" cy="115" r="8" fill="#2458b8"></circle>
+              <circle class="float" cx="467" cy="115" r="6" fill="#92650d"></circle>
             </svg>
           </div>
           <aside class="caption" aria-live="polite">
