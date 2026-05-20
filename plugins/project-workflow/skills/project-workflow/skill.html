@@ -112,7 +112,7 @@
         <div class="contract"><strong>정본 경로</strong><span>plugin-bundled skill만 정본 계약을 유지하고, 새 project instruction은 plugin 경로를 직접 링크합니다.</span></div>
         <div class="contract gate"><strong>질문 gate 우선</strong><span>raw idea에서는 <code>grill-with-docs</code>, <code>office-hours</code>, <code>brainstorming</code> setup gap check 전에는 PRD와 구조 인계를 확정하지 않습니다.</span></div>
         <div class="contract"><strong>실제 호출 우선</strong><span>선택한 primitive는 호출면을 확인해 실제 호출하고, 불가능하면 <code>fallback</code> 상태와 local 질문을 남깁니다.</span></div>
-        <div class="contract gate"><strong>Korean-first artifact gate</strong><span>영어 문서 요청이 없으면 durable setup docs의 제목, 본문, 목록, 위험 gate heading, lane label, field label, phase step 설명은 한국어 우선이어야 합니다.</span></div>
+        <div class="contract gate"><strong>Korean-first artifact gate</strong><span>영어 문서 요청이 없으면 durable setup docs의 최상위 문서 제목, 본문, 목록, 위험 gate heading, lane label, field label, phase step 설명은 한국어 우선이어야 합니다.</span></div>
         <div class="contract route"><strong>Actual project shell gate</strong><span>구조가 확정된 setup은 Markdown만 만들지 않고 root package config, ESM tsconfig, app/package shell, validation command를 만듭니다.</span></div>
         <div class="contract route"><strong>책임 분리</strong><span>구조는 <code>project-structure</code>, 반복 구현과 TDD와 QA는 <code>feature-workflow</code>, 문서 drift는 <code>sync-docs</code>로 넘깁니다.</span></div>
         <div class="contract stop"><strong>위험 gate</strong><span>tool, MCP, external API, file write, network, untrusted content는 <code>도구/보안 위험 게이트(Agent Tool And Security Risk Gate)</code>처럼 한국어 heading으로 기록합니다.</span></div>
@@ -284,7 +284,7 @@
       <div class="flow-grid" aria-label="goal condition 구성">
         <div class="node"><strong>판단 가능한 끝</strong><span><code>CONTEXT.md</code>, ADR, PRD, issue backlog, <code>design.md</code>, setup validation처럼 확인 가능한 산출물을 지정합니다.</span></div>
         <div class="node"><strong>검증 증거</strong><span>agent가 transcript에 남길 명령, 파일 경로, evidence path를 미리 정합니다.</span></div>
-        <div class="node"><strong>문서 언어 gate</strong><span>target project가 영어를 명시하지 않았으면 durable setup docs의 제목, 본문, 목록, 필드 라벨이 한국어 우선인지 확인합니다.</span></div>
+        <div class="node"><strong>문서 언어 gate</strong><span>target project가 영어를 명시하지 않았으면 durable setup docs의 최상위 문서 제목, 본문, 목록, 필드 라벨이 한국어 우선인지 확인합니다. 예시는 <code>제품 요구사항(PRD): &lt;slug&gt;</code>, <code>workflow 상태: &lt;slug&gt;</code>, <code>설정 검증(setup validation): &lt;slug&gt;</code>입니다.</span></div>
         <div class="node"><strong>제약</strong><span>건드리면 안 되는 파일, secret, destructive action, scope 바깥 작업을 명시합니다.</span></div>
         <div class="node"><strong>한계</strong><span><code>8 turns 후 중단</code>처럼 시간, turn, 항목 수의 상한을 둡니다.</span></div>
         <div class="node"><strong>평가 방식</strong><span><code>/goal</code> evaluator가 파일을 직접 읽지 않는다고 보고, 필요한 증거를 출력에 남기게 합니다.</span></div>
@@ -296,8 +296,10 @@
       <div class="source-table" aria-label="goal 반복 개선 loop">
         <div class="table-cell head"><strong>단계</strong></div><div class="table-cell head"><strong>판단</strong></div><div class="table-cell head"><strong>다음 행동</strong></div>
         <div class="table-cell"><strong>fresh clone cycle</strong></div><div class="table-cell"><span>GitHub에서 새로 받은 copy로 첫 응답, setup 실행, phase dry-run, shared workspace guard를 확인합니다.</span></div><div class="table-cell"><span><code>runs/cycle-NNN/</code>에 prompt, history, output, summary를 남깁니다.</span></div>
+        <div class="table-cell"><strong>확장 검증 케이스</strong></div><div class="table-cell"><span>UI dashboard, CLI/no-browser local data tool, API/external-risk mock service를 번갈아 돌립니다.</span></div><div class="table-cell"><span>한 종류의 pass만으로 완료하지 않고 다른 표면에서도 계약을 확인합니다.</span></div>
         <div class="table-cell"><strong>failure class</strong></div><div class="table-cell"><span><code>plugin contract</code>, <code>runner</code>, <code>test method</code>, <code>target artifact</code>, <code>environment/hook</code>으로 실패 원인을 분류합니다.</span></div><div class="table-cell"><span>기록을 고쳐 pass로 만들지 않고 원인에 맞는 파일을 수정합니다.</span></div>
-        <div class="table-cell"><strong>language gate</strong></div><div class="table-cell"><span><code>workflow-state.md</code> 위험 gate heading, <code>work-claims.md</code> lane/field label, phase step heading이 영어 중심이면 validation이 통과해도 pass가 아닙니다.</span></div><div class="table-cell"><span>Korean-first artifact gate를 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
+        <div class="table-cell"><strong>language gate</strong></div><div class="table-cell"><span>최상위 문서 제목, <code>workflow-state.md</code> 위험 gate heading, <code>work-claims.md</code> lane/field label, phase step heading이 영어 중심이면 validation이 통과해도 pass가 아닙니다.</span></div><div class="table-cell"><span>Korean-first artifact gate를 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
+        <div class="table-cell"><strong>runner timeout</strong></div><div class="table-cell"><span>외부 agent <code>resume</code>이 timeout되거나 final response가 없으면 산출물이 있어도 pass가 아닙니다.</span></div><div class="table-cell"><span>PID, 종료 시각, generated files, validation evidence를 기록하고 <code>runner</code> 실패로 분류합니다.</span></div>
         <div class="table-cell"><strong>actual shell gate</strong></div><div class="table-cell"><span>구조가 확정됐는데 <code>package.json</code>, ESM tsconfig, app/package folder, source entrypoint, validation command가 없으면 pass가 아닙니다.</span></div><div class="table-cell"><span>project shell 계약을 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
         <div class="table-cell"><strong>개선 후 반복</strong></div><div class="table-cell"><span>validator를 통과시키고 <code>atomic-committer</code>로 commit/push한 뒤 다음 fresh clone cycle을 돕니다.</span></div><div class="table-cell"><span>마지막 수정 이후 cycle이 통과하고 blocker가 없을 때만 완료로 봅니다.</span></div>
       </div>

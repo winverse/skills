@@ -7,7 +7,8 @@
 - `project-workflow` 첫 응답이 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check 순서로 질문하는지 확인한다.
 - `design.md`, `project-structure`, PRD, issue backlog, architecture handoff가 질문 gate 전에는 `deferred` 또는 `not created yet`로 남는지 확인한다.
 - 질문에 답한 뒤에는 실제 프로젝트 폴더, 구조 파일, 도메인 문서, ADR, PRD, `design.md`, `workflow-state.md`, `work-claims.md`, phase handoff가 생성되는지 확인한다.
-- target project가 다른 언어를 명시하지 않았으면 durable setup docs가 한국어 우선으로 작성되는지 확인한다.
+- target project가 다른 언어를 명시하지 않았으면 durable setup docs가 최상위 문서 제목까지 한국어 우선으로 작성되는지 확인한다.
+- UI dashboard, CLI/no-browser local data tool, API/external-risk mock service처럼 성격이 다른 케이스를 늘려도 같은 계약이 유지되는지 확인한다.
 - 실패하면 history를 고쳐 맞추지 않고 `project-workflow` 자체를 수정한 뒤 다음 cycle에서 다시 검증한다.
 
 ## `/goal` 반복 개선 루프
@@ -24,7 +25,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 - 질문 gate 전에는 `design.md`, `project-structure`, PRD, issue backlog, implementation이 `deferred` 또는 `not created yet`로 남는다.
 - 질문 답변 뒤에는 실제 project structure, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation이 생성된다.
 - 사용자가 structure를 확정했으면 `.scratch` Markdown만 생성하는 것은 실패다. root `package.json`, ESM tsconfig, 선택한 `apps/`/`packages/` 또는 `src/` shell, 검증 script가 실제 파일로 있어야 한다.
-- target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다. `workflow-state.md` risk-gate heading과 `work-claims.md` lane heading도 한국어 우선이어야 한다.
+- target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다. 최상위 문서 제목, `workflow-state.md` risk-gate heading, `work-claims.md` lane heading도 한국어 우선이어야 한다. 예시는 `# 제품 요구사항(PRD): ledgerImportChecker`, `# workflow 상태: ledgerImportChecker`, `# 설정 검증(setup validation): ledgerImportChecker`다.
 - `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt를 만든다.
 - shared workspace guard가 cycle 전후 동일하다.
 - 마지막 plugin/test-method/validator 수정 이후 최소 1개 fresh clone cycle이 통과한다. 중요한 계약 변경 뒤에는 2개 연속 cycle 통과를 권장한다.
@@ -33,6 +34,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 - shared workspace가 오염된다.
 - agent가 local workspace source를 읽거나 쓴다.
 - 같은 실패가 2번 반복되어 원인 분류 없이 cycle만 반복된다.
+- 외부 agent `resume`이 timeout에 걸리거나 final response 없이 산출물만 남긴다.
 - secret, destructive action, remote write가 필요해 사용자 확인이 필요하다.
 ```
 
@@ -49,6 +51,18 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 9. 완료 조건을 만족할 때만 goal을 완료로 표시한다.
 
 이 loop에서 중요한 것은 “결과 기록을 고쳐 pass로 만드는 것”이 아니라, 실패를 플러그인 계약이나 테스트 방법에 되먹임해서 다음 fresh clone cycle이 실제로 통과하게 만드는 것이다.
+
+## 확장 검증 케이스
+
+한 가지 성공 사례만으로 완료를 선언하지 않는다. 마지막 plugin/test-method/validator 변경 이후 최소 1개 fresh clone cycle이 필요하고, 중요한 계약 변경 뒤에는 아래 중 서로 다른 2개 케이스를 연속으로 확인하는 것을 권장한다.
+
+| 케이스 | 목적 | 추가 확인 |
+| --- | --- | --- |
+| UI dashboard | `design.md`, mock direction, dense operational UI 기준 확인 | 디자인 gate가 질문 뒤에 나오고, 구현은 `feature-workflow`로 인계되는지 확인 |
+| CLI/no-browser local data tool | browser evidence 없는 프로젝트에서도 workflow가 과한 UI/QA 요구를 하지 않는지 확인 | `src/` shell, fixture, CLI validation, non-browser runtime evidence가 남는지 확인 |
+| API/external-risk mock service | 외부 API나 secret이 미래 범위로 언급될 때 risk gate가 먼저 남는지 확인 | 실제 외부 write 없이 mock/fake boundary, `도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, phase handoff가 남는지 확인 |
+
+각 cycle은 raw prompt에 기대 순서를 넣지 않는다. 케이스 이름은 `cycle-summary.md`와 `cycles.md`에 남기고, 실패하면 케이스별 예외가 아니라 `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook` 중 하나로 분류한다.
 
 ## 테스트 루트
 
@@ -119,6 +133,8 @@ codex exec resume \
   > <skill-test-root>/runs/cycle-NNN/output/project-run-events.jsonl
 ```
 
+실제 반복 테스트에서는 `resume`을 bounded wrapper로 감싼다. 기본 한계는 setup resume 6분 또는 validation 이후 3분 동안 event log 증가가 없는 상태다. timeout이 발생하면 process를 종료하고 `resume-timeout.txt`, `resume-pid.txt`, `cycle-summary.md`에 기록한다. 산출물과 validation이 일부 생겼더라도 final response가 없으면 `runner` 실패다.
+
 ## Cycle 절차
 
 1. repo preflight를 실행한다.
@@ -164,7 +180,8 @@ codex exec resume \
    - phase handoff가 있으면 `execute-phase.ts`를 dry-run으로 실행한다.
    - dry-run prompt에 `Step undefined`나 `undefined` step title이 나오면 실패로 판정한다.
    - `node_modules`는 검증 중 생긴 generated artifact로 허용하되 `.gitignore` 또는 file-tree summary exclusion으로 처리한다. 산출물 품질 판단에는 포함하지 않는다.
-   - target project가 다른 언어를 명시하지 않았으면 durable setup docs의 자연어 제목/본문/목록/필드 라벨이 한국어 우선인지 확인한다. 영어 중심 heading, 영어-only field label, 영어 중심 phase step 설명이 있으면 target validation이 통과해도 실패다. exact identifier, command, file path, package name, status keyword는 허용한다.
+   - target project가 다른 언어를 명시하지 않았으면 durable setup docs의 최상위 문서 제목, 자연어 제목/본문/목록/필드 라벨이 한국어 우선인지 확인한다. 영어 중심 heading, 영어-only field label, 영어 중심 phase step 설명이 있으면 target validation이 통과해도 실패다. exact identifier, command, file path, package name, status keyword는 허용한다.
+   - `# ledgerImportChecker PRD`, `# ledgerImportChecker workflow state`, `# setup validation` 같은 제목은 실패다. `# 제품 요구사항(PRD): ledgerImportChecker`, `# workflow 상태: ledgerImportChecker`, `# 설정 검증(setup validation): ledgerImportChecker`처럼 한국어 제목 뒤에 exact identifier를 붙인다.
    - shared workspace guard를 다시 확인한다.
    - 결과는 `runs/cycle-NNN/output/`과 `cycle-summary.md`에 남긴다.
 
@@ -184,7 +201,9 @@ codex exec resume \
 - 외부 agent가 local shared workspace를 수정했는데 pass로 처리하지 않는다.
 - 한 번 pass했다고 `/goal`을 완료 처리하지 않는다. 마지막 수정 이후 fresh clone cycle 통과와 남은 개선점 여부를 같이 본다.
 - target project가 영어 문서를 명시하지 않았는데 영어 중심 setup docs가 생성된 cycle을 pass로 처리하지 않는다.
+- `# <slug> PRD`, `# <slug> workflow state`, `# setup validation`처럼 최상위 문서 제목이 영어 중심인 cycle을 pass로 처리하지 않는다.
 - `workflow-state.md`의 사람이 읽는 risk-gate heading, `work-claims.md`의 lane/field label, `phases/step<N>.md`의 section heading/body가 영어 중심이면 pass로 처리하지 않는다. exact field name이나 gate name은 `도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `API 작업 lane`처럼 한국어 heading 뒤 괄호나 backtick 안의 보조 표기로만 허용한다.
+- 외부 agent가 timeout이나 final response 누락을 냈는데 생성된 파일만 보고 pass로 처리하지 않는다.
 
 ## 기록 템플릿
 
@@ -206,6 +225,8 @@ codex exec resume \
 - verdict:
 - goal:
 - cycle count:
+- validation case:
+- runner timeout:
 - failure class:
 - goal status:
 - document language gate:

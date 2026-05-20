@@ -49,7 +49,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - local project instructions와 docs를 먼저 읽는다.
 - 현재 runtime에서 Matt Pocock, GStack, Superpowers 호출 surface를 확인하고, 선택된 primitive는 가능하면 실제 호출한다. 호출 surface가 없으면 그 사실을 `fallback`으로 남긴다. 호출 surface 확인은 현재 session의 skill list, enabled plugin list, slash command 또는 command surface, MCP/tool surface, project instruction 링크 순서로 증거를 남긴다.
 - 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. `code identifiers`, 명령, 파일 경로, 제품명, API 이름은 원문 표기를 유지한다.
-- Korean-first artifact gate: 완료 보고 전에 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff의 자연어 제목/본문/목록/section heading을 확인한다. 대상 프로젝트가 영어를 명시하지 않았는데 durable setup docs가 영어 중심이면 pass가 아니라 그 자리에서 한국어 우선으로 고쳐 쓴 뒤 검증한다.
+- Korean-first artifact gate: 완료 보고 전에 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff의 최상위 문서 제목, 자연어 제목/본문/목록/section heading을 확인한다. 대상 프로젝트가 영어를 명시하지 않았는데 durable setup docs가 영어 중심이면 pass가 아니라 그 자리에서 한국어 우선으로 고쳐 쓴 뒤 검증한다. `# ledgerImportChecker PRD`, `# ledgerImportChecker workflow state`, `# setup validation`처럼 project slug와 영어 noun만 있는 제목은 실패다. `# 제품 요구사항(PRD): ledgerImportChecker`, `# workflow 상태: ledgerImportChecker`, `# 설정 검증(setup validation): ledgerImportChecker`처럼 한국어 제목 뒤에 exact identifier를 보조 표기로 둔다.
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
 - raw idea나 새 프로젝트에서는 Matt Pocock skills `grill-with-docs` -> GStack plugin `office-hours` -> Superpowers plugin `brainstorming` setup gap check 순서가 끝나기 전 `design.md`, `project-structure`, PRD, issue backlog, architecture handoff를 진행하지 않는다. `grill-with-docs`는 기존 `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, 코드와 문서의 용어를 먼저 확인하고, 문서가 없으면 첫 용어가 확정될 때 `CONTEXT.md`를 lazily 제안한다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 fallback으로 진행한다.
@@ -64,7 +64,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다. 문서 heading은 `## Agent Tool And Security Risk Gate`처럼 영어-only로 쓰지 말고 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`처럼 한국어 제목과 exact identifier를 병기한다.
 - 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
-- `project-workflow` 자체를 개선하거나 검증할 때는 `/goal`식 반복 개선 루프를 사용한다. 한 번의 fresh clone `pass`로 완료 선언하지 말고, 실패 원인을 plugin contract, runner, test method, target artifact, environment/hook 중 하나로 분류한 뒤 수정, 검증, commit/push, 다음 fresh clone cycle을 반복한다. Korean-first artifact gate 실패는 plugin contract 또는 target artifact 실패로 기록하고 다음 cycle 전에 계약을 보강한다.
+- `project-workflow` 자체를 개선하거나 검증할 때는 `/goal`식 반복 개선 루프를 사용한다. 한 번의 fresh clone `pass`로 완료 선언하지 말고, 실패 원인을 plugin contract, runner, test method, target artifact, environment/hook 중 하나로 분류한 뒤 수정, 검증, commit/push, 다음 fresh clone cycle을 반복한다. Korean-first artifact gate 실패는 plugin contract 또는 target artifact 실패로 기록하고 다음 cycle 전에 계약을 보강한다. 외부 agent `resume`이 산출물 생성 뒤에도 끝나지 않거나 final response를 남기지 않으면 성공으로 보지 않고 `runner` 실패로 기록한다.
 
 ## 첫 응답 기준
 
@@ -134,7 +134,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 초기 셋팅 산출물은 사용자가 다른 언어를 지정하지 않는 한 한국어 우선이다. 여기에는 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 포함된다. 코드 식별자, 명령, 경로, 제품명, 외부 API 이름은 원문을 유지한다.
 
-Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 제목, section heading, 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름, status keyword에만 남긴다. `## Agent Tool And Security Risk Gate`, `## API lane`처럼 영어-only heading이나 영어-only field label이 남으면 이 gate는 실패다. 필요한 exact term은 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `## API 작업 lane`처럼 한국어 제목 뒤 괄호나 보조 단어로 둔다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
+Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 최상위 문서 제목, section heading, 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름, status keyword에만 남긴다. `# ledgerImportChecker PRD`, `# setup validation`, `## Agent Tool And Security Risk Gate`, `## API lane`처럼 영어-only heading이나 영어-only field label이 남으면 이 gate는 실패다. 필요한 exact term은 `# 제품 요구사항(PRD): ledgerImportChecker`, `# 설정 검증(setup validation): ledgerImportChecker`, `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `## API 작업 lane`처럼 한국어 제목 뒤 괄호나 보조 단어로 둔다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
 
 `work-claims.md`는 조정 문서지만 사람도 읽는 산출물이므로 lane heading과 field label도 한국어 우선으로 쓴다. 예시는 `## 도메인 lane`, `## API 작업 lane`, `## 웹 화면 lane`, `- 담당자/session:`, `- branch 또는 worktree:`, `- 대상 spec/issue:`, `- 수정 소유 범위(claimed write set):`, `- 읽기 전용 경로(read-only paths):`, `- 공유/hotspot 파일:`, `- 통합 담당자(integration owner):`, `- 상태(status):`, `- 검증 명령:`, `- 증거 경로:`처럼 쓴다. `## API lane`, `## domain lane`처럼 lane heading이 영어 단어와 `lane`만으로 끝나면 실패다.
 
@@ -209,8 +209,10 @@ setup에서 실제 project structure가 확정됐으면 `.scratch` 문서만 만
 
 - goal condition: 첫 응답 gate, 실제 project structure 생성, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation, shared workspace guard를 measurable end state로 둔다.
 - language condition: target project가 다른 언어를 명시하지 않았으면 durable setup docs가 Korean-first artifact gate를 통과해야 한다.
+- case matrix: 최소 하나의 UI dashboard case만 보지 말고, CLI/no-browser local data tool과 API/external-risk mock service를 별도 cycle로 돌려 browser evidence 없음, tool/security gate, phase handoff가 모두 유지되는지 확인한다.
 - cycle record: `cycles.md`, `runs/cycle-NNN/history/`, `runs/cycle-NNN/output/`, `cycle-summary.md`에 cycle count, downloaded commit, explicit session id, verdict, failure class를 남긴다.
 - failure class: `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook` 중 하나로 분류한다.
+- runner timeout: 외부 agent 실행은 bounded resume으로 감싼다. 기본 한계는 setup resume 6분 또는 validation 이후 3분 동안 event log 증가가 없는 상태다. timeout이나 final response 누락이 있으면 PID, 종료 시각, 생성된 산출물, 검증 결과를 남기고 cycle은 `fail`로 기록한다.
 - improvement action: 분류 결과에 따라 `SKILL.md`, playbook, `execute-phase.ts`, validator, eval fixture, 테스트 방법 문서를 수정한다.
 - publish gate: fresh clone이 최신 수정본을 받도록 `atomic-committer`로 commit/push한 뒤 다음 cycle을 돈다. 사용자가 push 금지를 명시하면 fresh clone loop를 멈추고 local-only 상태로 보고한다.
 - completion rule: 마지막 plugin/test-method/validator 수정 이후 fresh clone cycle이 통과하고, 반복 failure나 unresolved blocker가 없을 때만 `/goal`을 완료 처리한다. 중요한 계약 변경 뒤에는 2개 연속 cycle 통과를 권장한다.

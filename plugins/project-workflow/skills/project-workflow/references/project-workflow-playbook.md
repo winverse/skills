@@ -37,11 +37,11 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. `docs/update-sour
 
 한국어 우선 대상은 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, workflow log, `workflow-state.md`, `work-claims.md`다. `code identifiers`, 명령, 파일 경로, 제품명, protocol, API 이름, upstream skill/plugin 이름은 원문 표기를 유지한다.
 
-Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 제목, section heading, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 영어 중심 heading, 영어-only lane heading, 영어-only field label도 실패로 본다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
+Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 최상위 문서 제목, section heading, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 영어 중심 heading, 영어-only lane heading, 영어-only field label도 실패로 본다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
 
 허용되는 영어는 exact identifier, command, file path, API name, package name, source package name, status keyword처럼 번역하면 정확성이 떨어지는 값이다. 문서의 자연어 설명을 영어로 남기는 것은 사용자가 명시적으로 영어 문서를 요청했을 때만 허용한다.
 
-`workflow-state.md`, `work-claims.md`, phase step file은 조정 문서이지만 사람이 읽는 setup artifact다. exact field name과 gate name은 괄호나 backtick 안에 보조 표기로만 두고, section heading과 field label은 한국어 우선으로 쓴다. `## Agent Tool And Security Risk Gate`, `## API lane`처럼 영어-only heading이 남으면 실패다. 예시는 `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `## API 작업 lane`처럼 쓴다.
+`workflow-state.md`, `work-claims.md`, phase step file은 조정 문서이지만 사람이 읽는 setup artifact다. exact field name과 gate name은 괄호나 backtick 안에 보조 표기로만 두고, 최상위 문서 제목, section heading, field label은 한국어 우선으로 쓴다. `# ledgerImportChecker workflow state`, `# setup validation`, `## Agent Tool And Security Risk Gate`, `## API lane`처럼 영어-only heading이 남으면 실패다. 예시는 `# workflow 상태: ledgerImportChecker`, `# 설정 검증(setup validation): ledgerImportChecker`, `## 도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `## API 작업 lane`처럼 쓴다.
 
 ## scenario lanes 기준
 
@@ -195,6 +195,7 @@ Goal은 아래 evidence가 실제 fresh clone cycle에서 확인될 때까지 �
 - runner: `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt 생성
 - guard: shared workspace guard 전후 동일
 - validation: target project validation과 repo validators 통과
+- expanded case matrix: UI dashboard, CLI/no-browser local data tool, API/external-risk mock service 중 마지막 수정 이후 최소 1개를 돌리고, 중요한 계약 변경 뒤에는 서로 다른 2개 case를 연속 확인
 
 실패하면 cycle을 반복하기 전에 원인을 분류한다.
 
@@ -202,12 +203,15 @@ Goal은 아래 evidence가 실제 fresh clone cycle에서 확인될 때까지 �
 | --- | --- | --- |
 | `plugin contract` | `SKILL.md`나 playbook이 기대 행동을 충분히 명시하지 못함 | plugin-bundled skill과 snippet, validator를 수정 |
 | `runner` | `execute-phase.ts`나 phase metadata 처리 문제 | runner와 runner validator를 수정 |
+| `runner` | 외부 agent `resume`이 timeout에 걸리거나 final response 없이 산출물만 남김 | bounded resume wrapper, test method, failure 기록을 수정 |
 | `test method` | fresh clone 절차, cwd, resume, guard, 기록 방식이 불충분함 | `docs/project-workflow-test-method.md`와 validator를 수정 |
 | `target artifact` | 생성된 프로젝트 구조나 docs가 handoff 기준에 부족함 | project setup 계약, artifact map, issue/phase template을 수정 |
 | `plugin contract` 또는 `target artifact` | durable setup docs가 Korean-first artifact gate를 통과하지 못함 | Korean-first gate를 hard gate로 강화하고 다음 fresh clone cycle에서 문서 언어를 재검증 |
 | `environment/hook` | local hook, cache, dev server, Codex sandbox 같은 환경 영향 | 환경 guard를 보강하고 cycle에는 fail 또는 environment note를 남김 |
 
 수정 뒤에는 repo validator를 통과시키고, GitHub fresh clone이 최신본을 받을 수 있도록 `atomic-committer`로 commit/push한 뒤 다음 cycle을 돈다. 마지막 수정 이후 fresh clone cycle이 통과하고 unresolved blocker가 없을 때만 goal을 완료한다.
+
+외부 agent 실행은 bounded resume으로 감싼다. 기본 한계는 setup resume 6분 또는 validation 이후 3분 동안 event log 증가가 없는 상태다. timeout이 발생하면 남은 process를 종료하고 PID, 종료 시각, 생성된 산출물, validation evidence를 `cycle-summary.md`에 기록하되, final response가 없으면 pass로 보지 않는다.
 
 ## feature-workflow handoff 기준
 
