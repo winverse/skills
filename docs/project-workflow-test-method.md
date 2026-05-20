@@ -9,6 +9,44 @@
 - 질문에 답한 뒤에는 실제 프로젝트 폴더, 구조 파일, 도메인 문서, ADR, PRD, `design.md`, `workflow-state.md`, `work-claims.md`, phase handoff가 생성되는지 확인한다.
 - 실패하면 history를 고쳐 맞추지 않고 `project-workflow` 자체를 수정한 뒤 다음 cycle에서 다시 검증한다.
 
+## `/goal` 반복 개선 루프
+
+`project-workflow` 검증은 한 번의 `pass` 선언으로 끝내지 않는다. Claude Code에서는 `/goal`로 session-scoped goal condition을 먼저 세우고, Codex나 다른 agent에서는 같은 내용을 completion checklist로 `cycles.md`와 `cycle-summary.md`에 남긴다. 이 goal은 테스트 실행, 실패 분석, 플러그인 수정, 재검증을 하나의 loop로 묶는다.
+
+기본 goal condition은 아래처럼 쓴다.
+
+```text
+Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에서 안정적으로 동작할 때까지 반복 개선한다.
+
+완료 조건:
+- GitHub fresh clone cycle에서 첫 응답 순서가 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check로 나온다.
+- 질문 gate 전에는 `design.md`, `project-structure`, PRD, issue backlog, implementation이 `deferred` 또는 `not created yet`로 남는다.
+- 질문 답변 뒤에는 실제 project structure, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation이 생성된다.
+- `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt를 만든다.
+- shared workspace guard가 cycle 전후 동일하다.
+- 마지막 plugin/test-method/validator 수정 이후 최소 1개 fresh clone cycle이 통과한다. 중요한 계약 변경 뒤에는 2개 연속 cycle 통과를 권장한다.
+
+중단 조건:
+- shared workspace가 오염된다.
+- agent가 local workspace source를 읽거나 쓴다.
+- 같은 실패가 2번 반복되어 원인 분류 없이 cycle만 반복된다.
+- secret, destructive action, remote write가 필요해 사용자 확인이 필요하다.
+```
+
+반복 방식은 아래처럼 고정한다.
+
+1. goal condition을 `cycles.md`와 해당 `cycle-summary.md`에 기록한다.
+2. `current/`를 삭제하고 GitHub fresh clone으로 cycle을 시작한다.
+3. 실제 첫 응답과 실제 setup 실행을 기록한다.
+4. 실패하면 원인을 `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook` 중 하나로 분류한다.
+5. 분류 결과에 따라 이 repo의 `project-workflow`, `execute-phase.ts`, 테스트 문서, validator, eval fixture 중 필요한 곳을 수정한다.
+6. repo validator를 통과시킨다.
+7. GitHub fresh clone이 최신 수정본을 받도록 `atomic-committer`로 commit/push한다. 사용자가 명시적으로 push를 금지한 경우에는 fresh clone cycle을 계속하지 않고 local-only 검증 결과로 따로 표시한다.
+8. 다음 cycle을 새로 돌린다.
+9. 완료 조건을 만족할 때만 goal을 완료로 표시한다.
+
+이 loop에서 중요한 것은 “결과 기록을 고쳐 pass로 만드는 것”이 아니라, 실패를 플러그인 계약이나 테스트 방법에 되먹임해서 다음 fresh clone cycle이 실제로 통과하게 만드는 것이다.
+
 ## 테스트 루트
 
 기본 루트는 사용자가 지정한 scratch root를 사용한다. 예시는 placeholder로 적는다.
@@ -125,6 +163,7 @@ codex exec resume \
 7. 판정한다.
    - `pass`: 첫 응답 순서, 실제 파일 생성, 검증 명령, history 기록이 모두 맞다.
    - `fail`: 하나라도 틀리면 원인을 `cycle-summary.md`에 쓰고, 필요한 경우 이 repo의 테스트 방법, validator, 또는 `project-workflow`를 수정한 뒤 commit/push하고 다음 cycle로 반복한다.
+   - `goal complete`: 마지막 plugin/test-method/validator 변경 이후 fresh clone cycle이 통과하고, 남은 blocker나 반복 failure가 없을 때만 표시한다.
 
 ## 금지
 
@@ -135,6 +174,7 @@ codex exec resume \
 - 첫 응답 테스트에서 파일을 만든 것처럼 기록하지 않는다.
 - `codex exec resume --last`로 다른 cwd의 session을 이어받지 않는다.
 - 외부 agent가 local shared workspace를 수정했는데 pass로 처리하지 않는다.
+- 한 번 pass했다고 `/goal`을 완료 처리하지 않는다. 마지막 수정 이후 fresh clone cycle 통과와 남은 개선점 여부를 같이 본다.
 
 ## 기록 템플릿
 
@@ -154,6 +194,10 @@ codex exec resume \
 - explicit session id:
 - shared workspace guard:
 - verdict:
+- goal:
+- cycle count:
+- failure class:
+- goal status:
 
 ## 0. Source download
 

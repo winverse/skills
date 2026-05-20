@@ -289,6 +289,16 @@
     </section>
 
     <section class="section">
+      <div class="section-head"><h2>/goal 반복 개선</h2><p>플러그인 자체를 다듬을 때는 한 번의 pass가 아니라 fresh clone cycle을 반복합니다.</p></div>
+      <div class="source-table" aria-label="goal 반복 개선 loop">
+        <div class="table-cell head"><strong>단계</strong></div><div class="table-cell head"><strong>판단</strong></div><div class="table-cell head"><strong>다음 행동</strong></div>
+        <div class="table-cell"><strong>fresh clone cycle</strong></div><div class="table-cell"><span>GitHub에서 새로 받은 copy로 첫 응답, setup 실행, phase dry-run, shared workspace guard를 확인합니다.</span></div><div class="table-cell"><span><code>runs/cycle-NNN/</code>에 prompt, history, output, summary를 남깁니다.</span></div>
+        <div class="table-cell"><strong>failure class</strong></div><div class="table-cell"><span><code>plugin contract</code>, <code>runner</code>, <code>test method</code>, <code>target artifact</code>, <code>environment/hook</code>으로 실패 원인을 분류합니다.</span></div><div class="table-cell"><span>기록을 고쳐 pass로 만들지 않고 원인에 맞는 파일을 수정합니다.</span></div>
+        <div class="table-cell"><strong>개선 후 반복</strong></div><div class="table-cell"><span>validator를 통과시키고 <code>atomic-committer</code>로 commit/push한 뒤 다음 fresh clone cycle을 돕니다.</span></div><div class="table-cell"><span>마지막 수정 이후 cycle이 통과하고 blocker가 없을 때만 완료로 봅니다.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="section-head"><h2>파일 관계</h2><p>이 스킬 폴더에서 사람이 확인할 주요 파일입니다.</p></div>
       <div class="files">
         <a class="file" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 따르는 호출 조건과 실행 계약입니다.</span></a>

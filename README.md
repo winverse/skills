@@ -87,7 +87,7 @@ plugins/caveman/
 - `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, `web-research` 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 계약, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
-- `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 우선, 그림 우선, 인터랙티브, 애니메이션 중심 `skill.html`을 만들거나 고치는 스킬. 산출물은 PC desktop 기준만 보고, mobile/tablet layout은 비대상으로 둔다.
+- `skill-to-html`: `SKILL.md` 옆에 사람이 한눈에 이해할 수 있는 한국어 우선, 그림 우선, 인터랙티브, 애니메이션 중심 `skill.html`을 만들거나 고치는 스킬. 산출물은 PC desktop 기준만 보고, mobile/tablet layout은 비대상으로 두며, 좁은 side panel 안에 4개 이상 계약 카드를 다열 grid로 우겨 넣지 않는다.
   - Source instruction: `skills/skill-to-html/SKILL.md`
   - Human visual guide: `skills/skill-to-html/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
@@ -96,7 +96,7 @@ plugins/caveman/
 - `skill-update`: 기존 공유 스킬을 수정할 때 `docs/update-source-registry.md`를 단일 source registry로 먼저 읽어 `.gitmodules` 기반 vendored source와 workflow primitive source id를 구분하고, original/upstream provenance preflight와 `adopt`/`adapt`/`reject`/`defer` 판단에 따라 `SKILL.md`, references, validator, `skill.html`, snippets, docs, history를 함께 맞추는 유지보수 스킬. 사용자가 plugin update를 명시하면 plugin update lane으로 `.gitmodules`, plugin catalog, `Plugin update list`, validator, history까지 함께 맞춘다. 외부 dependency 전체 갱신 요청은 dependency update sweep으로 보고 `.gitmodules` vendored plugin, repo-owned plugin, registry의 workflow primitive lane, workflow usage map을 모두 점검한다.
   - Source instruction: `skills/skill-update/SKILL.md`
   - Human visual guide: `skills/skill-update/skill.html`
-- `atomic-committer`: dirty git tree를 secret guard로 검사하고 반복적으로 올라가면 안 되는 local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나누고, 영어 conventional prefix와 한글 요약으로 커밋하는 스킬.
+- `atomic-committer`: dirty git tree를 secret guard로 검사하고 반복적으로 올라가면 안 되는 local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나누며, 사용자가 push 금지를 명시하지 않는 한 커밋 후 push까지 수행하는 스킬.
   - Source instruction: `skills/atomic-committer/SKILL.md`
   - Human visual guide: `skills/atomic-committer/skill.html`
 - `pull-request`: GitHub pull request의 branch/base/head 상태, title/body, reviewer/label/milestone/project, linked issue, `gh pr create` 실행 경계를 관리하는 스킬.

@@ -62,6 +62,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다.
 - 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
+- `project-workflow` 자체를 개선하거나 검증할 때는 `/goal`식 반복 개선 루프를 사용한다. 한 번의 fresh clone `pass`로 완료 선언하지 말고, 실패 원인을 plugin contract, runner, test method, target artifact, environment/hook 중 하나로 분류한 뒤 수정, 검증, commit/push, 다음 fresh clone cycle을 반복한다.
 
 ## 첫 응답 기준
 
@@ -182,6 +183,17 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 - turn/time bound: `8 turns 후 중단`처럼 runaway를 막는 한계
 
 `/goal` evaluator는 스스로 명령을 실행하거나 파일을 읽지 않는다고 가정한다. 따라서 검증 증거를 agent output에 남기게 해야 한다.
+
+## self-improvement loop 기준
+
+`project-workflow` plugin, `execute-phase.ts`, workflow suite test method를 개선하는 작업은 `/goal` 반복 개선 루프로 다룬다. 목표는 chat에서 좋아 보이는 결과가 아니라 GitHub fresh clone 기준 실제 cycle이 통과하는 것이다.
+
+- goal condition: 첫 응답 gate, 실제 project structure 생성, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation, shared workspace guard를 measurable end state로 둔다.
+- cycle record: `cycles.md`, `runs/cycle-NNN/history/`, `runs/cycle-NNN/output/`, `cycle-summary.md`에 cycle count, downloaded commit, explicit session id, verdict, failure class를 남긴다.
+- failure class: `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook` 중 하나로 분류한다.
+- improvement action: 분류 결과에 따라 `SKILL.md`, playbook, `execute-phase.ts`, validator, eval fixture, 테스트 방법 문서를 수정한다.
+- publish gate: fresh clone이 최신 수정본을 받도록 `atomic-committer`로 commit/push한 뒤 다음 cycle을 돈다. 사용자가 push 금지를 명시하면 fresh clone loop를 멈추고 local-only 상태로 보고한다.
+- completion rule: 마지막 plugin/test-method/validator 수정 이후 fresh clone cycle이 통과하고, 반복 failure나 unresolved blocker가 없을 때만 `/goal`을 완료 처리한다. 중요한 계약 변경 뒤에는 2개 연속 cycle 통과를 권장한다.
 
 ## output shape 기준
 

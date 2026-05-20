@@ -162,6 +162,31 @@ PRD에는 problem, user, first usable slice, included scope, excluded scope, acc
 
 `project-workflow`의 completion은 project setup 완료와 `feature-workflow` handoff 완료를 뜻한다. code review, QA, document sync, atomic commit, push/deploy는 구현 spec이 끝난 뒤 `feature-workflow`나 관련 helper가 맡으며, release prep은 release publishing이 아니다.
 
+## `/goal` 반복 개선 루프 기준
+
+`project-workflow` plugin이나 workflow suite 자체를 완성하는 작업은 단발 검토가 아니라 `/goal` 반복 개선 루프로 운영한다. Claude Code에서는 `/goal`을 실제로 설정하고, Codex나 다른 agent에서는 같은 내용을 completion checklist로 `cycles.md`와 `cycle-summary.md`에 남긴다.
+
+Goal은 아래 evidence가 실제 fresh clone cycle에서 확인될 때까지 유지한다.
+
+- 첫 응답 gate: `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check
+- gate 전 산출물 상태: `design.md`, `project-structure`, PRD, issue backlog, implementation은 `deferred` 또는 `not created yet`
+- setup 후 산출물: 실제 project structure, `.scratch` authority docs, `workflow-state.md`, `work-claims.md`, phase handoff
+- runner: `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt 생성
+- guard: shared workspace guard 전후 동일
+- validation: target project validation과 repo validators 통과
+
+실패하면 cycle을 반복하기 전에 원인을 분류한다.
+
+| Failure class | 의미 | 다음 조치 |
+| --- | --- | --- |
+| `plugin contract` | `SKILL.md`나 playbook이 기대 행동을 충분히 명시하지 못함 | plugin-bundled skill과 snippet, validator를 수정 |
+| `runner` | `execute-phase.ts`나 phase metadata 처리 문제 | runner와 runner validator를 수정 |
+| `test method` | fresh clone 절차, cwd, resume, guard, 기록 방식이 불충분함 | `docs/project-workflow-test-method.md`와 validator를 수정 |
+| `target artifact` | 생성된 프로젝트 구조나 docs가 handoff 기준에 부족함 | project setup 계약, artifact map, issue/phase template을 수정 |
+| `environment/hook` | local hook, cache, dev server, Codex sandbox 같은 환경 영향 | 환경 guard를 보강하고 cycle에는 fail 또는 environment note를 남김 |
+
+수정 뒤에는 repo validator를 통과시키고, GitHub fresh clone이 최신본을 받을 수 있도록 `atomic-committer`로 commit/push한 뒤 다음 cycle을 돈다. 마지막 수정 이후 fresh clone cycle이 통과하고 unresolved blocker가 없을 때만 goal을 완료한다.
+
 ## feature-workflow handoff 기준
 
 `feature-workflow`는 project setup 이후 반복 개발을 맡는다. 넘길 때는 아래 정보를 남긴다.

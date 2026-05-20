@@ -26,6 +26,8 @@ node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phas
 
 Codex CLI로 실제 테스트할 때는 첫 응답과 `resume`을 모두 테스트 project root cwd에서 실행하고, 첫 JSON event log에서 얻은 explicit session id를 직접 넘긴다. `--last` 기반 resume이나 wrapper cwd에서 sibling project를 쓰는 방식은 실패로 기록한다.
 
+이 테스트는 `/goal` 반복 개선 루프로 운영한다. 한 번 pass했다고 완료하지 않고, 실패 원인을 `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook`으로 분류해 수정한 뒤 commit/push하고 다음 fresh clone cycle을 다시 돌린다. 마지막 plugin/test-method/validator 수정 이후 fresh clone cycle이 통과하고 unresolved blocker가 없을 때만 완료로 본다.
+
 ## 제외 범위
 
 `feature-workflow`는 이 plugin에 넣지 않는다. `feature-workflow`는 초기 셋팅 이후 기존 PRD, issue, spec, bug, ADR, `design.md`를 구현하는 별도 반복 개발 스킬이다.

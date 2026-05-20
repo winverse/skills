@@ -13,7 +13,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | 현재 스킬 목록을 보고 싶다 | `show-skills` | `sync-docs` |
 | 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다. `web-search`라고 말해도 이 스킬로 해석한다. | `web-research` | `agent-improvement-loop` |
-| 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | 한국어 짧은 라벨과 캡션, 그림 우선, 인터랙티브, 애니메이션 중심으로 만들고 PC desktop 기준만 본다. mobile/tablet layout은 비대상이다. `browser-qa`, `design-review` |
+| 새 스킬의 사람용 HTML guide를 만든다 | `skill-to-html` | 한국어 짧은 라벨과 캡션, 그림 우선, 인터랙티브, 애니메이션 중심으로 만들고 PC desktop 기준만 본다. 좁은 side panel 안에 4개 이상 카드 grid를 만들지 않는다. mobile/tablet layout은 비대상이다. `browser-qa`, `design-review` |
 | 기존 스킬을 수정한다 | `skill-update` | 모든 호출에서 원본 provenance preflight를 먼저 실행하고, 원본 확인이 필요하면 `web-research`, 이후 `skill-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `sync-docs` |
@@ -56,7 +56,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
-| `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 PC desktop 기준, 한국어 우선, 그림 우선, 인터랙티브, 애니메이션 중심 `skill.html`을 만든다. mobile/tablet layout과 responsive breakpoint는 비대상이다. 외부 CDN/script/image 없이 CSS/SVG animation, Web Animations API, 짧은 inline JavaScript로 상호작용을 닫는다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
+| `skill-to-html` | `SKILL.md` 옆에 사람이 빠르게 이해할 수 있는 PC desktop 기준, 한국어 우선, 그림 우선, 인터랙티브, 애니메이션 중심 `skill.html`을 만든다. mobile/tablet layout과 responsive breakpoint는 비대상이다. 좁은 side panel 안의 4개 이상 계약 카드 grid를 금지하고, 외부 CDN/script/image 없이 CSS/SVG animation, Web Animations API, 짧은 inline JavaScript로 상호작용을 닫는다. | [SKILL.md](../skills/skill-to-html/SKILL.md) · [skill.html](../skills/skill-to-html/skill.html) |
 | `skill-update` | 기존 공유 스킬을 수정할 때 `docs/update-source-registry.md`와 `.gitmodules`를 먼저 확인하고, 원본/upstream provenance preflight, source/release 비교, `adopt`/`adapt`/`reject`/`defer` 판단, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. 외부 dependency 전체 갱신 요청은 `.gitmodules` vendored plugin, repo-owned plugin, registry workflow primitive lane, workflow usage map을 모두 보는 dependency update sweep으로 처리하며, `scripts/validate-source-registry.ts`로 source id drift를 막는다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
 | `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
@@ -68,7 +68,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | `karpathy-thinkings` | Karpathy식 코딩 에이전트 사고로 추측, 과설계, 주변 리팩터링, 약한 검증을 줄인다. | [SKILL.md](../skills/karpathy-thinkings/SKILL.md) · [skill.html](../skills/karpathy-thinkings/skill.html) |
 | `project-structure` | frontend, backend, full-stack monorepo, desktop app과 folder-local AGENTS.md 목차, 선택형 DB/infra 구조, TypeScript ESM-only module 정책, 기본 stack/env/codegen/test/security/tool-boundary 정책을 잡는다. | [SKILL.md](../skills/project-structure/SKILL.md) · [skill.html](../skills/project-structure/skill.html) |
-| `project-workflow` | `plugins/project-workflow`의 초기 설정 plugin이며 새 프로젝트나 큰 기획의 초기 셋팅을 도메인 문서, 제품 검증, ADR, `design.md`, PRD, 이슈 목록, TypeScript ESM only 정책, 설정 확인, `workflow-state.md`, 병렬 `work-claims.md`, `feature-workflow` 인계까지 정리한다. Matt Pocock `grill-with-docs`, GStack `office-hours`, 조건부 Superpowers `brainstorming`/`writing-plans`는 가능하면 실제 호출하고, 불가능할 때만 fallback 질문 루프로 대체한다. `grill-me`는 project setup 기본 gate가 아니라 비코드 standalone fallback 후보로만 남긴다. 나중 gate 뒤에 실행할 항목은 `deferred`로 표시하고 첫 raw idea 응답에서는 산출물 경로를 target/proposed/not created yet로 구분한다. 큰 구현 인계는 phase/step handoff plan으로 만들고 선택 TypeScript runner는 Codex-first command boundary를 쓴다. 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. | [SKILL.md](../plugins/project-workflow/skills/project-workflow/SKILL.md) · [skill.html](../plugins/project-workflow/skills/project-workflow/skill.html) |
+| `project-workflow` | `plugins/project-workflow`의 초기 설정 plugin이며 새 프로젝트나 큰 기획의 초기 셋팅을 도메인 문서, 제품 검증, ADR, `design.md`, PRD, 이슈 목록, TypeScript ESM only 정책, 설정 확인, `workflow-state.md`, 병렬 `work-claims.md`, `feature-workflow` 인계까지 정리한다. Matt Pocock `grill-with-docs`, GStack `office-hours`, 조건부 Superpowers `brainstorming`/`writing-plans`는 가능하면 실제 호출하고, 불가능할 때만 fallback 질문 루프로 대체한다. `grill-me`는 project setup 기본 gate가 아니라 비코드 standalone fallback 후보로만 남긴다. 나중 gate 뒤에 실행할 항목은 `deferred`로 표시하고 첫 raw idea 응답에서는 산출물 경로를 target/proposed/not created yet로 구분한다. 큰 구현 인계는 phase/step handoff plan으로 만들고 선택 TypeScript runner는 Codex-first command boundary를 쓴다. plugin 자체 개선은 `/goal` 반복 개선 루프로 fresh clone cycle, failure class 분류, 수정, commit/push, 재검증을 반복한다. 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. | [SKILL.md](../plugins/project-workflow/skills/project-workflow/SKILL.md) · [skill.html](../plugins/project-workflow/skills/project-workflow/skill.html) |
 | `feature-workflow` | 반복 구현 구간의 별도 skill이다. 기존 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`, `workflow-state.md`, `work-claims.md`를 기준으로 feature, bug fix, vertical slice를 TDD, implementation plan, review, QA/runtime evidence, document sync, completion reporting까지 끝내고 TypeScript production edit에서 CommonJS 도입을 차단한다. 대상 코드 repo에서는 RED evidence를 강제하고, 이 shared skills repo에는 TDD hook을 설치하지 않는다. | [SKILL.md](../skills/feature-workflow/SKILL.md) · [skill.html](../skills/feature-workflow/skill.html) |
 
 ### 문서와 커밋
@@ -76,7 +76,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `transcript-polisher` | 전사본, 강의 대본, 자막, 회의록, 긴 산문을 코드 치환 없이 직접 읽고 source/output 구조, `polish` 분량, 불확실 용어를 검증하며 Claude Code `/goal`식 완료 조건 루프로 검토한다. | [SKILL.md](../skills/transcript-polisher/SKILL.md) · [skill.html](../skills/transcript-polisher/skill.html) |
-| `atomic-committer` | dirty git tree를 secret guard로 검사하고, 반복 untracked local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나눠 조건부 push를 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
+| `atomic-committer` | dirty git tree를 secret guard로 검사하고, 반복 untracked local/secret artifact는 `.gitignore`로 예방한 뒤 atomic commit 단위로 나누며, 사용자가 push 금지를 명시하지 않는 한 커밋 후 push까지 수행한다. | [SKILL.md](../skills/atomic-committer/SKILL.md) · [skill.html](../skills/atomic-committer/skill.html) |
 | `pull-request` | GitHub PR의 branch/base/head, 한국어 title/body, template, issue link, reviewer/label/draft 옵션과 `gh pr create` 실행 경계를 관리한다. | [SKILL.md](../skills/pull-request/SKILL.md) · [skill.html](../skills/pull-request/skill.html) |
 
 ### 리뷰와 QA
