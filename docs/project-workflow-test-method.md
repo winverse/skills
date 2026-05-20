@@ -7,6 +7,7 @@
 - `project-workflow` 첫 응답이 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check 순서로 질문하는지 확인한다.
 - `design.md`, `project-structure`, PRD, issue backlog, architecture handoff가 질문 gate 전에는 `deferred` 또는 `not created yet`로 남는지 확인한다.
 - 질문에 답한 뒤에는 실제 프로젝트 폴더, 구조 파일, 도메인 문서, ADR, PRD, `design.md`, `workflow-state.md`, `work-claims.md`, phase handoff가 생성되는지 확인한다.
+- target project가 다른 언어를 명시하지 않았으면 durable setup docs가 한국어 우선으로 작성되는지 확인한다.
 - 실패하면 history를 고쳐 맞추지 않고 `project-workflow` 자체를 수정한 뒤 다음 cycle에서 다시 검증한다.
 
 ## `/goal` 반복 개선 루프
@@ -22,6 +23,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 - GitHub fresh clone cycle에서 첫 응답 순서가 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check로 나온다.
 - 질문 gate 전에는 `design.md`, `project-structure`, PRD, issue backlog, implementation이 `deferred` 또는 `not created yet`로 남는다.
 - 질문 답변 뒤에는 실제 project structure, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation이 생성된다.
+- target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다.
 - `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt를 만든다.
 - shared workspace guard가 cycle 전후 동일하다.
 - 마지막 plugin/test-method/validator 수정 이후 최소 1개 fresh clone cycle이 통과한다. 중요한 계약 변경 뒤에는 2개 연속 cycle 통과를 권장한다.
@@ -157,12 +159,13 @@ codex exec resume \
    - phase handoff가 있으면 `execute-phase.ts`를 dry-run으로 실행한다.
    - dry-run prompt에 `Step undefined`나 `undefined` step title이 나오면 실패로 판정한다.
    - `node_modules`는 검증 중 생긴 generated artifact로 허용하되 `.gitignore` 또는 file-tree summary exclusion으로 처리한다. 산출물 품질 판단에는 포함하지 않는다.
+   - target project가 다른 언어를 명시하지 않았으면 durable setup docs의 자연어 제목/본문/목록이 한국어 우선인지 확인한다. 영어 중심이면 target validation이 통과해도 실패다.
    - shared workspace guard를 다시 확인한다.
    - 결과는 `runs/cycle-NNN/output/`과 `cycle-summary.md`에 남긴다.
 
 7. 판정한다.
    - `pass`: 첫 응답 순서, 실제 파일 생성, 검증 명령, history 기록이 모두 맞다.
-   - `fail`: 하나라도 틀리면 원인을 `cycle-summary.md`에 쓰고, 필요한 경우 이 repo의 테스트 방법, validator, 또는 `project-workflow`를 수정한 뒤 commit/push하고 다음 cycle로 반복한다.
+   - `fail`: 하나라도 틀리면 원인을 `cycle-summary.md`에 쓰고, 필요한 경우 이 repo의 테스트 방법, validator, 또는 `project-workflow`를 수정한 뒤 commit/push하고 다음 cycle로 반복한다. Korean-first artifact gate 실패는 `plugin contract` 또는 `target artifact`로 분류한다.
    - `goal complete`: 마지막 plugin/test-method/validator 변경 이후 fresh clone cycle이 통과하고, 남은 blocker나 반복 failure가 없을 때만 표시한다.
 
 ## 금지
@@ -175,6 +178,7 @@ codex exec resume \
 - `codex exec resume --last`로 다른 cwd의 session을 이어받지 않는다.
 - 외부 agent가 local shared workspace를 수정했는데 pass로 처리하지 않는다.
 - 한 번 pass했다고 `/goal`을 완료 처리하지 않는다. 마지막 수정 이후 fresh clone cycle 통과와 남은 개선점 여부를 같이 본다.
+- target project가 영어 문서를 명시하지 않았는데 영어 중심 setup docs가 생성된 cycle을 pass로 처리하지 않는다.
 
 ## 기록 템플릿
 
@@ -198,6 +202,7 @@ codex exec resume \
 - cycle count:
 - failure class:
 - goal status:
+- document language gate:
 
 ## 0. Source download
 

@@ -49,6 +49,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - local project instructions와 docs를 먼저 읽는다.
 - 현재 runtime에서 Matt Pocock, GStack, Superpowers 호출 surface를 확인하고, 선택된 primitive는 가능하면 실제 호출한다. 호출 surface가 없으면 그 사실을 `fallback`으로 남긴다. 호출 surface 확인은 현재 session의 skill list, enabled plugin list, slash command 또는 command surface, MCP/tool surface, project instruction 링크 순서로 증거를 남긴다.
 - 사용자가 다른 언어를 명시하지 않으면 초기 셋팅 산출물과 프로젝트 문서는 한국어 우선으로 작성한다. `code identifiers`, 명령, 파일 경로, 제품명, API 이름은 원문 표기를 유지한다.
+- Korean-first artifact gate: 완료 보고 전에 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff의 자연어 제목/본문/목록을 확인한다. 대상 프로젝트가 영어를 명시하지 않았는데 durable setup docs가 영어 중심이면 pass가 아니라 그 자리에서 한국어 우선으로 고쳐 쓴 뒤 검증한다.
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
 - raw idea나 새 프로젝트에서는 Matt Pocock skills `grill-with-docs` -> GStack plugin `office-hours` -> Superpowers plugin `brainstorming` setup gap check 순서가 끝나기 전 `design.md`, `project-structure`, PRD, issue backlog, architecture handoff를 진행하지 않는다. `grill-with-docs`는 기존 `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, 코드와 문서의 용어를 먼저 확인하고, 문서가 없으면 첫 용어가 확정될 때 `CONTEXT.md`를 lazily 제안한다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 fallback으로 진행한다.
@@ -62,7 +63,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 기록한다.
 - 여러 session, agent, worktree가 병렬로 구현할 수 있으면 `work-claims.md`에 lane ownership과 claimed write set을 먼저 나눈다.
 - 이 repo에서 `/goal`이라고 쓰면 Claude Code의 `/goal` 기능을 뜻한다. Claude Code에서는 긴 초기 셋팅에 session-scoped goal condition을 제안하고, 다른 agent에서는 같은 내용을 completion checklist로 남긴다.
-- `project-workflow` 자체를 개선하거나 검증할 때는 `/goal`식 반복 개선 루프를 사용한다. 한 번의 fresh clone `pass`로 완료 선언하지 말고, 실패 원인을 plugin contract, runner, test method, target artifact, environment/hook 중 하나로 분류한 뒤 수정, 검증, commit/push, 다음 fresh clone cycle을 반복한다.
+- `project-workflow` 자체를 개선하거나 검증할 때는 `/goal`식 반복 개선 루프를 사용한다. 한 번의 fresh clone `pass`로 완료 선언하지 말고, 실패 원인을 plugin contract, runner, test method, target artifact, environment/hook 중 하나로 분류한 뒤 수정, 검증, commit/push, 다음 fresh clone cycle을 반복한다. Korean-first artifact gate 실패는 plugin contract 또는 target artifact 실패로 기록하고 다음 cycle 전에 계약을 보강한다.
 
 ## 첫 응답 기준
 
@@ -96,7 +97,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 1. context 읽기
 2. runtime invocation surface 확인: repo-local skill, enabled plugin, command slash, MCP/tool, agent-specific workflow surface
-3. document language를 한국어 우선으로 고정하고, target project가 이미 다른 언어 규칙을 갖고 있으면 그 규칙을 명시
+3. document language를 한국어 우선으로 고정하고, target project가 이미 다른 언어 규칙을 갖고 있으면 그 규칙을 명시한다. 이 결정은 `workflow-state.md`에 남기고, durable setup docs를 쓰기 전에 다시 확인한다.
 4. source-labeled primitive inventory를 만들고 각 항목을 `selected`, `invoked`, `skipped`, `fallback`, `deferred`로 추적
 5. Matt Pocock skills `grill-with-docs`를 호출하거나 fallback 질문으로 domain language, `CONTEXT.md`, `CONTEXT-MAP.md`, ADR 후보를 정리
 6. GStack plugin `office-hours`를 호출하거나 fallback 질문으로 product challenge와 가장 좁은 진입점 확인
@@ -129,7 +130,9 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 `.scratch/<project-or-feature-slug>/` 아래에 notes, `CONTEXT.md` draft, ADR, PRD, issues, design decisions, setup validation, workflow log를 둔다. 프로젝트가 이미 다른 workflow area를 갖고 있으면 그 위치를 따른다.
 
-초기 셋팅 산출물은 사용자가 다른 언어를 지정하지 않는 한 한국어 우선이다. 여기에는 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`가 포함된다. 코드 식별자, 명령, 경로, 제품명, 외부 API 이름은 원문을 유지한다.
+초기 셋팅 산출물은 사용자가 다른 언어를 지정하지 않는 한 한국어 우선이다. 여기에는 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 포함된다. 코드 식별자, 명령, 경로, 제품명, 외부 API 이름은 원문을 유지한다.
+
+Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의 설명 문장, 결정 이유, acceptance criteria, issue 설명, design 방향, work-claims 설명, phase step 설명은 한국어로 쓴다. 영어는 exact identifier, 명령, 파일 경로, API 이름, source package 이름에만 남긴다. 이 gate가 실패하면 target project validation이 통과해도 `project-workflow` cycle은 실패다.
 
 `workflow-state.md`를 같은 위치에 두고, 이후 `feature-workflow`가 반복 질문 없이 이어받을 수 있는 최소 상태를 남긴다.
 
@@ -189,6 +192,7 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 `project-workflow` plugin, `execute-phase.ts`, workflow suite test method를 개선하는 작업은 `/goal` 반복 개선 루프로 다룬다. 목표는 chat에서 좋아 보이는 결과가 아니라 GitHub fresh clone 기준 실제 cycle이 통과하는 것이다.
 
 - goal condition: 첫 응답 gate, 실제 project structure 생성, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation, shared workspace guard를 measurable end state로 둔다.
+- language condition: target project가 다른 언어를 명시하지 않았으면 durable setup docs가 Korean-first artifact gate를 통과해야 한다.
 - cycle record: `cycles.md`, `runs/cycle-NNN/history/`, `runs/cycle-NNN/output/`, `cycle-summary.md`에 cycle count, downloaded commit, explicit session id, verdict, failure class를 남긴다.
 - failure class: `plugin contract`, `runner`, `test method`, `target artifact`, `environment/hook` 중 하나로 분류한다.
 - improvement action: 분류 결과에 따라 `SKILL.md`, playbook, `execute-phase.ts`, validator, eval fixture, 테스트 방법 문서를 수정한다.
@@ -207,6 +211,7 @@ Primitive inventory
 Project setup state
 - <domain/product/architecture/design/PRD/issues readiness>
 - document language: Korean-first unless target project says otherwise
+- document language gate: pass/fail and evidence path
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - state cache: <workflow-state.md path>
 - work claims: <work-claims.md path or none>

@@ -37,6 +37,10 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. `docs/update-sour
 
 한국어 우선 대상은 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, workflow log, `workflow-state.md`, `work-claims.md`다. `code identifiers`, 명령, 파일 경로, 제품명, protocol, API 이름, upstream skill/plugin 이름은 원문 표기를 유지한다.
 
+Korean-first artifact gate는 완료 전 hard gate다. durable setup docs의 제목, 설명 문장, 결정 이유, issue 설명, design 방향, work claim 설명, phase step 설명이 영어 중심이면 target project validation이 통과해도 cycle은 실패다. 먼저 문서를 한국어 우선으로 고친 뒤 검증 결과를 `setup-validation.md` 또는 `workflow-state.md`에 남긴다.
+
+허용되는 영어는 exact identifier, command, file path, API name, package name, source package name, status keyword처럼 번역하면 정확성이 떨어지는 값이다. 문서의 자연어 설명을 영어로 남기는 것은 사용자가 명시적으로 영어 문서를 요청했을 때만 허용한다.
+
 ## scenario lanes 기준
 
 ### raw new SaaS/service 기준
@@ -183,6 +187,7 @@ Goal은 아래 evidence가 실제 fresh clone cycle에서 확인될 때까지 �
 | `runner` | `execute-phase.ts`나 phase metadata 처리 문제 | runner와 runner validator를 수정 |
 | `test method` | fresh clone 절차, cwd, resume, guard, 기록 방식이 불충분함 | `docs/project-workflow-test-method.md`와 validator를 수정 |
 | `target artifact` | 생성된 프로젝트 구조나 docs가 handoff 기준에 부족함 | project setup 계약, artifact map, issue/phase template을 수정 |
+| `plugin contract` 또는 `target artifact` | durable setup docs가 Korean-first artifact gate를 통과하지 못함 | Korean-first gate를 hard gate로 강화하고 다음 fresh clone cycle에서 문서 언어를 재검증 |
 | `environment/hook` | local hook, cache, dev server, Codex sandbox 같은 환경 영향 | 환경 guard를 보강하고 cycle에는 fail 또는 environment note를 남김 |
 
 수정 뒤에는 repo validator를 통과시키고, GitHub fresh clone이 최신본을 받을 수 있도록 `atomic-committer`로 commit/push한 뒤 다음 cycle을 돈다. 마지막 수정 이후 fresh clone cycle이 통과하고 unresolved blocker가 없을 때만 goal을 완료한다.
@@ -214,6 +219,7 @@ Spec handoff
 Workflow State
 - source primitives:
 - document language: Korean-first unless target project says otherwise
+- document language gate: Korean-first artifact gate pass/fail and evidence path
 - primitive invocation: selected/invoked/skipped/fallback/deferred with fallback reason and timing
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - authority docs:
