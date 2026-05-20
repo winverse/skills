@@ -35,7 +35,7 @@ const summaryBySkill: Record<string, string> = {
   "project-structure": "frontend, backend, monorepo, desktop app, ESM TypeScript 구조 결정",
   "project-workflow": "plugin-bundled 초기 설정: 도메인, PRD, ESM TypeScript 정책, workflow-state cache",
   "feature-workflow": "워크플로우 묶음 반복 구현: feature/issue/bug를 ESM TypeScript, TDD, QA로 구현",
-  "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
+  "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 기본 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
   "code-review": "findings-first 코드 리뷰와 회귀/테스트/보안 위험 점검",
   "design-review": "제품 도메인과 디자인 시스템 우선 UI 리뷰",

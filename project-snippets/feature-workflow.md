@@ -22,4 +22,4 @@
 - Before connecting tools, MCP servers, external APIs, write-capable automation, network fetches, or untrusted content processing, verify or write the Agent Tool And Security Risk Gate.
 - Completion requires acceptance criteria, tests or runtime evidence, review result, docs sync decision, and artifact hygiene.
 - If a wrong route, missing setup gate, skipped TDD evidence, repeated QA/docs omission, or tool/security gate miss appears, leave an `agent-eval-harness` seed candidate under `.scratch/<feature-slug>/eval-candidates/` instead of running a heavy improvement loop every time.
-- Commit, push, deploy, tag, or release only when explicitly requested; use `atomic-committer` for commit/push handoff.
+- Start commit, deploy, tag, or release handoff only when explicitly requested. For commit handoff, use `atomic-committer`; after that handoff, its default-push contract applies unless the user explicitly forbids push.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Atomic Committer"
   short_description: "Group dirty git changes into guarded atomic commits"
-  default_prompt: "Use $atomic-committer to inspect the dirty git tree, block live-looking credential assignments and private-key material across common providers, update `.gitignore` for repeatable untracked local or secret-bearing artifacts that should never be committed, group safe files into logical changesets, commit with English conventional prefixes and Korean messages, and push only when a remote exists and push was requested."
+  default_prompt: "Use $atomic-committer to inspect the dirty git tree, block live-looking credential assignments and private-key material across common providers, update `.gitignore` for repeatable untracked local or secret-bearing artifacts that should never be committed, group safe files into logical changesets, create one commit per logical changeset, and push after committing unless the user explicitly asks not to push. If remote, branch, or upstream is missing, commit and report why push could not run."

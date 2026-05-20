@@ -119,7 +119,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - artifact hygiene
 - TypeScript 작업이면 ESM only 유지와 CommonJS 미도입 확인
 - gate, review, QA, docs sync 누락이 반복될 위험이 있으면 `agent-eval-harness`에 넘길 eval seed 후보를 남김
-- commit/push는 사용자가 요청했을 때만 `atomic-committer` handoff
+- commit handoff는 사용자가 요청했을 때만 `atomic-committer`로 넘기고, handoff 이후에는 `atomic-committer`의 기본 push 계약을 따른다.
 
 ## output shape 기준
 

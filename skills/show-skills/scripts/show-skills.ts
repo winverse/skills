@@ -69,7 +69,7 @@ const summaryBySkill: Record<string, string> = {
   "project-workflow": "plugin-bundled 초기 설정: domain, PRD, issue backlog, workflow-state cache",
   "feature-workflow": "Workflow suite loop: feature/issue/bug를 TDD, QA, docs sync로 구현",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
-  "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 조건부 push",
+  "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 기본 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
   "code-review": "findings-first 코드 리뷰와 회귀/테스트/보안 위험 점검",
   "design-review": "제품 도메인과 디자인 시스템 우선 UI 리뷰",

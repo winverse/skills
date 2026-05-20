@@ -50,7 +50,7 @@
       {
         "type": "required_text",
         "file": "AGENTS.md",
-        "value": "push only when a remote exists and push was requested"
+        "value": "push after committing unless the user explicitly asks not to push"
       }
     ]
   },

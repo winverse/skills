@@ -9,5 +9,5 @@ Artifacts
 - Preserve historical plans/specs as historical records.
 
 Validation
-- Commit or push only when the user asks and after atomic-committer secret guard.
+- Start commit handoff only when the user asks and after atomic-committer secret guard; after that handoff, atomic-committer pushes by default unless the user explicitly forbids push.
 - Release prep is separate from tag creation, release publishing, deployment, and public ship.
