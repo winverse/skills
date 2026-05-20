@@ -1,0 +1,25 @@
+{
+  "name": "project-workflow",
+  "version": "0.1.0",
+  "description": "Initial project setup workflow plugin for Korean-first docs, domain and product gates, architecture and design baseline, PRD and issue handoff, workflow-state cache, and multi-session work-claims coordination.",
+  "author": {
+    "name": "winverse"
+  },
+  "homepage": "https://github.com/winverse/agents-skills",
+  "repository": "https://github.com/winverse/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "project-setup",
+    "prd",
+    "multi-agent",
+    "work-claims"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Project Workflow",
+    "shortDescription": "Initial project setup orchestration plugin",
+    "developerName": "winverse",
+    "category": "Productivity"
+  }
+}

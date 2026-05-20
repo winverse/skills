@@ -6,6 +6,7 @@
 
 - `skill-update`는 대상 스킬을 고치기 전에 이 문서를 먼저 읽는다.
 - 실제 vendored plugin 또는 외부 repo 목록은 `.gitmodules`가 canonical source다.
+- repo-owned plugin은 `.gitmodules`가 아니라 각 plugin의 `.codex-plugin/plugin.json`과 `README.md`가 canonical source다.
 - plugin의 설명, 버전 메모, 사용 목적은 `docs/plugin-catalog.md`에 두지만, plugin 추가/삭제 여부는 `.gitmodules`와 달라지면 안 된다.
 - workflow가 참고만 하는 외부 primitive는 `.gitmodules`에 넣지 않는다. 이런 항목은 workflow provenance-only primitive이며, 각 workflow의 `references/upstream-dependency-map.md`가 canonical source다.
 - repo-owned shared skill 목록은 `skills/*/SKILL.md`와 `history/skills.md`가 canonical source다.
@@ -16,6 +17,7 @@
 | 범주 | canonical source | 보조 문서 | skill-update에서 하는 일 |
 | --- | --- | --- | --- |
 | Vendored external plugin/repo | `.gitmodules` | `docs/plugin-catalog.md`, plugin 내부 manifest | submodule path와 URL을 업데이트 후보로 읽고, 대상 skill과 관련 있을 때 version/commit/source ledger를 기록한다. |
+| Repo-owned plugin | `plugins/<name>/.codex-plugin/plugin.json` | `plugins/<name>/README.md`, `docs/plugin-catalog.md` | plugin boundary, bundled skills, compatibility entry drift를 확인한다. |
 | Plugin manifest detail | plugin 내부 manifest, 예: `.codex-plugin/plugin.json`, `.mcp.json`, `pyproject.toml` | `docs/plugin-catalog.md` | version, repository, MCP entrypoint, bundled skill 위치를 확인한다. |
 | Workflow provenance-only primitive | `skills/project-workflow/references/upstream-dependency-map.md`, `skills/feature-workflow/references/upstream-dependency-map.md` | 각 workflow `SKILL.md`, eval fixture | 출처 라벨과 exact primitive name을 읽되, submodule처럼 취급하지 않는다. |
 | Repo-owned shared skill | `skills/<skill>/SKILL.md`, `history/skills.md` | README, AGENTS, snippets, `skill.html` | local package update 범위와 lifecycle/event 기록 여부를 판단한다. |
@@ -41,6 +43,14 @@ git config --file .gitmodules --get-regexp '^submodule\\..*\\.(path|url)$'
 | `code-review-graph` | `plugins/code-review-graph` | `https://github.com/tirth8205/code-review-graph.git` | `plugins/code-review-graph/pyproject.toml`, `plugins/code-review-graph/.mcp.json`, `plugins/code-review-graph/skills/review-pr/SKILL.md`, `plugins/code-review-graph/skills/review-changes/SKILL.md` | package version, MCP command, bundled review skill, release/tag 변경 |
 | `caveman` | `plugins/caveman` | `https://github.com/JuliusBrussee/caveman.git` | `plugins/caveman/package.json`, `plugins/caveman/.claude-plugin/plugin.json`, `plugins/caveman/plugins/caveman/.codex-plugin/plugin.json`, `plugins/caveman/plugins/caveman/.codex-plugin/hooks.json`, `plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs`, `plugins/caveman/commands/`, `plugins/caveman/skills/caveman/SKILL.md`, bundled `plugins/caveman/skills/` | installer metadata, Claude/Codex plugin manifest, SessionStart hook, command, compression skill, release/tag 변경 |
 
+## Repo-owned plugin list
+
+이 목록은 `.gitmodules`에서 파생하지 않는다. 이 repo가 직접 유지하는 plugin bundle이다.
+
+| Plugin | Path | Manifest | Bundled skills | Boundary |
+| --- | --- | --- | --- | --- |
+| `project-workflow` | `plugins/project-workflow` | `plugins/project-workflow/.codex-plugin/plugin.json` | `plugins/project-workflow/skills/project-workflow/SKILL.md` | `feature-workflow`는 별도 반복 개발 스킬로 유지하고 bundle core에 넣지 않는다. |
+
 `skill-update`가 이 표의 항목에서 submodule bump, plugin manifest 수정, MCP config 수정, bundled plugin skill 수정을 발견했지만 사용자가 plugin update를 명시하지 않았다면 local shared skill update 범위를 멈추고 별도 plugin update 요청이 필요하다고 보고한다. 사용자가 plugin update를 명시했거나 현재 요청에 plugin update를 포함했다면 plugin update lane으로 계속 진행하고, 해당 submodule의 tag/commit, upstream release note, package metadata, manifest, bundled skill 경로를 함께 확인한 뒤 `.gitmodules`, `docs/plugin-catalog.md`, 이 목록, validator, history를 맞춘다.
 
 Plugin update list를 바꾼 뒤에는 아래 검증이 `.gitmodules`와 catalog/list drift를 잡아야 한다.
@@ -65,6 +75,7 @@ node scripts/validate-plugins.ts .
 ## Drift Checks
 
 - `.gitmodules` path와 `docs/plugin-catalog.md`의 위치가 다르면 catalog drift다.
+- repo-owned plugin이 `.gitmodules`에 들어가면 vendored source와 local source가 섞인 것이다.
 - `.gitmodules` path 또는 URL이 `Plugin update list`에 없으면 update checklist drift다.
 - `Plugin update list`나 `docs/plugin-catalog.md`가 `.gitmodules`에 없는 `plugins/<name>` 경로를 언급하면 stale plugin reference다.
 - workflow primitive를 `.gitmodules`에 넣으면 vendored source와 provenance-only source가 섞인 것이다.

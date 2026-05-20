@@ -1,8 +1,14 @@
 # Plugin Catalog
 
-이 문서는 이 repo가 source reference로 보관하는 외부 plugin의 human catalog다. 실제 vendored plugin/submodule 목록의 canonical source는 `.gitmodules`이고, 업데이트 후보를 찾는 단일 진입점은 `docs/update-source-registry.md`다. Plugin은 `skills/`와 다르게 upstream manifest, MCP config, hooks, bundled skills를 함께 가진다. 따라서 plugin-bundled `skills/`를 이 repo 최상위 `skills/`로 옮기지 않는다.
+이 문서는 이 repo가 보관하는 plugin의 human catalog다. 외부 vendored plugin/submodule 목록의 canonical source는 `.gitmodules`이고, repo-owned plugin 목록의 canonical source는 각 plugin의 `.codex-plugin/plugin.json`이다. 업데이트 후보를 찾는 단일 진입점은 `docs/update-source-registry.md`다. Plugin은 `skills/`와 다르게 manifest, MCP config, hooks, bundled skills를 함께 가질 수 있다. 따라서 plugin-bundled `skills/`를 이 repo 최상위 `skills/`로 옮기지 않는다.
 
-## 현재 플러그인
+## Repo-owned 플러그인
+
+| Plugin | 위치 | 버전 | 출처 | 용도 |
+| --- | --- | --- | --- | --- |
+| `project-workflow` | `plugins/project-workflow` | `0.1.0` | repo-owned | 초기 프로젝트 셋팅 전용 orchestration plugin이다. `feature-workflow`는 별도 반복 개발 skill로 유지하고, `agent-eval-harness`는 companion 검증 스킬로 분리한다. |
+
+## 외부 Vendored 플러그인
 
 | Plugin | 위치 | 고정 버전 | 출처 | 용도 |
 | --- | --- | --- | --- | --- |
@@ -13,10 +19,20 @@
 ## 보관 기준
 
 - 외부 plugin은 upstream 구조를 그대로 둔다.
+- repo-owned plugin은 `.gitmodules`에 넣지 않고, plugin root의 `.codex-plugin/plugin.json`과 `README.md`를 canonical source로 둔다.
 - Codex plugin manifest는 각 plugin의 `.codex-plugin/plugin.json`을 따른다.
 - MCP entrypoint와 hooks는 plugin 내부 경로를 기준으로 유지한다.
 - 이 repo는 plugin을 전역 설치하거나 global plugin directory에 등록하지 않는다.
 - 새 clone 후에는 `git submodule update --init --recursive`를 실행한다.
+
+## project-workflow 확인 사항
+
+- Codex manifest: `plugins/project-workflow/.codex-plugin/plugin.json`
+- Bundled skills: `plugins/project-workflow/skills/`
+- Primary setup skill: `plugins/project-workflow/skills/project-workflow/SKILL.md`
+- Boundary review: `plugins/project-workflow/references/plugin-boundary-review.md`
+- Top-level compatibility entry: `skills/project-workflow/SKILL.md`
+- Companion validation skill: `skills/agent-eval-harness/SKILL.md`
 
 ## context-mode 확인 사항
 

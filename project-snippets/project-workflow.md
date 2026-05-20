@@ -5,13 +5,15 @@
 ## Project Skill Overrides
 
 - Treat `project-workflow` as the initial setup half of the Workflow suite, not an implementation loop. It ends when the project has enough domain/product/architecture/design/PRD/issue context for `feature-workflow` to implement a vertical slice.
-- Before running it, inventory selected setup primitives from Matt Pocock skills, GStack plugin, design-direction, and repo-local custom helpers as `selected`, `skipped`, or `fallback`; do not run whole upstream packages by default.
-- Label borrowed primitives with their source package, for example Matt Pocock skills `grill-me`, GStack plugin `office-hours`, repo-local custom `project-structure`, and user custom `design.md`.
+- Before running it, inventory setup primitives from Matt Pocock skills, GStack plugin, Superpowers plugin, design-direction, and repo-local custom helpers as `selected`, `invoked`, `skipped`, or `fallback`; do not run whole upstream packages by default.
+- When a primitive is selected and the current runtime exposes the original skill/plugin/command, invoke it instead of merely imitating it. Use `fallback` only when the original surface is unavailable, and record the reason.
+- Label borrowed primitives with their source package, for example Matt Pocock skills `grill-me`, GStack plugin `office-hours`, Superpowers plugin `brainstorming`, repo-local custom `project-structure`, and user custom `design.md`.
 - If an upstream dependency changes, re-read that dependency's `SKILL.md` or official plugin source and update only the provenance ledger, project setup handoff, artifact path, validator/eval fixture, and visible guide. Do not duplicate the full source skill inside `project-workflow`.
 - Read the project instruction file first, then domain docs, ADRs, PRD, issue tracker docs, testing docs, and `design.md` when relevant.
 - Unless the user or target project explicitly chooses another language, write initial setup artifacts and project docs in Korean first. Preserve exact code identifiers, commands, file paths, product names, API names, and upstream skill/plugin names.
 - When the workflow must run across Codex, Claude, Cursor, Windsurf, Copilot, or another agent, identify that agent's actual instruction/rule/workflow surface before relying on hooks, memories, skills, workflows, or subagents.
 - Fix domain language before technology choices, and record app boundary and stack choices in ADRs before PRD and issue decomposition.
+- For raw ideas and new projects, complete a `grill-me`/`grill-with-docs` domain interview and an `office-hours` product challenge before PRD, issue backlog, or architecture handoff. If the original skills/plugins are unavailable, ask fallback interview questions first.
 - When a setup uses TypeScript, record ESM only as an architecture constraint: `package.json` `type: "module"`, ESM `tsconfig`, `import`/`export`, and no CommonJS, `require`, `module.exports`, `.cjs`, or `.cts`. Existing CommonJS is a migration boundary, not a pattern to copy.
 - Call `project-structure` only after domain language exists and the project kind, runtime, app boundary, API, persistence, env/codegen, DB, or infra questions are concrete enough to evaluate.
 - For substantial UI, create or refresh baseline `design.md` early enough to shape PRD/issues, then require 2-3 mock directions with user selection before implementation.

@@ -76,17 +76,27 @@
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "Matt Pocock skills: selected | skipped | fallback"
+        "value": "Matt Pocock skills: selected | invoked | skipped | fallback"
       },
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
-        "value": "GStack plugin: selected | skipped | fallback"
+        "value": "GStack plugin: selected | invoked | skipped | fallback"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
+        "value": "Superpowers plugin: selected | invoked | skipped | fallback"
       },
       {
         "type": "required_text",
         "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
         "value": "Design direction: selected | skipped | fallback"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/dependency-inventory.md",
+        "value": "invoke original if available"
       },
       {
         "type": "required_text",

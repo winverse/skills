@@ -15,7 +15,7 @@
 - 이 repo의 커스텀 스킬이 어떤 작업을 커버한다면, 그 작업에서는 각 에이전트의 기본/global 동작보다 이 repo의 스킬을 우선한다.
 - 각 스킬은 작고, 명확하고, 내 취향에 맞게 수정하기 쉬워야 한다.
 - 긴 취향, 세부 규칙, 평가 prompt, 예시는 `SKILL.md`를 부풀리지 말고 `references/`에 둔다.
-- 외부 plugin은 `plugins/` 아래에 upstream 구조를 그대로 보존하고, bundled `skills/`를 이 repo의 최상위 `skills/`로 풀어내지 않는다.
+- 외부 plugin은 `plugins/` 아래에 upstream 구조를 그대로 보존하고, repo-owned plugin은 같은 위치에서 직접 관리한다. bundled `skills/`를 이 repo의 최상위 `skills/`로 풀어내지 않는다.
 
 ## 스킬 포맷
 
@@ -33,9 +33,16 @@ skills/skill-name/
 
 ## 플러그인 포맷
 
-외부 plugin은 `plugins/<plugin-name>/` 아래에 둔다. upstream 자체가 plugin manifest, MCP config, hooks, bundled skills를 갖는 경우 이 repo에서는 submodule로 고정하고, 전역 설치나 자동 등록은 하지 않는다.
+Plugin은 `plugins/<plugin-name>/` 아래에 둔다. upstream 자체가 plugin manifest, MCP config, hooks, bundled skills를 갖는 경우 이 repo에서는 submodule로 고정하고, 전역 설치나 자동 등록은 하지 않는다. 이 repo가 직접 관리하는 orchestration bundle은 repo-owned plugin으로 두고 `.gitmodules`에 넣지 않는다.
 
 ```text
+plugins/project-workflow/
+├── .codex-plugin/
+│   └── plugin.json
+├── skills/
+│   └── project-workflow/
+└── README.md
+
 plugins/context-mode/
 ├── .codex-plugin/
 │   ├── plugin.json
@@ -59,7 +66,7 @@ plugins/caveman/
 └── README.md
 ```
 
-`.gitmodules`가 실제 vendored plugin/submodule 목록의 canonical source이고, plugin catalog는 `docs/plugin-catalog.md`에 둔다. 업데이트 후보를 찾는 단일 진입점은 `docs/update-source-registry.md`다. 새 clone에서는 submodule도 함께 초기화해야 한다.
+`.gitmodules`가 실제 vendored plugin/submodule 목록의 canonical source이고, repo-owned plugin은 각 plugin의 `.codex-plugin/plugin.json`이 canonical source다. plugin catalog는 `docs/plugin-catalog.md`에 둔다. 업데이트 후보를 찾는 단일 진입점은 `docs/update-source-registry.md`다. 새 clone에서는 submodule도 함께 초기화해야 한다.
 
 ## 생명주기와 History
 
@@ -98,10 +105,10 @@ plugins/caveman/
 - `project-structure`: frontend, backend, full-stack monorepo, desktop app, infrastructure-aware 구조의 폴더 구조와 기본 stack/env/codegen 정책, TypeScript ESM-only module 정책, folder-local `AGENTS.md` 목차, PostgreSQL/Drizzle, MongoDB Atlas, Supabase Postgres, psql/mongosh helper, Pulumi/Docker/AWS ECR/ECS/EC2 infra, backend logger/cache/security/observability, agent tool/MCP/API boundary, Redis DB boundary, migration/index sync, test surface를 일관되게 잡는 스킬.
   - Source instruction: `skills/project-structure/SKILL.md`
   - Human visual guide: `skills/project-structure/skill.html`
-- `project-workflow`: 워크플로우 묶음의 초기 설정 구간이다. 새 프로젝트나 큰 기획의 도메인 문서, 제품 검증, ADR, `design.md`, PRD, 초기 이슈 목록, 프로젝트 설정 확인, `feature-workflow` 인계까지 정리하고, 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. TypeScript 프로젝트는 ESM only와 CommonJS 금지를 architecture constraint로 남긴다. Matt Pocock skills `grill-me`, GStack plugin `office-hours`, repo-local `project-structure`, user custom `design.md`처럼 출처 라벨을 붙여 추적하고, `.scratch/<slug>/workflow-state.md` cache를 남긴다. 여러 session, agent, worktree가 병렬 구현할 수 있으면 `.scratch/<slug>/work-claims.md`에 lane owner와 claimed write set, shared/hotspot file의 integration owner를 기록한다.
+- `project-workflow`: `plugins/project-workflow`의 초기 설정 plugin이며, top-level 경로는 compatibility entry다. 새 프로젝트나 큰 기획의 도메인 문서, 제품 검증, ADR, `design.md`, PRD, 초기 이슈 목록, 프로젝트 설정 확인, `feature-workflow` 인계까지 정리하고, 별도 언어 지정이 없으면 초기 셋팅 문서를 한국어 우선으로 작성한다. TypeScript 프로젝트는 ESM only와 CommonJS 금지를 architecture constraint로 남긴다. Matt Pocock skills `grill-me`, GStack plugin `office-hours`, Superpowers plugin `brainstorming`, repo-local `project-structure`, user custom `design.md`처럼 출처 라벨을 붙여 추적하고, 현재 runtime에서 가능하면 선택된 원본 primitive를 실제 호출한다. 호출할 수 없을 때만 `fallback` 질문 루프로 대체하고 `.scratch/<slug>/workflow-state.md` cache에 이유를 남긴다. 여러 session, agent, worktree가 병렬 구현할 수 있으면 `.scratch/<slug>/work-claims.md`에 lane owner와 claimed write set, shared/hotspot file의 integration owner를 기록한다.
   - Source instruction: `skills/project-workflow/SKILL.md`
   - Human visual guide: `skills/project-workflow/skill.html`
-- `feature-workflow`: 워크플로우 묶음의 반복 개발 구간이다. 이미 있는 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`와 `workflow-state.md` cache를 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA/runtime evidence, document sync, completion reporting까지 끝낸다. `work-claims.md`가 있으면 production edit 전에 현재 lane의 claimed write set을 확인하고, 다른 active lane과 겹치면 overlap block으로 멈춘다. TypeScript production edit은 ESM only를 유지하고 CommonJS 도입은 blocker 또는 migration boundary로 다룬다. 대상 코드 repo에서는 production code edit 전에 RED evidence를 강제하고, 이 shared skills repo에서는 hook을 설치하지 않고 target-project hook 계약만 문서화한다. Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, repo-local `code-review`/`browser-qa`/`sync-docs`의 출처를 분리해 추적하고, 실패/누락이 있으면 `agent-eval-harness` seed 후보를 남긴다.
+- `feature-workflow`: 초기 셋팅 이후 쓰는 별도 반복 개발 skill이다. 이미 있는 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`와 `workflow-state.md` cache를 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA/runtime evidence, document sync, completion reporting까지 끝낸다. `work-claims.md`가 있으면 production edit 전에 현재 lane의 claimed write set을 확인하고, 다른 active lane과 겹치면 overlap block으로 멈춘다. TypeScript production edit은 ESM only를 유지하고 CommonJS 도입은 blocker 또는 migration boundary로 다룬다. 대상 코드 repo에서는 production code edit 전에 RED evidence를 강제하고, 이 shared skills repo에서는 hook을 설치하지 않고 target-project hook 계약만 문서화한다. Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, repo-local `code-review`/`browser-qa`/`sync-docs`의 출처를 분리해 추적하고, 실패/누락이 있으면 `agent-eval-harness` seed 후보를 남긴다.
   - Source instruction: `skills/feature-workflow/SKILL.md`
   - Human visual guide: `skills/feature-workflow/skill.html`
 - `sync-docs`: README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 서로 비교해 stale 설명, 누락된 연결, 충돌하는 규칙을 정리하는 문서 최신화 스킬.
@@ -128,6 +135,10 @@ plugins/caveman/
 
 ## 현재 플러그인
 
+- `project-workflow`: repo-owned plugin이다. 초기 프로젝트 셋팅 전용이고, `feature-workflow`는 별도 반복 개발 skill로 분리한다.
+  - Version: `0.1.0`
+  - Manifest: `plugins/project-workflow/.codex-plugin/plugin.json`
+  - Catalog: `docs/plugin-catalog.md`
 - `context-mode`: `mksglu/context-mode` upstream을 `plugins/context-mode` submodule로 고정한 MCP plugin reference다. Codex manifest는 `plugins/context-mode/.codex-plugin/plugin.json`이고, bundled plugin skills는 `plugins/context-mode/skills/`에 그대로 둔다.
   - Version: `v1.0.136`
   - Source: `https://github.com/mksglu/context-mode`

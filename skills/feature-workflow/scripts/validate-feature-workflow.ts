@@ -32,6 +32,8 @@ const requiredChecks = [
   ["../../project-snippets/feature-workflow.md", "CommonJS"],
   ["../../project-snippets/base.md", "overlap block"],
   ["../../project-snippets/base.md", "ESM only"],
+  ["../../plugins/project-workflow/README.md", "feature-workflow`는 이 plugin에 넣지 않는다"],
+  ["../../plugins/project-workflow/references/plugin-boundary-review.md", "`feature-workflow` | 별도 skill 유지"],
 ] as const;
 
 const failures: string[] = [];

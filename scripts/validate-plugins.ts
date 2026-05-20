@@ -147,6 +147,8 @@ function pluginRootsMentioned(relativePath: string): Set<string> {
 requireFile(".gitmodules");
 const submodules = parseGitmodules();
 const submodulePaths = new Set(submodules.map((entry) => entry.path));
+const repoOwnedPluginPaths = new Set(["plugins/project-workflow"]);
+const knownPluginPaths = new Set([...submodulePaths, ...repoOwnedPluginPaths]);
 
 for (const entry of submodules) {
   if (!entry.path.startsWith("plugins/")) {
@@ -201,12 +203,17 @@ for (const entry of submodules) {
 
 for (const relativePath of ["docs/plugin-catalog.md", "docs/update-source-registry.md"]) {
   for (const pluginPath of pluginRootsMentioned(relativePath)) {
-    if (!submodulePaths.has(pluginPath)) {
-      errors.push(`${relativePath} mentions ${pluginPath}, but .gitmodules does not list it`);
+    if (!knownPluginPaths.has(pluginPath)) {
+      errors.push(`${relativePath} mentions ${pluginPath}, but .gitmodules or repo-owned plugin list does not list it`);
     }
   }
 }
 
+requireFile("plugins/project-workflow/.codex-plugin/plugin.json");
+requireFile("plugins/project-workflow/README.md");
+requireFile("plugins/project-workflow/references/plugin-boundary-review.md");
+requireFile(path.posix.join("plugins/project-workflow/skills", "project-workflow", "SKILL.md"));
+requireFile(path.posix.join("plugins/project-workflow/skills", "project-workflow", "references", "project-workflow-playbook.md"));
 requireText(".gitmodules", "path = plugins/context-mode");
 requireText(".gitmodules", "url = https://github.com/mksglu/context-mode.git");
 requireText(".gitmodules", "path = plugins/code-review-graph");
@@ -216,10 +223,14 @@ requireText(".gitmodules", "url = https://github.com/JuliusBrussee/caveman.git")
 requireText("README.md", "plugins/context-mode");
 requireText("README.md", "plugins/code-review-graph");
 requireText("README.md", "plugins/caveman");
+requireText("README.md", "plugins/project-workflow");
 requireText("README.md", "JuliusBrussee/caveman");
 requireText("README.md", "node scripts/validate-plugins.ts .");
 requireText("AGENTS.md", "Plugin folders live under `plugins/`");
+requireText("AGENTS.md", "plugins/project-workflow");
 requireText("docs/plugin-catalog.md", "`context-mode`");
+requireText("docs/plugin-catalog.md", "`project-workflow`");
+requireText("docs/plugin-catalog.md", "repo-owned plugin");
 requireText("docs/plugin-catalog.md", "v1.0.136");
 requireText("docs/plugin-catalog.md", "`code-review-graph`");
 requireText("docs/plugin-catalog.md", "v2.3.3");
@@ -233,7 +244,9 @@ requireText("docs/plugin-catalog.md", "plugins/caveman/plugins/caveman/.codex-pl
 requireText("docs/plugin-catalog.md", "plugins/caveman/plugins/caveman/hooks/codex/sessionstart.mjs");
 requireText("docs/plugin-catalog.md", "canonical source는 `.gitmodules`");
 requireText("docs/update-source-registry.md", ".gitmodules");
+requireText("docs/update-source-registry.md", "Repo-owned plugin");
 requireText("docs/update-source-registry.md", "## Plugin update list");
+requireText("docs/update-source-registry.md", "`project-workflow` | `plugins/project-workflow`");
 requireText("docs/update-source-registry.md", "`context-mode` | `plugins/context-mode` | `https://github.com/mksglu/context-mode.git`");
 requireText("docs/update-source-registry.md", "`code-review-graph` | `plugins/code-review-graph` | `https://github.com/tirth8205/code-review-graph.git`");
 requireText("docs/update-source-registry.md", "`caveman` | `plugins/caveman` | `https://github.com/JuliusBrussee/caveman.git`");
@@ -242,6 +255,30 @@ requireText("docs/update-source-registry.md", "docs/plugin-catalog.md");
 requireText("docs/update-source-registry.md", "workflow provenance-only primitive");
 requireText("history/skills.md", "`code-review-graph` plugin reference added");
 requireText("history/skills.md", "`caveman` plugin reference added");
+requireText("history/skills.md", "Project workflow plugin boundary added");
+
+const projectWorkflowManifest = readJson<CodexPluginManifest>("plugins/project-workflow/.codex-plugin/plugin.json");
+if (projectWorkflowManifest) {
+  const expectedProjectWorkflowManifest: Array<[unknown, string]> = [
+    [projectWorkflowManifest.name === "project-workflow", "project-workflow plugin name"],
+    [projectWorkflowManifest.version === "0.1.0", "project-workflow version"],
+    [projectWorkflowManifest.repository === "https://github.com/winverse/agents-skills", "project-workflow repository URL"],
+    [projectWorkflowManifest.license === "MIT", "project-workflow license"],
+    [projectWorkflowManifest.skills === "./skills/", "project-workflow bundled skills path"],
+    [projectWorkflowManifest.interface?.displayName === "Project Workflow", "project-workflow display name"],
+    [projectWorkflowManifest.interface?.category === "Productivity", "project-workflow category"],
+  ];
+  for (const [ok, label] of expectedProjectWorkflowManifest) {
+    if (!ok) errors.push(`Unexpected manifest value for ${label}`);
+  }
+}
+
+requireText("plugins/project-workflow/README.md", "feature-workflow`는 이 plugin에 넣지 않는다");
+requireText("plugins/project-workflow/README.md", "agent-eval-harness");
+requireText("plugins/project-workflow/references/plugin-boundary-review.md", "`project-workflow` | plugin core");
+requireText("plugins/project-workflow/references/plugin-boundary-review.md", "`feature-workflow` | 별도 skill 유지");
+requireText("plugins/project-workflow/references/plugin-boundary-review.md", "`agent-eval-harness` | companion skill 유지");
+requireText("skills/project-workflow/SKILL.md", "plugins/project-workflow/skills/project-workflow/SKILL.md");
 
 const manifest = readJson<CodexPluginManifest>("plugins/context-mode/.codex-plugin/plugin.json");
 if (manifest) {
