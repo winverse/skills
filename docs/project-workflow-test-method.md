@@ -85,6 +85,7 @@ skill-test/
 - Codex CLI를 쓰면 첫 실행의 JSON event log에서 explicit session id를 추출하고, 이어지는 `codex exec resume`에는 그 id를 직접 넘긴다. `--last`는 다른 cwd의 마지막 session을 잡을 수 있으므로 쓰지 않는다.
 - resume도 첫 실행과 같은 actual project root cwd에서 실행한다.
 - non-git scratch project에서 Codex CLI를 쓸 때는 필요하면 `--skip-git-repo-check`를 명시한다. 이 flag는 테스트 scratch project에 대한 repo check 우회일 뿐, shared workspace를 target으로 삼는 허가가 아니다.
+- 테스트 목적이 local shared workspace hook이나 project rule 검증이 아니라면 external Codex 실행에는 `--ignore-rules`를 붙인다. user config나 MCP hook이 shared workspace side effect를 만들 수 있는 환경이면 `--ignore-user-config`도 함께 붙인다. plugin entrypoint는 prompt의 GitHub fresh clone 경로로 직접 제공하므로, 이 isolation은 local shared repo hook이 테스트 중 shared workspace를 수정하는 일을 막기 위한 것이다.
 - shared workspace guard를 매 외부 agent 실행 전후로 확인한다. 예시는 아래와 같다.
 
 ```bash
@@ -100,6 +101,7 @@ cd <skill-test-root>/current/example-projects/<project-slug>
 
 codex exec \
   --skip-git-repo-check \
+  --ignore-rules \
   --json \
   -o <skill-test-root>/runs/cycle-NNN/history/first-response.md \
   - < <skill-test-root>/runs/cycle-NNN/prompts/first-response.md \
@@ -109,6 +111,7 @@ codex exec \
 
 codex exec resume \
   --skip-git-repo-check \
+  --ignore-rules \
   --json \
   -o <skill-test-root>/runs/cycle-NNN/history/project-run-final.md \
   <explicit-session-id> \
