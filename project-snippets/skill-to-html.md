@@ -16,5 +16,7 @@
 - Framer Motion, Motion One, GSAP, or similar animation libraries are allowed only when the target project already has a local build pipeline and the dependency is bundled locally; standalone skill guides should use CSS animation, SVG animation, or Web Animations API.
 - Design and verify only for PC desktop viewport; mobile/tablet layout and responsive breakpoint tuning are out of scope for this skill. Desktop click, hover, focus, and animated state changes are in scope.
 - Keep wide scope tables, matrices, and checklist tables in full-width sections rather than narrow two-column layouts.
+- Do not place 4+ core contract cards or prose cards as a multi-column grid inside a narrow side panel, status panel, or secondary column.
+- Use readable card grids such as `repeat(auto-fit, minmax(280px, 1fr))`; compact contract snapshots must still keep at least `minmax(220px, 1fr)`.
 - Make SVG arrows terminate at visible nodes, boxes, or lanes; do not leave dangling arrowheads in empty space.
 - Verify the HTML visually in a PC desktop viewport when practical, especially interaction state changes, animation state, arrow endpoints, table width, overflow, and text overlap.

@@ -54,6 +54,9 @@
     .control[aria-pressed="true"] { background:var(--soft-green); border-color:var(--green); }
     .control strong { display:block; font-size:13px; margin-bottom:3px; }
     .control span { color:var(--muted); font-size:12px; }
+    .evidence-note { border:1px solid var(--border); border-radius:8px; background:#fff; padding:10px; min-height:76px; }
+    .evidence-note b { display:block; font-size:12px; margin-bottom:3px; color:var(--blue); }
+    .evidence-note span { display:block; color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
     .section { margin-top:22px; }
     .section-head { display:flex; align-items:baseline; justify-content:space-between; gap:20px; margin-bottom:10px; }
     .section-head p { color:var(--muted); font-size:13px; }
@@ -83,6 +86,12 @@
     .source-cell:nth-last-child(-n+4) { border-bottom:0; }
     .source-head { background:var(--soft); min-height:54px; }
     .file-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; }
+    .contract-grid { display:grid; gap:10px; }
+    .contract-tile { width:100%; min-height:74px; padding:12px; text-align:left; border:1px solid var(--border); border-radius:8px; background:#fff; cursor:pointer; transition:transform .18s ease, background .18s ease, border-color .18s ease; }
+    .contract-tile:hover, .contract-tile:focus-visible { transform:translateY(-1px); outline:2px solid rgba(36,88,184,.24); outline-offset:2px; }
+    .contract-tile[aria-pressed="true"] { background:var(--soft-amber); border-color:var(--amber); }
+    .contract-tile strong { display:block; font-size:13px; margin-bottom:4px; }
+    .contract-tile span { display:block; color:var(--muted); font-size:12px; }
     .tile { min-height:86px; padding:12px; background:var(--panel); overflow-wrap:anywhere; }
     .guard-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); overflow:hidden; }
     .guard-grid .tile { border-radius:0; border-left:0; border-top:0; }
@@ -122,7 +131,7 @@
           </div>
           <div class="mode-panel" role="group" aria-label="보기 모드">
             <button class="control" type="button" data-view="shape" aria-pressed="true"><strong>형태 먼저</strong><span>글보다 화면 구조를 먼저 만듭니다.</span></button>
-            <button class="control" type="button" data-view="motion" aria-pressed="false"><strong>움직임 연결</strong><span>계약과 근거를 animated path로 연결합니다.</span></button>
+            <button class="control" type="button" data-view="motion" aria-pressed="false"><strong>움직임 연결</strong><span>계약과 근거를 움직이는 경로로 연결합니다.</span></button>
             <button class="control" type="button" data-view="evidence" aria-pressed="false"><strong>근거 펼치기</strong><span>원문과 validator를 클릭으로 드러냅니다.</span></button>
           </div>
         </div>
@@ -173,20 +182,23 @@
               <strong id="mode-title">형태 먼저</strong>
               <p id="mode-copy">첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다.</p>
             </div>
-            <p class="hint">모드를 누르면 도표 node, caption, evidence가 함께 바뀝니다. 긴 설명은 아래 원문 근거와 실제 확인으로 내려갑니다.</p>
+            <div class="evidence-note" id="evidence-note">
+              <b>원문 근거</b>
+              <span><code>SKILL.md</code> required outcome: 첫 화면은 움직이는 도표, 판단 보드, 상태 전환으로 시작합니다.</span>
+            </div>
+            <p class="hint">모드를 누르면 도표 node, caption, 근거가 함께 바뀝니다. 긴 설명은 아래 원문 근거와 실제 확인으로 내려갑니다.</p>
           </aside>
         </div>
       </section>
 
-      <aside class="panel" aria-label="핵심 파일">
-        <div class="section-head"><h2>핵심 파일</h2><p>인접 파일 쌍</p></div>
-        <div class="file-grid">
-          <a class="tile" href="SKILL.md"><strong>SKILL.md</strong><span>에이전트가 읽는 원본 계약입니다.</span></a>
-          <a class="tile" href="skill.html"><strong>skill.html</strong><span>사람이 조작하는 시각 가이드입니다.</span></a>
-          <a class="tile" href="references/visual-guide-standards.md"><strong>visual-guide-standards.md</strong><span>상호작용, animation library, render integrity 기준입니다.</span></a>
-          <a class="tile" href="scripts/validate-skill-to-html.ts"><strong>validate-skill-to-html.ts</strong><span>스킬 전용 문구와 상호작용 계약을 검사합니다.</span></a>
-          <a class="tile" href="../../scripts/validate-skill-html.ts"><strong>validate-skill-html.ts</strong><span>공통 HTML, inline script safety, SVG arrow endpoint를 검사합니다.</span></a>
-          <a class="tile" href="../../project-snippets/skill-to-html.md"><strong>project snippet</strong><span>프로젝트에 붙는 짧은 사용 규칙입니다.</span></a>
+      <aside class="panel" aria-label="핵심 계약">
+        <div class="section-head"><h2>핵심 계약</h2><p>첫 화면 노출</p></div>
+        <div class="contract-grid" role="group" aria-label="핵심 계약 선택">
+          <button class="contract-tile" type="button" data-contract="pair" aria-pressed="true"><strong>인접 쌍 유지</strong><span><code>SKILL.md</code> 옆에 <code>skill.html</code>을 둡니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="visual" aria-pressed="false"><strong>그림 우선</strong><span>긴 설명보다 조작 가능한 시각 장면을 먼저 만듭니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="bounds" aria-pressed="false"><strong>금지 경계</strong><span>외부 CDN, 외부 script, 외부 image를 쓰지 않습니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="wide" aria-pressed="false"><strong>읽기 폭</strong><span>4개 이상 계약은 좁은 다열 grid가 아니라 전체 폭이나 single-column으로 둡니다.</span></button>
+          <button class="contract-tile" type="button" data-contract="verify" aria-pressed="false"><strong>실제 확인</strong><span>PC desktop click, focus, animation state를 기록합니다.</span></button>
         </div>
       </aside>
     </header>
@@ -356,22 +368,34 @@ Validate with node scripts/validate-skill-html.ts . and the target skill's valid
     const modeCopy = {
       shape: {
         title: "형태 먼저",
-        copy: "첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다."
+        copy: "첫 화면은 텍스트 카드가 아니라 조작 가능한 그림으로 시작합니다.",
+        evidence: "<code>SKILL.md</code> required outcome: 첫 화면은 움직이는 도표, 판단 보드, 상태 전환으로 시작합니다."
       },
       motion: {
         title: "움직임 연결",
-        copy: "애니메이션은 장식이 아니라 원문 계약이 화면 상태로 바뀌는 과정을 보여줍니다."
+        copy: "애니메이션은 장식이 아니라 원문 계약이 화면 상태로 바뀌는 과정을 보여줍니다.",
+        evidence: "<code>SKILL.md</code> design contract: 도표와 애니메이션은 의사결정, 실행 순서, 금지 경계, 증거 연결을 보여야 합니다."
       },
       evidence: {
         title: "근거 펼치기",
-        copy: "클릭한 mode는 관련 node와 근거 caption을 함께 바꿔 검증 경로를 드러냅니다."
+        copy: "클릭한 mode는 관련 node와 근거 caption을 함께 바꿔 검증 경로를 드러냅니다.",
+        evidence: "<code>SKILL.md</code> creation workflow: 원문 근거와 실제 확인 표를 함께 남깁니다."
       }
+    };
+
+    const contractCopy = {
+      pair: "<code>SKILL.md</code> required outcome: 각 skill folder에는 <code>SKILL.md</code>와 <code>skill.html</code>이 함께 있어야 합니다.",
+      visual: "<code>SKILL.md</code> quality bar: 첫 화면만 봐도 판단 구조가 그림으로 먼저 보여야 합니다.",
+      bounds: "<code>SKILL.md</code> required outcome: 외부 CDN, 외부 이미지, 외부 script에 의존하지 않습니다.",
+      wide: "<code>SKILL.md</code> required outcome: 4개 이상 핵심 계약은 좁은 다열 grid에 넣지 않고 읽기 폭을 확보합니다.",
+      verify: "<code>SKILL.md</code> creation workflow: validator와 PC desktop viewport 확인을 실제 확인 표에 남깁니다."
     };
 
     const controls = document.querySelectorAll("[data-view]");
     const nodes = document.querySelectorAll("[data-node]");
     const title = document.querySelector("#mode-title");
     const copy = document.querySelector("#mode-copy");
+    const evidenceNote = document.querySelector("#evidence-note span");
 
     controls.forEach((control) => {
       control.addEventListener("click", () => {
@@ -380,6 +404,15 @@ Validate with node scripts/validate-skill-html.ts . and the target skill's valid
         nodes.forEach((node) => node.classList.toggle("active", node.getAttribute("data-node") === view));
         title.textContent = modeCopy[view].title;
         copy.textContent = modeCopy[view].copy;
+        evidenceNote.innerHTML = modeCopy[view].evidence;
+      });
+    });
+
+    document.querySelectorAll("[data-contract]").forEach((contract) => {
+      contract.addEventListener("click", () => {
+        const selected = contract.getAttribute("data-contract");
+        document.querySelectorAll("[data-contract]").forEach((item) => item.setAttribute("aria-pressed", String(item === contract)));
+        evidenceNote.innerHTML = contractCopy[selected];
       });
     });
 

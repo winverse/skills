@@ -15,6 +15,7 @@
 - `SKILL.md` 본문이 과하게 길지 않고, 세부 내용은 `references/`로 분리되어 있는가
 - `skill.html`이 단순 카드형 요약이 아니라 decision matrix, workflow, chart, resource map, input/output schema 같은 시각 구조를 제공하는가
 - `skill-to-html` 산출물은 첫 화면에서 텍스트 카드보다 interactive visual scene, animated diagram, mode switch, progressive disclosure가 먼저 보이는가
+- `skill-to-html` 산출물은 4개 이상 계약 카드나 prose card를 좁은 side panel의 다열 grid로 만들지 않고, 전체 폭 matrix, wrap grid, 또는 읽기 폭이 있는 single-column control로 처리하는가
 - `skill.html`의 화면 라벨이 한국어 우선인지 확인한다. `commit`, `push`, `repo`, `SKILL.md`, `GraphQL`, `TypeScript`, `Playwright`처럼 코드 맥락의 고유어는 허용하지만 `Decision Matrix`, `Workflow`, `Resource Map`, `Do Not` 같은 일반 UI 라벨은 한국어로 쓴다.
 - `agents/openai.yaml`과 `project-snippets/`가 실제 스킬 목적과 맞는가
 - `AGENTS.md`, `CLAUDE.md`, 또는 다른 에이전트 instruction 파일에서 연결 가능한 방식으로 문서화되어 있는가
@@ -36,7 +37,7 @@
 8. repo 기본 TypeScript validator를 실행한다.
 9. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
 10. 공통 HTML validator로 `skill.html`의 portable self-contained HTML, desktop layout, visual structures, validation, misuse guardrails를 확인한다.
-11. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap을 확인한다. `skill-to-html` 산출물은 mobile/tablet viewport를 검사하지 않아도 되지만 desktop click, focus, animation state는 확인한다.
+11. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap, card readable width를 확인한다. `skill-to-html` 산출물은 mobile/tablet viewport를 검사하지 않아도 되지만 desktop click, focus, animation state는 확인한다.
 12. 수정하기 전에 local-only `inspector/YYYY-MM-DD-<scope>.md` 파일을 만들고 findings, 근거 파일, 검증 명령, 해결 기준을 적는다.
 13. 그 검사 문서를 기준으로 수정한다.
 14. 이슈가 처리되면 해당 검사 파일은 삭제한다. 일부만 처리됐으면 해결된 항목을 제거하고 미해결 항목만 남긴다.
@@ -85,6 +86,7 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 - 긴 취향, 예시, 평가 prompt, source rule은 `references/`로 분리한다.
 - `skill.html`은 최소 4개 이상의 시각 구조를 포함한다.
 - `skill-to-html` 산출물은 첫 viewport에 조작 가능한 visual scene, animated diagram, mode switch, 또는 evidence reveal을 둔다.
+- `skill-to-html` 산출물은 좁은 side panel에 4개 이상 계약 카드를 다열 grid로 배치하지 않는다.
 - `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다. Self-contained inline JavaScript는 짧은 상호작용 구현에만 쓴다.
 - `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.
 - `project-snippets/`의 문구가 실제 trigger와 맞다.

@@ -16,7 +16,7 @@
 - Do not update plugin packages, MCP config, or submodules incidentally through `skill-update`; when the user explicitly includes plugin updates, use the plugin update lane and keep `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, validators, and history aligned.
 - Treat requests for "all external dependency updates", "plugin and workflow primitive updates", or similar repo-wide source refresh as a dependency update sweep; automatically check all `.gitmodules` vendored plugins, repo-owned plugins, `docs/update-source-registry.md` workflow primitive lane, and workflow `upstream-dependency-map.md` usage maps.
 - Use `skill-to-html` after material skill changes.
-- When `skill.html` changes, verify HTML validation plus PC viewport interaction/rendering for click/focus/animation states, wide tables, SVG arrow endpoints, overflow, and text overlap.
+- When `skill.html` changes, verify HTML validation plus PC viewport interaction/rendering for click/focus/animation states, wide tables, SVG arrow endpoints, overflow, text overlap, and card readable width.
 - Run `node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills` after skill add, remove, rename, archive, or restore operations.
 - Use `sync-docs` when paths, snippets, README, AGENTS, docs, history, or validation commands may drift.
 - Ask before changing unclear trigger behavior, lifecycle state, rename, split, merge, deprecation, or removal.

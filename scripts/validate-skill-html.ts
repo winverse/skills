@@ -259,6 +259,34 @@ function validateWideVisualStructure(skillPath: string, html: string): void {
   }
 }
 
+function validateReadableCardGrids(skillPath: string, html: string): void {
+  const contractsBlock = /\.contracts\s*\{(?<body>[^}]*)\}/i.exec(html)?.groups?.body ?? "";
+  if (contractsBlock) {
+    if (/grid-template-columns\s*:\s*repeat\(\s*5\s*,/i.test(contractsBlock)) {
+      fail(skillPath, "contract card grids must use readable minmax width and wrap instead of forcing five columns");
+    }
+
+    const fixedFourColumnMatch = /grid-template-columns\s*:\s*repeat\(\s*4\s*,\s*(?:1fr|minmax\(\s*0\b)/i;
+    if (fixedFourColumnMatch.test(contractsBlock)) {
+      fail(skillPath, "contract card grids must use readable minmax width, not four narrow equal columns");
+    }
+
+    const minmaxWidth = /minmax\(\s*(\d+)px\s*,\s*1fr\s*\)/i.exec(contractsBlock)?.[1];
+    if (minmaxWidth !== undefined && Number(minmaxWidth) < 180) {
+      fail(skillPath, "contract card grids must use readable minmax width of at least 180px");
+    }
+  }
+
+  for (const statusPanel of html.matchAll(/<div[^>]*class="[^"]*\bstatus-panel\b[^"]*"[^>]*>/gi)) {
+    const start = (statusPanel.index ?? 0) + statusPanel[0].length;
+    const firstClose = html.indexOf("</div>", start);
+    const directPanelBody = firstClose === -1 ? html.slice(start) : html.slice(start, firstClose);
+    if (/<div[^>]*class="[^"]*\bcontracts\b/.test(directPanelBody)) {
+      fail(skillPath, "contract card rail should not be nested inside a narrow status panel");
+    }
+  }
+}
+
 function validateSvgArrowEndpoints(skillPath: string, html: string): void {
   let svgIndex = 0;
   for (const svgMatch of html.matchAll(/<svg\b[\s\S]*?<\/svg>/gi)) {
@@ -359,6 +387,7 @@ function validateSkillHtml(skillPath: string): void {
 
   validateLocalLinks(skillPath, html);
   validateWideVisualStructure(skillPath, html);
+  validateReadableCardGrids(skillPath, html);
   validateSvgArrowEndpoints(skillPath, html);
 
   const sectionHeadingCount = countMatches(html, /<h2\b/g);

@@ -33,6 +33,16 @@
 
 첫 화면에서 skill name, 호출 조건, 오용 방지 경계가 보여야 한다. 하지만 첫 화면의 중심은 문장 카드가 아니라 interactive hero 또는 animated diagram이어야 한다. 이어서 작업 흐름과 검증 명령이 보여야 한다.
 
+## readability and card grid 기준
+
+- 핵심 계약 카드가 4개 이상이면 좁은 side panel, status panel, 2열 layout의 보조 영역 안에서 다열 grid로 넣지 않는다.
+- side panel은 현재 mode 설명, 진행 상태, 근거 요약, 또는 폭 280px 이상 single-column 선택 리스트에만 쓴다.
+- 본문형 card grid는 `repeat(auto-fit, minmax(280px, 1fr))`를 기본으로 한다.
+- 핵심 계약처럼 짧은 snapshot card도 최소 `minmax(220px, 1fr)`를 확보한다. 그보다 좁아지면 card가 아니라 rail chip, matrix row, table row, disclosure summary로 바꾼다.
+- Korean/CJK 본문은 긴 줄도 긴 세로 열도 피한다. 문장형 설명은 `max-width:40em` 안팎으로 두고, 좁은 카드 안에 긴 문장을 넣지 않는다.
+- 같은 층위의 카드를 4-5개 한 줄로 고정하지 않는다. PC desktop에서도 `auto-fit`, wrap, matrix, 또는 full-width table로 읽기 폭을 확보한다.
+- 비교해야 하는 정보는 tabs로 숨기지 말고 전체 폭 matrix나 table로 둔다. tabs는 같은 맥락의 관련 panel을 전환할 때만 쓴다.
+
 ## diagram rules 기준
 
 도표는 실제 의사결정에 쓰여야 한다. 텍스트를 박스로 쪼개기만 한 구조는 부족하다.
@@ -62,5 +72,5 @@
 - `marker-end`가 있는 화살표는 실제 box, node, lane, 또는 명시된 목표에 닿아야 하며 빈 공간을 가리키지 않는다.
 - 넓은 범위 표, 매트릭스, 체크리스트 표는 전체 폭 section에 둔다.
 - 2열 layout에는 짧은 카드, 구조도, 파일 지도처럼 폭이 안정적인 구조만 넣는다.
-- PC desktop viewport에서 section header, table cell, SVG text, code path가 부모 밖으로 밀리거나 잘리지 않아야 한다.
+- PC desktop viewport에서 section header, table cell, SVG text, code path, card readable width가 부모 밖으로 밀리거나 잘리지 않아야 한다.
 - mobile/tablet breakpoint, 1열 접힘, touch target, small viewport wrapping은 이 스킬의 완료 조건이 아니다.

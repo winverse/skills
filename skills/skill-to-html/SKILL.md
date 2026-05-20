@@ -12,6 +12,8 @@ description: "SKILL.md 옆에 사람이 빠르게 이해할 수 있는 그림 �
 - 각 skill folder에는 `SKILL.md`와 `skill.html`이 함께 있어야 한다.
 - 첫 화면은 글 목록이 아니라 움직이는 도표, 조작 가능한 판단 보드, 상태 전환이 있는 시각 장면으로 시작한다.
 - 화면 텍스트는 짧은 라벨, 캡션, 상태값 중심으로 제한하고, 긴 설명은 접힌 패널이나 하단 근거 section으로 보낸다.
+- 핵심 계약 카드가 4개 이상이고 각 카드에 문장 설명이 있으면, 좁은 side panel, status panel, 2열 layout의 보조 영역 안에서 다열 grid로 넣지 않는다. 전체 폭 rail, matrix, flow lane, table, disclosure, 또는 280px 이상 single-column 선택 리스트로 읽기 폭을 확보한다.
+- 본문형 card grid는 280px 이상을 기본으로 하고, 짧은 핵심 계약 snapshot도 `minmax(220px, 1fr)`보다 좁게 만들지 않는다.
 - 화면에 보이는 설명은 한국어 문장 우선으로 작성한다.
 - 영어 설명어를 쉼표로 길게 나열하지 않는다. `TDD`, `QA`, `API`, `MCP`, `PRD`, 파일명, 명령, product/library 이름처럼 정확성이 필요한 식별자만 원문을 유지한다.
 - `workflow suite`, `setup`, `initiative`, `domain language`, `architecture boundary`, `design direction`, `issue backlog`, `handoff`, `orchestration`, `source-labeled primitive` 같은 설명어는 한국어로 풀어 쓴다.
@@ -35,6 +37,7 @@ description: "SKILL.md 옆에 사람이 빠르게 이해할 수 있는 그림 �
 - visual guide는 정적인 설명보다 직접 조작 가능한 상태 변화를 우선한다.
 - 애니메이션은 의미가 있어야 한다. 예를 들어 source node가 evidence node로 연결되거나, 금지 경계가 선택 시 차단 상태로 바뀌어야 한다.
 - `SKILL.md`의 모든 항목을 옮기지 않는다. 핵심 계약 3-5개, 오용 방지 경계, 실제 확인 결과만 남기고 나머지는 링크와 근거로 넘긴다.
+- 4-5개 핵심 계약을 한 줄 카드로 보여줄 때는 좁은 side panel에 넣지 말고, 전체 폭에서 wrap되는 grid나 matrix로 둔다.
 - diagram은 브라우저에서 읽히는 geometry를 기준으로 검토한다.
 - layout 판단은 PC desktop을 기준으로 한다. mobile/tablet 최적화, touch interaction, breakpoint 조정은 다루지 않는다.
 - 색상은 절제하고, nested card와 decorative orb를 피한다.
@@ -46,12 +49,13 @@ description: "SKILL.md 옆에 사람이 빠르게 이해할 수 있는 그림 �
 1. 대상 `SKILL.md`와 필요한 `references/`만 읽는다.
 2. 핵심 계약 3-5개를 추출하고, 이를 먼저 조작 가능한 화면 상태로 바꾼다.
 3. 텍스트 구조가 아니라 interactive storyboard를 먼저 잡는다. 최소 하나의 mode switch, 하나의 animated flow, 하나의 evidence reveal이 있어야 한다.
-4. 호출 조건, 실행 흐름, 안전 경계, 출력 형태를 핵심 계약과 원문 근거에 연결한다.
-5. 실제 확인 표를 만든다. 최소한 공통 HTML validator와 해당 스킬 validator, browser viewport 확인, interaction check 여부가 있어야 한다.
-6. 최소 4개 이상의 시각 구조를 설계하되, 첫 구조는 정적인 카드가 아니라 interactive hero 또는 animated diagram이어야 한다.
-7. `skill.html`을 self-contained HTML로 작성한다. 필요한 경우 짧은 inline JavaScript를 허용하되 network call, external script, 외부 asset은 금지한다.
-8. `node scripts/validate-skill-html.ts .`를 실행한다.
-9. material visual change면 PC desktop viewport에서 click interaction, keyboard focus, animation state, arrow endpoint, table width, overflow, text overlap을 확인한다.
+4. 4개 이상의 카드, matrix, 표가 필요하면 먼저 전체 폭 배치를 잡고, side panel에는 다열 카드 grid를 두지 않는다.
+5. 호출 조건, 실행 흐름, 안전 경계, 출력 형태를 핵심 계약과 원문 근거에 연결한다.
+6. 실제 확인 표를 만든다. 최소한 공통 HTML validator와 해당 스킬 validator, browser viewport 확인, interaction check 여부가 있어야 한다.
+7. 최소 4개 이상의 시각 구조를 설계하되, 첫 구조는 정적인 카드가 아니라 interactive hero 또는 animated diagram이어야 한다.
+8. `skill.html`을 self-contained HTML로 작성한다. 필요한 경우 짧은 inline JavaScript를 허용하되 network call, external script, 외부 asset은 금지한다.
+9. `node scripts/validate-skill-html.ts .`를 실행한다.
+10. material visual change면 PC desktop viewport에서 click interaction, keyboard focus, animation state, arrow endpoint, table width, overflow, text overlap, card readable width를 확인한다.
 
 ## quality bar 기준
 
