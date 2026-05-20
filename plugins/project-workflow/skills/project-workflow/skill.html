@@ -107,12 +107,13 @@
     </header>
 
     <section class="section" aria-label="핵심 계약">
-      <div class="section-head"><h2>핵심 계약</h2><p>실행을 바꾸는 6개 계약만 첫 화면에서 확인합니다.</p></div>
+      <div class="section-head"><h2>핵심 계약</h2><p>실행을 바꾸는 7개 계약만 첫 화면에서 확인합니다.</p></div>
       <div class="contracts">
         <div class="contract"><strong>정본 경로</strong><span>plugin-bundled skill만 정본 계약을 유지하고, 새 project instruction은 plugin 경로를 직접 링크합니다.</span></div>
         <div class="contract gate"><strong>질문 gate 우선</strong><span>raw idea에서는 <code>grill-with-docs</code>, <code>office-hours</code>, <code>brainstorming</code> setup gap check 전에는 PRD와 구조 인계를 확정하지 않습니다.</span></div>
         <div class="contract"><strong>실제 호출 우선</strong><span>선택한 primitive는 호출면을 확인해 실제 호출하고, 불가능하면 <code>fallback</code> 상태와 local 질문을 남깁니다.</span></div>
         <div class="contract gate"><strong>Korean-first artifact gate</strong><span>영어 문서 요청이 없으면 durable setup docs의 제목, 본문, 목록, lane label, field label, phase step 설명은 한국어 우선이어야 합니다.</span></div>
+        <div class="contract route"><strong>Actual project shell gate</strong><span>구조가 확정된 setup은 Markdown만 만들지 않고 root package config, ESM tsconfig, app/package shell, validation command를 만듭니다.</span></div>
         <div class="contract route"><strong>책임 분리</strong><span>구조는 <code>project-structure</code>, 반복 구현과 TDD와 QA는 <code>feature-workflow</code>, 문서 drift는 <code>sync-docs</code>로 넘깁니다.</span></div>
         <div class="contract stop"><strong>위험 gate</strong><span>tool, MCP, external API, file write, network, untrusted content는 Agent Tool And Security Risk Gate를 먼저 기록합니다.</span></div>
       </div>
@@ -297,6 +298,7 @@
         <div class="table-cell"><strong>fresh clone cycle</strong></div><div class="table-cell"><span>GitHub에서 새로 받은 copy로 첫 응답, setup 실행, phase dry-run, shared workspace guard를 확인합니다.</span></div><div class="table-cell"><span><code>runs/cycle-NNN/</code>에 prompt, history, output, summary를 남깁니다.</span></div>
         <div class="table-cell"><strong>failure class</strong></div><div class="table-cell"><span><code>plugin contract</code>, <code>runner</code>, <code>test method</code>, <code>target artifact</code>, <code>environment/hook</code>으로 실패 원인을 분류합니다.</span></div><div class="table-cell"><span>기록을 고쳐 pass로 만들지 않고 원인에 맞는 파일을 수정합니다.</span></div>
         <div class="table-cell"><strong>language gate</strong></div><div class="table-cell"><span><code>work-claims.md</code> lane/field label이나 phase step heading이 영어 중심이면 validation이 통과해도 pass가 아닙니다.</span></div><div class="table-cell"><span>Korean-first artifact gate를 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
+        <div class="table-cell"><strong>actual shell gate</strong></div><div class="table-cell"><span>구조가 확정됐는데 <code>package.json</code>, ESM tsconfig, app/package folder, source entrypoint, validation command가 없으면 pass가 아닙니다.</span></div><div class="table-cell"><span>project shell 계약을 보강하고 다음 fresh clone cycle에서 다시 확인합니다.</span></div>
         <div class="table-cell"><strong>개선 후 반복</strong></div><div class="table-cell"><span>validator를 통과시키고 <code>atomic-committer</code>로 commit/push한 뒤 다음 fresh clone cycle을 돕니다.</span></div><div class="table-cell"><span>마지막 수정 이후 cycle이 통과하고 blocker가 없을 때만 완료로 봅니다.</span></div>
       </div>
     </section>

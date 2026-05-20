@@ -23,6 +23,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 - GitHub fresh clone cycle에서 첫 응답 순서가 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check로 나온다.
 - 질문 gate 전에는 `design.md`, `project-structure`, PRD, issue backlog, implementation이 `deferred` 또는 `not created yet`로 남는다.
 - 질문 답변 뒤에는 실제 project structure, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation이 생성된다.
+- 사용자가 structure를 확정했으면 `.scratch` Markdown만 생성하는 것은 실패다. root `package.json`, ESM tsconfig, 선택한 `apps/`/`packages/` 또는 `src/` shell, 검증 script가 실제 파일로 있어야 한다.
 - target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다.
 - `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt를 만든다.
 - shared workspace guard가 cycle 전후 동일하다.
@@ -153,6 +154,7 @@ codex exec resume \
    - 이어진 실행이 필요하면 첫 응답에서 얻은 explicit session id로 같은 actual project root cwd에서 resume한다.
    - `--last` 기반 resume, 다른 cwd 기반 resume, wrapper cwd에서 sibling project를 쓰는 방식은 실패다.
    - 단순 Markdown만 만들면 실패다. 선택한 구조에 맞는 `apps/`/`packages/` 또는 `src/` 같은 실제 project structure, `docs/`, `.scratch/`, 검증 script가 실제 파일로 있어야 한다.
+   - 사용자가 TypeScript monorepo shell을 확정했으면 root `package.json`, `"type": "module"`, ESM tsconfig, 선택한 workspace package, source entrypoint, validation script가 있어야 한다.
 
 6. 검증을 실행한다.
    - target project 자체 검증 명령을 실행한다.

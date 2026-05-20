@@ -127,6 +127,17 @@ owner policy는 one active owner per claimed write path다. 읽기는 허용하�
 
 folder/env/codegen/db/infra boundary가 필요할 때만 `project-structure`를 호출한다. raw idea discovery 중에는 호출하지 않는다. 특히 `grill-with-docs`, `office-hours`, Superpowers `brainstorming` setup gap check가 끝나기 전 호출하지 않는다.
 
+Actual project shell gate는 setup 완료 전 hard gate다. 사용자가 structure를 확정했거나 `apps/`, `packages/`, `src/`, API/web/domain shell을 원한다고 답하면 `.scratch` 문서만 만들고 끝내지 않는다. `project-structure`를 실제 호출하거나, 호출 surface가 없으면 fallback으로 최소 실행 shell, 즉 minimal runnable shell을 만든다. 만들 수 없으면 blocker로 기록하고 pass로 보고하지 않는다.
+
+TypeScript monorepo shell을 확정한 경우 최소 산출물은 아래다.
+
+- root `package.json` with `"type": "module"` and validation script
+- root ESM `tsconfig` 또는 `tsconfig.base.json`
+- 선택한 app/package folder, 예를 들면 `apps/web`, `apps/api`, `packages/domain`
+- 각 app/package의 `package.json`과 `src/` entrypoint
+- external API, secret, real PII 없이 검증 가능한 dummy data 또는 pure helper
+- `npm`, `pnpm`, `bun` 중 하나의 실제 검증 명령과 `setup-validation.md` 기록
+
 ## fallback interview gate 기준
 
 원본 호출이 불가능하면 fallback 질문을 실행한다. fallback은 원본 전문 복제가 아니라 setup에 필요한 최소 질문이다.

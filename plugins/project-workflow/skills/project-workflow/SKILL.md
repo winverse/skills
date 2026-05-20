@@ -57,6 +57,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - TypeScript 프로젝트를 초기 셋팅하면 ESM only를 architecture constraint로 고정한다. `package.json`의 `type: "module"`, ESM `tsconfig`, `import`/`export`를 기본값으로 두고 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`는 새 구조나 이슈에 넣지 않는다.
 - 기존 코드가 CommonJS면 새 패턴으로 복사하지 말고 migration boundary, blocker, 또는 `project-structure` handoff 질문으로 남긴다.
 - `project-structure`는 domain language와 concrete architecture questions가 생긴 뒤 호출한다.
+- Actual project shell gate: 사용자가 새 프로젝트 setup에서 구조를 확정했거나 `apps/`, `packages/`, `src/`, API/web/domain shell 같은 파일 구조를 원한다고 답하면 문서만 만들고 끝내지 않는다. 최소 실행 가능한 project shell을 현재 target project root 아래에 만들고, root `package.json`, ESM `tsconfig`, 선택된 app/package 폴더, 간단한 source file, 검증 명령을 포함한다. 구조를 만들 수 없으면 `workflow-state.md` open questions와 최종 보고에 blocker로 남기며 pass로 보고하지 않는다.
 - substantial UI는 구현 전 `design.md`와 2-3 mock direction 선택을 거친다.
 - 구현 handoff가 여러 단계로 쪼개지면 `phase/step handoff gate`를 만들고, 각 step은 이후 `feature-workflow` 실행 session이 이어받을 수 있도록 read files, claimed write set, acceptance command, blocked condition, summary field를 포함한다.
 - `harness_framework`의 `execute.py` 아이디어는 Python 실행 엔진이 아니라 TypeScript 기반 선택 도구와 phase/step handoff 규칙으로만 채택한다. Codex-first command boundary를 두고, custom command는 사용자가 명시했을 때만 fallback으로 허용한다. 선택 runner는 `project-workflow` 산출물을 실행하는 기본 경로가 아니라, 사용자가 명시했을 때 `feature-workflow` step 실행을 돕는 adapter다.
@@ -105,12 +106,13 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 8. TypeScript를 쓰는 프로젝트면 ESM only와 CommonJS 금지를 architecture constraint로 기록
 9. 필요한 경우 Agent Tool And Security Risk Gate 기록
 10. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
-11. light spec과 PRD settings 확정
-12. vertical issue backlog 작성
-13. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
-14. 구현 handoff가 크면 `.scratch/<slug>/phases/index.json`과 `step<N>.md` 초안을 만들거나 동등한 phase/step handoff plan을 남김
-15. `feature-workflow`가 받을 준비 상태를 점검
-16. document sync와 setup validation을 수행하고 다음 spec을 지정
+11. 구조가 확정된 뒤에는 `project-structure`를 실제 호출하거나 fallback으로 최소 shell을 만든다. fallback shell도 docs-only가 아니어야 하며, TypeScript면 `package.json` `type: "module"`, ESM `tsconfig`, `import`/`export`, CommonJS 금지를 실제 파일에 반영한다.
+12. light spec과 PRD settings 확정
+13. vertical issue backlog 작성
+14. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
+15. 구현 handoff가 크면 `.scratch/<slug>/phases/index.json`과 `step<N>.md` 초안을 만들거나 동등한 phase/step handoff plan을 남김
+16. `feature-workflow`가 받을 준비 상태를 점검
+17. document sync와 setup validation을 수행하고 다음 spec을 지정
 
 ## interview gate 기준
 
@@ -158,6 +160,16 @@ Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의
 큰 구현 handoff를 준비하면 `.scratch/<slug>/phases/` 또는 target project의 동등한 workflow area에 phase/step handoff plan을 둔다. `project-workflow`는 이 plan을 만들 수 있지만, 기본적으로 구현 runner를 실행하지 않는다. 실제 production edit은 `feature-workflow`의 work-claim preflight, TDD/characterization, QA/runtime evidence 규칙을 따른다.
 
 phase step Markdown도 한국어 우선 산출물이다. `step<N>.md`의 제목, 작업 범위, 차단 조건, 요약 지시 같은 사람이 읽는 문장은 한국어로 쓰고, runner나 cross-agent 호환에 필요한 exact field name은 괄호나 backtick 안에 보조 표기로만 둔다. 예시는 `## 읽을 파일(read files)`, `## 작업 범위`, `## 수정 소유 범위(claimed write set)`, `## 검증 명령(acceptance commands)`, `## 차단 조건(blocked conditions)`, `## 완료 요약(summary field)`처럼 쓴다. `index.json`의 `title`이나 `name`도 dry-run에서 보이므로 한국어 우선 또는 한국어+identifier 병기로 둔다.
+
+setup에서 실제 project structure가 확정됐으면 `.scratch` 문서만 만드는 것은 실패다. 최소 shell은 프로젝트 성격에 맞춰 작게 만들되, 이 테스트의 TypeScript monorepo처럼 사용자가 `apps/web`, `apps/api`, `packages/domain`을 고르면 아래가 있어야 한다.
+
+- root `package.json` with `"type": "module"` and validation script
+- root ESM `tsconfig` 또는 `tsconfig.base.json`
+- `apps/web/package.json`, `apps/web/src/`
+- `apps/api/package.json`, `apps/api/src/`
+- `packages/domain/package.json`, `packages/domain/src/`
+- dummy data나 pure domain helper처럼 external API/secret 없이 검증 가능한 최소 source
+- `npm`, `pnpm`, `bun` 중 하나의 실제 검증 명령과 결과 기록
 
 - `index.json`: project, phase, steps, status를 담는다.
 - `step<N>.md`: read files, 작업 범위, claimed write set, acceptance commands, blocked conditions, 금지사항을 담는다.
