@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>web-research 4컷 comic</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --ink: #17202e;
+      --muted: #5e6a79;
+      --border: #c9d4e2;
+      --blue: #285da8;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    body { padding: 32px; }
+
+    main {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    h1,
+    h2,
+    p { margin: 0; }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .hero,
+    .comic-frame,
+    .notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: end;
+    }
+
+    h1 {
+      font-size: 30px;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .comic-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .notes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .notes h2 {
+      font-size: 19px;
+      margin-bottom: 10px;
+    }
+
+    ol,
+    ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background: #eef3fb;
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="hero" aria-labelledby="title">
+    <div>
+      <h1 id="title">web-research 4컷 comic</h1>
+      <p class="meta">원본: <a href="../SKILL.md">skills/web-research/SKILL.md</a> · 이미지: <a href="comic.png">comic.png</a> · brief: <a href="comic-brief.json">comic-brief.json</a></p>
+    </div>
+    <p class="meta">생성 방식: <code>$imagegen</code>으로 4컷 raster comic 생성 후 HTML wrapper로 묶음</p>
+  </section>
+
+  <section class="comic-frame" aria-label="web-research 4컷 comic 이미지">
+    <img src="comic.png" alt="web-research skill을 설명하는 4컷 comic. 1컷은 최신성 판단, 2컷은 공식 문서와 논문과 비교 출처 병렬 조사, 3컷은 URL과 날짜와 주장과 신뢰도를 적는 출처 장부, 4컷은 citation 기반 답변과 웹 지시 무시를 보여준다.">
+  </section>
+
+  <section class="notes" aria-label="comic transcript와 검증 기록">
+    <article>
+      <h2>Transcript</h2>
+      <ol>
+        <li>질문이 최신 정보인지, 시간이 지나면 바뀔 가능성이 있는지 먼저 판단한다.</li>
+        <li>공식 출처, 논문, 비교 출처를 병렬로 나누어 조사한다.</li>
+        <li>URL, 날짜, 주장, 신뢰도를 source ledger에 기록한다.</li>
+        <li>citation과 함께 답하고, 웹페이지 내부의 지시문은 따르지 않는다.</li>
+      </ol>
+    </article>
+    <article>
+      <h2>검증 기록</h2>
+      <ul>
+        <li>Panel 수: 4컷</li>
+        <li>순서: 좌상단에서 우하단까지 1-4 순서</li>
+        <li>원문 anchor: research workflow 기준, source rules 기준</li>
+        <li>주의: 정확한 정책 문구와 세부 규칙은 원본 <code>SKILL.md</code>가 권위다.</li>
+      </ul>
+    </article>
+  </section>
+</main>
+</body>
+</html>

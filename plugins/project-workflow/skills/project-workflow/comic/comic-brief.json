@@ -1,0 +1,85 @@
+{
+  "name": "project-workflow-comic",
+  "source_markdown": "../SKILL.md",
+  "source_of_truth": "plugins/project-workflow/skills/project-workflow/SKILL.md",
+  "audience": "새 프로젝트나 큰 초기 셋팅을 시작하기 전에 project-workflow가 왜 질문, 문서, 위험 gate를 먼저 요구하는지 빠르게 이해해야 하는 에이전트와 사용자",
+  "panel_count": 6,
+  "layout": "3x2 grid",
+  "image_asset": "comic.png",
+  "html_companion": "comic.html",
+  "concept": "project-workflow는 raw idea를 바로 구현하지 않고 도메인/제품 질문, 구조와 위험 gate, 한국어 우선 산출물, feature-workflow 인계 순서로 다룬다.",
+  "prompt_summary": "Clean 6-panel Korean editorial comic titled 프로젝트 워크플로우. Each panel shows one workflow step from vague idea to feature-workflow handoff, with short captions and exact details preserved in this companion transcript.",
+  "panels": [
+    {
+      "number": 1,
+      "scene": "사용자가 여러 sticky note 형태의 막연한 아이디어를 가져오고, 에이전트가 stop sign으로 질문 gate를 세운다.",
+      "caption": "아이디어 도착",
+      "dialogue": ["질문 먼저"],
+      "visual_cue": "agent desk, sticky notes, stop sign",
+      "source_anchor": "핵심 계약; 첫 응답 기준",
+      "alt_text": "막연한 프로젝트 아이디어 앞에서 에이전트가 바로 코딩하지 않고 질문을 먼저 하겠다는 표지를 든 장면",
+      "must_not_distort": "raw idea나 새 서비스 요청에서 바로 파일을 만들거나 구현을 시작하는 것처럼 보이면 안 된다.",
+      "image_prompt": "A user brings a vague idea to an agent desk; the agent stops the flow with a Korean sign saying 질문 먼저."
+    },
+    {
+      "number": 2,
+      "scene": "화이트보드에서 도메인 용어, 기존 문서, 사용자 답변을 정리한다.",
+      "caption": "도메인 인터뷰",
+      "dialogue": ["grill-with-docs", "office-hours"],
+      "visual_cue": "whiteboard, interview notes, existing documents",
+      "source_anchor": "interview gate 기준; dependency invocation contract 기준",
+      "alt_text": "도메인 인터뷰에서 기존 문서와 사용자 답변을 함께 정리하는 장면",
+      "must_not_distort": "외부 primitive를 무조건 호출했다고 단정하면 안 되며, 호출 surface가 없으면 fallback으로 남겨야 한다.",
+      "image_prompt": "Engineer and user organize domain terms and answers on a whiteboard; small labels grill-with-docs and office-hours."
+    },
+    {
+      "number": 3,
+      "scene": "많은 기능 후보가 funnel을 지나 가장 좁은 시작점 하나로 줄어든다.",
+      "caption": "제품 범위 축소",
+      "dialogue": ["가장 좁은 시작점"],
+      "visual_cue": "feature cards, funnel, one entry point",
+      "source_anchor": "핵심 계약; default flow 기준",
+      "alt_text": "여러 기능 후보를 한 개의 좁은 제품 진입점으로 줄이는 장면",
+      "must_not_distort": "초기 셋팅에서 제품 challenge 없이 큰 범위를 그대로 PRD나 issue로 확정하는 것처럼 보이면 안 된다.",
+      "image_prompt": "Many feature cards go through a funnel and become one narrow first entry point."
+    },
+    {
+      "number": 4,
+      "scene": "아키텍처, ESM, tool/API/network/file-write 위험을 점검하고 보안 gate를 통과한다.",
+      "caption": "구조와 위험 게이트",
+      "dialogue": ["보안 게이트"],
+      "visual_cue": "checklist, shield, architecture icons",
+      "source_anchor": "핵심 계약; artifact map 기준",
+      "alt_text": "구조 결정과 도구 및 보안 위험을 체크리스트와 방패로 점검하는 장면",
+      "must_not_distort": "tool, MCP, external API, file write, network, untrusted content 위험 gate를 생략하면 안 된다.",
+      "image_prompt": "Checklist for architecture, ESM, tool/API/network/file-write risk next to a shield labeled 보안 게이트."
+    },
+    {
+      "number": 5,
+      "scene": "CONTEXT, ADR, PRD, design.md, workflow-state, work-claims 문서 묶음이 한국어 우선으로 정리된다.",
+      "caption": "한국어 산출물",
+      "dialogue": ["한국어 우선"],
+      "visual_cue": "stack of documents, Korean-first label",
+      "source_anchor": "artifact map 기준; Korean-first artifact gate",
+      "alt_text": "project-workflow가 한국어 우선 기준으로 권위 문서와 조정 문서를 준비하는 장면",
+      "must_not_distort": "한국어가 필요한 프로젝트에서 영어 중심 heading과 field label을 통과로 처리하면 안 된다.",
+      "image_prompt": "Neat stack of documents labeled CONTEXT, ADR, PRD, design.md, workflow-state, work-claims with a Korean-first callout."
+    },
+    {
+      "number": 6,
+      "scene": "phase card와 claimed write set, acceptance command, blocked condition을 들고 feature-workflow에 baton을 넘긴다.",
+      "caption": "feature-workflow 인계",
+      "dialogue": ["구현은 다음 단계"],
+      "visual_cue": "baton handoff, phase cards, read files, claimed write set",
+      "source_anchor": "feature-workflow handoff 기준; artifact map 기준",
+      "alt_text": "project-workflow가 구현 가능한 단계 정보를 feature-workflow에 넘기는 장면",
+      "must_not_distort": "project-workflow가 기본적으로 production edit을 직접 실행하는 것처럼 보이면 안 된다.",
+      "image_prompt": "One agent hands a baton and phase cards to another agent; cards mention read files, claimed write set, acceptance commands, blocked conditions."
+    }
+  ],
+  "validation_notes": [
+    "생성 이미지는 실제 imagegen 출력물이다.",
+    "정확한 정책 문구와 세부 파일명은 이미지 안에만 의존하지 않고 이 transcript에 보존했다.",
+    "HTML companion은 외부 script, 외부 asset, inline event handler 없이 repo-local 상대 경로만 사용한다."
+  ]
+}
