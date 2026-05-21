@@ -10,7 +10,8 @@
 2. folder-local instruction
 3. README와 기존 domain docs
 4. ADR, PRD, issue tracker가 이미 있으면 먼저 확인
-5. 디자인 기준, env, API, DB, deployment docs
+5. domain-first folder map과 folder-local instruction docs
+6. 디자인 기준, env, API, DB, deployment docs
 
 ## dependency invocation 기준
 
@@ -62,6 +63,21 @@ Superpowers plugin `brainstorming`은 raw idea 첫 응답에서 `office-hours` �
 ### CLI/no-browser 프로젝트 기준
 
 browser evidence를 요구하지 않는다. setup 단계에서는 command/API boundary, fixture path, runtime evidence 방식만 정한다.
+
+### DDD-lite structure gate 기준
+
+도메인 대화를 거친 프로젝트가 중간 이상 규모이거나 장기 유지가 예상되면 `project-structure` 전에 DDD-lite structure gate를 둔다. 목표는 full DDD ceremony가 아니라, 다음 agent가 전체 대화를 기억하지 못해도 folder와 문서만 보고 도메인 경계를 다시 잡을 수 있게 하는 것이다.
+
+최소 질문은 아래다.
+
+- bounded context가 하나인지 여러 개인지, 여러 개라면 어떤 용어와 책임으로 나뉘는지
+- 핵심 객체가 entity, value object, DTO, external resource 중 무엇인지
+- 코드로 지켜야 할 domain invariant, policy, use case, domain event 후보가 무엇인지
+- framework, DB, transport, UI adapter가 domain model 안으로 들어오지 않게 막을 dependency direction이 무엇인지
+- `packages/domain/src/<bounded-context>/`, `apps/api/src/<bounded-context>/`, `apps/web/src/features/<bounded-context>/`처럼 domain-first folder map을 둘지, 작은 프로젝트라 하나의 context로 시작할지
+- meaningful boundary folder마다 어떤 folder-local instruction docs를 둘지. Codex 중심이면 `AGENTS.md`, Claude 중심이면 `CLAUDE.md`, 둘 다 쓰면 두 문서를 같은 요약 source에서 짧게 맞추고, agent가 읽지 않는 보조 설명은 `README.md`로 둔다.
+
+이 gate의 산출물은 `CONTEXT.md`, `CONTEXT-MAP.md`, ADR, setup validation, folder-local instruction docs 중 적어도 하나에 남긴다. 단순 CRUD나 작은 one-off tool에서는 `DDD-lite structure gate: skipped`와 이유를 `workflow-state.md`에 남기고 가볍게 진행할 수 있다.
 
 ### TypeScript module policy 기준
 
@@ -138,6 +154,8 @@ TypeScript monorepo shell을 확정한 경우 최소 산출물은 아래다.
 - root `package.json` with `"type": "module"` and validation script
 - root ESM `tsconfig` 또는 `tsconfig.base.json`
 - 선택한 app/package folder, 예를 들면 `apps/web`, `apps/api`, `packages/domain`
+- domain-first folder map, 예를 들면 `packages/domain/src/<bounded-context>/`, `apps/api/src/<bounded-context>/`, `apps/web/src/features/<bounded-context>/`
+- 의미 있는 boundary folder의 folder-local instruction docs. 예: `apps/web/AGENTS.md`, `apps/api/AGENTS.md`, `packages/domain/AGENTS.md`, Claude 중심 프로젝트의 `CLAUDE.md`, 또는 agent가 읽지 않는 보조 `README.md`
 - 각 app/package의 `package.json`과 `src/` entrypoint
 - external API, secret, real PII 없이 검증 가능한 dummy data 또는 pure helper
 - `npm`, `pnpm`, `bun` 중 하나의 실제 검증 명령과 `setup-validation.md` 기록
@@ -221,6 +239,8 @@ Goal은 아래 evidence가 실제 fresh clone cycle에서 확인될 때까지 �
 Spec handoff
 - spec or issue:
 - acceptance criteria:
+- domain-first folder map:
+- TDD starting point:
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - design reference:
 - architecture reference:
@@ -242,6 +262,7 @@ Workflow State
 - document language: Korean-first unless target project says otherwise
 - document language gate: Korean-first artifact gate pass/fail and evidence path
 - primitive invocation: selected/invoked/skipped/fallback/deferred with fallback reason and timing
+- DDD-lite structure gate: bounded context, domain-first folder map, folder-local instruction docs, TDD starting point
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - authority docs:
 - decisions:

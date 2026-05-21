@@ -3,38 +3,84 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>project-structure 요약</title>
+  <title>project-structure 안내</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
-      --bg: #f4f6f8;
+      --bg: #f5f7fa;
       --surface: #ffffff;
-      --panel: #f8fafc;
-      --line: #c9d2dc;
-      --text: #17202b;
-      --muted: #5f6b7a;
-      --blue: #2458b8;
-      --green: #2f684f;
-      --red: #963d38;
-      --code: #eef2f7;
+      --soft: #f0f4f8;
+      --line: #cbd5e1;
+      --text: #18212f;
+      --muted: #5f6f84;
+      --strong: #204d8f;
+      --ok: #276749;
+      --warn: #8a4b10;
+      --stop: #9f342f;
+      --code: #e9eef5;
     }
+
     * { box-sizing: border-box; }
+
     html,
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
       font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.58;
+      line-height: 1.6;
       letter-spacing: 0;
       overflow-wrap: anywhere;
     }
-    body { padding: 32px 28px 56px; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { margin-bottom: 10px; font-size: 32px; line-height: 1.18; }
-    h2 { margin-bottom: 12px; font-size: 20px; line-height: 1.3; }
-    h3 { margin-bottom: 8px; font-size: 15px; }
-    p { color: var(--muted); }
+
+    body { padding: 34px 30px 58px; }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    header,
+    section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    header { padding: 30px 34px 28px; }
+    section {
+      margin-top: 18px;
+      padding: 26px 34px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 32px;
+      line-height: 1.18;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 21px;
+      line-height: 1.3;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    p {
+      max-width: 74em;
+      color: var(--muted);
+    }
+
     code {
       border-radius: 5px;
       background: var(--code);
@@ -42,263 +88,224 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: .92em;
     }
-    .shell {
-      max-width: 1180px;
-      margin: 0 auto;
-    }
-    .hero,
-    section {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-    }
-    .hero { padding: 28px 34px 24px; }
-    section {
-      padding: 26px 34px;
-      margin-top: 16px;
-    }
+
     .lead {
-      max-width: 64em;
       margin-bottom: 16px;
       font-size: 16px;
     }
-    .meta-line {
+
+    .meta {
       margin: 0;
       color: var(--muted);
       font-size: 13px;
     }
-    .summary-copy,
-    .use-copy {
-      max-width: 64em;
-      margin-bottom: 12px;
-    }
+
     .summary-list,
-    .contract-list,
-    .workflow-list,
-    .verify-list {
+    .criteria-list,
+    .flow-list,
+    .file-list {
       margin: 0;
       padding: 0;
       list-style: none;
     }
-    .summary-list li {
+
+    .summary-list li,
+    .criteria-list li,
+    .file-list li {
       display: grid;
-      grid-template-columns: 150px minmax(0, 1fr);
-      gap: 16px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 14px;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 18px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
     }
-    .summary-list li:last-child { border-bottom: 0; }
+
+    .summary-list li:first-child,
+    .criteria-list li:first-child,
+    .file-list li:first-child { border-top: 0; }
+
     .summary-list strong,
-    .contract-list strong,
-    .verify-list strong { color: var(--text); }
-    .decision-table,
-    .rule-table,
-    .command-table {
+    .criteria-list strong,
+    .file-list strong {
+      color: var(--text);
+    }
+
+    .summary-list span,
+    .criteria-list span,
+    .file-list span,
+    .flow-list span,
+    td {
+      color: var(--muted);
+    }
+
+    table {
       width: 100%;
       border-collapse: collapse;
     }
-    .decision-table th,
-    .decision-table td,
-    .rule-table th,
-    .rule-table td,
-    .command-table th,
-    .command-table td {
+
+    th,
+    td {
       padding: 12px 0;
-      border-bottom: 1px solid var(--line);
+      border-top: 1px solid var(--line);
       text-align: left;
       vertical-align: top;
     }
-    .decision-table tr:last-child th,
-    .decision-table tr:last-child td,
-    .rule-table tr:last-child th,
-    .rule-table tr:last-child td,
-    .command-table tr:last-child th,
-    .command-table tr:last-child td { border-bottom: 0; }
-    .decision-table th,
-    .rule-table th,
-    .command-table th { width: 190px; color: var(--text); }
-    .decision-table td,
-    .rule-table td,
-    .command-table td { color: var(--muted); }
-    .contract-list li {
+
+    tbody tr:first-child th,
+    tbody tr:first-child td { border-top: 0; }
+
+    th {
+      width: 210px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .flow-list {
+      counter-reset: step;
+    }
+
+    .flow-list li {
+      counter-increment: step;
       display: grid;
-      grid-template-columns: 210px minmax(0, 1fr);
-      gap: 18px;
+      grid-template-columns: 42px 220px minmax(0, 1fr);
+      gap: 16px;
       padding: 13px 0;
-      border-bottom: 1px solid var(--line);
+      border-top: 1px solid var(--line);
     }
-    .contract-list li:last-child { border-bottom: 0; }
-    .contract-list span,
-    .workflow-list span,
-    .verify-list span {
+
+    .flow-list li:first-child { border-top: 0; }
+
+    .flow-list li::before {
+      content: counter(step);
+      color: var(--strong);
+      font-weight: 800;
+    }
+
+    .boundary-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .boundary-block article {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+      padding: 18px 20px;
+    }
+
+    .boundary-block ul {
+      margin: 0;
+      padding-left: 20px;
       color: var(--muted);
-      font-size: 14px;
     }
-    .workflow-list li {
-      display: grid;
-      grid-template-columns: 36px 190px minmax(0, 1fr);
-      gap: 16px;
-      padding: 12px 0;
-      border-top: 1px solid var(--line);
-    }
-    .workflow-list li:first-child { border-top: 0; }
-    .workflow-list b {
-      color: var(--blue);
-      font-size: 14px;
-    }
-    .rule-zones { display: grid; gap: 16px; }
-    .rule-zone {
-      display: grid;
-      grid-template-columns: 170px minmax(0, 1fr);
-      gap: 20px;
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-    }
-    .rule-zone:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-    .rule-zone-heading { margin: 0; }
-    .rule-zone-heading strong {
-      display: block;
-      font-size: 16px;
-      line-height: 1.35;
-    }
-    .allow-zone .rule-zone-heading strong { color: var(--green); }
-    .conditional-zone .rule-zone-heading strong { color: var(--blue); }
-    .block-zone .rule-zone-heading strong { color: var(--red); }
-    .rule-table thead th {
-      padding: 0 0 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .verify-list { margin-top: 12px; }
-    .verify-list li {
-      display: grid;
-      grid-template-columns: 170px minmax(0, 1fr);
-      gap: 16px;
-      padding: 12px 0;
-      border-top: 1px solid var(--line);
-    }
-    .verify-list li:first-child { border-top: 0; }
-    .command-table code { white-space: normal; }
+
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .stop { color: var(--stop); }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <header class="hero">
+  <main>
+    <header>
       <h1>project-structure</h1>
-      <p class="lead">frontend, backend, full-stack monorepo, desktop app, 인프라를 고려한 프로젝트 폴더 구조와 folder-local AGENTS.md index를 선택·생성·표준화·리팩터링할 때 사용한다.</p>
-      <p class="meta-line">SKILL.md 기준 · 읽기용 skill.html · 한국어 우선 · 보안 경계 · 인터랙션 없음</p>
+      <p class="lead">프로젝트 구조를 선택하거나 표준화할 때 폴더 경계, 도메인 우선 구조, 환경 변수, codegen, DB, 테스트, 보안, 상태 점검, 관측성, 인프라 인계를 한 번에 정리한다.</p>
+      <p class="meta">스킬 읽기용 단일 HTML · 한국어 우선 · 외부 asset 없음 · 인터랙션 없음</p>
     </header>
 
     <section>
       <h2>요약</h2>
-      <p class="summary-copy">frontend, backend, monorepo, desktop, 인프라를 고려한 프로젝트 구조와 folder-local <code>AGENTS.md</code> index를 정한다.</p>
       <ul class="summary-list">
-        <li><strong>사용할 때</strong><span>frontend, backend, monorepo, desktop, 인프라를 고려한 프로젝트 구조와 folder-local <code>AGENTS.md</code> index를 정한다.</span></li>
-        <li><strong>주요 입력</strong><span>프로젝트 유형, stack 선택, env/db/codegen/infra 요구, 경계 질문.</span></li>
-        <li><strong>주요 출력</strong><span>권장 folder tree, package 경계, validation command, folder-local <code>AGENTS.md</code> index.</span></li>
-        <li><strong>먼저 판단</strong><span><code>TypeScript</code>는 <code>ESM only</code>를 기본으로 하고, 구조 선택은 도메인/아키텍처 답변 뒤에 고정한다.</span></li>
-        <li><strong>검증</strong><span>관련 validator와 <code>node scripts/validate-skill-html.ts .</code>로 확인한다.</span></li>
+        <li><strong>목적</strong><span>frontend, backend, full-stack monorepo, desktop app, 인프라-aware 구조를 도메인 경계와 실행 경계 기준으로 설계한다.</span></li>
+        <li><strong>사용할 때</strong><span>새 프로젝트 구조를 만들거나 기존 repo의 폴더, package, app, infra, folder-local instruction docs 경계를 정리할 때 사용한다.</span></li>
+        <li><strong>주요 입력</strong><span>제품/도메인 언어, runtime 요구, stack 선택, DB와 codegen 방식, 테스트와 배포 범위, 기존 repo 구조.</span></li>
+        <li><strong>주요 출력</strong><span>선택한 stack, 폴더 tree, bounded context map, 경계 설명, folder-local <code>AGENTS.md</code> 또는 <code>CLAUDE.md</code>, 검증 명령.</span></li>
+        <li><strong>선행 조건</strong><span>raw product discovery는 먼저 <code>project-workflow</code>가 처리하고, 이 스킬은 도메인 언어와 구조 질문이 구체화된 뒤 호출한다.</span></li>
       </ul>
     </section>
 
     <section>
       <h2>사용 판단</h2>
-      <p class="use-copy">이 화면은 스킬을 설치하거나 적용하기 전에 “언제 쓰고 무엇을 확인해야 하는지”를 빠르게 보여준다.</p>
-      <table class="decision-table">
+      <table>
         <tbody>
-          <tr><th>사용할 때</th><td>frontend, backend, full-stack monorepo, desktop app, 인프라를 고려한 프로젝트 폴더 구조와 folder-local AGENTS.md index를 선택·생성·표준화·리팩터링할 때 사용한다.</td></tr>
-          <tr><th>먼저 볼 것</th><td><code>SKILL.md</code>의 description, trigger, 금지 조건, 검증 명령.</td></tr>
-          <tr><th>완료 신호</th><td><code>skill.html</code>이 원문 기준과 같은 방향을 가리키고, validator가 통과한다.</td></tr>
-          <tr><th>검증 신호</th><td><code>TypeScript module 정책</code> <code>ESM only</code> <code>CommonJS 금지</code></td></tr>
+          <tr>
+            <th>바로 사용</th>
+            <td>사용자가 frontend, backend, monorepo, desktop, infra-aware folder structure, DDD-lite domain-first folders, folder-local <code>AGENTS.md</code> index를 선택·생성·표준화·리팩터링하자고 할 때.</td>
+          </tr>
+          <tr>
+            <th>먼저 확인</th>
+            <td>stack 선택이 불명확하면 짧은 숫자 선택지로 확인하고, 기존 repo가 있으면 현재 구조와 package manager를 먼저 읽는다.</td>
+          </tr>
+          <tr>
+            <th>먼저 읽기</th>
+            <td><code>CONTEXT.md</code>, <code>CONTEXT-MAP.md</code>, ADR, PRD, issue, folder-local instruction docs가 있으면 stack보다 먼저 읽어 도메인 용어와 bounded context를 확인한다.</td>
+          </tr>
+          <tr>
+            <th>사용하지 않음</th>
+            <td>원시 아이디어, 제품 검증, 도메인 인터뷰, PRD 작성이 아직 필요한 경우에는 <code>project-workflow</code>가 먼저다.</td>
+          </tr>
         </tbody>
       </table>
     </section>
 
     <section>
       <h2>중요한 기준</h2>
-      <ul class="contract-list">
-        <li><strong>&lt;stack/runtime/db/infra</strong><span>&lt;stack/runtime/db/infra</span></li>
-        <li><strong>TypeScript module</strong><span>TypeScript module: ESM only, CommonJS 금지</span></li>
-        <li><strong>사용자의 stack 선택이 명확하지 않으면 compact numeric ch</strong><span>사용자의 stack 선택이 명확하지 않으면 compact numeric choices로 확인한다.</span></li>
-        <li><strong>사용자가 infra를 요청하지 않았으면 Pulumi/AWS/Docker 배포</strong><span>사용자가 infra를 요청하지 않았으면 Pulumi/AWS/Docker 배포 구조를 추가하지 않는다.</span></li>
-        <li><strong>TypeScript를 쓰는 프로젝트 구조는 반드시 ESM으로 설계한다</strong><span>TypeScript를 쓰는 프로젝트 구조는 반드시 ESM으로 설계한다.</span></li>
+      <ul class="criteria-list">
+        <li><strong>기본 stack</strong><span>명시가 없으면 Bun, Turborepo, Next.js, NestJS with Fastify, GraphQL, urql, GraphQL Code Generator, PostgreSQL + Drizzle, Panda CSS with headless UI, Tauri, Zod env validation을 기본값으로 둔다.</span></li>
+        <li><strong>인프라 조건</strong><span>사용자가 infra를 요청하지 않았으면 Pulumi, AWS, Docker 배포 구조를 추가하지 않는다. infra 요청 시 Pulumi, Docker, AWS ECR/ECS Fargate를 기본 경로로 둔다.</span></li>
+        <li><strong>TypeScript module 정책</strong><span>TypeScript 구조는 <code>ESM only</code>로 설계한다. <code>package.json</code>의 <code>type: "module"</code>, <code>import</code>/<code>export</code>, runtime에 맞는 <code>tsconfig</code>를 기본으로 둔다.</span></li>
+        <li><strong>CommonJS 금지</strong><span><code>require</code>, <code>module.exports</code>, <code>exports.*</code>, <code>.cjs</code>, <code>.cts</code>를 생성하거나 권장하지 않는다. 기존 CommonJS repo는 전환 boundary와 migration 단계를 표시한다.</span></li>
+        <li><strong>DDD-lite</strong><span>중간 이상 규모, 장기 유지, 여러 agent/session 협업, 복잡한 business rule이 있는 프로젝트는 기술 계층만 있는 tree를 기본값으로 삼지 않는다.</span></li>
+        <li><strong>생성물 경계</strong><span>generated artifact와 source artifact를 섞지 않고, env, codegen, DB migration, test, health/readiness, observability 위치를 tree에 드러낸다.</span></li>
       </ul>
     </section>
 
     <section>
       <h2>작업 흐름</h2>
-      <ol class="workflow-list">
-        <li><b>1</b><strong>제품/도메인 언어와 runtime 요구를 확인한다</strong><span>제품/도메인 언어와 runtime 요구를 확인한다.</span></li>
-        <li><b>2</b><strong>app, package, infra, docs 경계</strong><span>app, package, infra, docs 경계를 고른다.</span></li>
-        <li><b>3</b><strong>TypeScript 모듈 정책 반영</strong><span>TypeScript 사용 여부를 확인하고 ESM module policy를 package/env/codegen 경계에 반영한다.</span></li>
-        <li><b>4</b><strong>env, codegen, DB migration, test, </strong><span>env, codegen, DB migration, test, health/readiness, observability 위치를 정한다.</span></li>
-        <li><b>5</b><strong>의미 있는 경계 폴더에 짧은 AGENTS</strong><span>의미 있는 경계 폴더에 짧은 AGENTS.md index를 둔다.</span></li>
-        <li><b>6</b><strong>최종 tree와 validation command를 함께 제시</strong><span>최종 tree와 validation command를 함께 제시한다.</span></li>
+      <ol class="flow-list">
+        <li><strong>요구 확인</strong><span>제품/도메인 언어와 runtime 요구를 확인한다.</span></li>
+        <li><strong>도메인 경계</strong><span>필요하면 <code>DDD-lite</code> 기준으로 bounded context와 domain-first folder map을 정한다.</span></li>
+        <li><strong>구조 선택</strong><span>app, package, infra, docs boundary를 고른다.</span></li>
+        <li><strong>모듈 정책</strong><span>TypeScript 사용 여부를 확인하고 ESM module policy를 package, env, codegen 경계에 반영한다.</span></li>
+        <li><strong>운영 경계</strong><span>env, codegen, DB migration, test, health/readiness, observability 위치를 정한다.</span></li>
+        <li><strong>instruction docs</strong><span>의미 있는 boundary folder에 짧은 folder-local instruction docs를 둔다.</span></li>
+        <li><strong>완료 형태</strong><span>최종 tree와 validation command를 함께 제시한다.</span></li>
       </ol>
     </section>
 
     <section>
       <h2>보안 경계</h2>
-      <div class="rule-zones">
-        <div class="rule-zone allow-zone">
-          <h3 class="rule-zone-heading"><strong>허용</strong></h3>
-          <table class="rule-table">
-            <thead><tr><th>항목</th><th>기준</th></tr></thead>
-            <tbody>
-              <tr><th>사용자의 stack 선택이 명확하지 않으면 compact </th><td>사용자의 stack 선택이 명확하지 않으면 compact numeric choices로 확인한다.</td></tr>
-              <tr><th>기존 repo가 있으면 현재 구조와 package mana</th><td>기존 repo가 있으면 현재 구조와 package manager를 먼저 읽는다.</td></tr>
-              <tr><th>사용자가 infra를 요청하지 않았으면 Pulumi/AWS</th><td>사용자가 infra를 요청하지 않았으면 Pulumi/AWS/Docker 배포 구조를 추가하지 않는다.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="rule-zone conditional-zone">
-          <h3 class="rule-zone-heading"><strong>조건부 허용</strong></h3>
-          <table class="rule-table">
-            <thead><tr><th>항목</th><th>기준</th></tr></thead>
-            <tbody>
-              <tr><th>tsconfig는 runtime에 맞춰 ESM module</th><td>tsconfig는 runtime에 맞춰 ESM module 설정을 명시한다. Node/NestJS runtime은 module: &quot;NodeNext&quot;와 moduleResolution: &quot;NodeNext&quot;를 우선하고, Bun/Next.js/browser-bund...</td></tr>
-              <tr><th>기존 repo가 CommonJS를 쓰고 있으면 새 구조 제</th><td>기존 repo가 CommonJS를 쓰고 있으면 새 구조 제안에서 CommonJS를 따라가지 말고 ESM 전환 boundary와 필요한 migration 단계를 tree와 검증 명령에 표시한다.</td></tr>
-              <tr><th>외부 도구가 CommonJS 설정만 요구하는 것처럼 보이면</th><td>외부 도구가 CommonJS 설정만 요구하는 것처럼 보이면 .cjs fallback을 추가하지 말고 ESM 지원 경로를 찾거나 사용자에게 예외 승인을 요청한다.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="rule-zone block-zone">
-          <h3 class="rule-zone-heading"><strong>금지</strong></h3>
-          <table class="rule-table">
-            <thead><tr><th>항목</th><th>기준</th></tr></thead>
-            <tbody>
-              <tr><th>사용자의 stack 선택이 명확하지 않으면 compact </th><td>사용자의 stack 선택이 명확하지 않으면 compact numeric choices로 확인한다.</td></tr>
-              <tr><th>사용자가 infra를 요청하지 않았으면 Pulumi/AWS</th><td>사용자가 infra를 요청하지 않았으면 Pulumi/AWS/Docker 배포 구조를 추가하지 않는다.</td></tr>
-              <tr><th>CommonJS, require, module</th><td>CommonJS, require, module.exports, exports., .cjs, .cts는 생성하거나 권장하지 않는다.</td></tr>
-              <tr><th>외부 도구가 CommonJS 설정만 요구하는 것처럼 보이면</th><td>외부 도구가 CommonJS 설정만 요구하는 것처럼 보이면 .cjs fallback을 추가하지 말고 ESM 지원 경로를 찾거나 사용자에게 예외 승인을 요청한다.</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="boundary-block">
+        <article>
+          <h3 class="ok">표시해야 할 경계</h3>
+          <ul>
+            <li>agent tool, MCP, external API, DB shell</li>
+            <li>migration, deploy script, destructive command</li>
+            <li>secret, scrubbed artifact, generated artifact</li>
+            <li>test, security, health/readiness, observability</li>
+          </ul>
+        </article>
+        <article>
+          <h3 class="stop">금지와 예외 승인</h3>
+          <ul>
+            <li>Supabase service-role key와 MongoDB URI를 client 또는 shared package에 두는 구조</li>
+            <li>외부 도구 때문에 CommonJS fallback을 임의로 추가하는 결정</li>
+            <li>사용자 요청 없이 Pulumi, AWS, Docker 배포 구조를 추가하는 변경</li>
+            <li>source artifact와 generated artifact가 같은 소유권으로 섞이는 tree</li>
+          </ul>
+        </article>
       </div>
     </section>
 
     <section>
-      <h2>파일과 검증</h2>
-      <p class="summary-copy">파일 관계와 검증 명령을 함께 확인한다.</p>
-      <ul class="verify-list">
-        <li><strong>기준 문서</strong><span><code>SKILL.md</code> agent가 실제로 따르는 원문이다.</span></li>
-        <li><strong>읽기 화면</strong><span><code>skill.html</code> 사람이 빠르게 확인하는 단일 HTML이다.</span></li>
-        <li><strong>메타데이터</strong><span><code>agents/openai.yaml</code> agent adapter용 설명과 기본 prompt를 담는다.</span></li>
-        <li><strong>참조 문서</strong><span><code>references/</code> 긴 기준과 세부 예시를 분리한다.</span></li>
-        <li><strong>검증 스크립트</strong><span><code>scripts/</code> 스킬 고유 검증 명령을 둔다.</span></li>
+      <h2>파일 관계와 검증</h2>
+      <ul class="file-list">
+        <li><strong>기준 문서</strong><span><code>skills/project-structure/SKILL.md</code>가 agent가 따르는 원문이다.</span></li>
+        <li><strong>사람용 안내</strong><span><code>skills/project-structure/skill.html</code>은 같은 폴더의 읽기용 요약이다.</span></li>
+        <li><strong>참조 문서</strong><span><code>skills/project-structure/references/</code>는 backend, frontend, DB, desktop, env, folder agents, infra, monorepo, TypeScript module policy 같은 세부 기준을 담는다.</span></li>
+        <li><strong>스킬 검증</strong><span><code>node scripts/validate-skill.ts skills/project-structure</code></span></li>
+        <li><strong>고유 검증</strong><span><code>node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure</code></span></li>
+        <li><strong>HTML 검증</strong><span><code>node scripts/validate-skill-html.ts .</code></span></li>
       </ul>
-      <table class="command-table">
-        <tbody>
-          <tr><th>공통 HTML</th><td><code>node scripts/validate-skill-html.ts .</code></td></tr>
-            <tr><th>공통 스킬</th><td><code>node scripts/validate-skill.ts skills/project-structure</code></td></tr>
-            <tr><th>스킬 고유</th><td><code>node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure</code></td></tr>
-        </tbody>
-      </table>
     </section>
   </main>
 </body>

@@ -7,6 +7,7 @@
 - `project-workflow` 첫 응답이 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check 순서로 질문하는지 확인한다.
 - `design.md`, `project-structure`, PRD, issue backlog, architecture handoff가 질문 gate 전에는 `deferred` 또는 `not created yet`로 남는지 확인한다.
 - 질문에 답한 뒤에는 실제 프로젝트 폴더, 구조 파일, 도메인 문서, ADR, PRD, `design.md`, `workflow-state.md`, `work-claims.md`, phase handoff가 생성되는지 확인한다.
+- 중간 이상 규모나 장기 유지 프로젝트에서는 `DDD-lite structure gate`가 bounded context, domain-first folder map, folder-local instruction docs, TDD 시작 후보를 `project-structure` 전에 남기는지 확인한다.
 - target project가 다른 언어를 명시하지 않았으면 durable setup docs가 최상위 문서 제목까지 한국어 우선으로 작성되는지 확인한다.
 - UI dashboard, CLI/no-browser local data tool, API/external-risk mock service처럼 성격이 다른 케이스를 늘려도 같은 계약이 유지되는지 확인한다.
 - 실패하면 history를 고쳐 맞추지 않고 `project-workflow` 자체를 수정한 뒤 다음 cycle에서 다시 검증한다.
@@ -24,6 +25,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 - GitHub fresh clone cycle에서 첫 응답 순서가 `grill-with-docs` -> `office-hours` -> Superpowers `brainstorming` setup gap check로 나온다.
 - 질문 gate 전에는 `design.md`, `project-structure`, PRD, issue backlog, implementation이 `deferred` 또는 `not created yet`로 남는다.
 - 질문 답변 뒤에는 실제 project structure, `.scratch` authority docs, `work-claims.md`, phase handoff, target project validation이 생성된다.
+- medium/large/long-lived case에서는 `DDD-lite structure gate` 결과가 `CONTEXT.md`, `CONTEXT-MAP.md`, ADR, setup validation, 또는 folder-local instruction docs에 남고, `packages/domain/src/<bounded-context>/` 같은 domain-first folder map이 생성되거나 skip 이유가 기록된다.
 - 사용자가 structure를 확정했으면 `.scratch` Markdown만 생성하는 것은 실패다. root `package.json`, ESM tsconfig, 선택한 `apps/`/`packages/` 또는 `src/` shell, 검증 script가 실제 파일로 있어야 한다.
 - target project가 다른 언어를 명시하지 않았으면 `CONTEXT.md`, ADR, PRD, issue backlog, `design.md`, setup validation, `workflow-state.md`, `work-claims.md`, phase handoff가 Korean-first artifact gate를 통과한다. 최상위 문서 제목, `workflow-state.md` risk-gate heading, `work-claims.md` lane heading도 한국어 우선이어야 한다. 예시는 `# 제품 요구사항(PRD): ledgerImportChecker`, `# workflow 상태: ledgerImportChecker`, `# 설정 검증(setup validation): ledgerImportChecker`다.
 - `execute-phase.ts --dry-run`이 `Step undefined` 없이 feature-workflow step prompt를 만든다.
@@ -59,6 +61,7 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 | 케이스 | 목적 | 추가 확인 |
 | --- | --- | --- |
 | UI dashboard | `design.md`, mock direction, dense operational UI 기준 확인 | 디자인 gate가 질문 뒤에 나오고, 구현은 `feature-workflow`로 인계되는지 확인 |
+| Domain-heavy operations app | DDD-lite structure gate와 domain-first folder map 확인 | bounded context, `packages/domain/src/<bounded-context>/`, folder-local instruction docs, TDD starting point가 setup 뒤에 남는지 확인 |
 | CLI/no-browser local data tool | browser evidence 없는 프로젝트에서도 workflow가 과한 UI/QA 요구를 하지 않는지 확인 | `src/` shell, fixture, CLI validation, non-browser runtime evidence가 남는지 확인 |
 | API/external-risk mock service | 외부 API나 secret이 미래 범위로 언급될 때 risk gate가 먼저 남는지 확인 | 실제 외부 write 없이 mock/fake boundary, `도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, phase handoff가 남는지 확인 |
 

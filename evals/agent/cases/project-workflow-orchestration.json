@@ -382,6 +382,59 @@
     ]
   },
   {
+    "id": "project-workflow-domain-driven-structure-gate",
+    "title": "Domain-heavy setup records DDD-lite folder and TDD handoff before project-structure",
+    "prompt": "새 클리닉 운영 서비스야. 환자 콜백과 재방문 업무가 핵심 도메인이고 오래 유지할 서비스라 도메인 기준 폴더 구조까지 잡아줘.",
+    "scope": "project-workflow",
+    "expectedSkills": [
+      "project-workflow",
+      "project-structure"
+    ],
+    "forbiddenSkills": [
+      "feature-workflow"
+    ],
+    "agentSurfaces": [
+      "codex",
+      "claude-code"
+    ],
+    "assumptionDate": "2026-05-21",
+    "exampleType": "typical",
+    "risk": "medium",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "required_text",
+        "file": "plugins/project-workflow/skills/project-workflow/SKILL.md",
+        "value": "DDD-lite structure gate"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/project-workflow/skills/project-workflow/references/project-workflow-playbook.md",
+        "value": "domain-first folder map"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/domain-driven-structure-gate.md",
+        "value": "Bounded context: `recall`"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/domain-driven-structure-gate.md",
+        "value": "TDD starting point"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/domain-driven-structure-gate.md",
+        "value": "packages/domain/src/recall/"
+      },
+      {
+        "type": "required_text",
+        "file": "evals/agent/fixtures/project-workflow/domain-driven-structure-gate.md",
+        "value": "Folder-local instruction docs"
+      }
+    ]
+  },
+  {
     "id": "project-workflow-cross-agent-setup-verification",
     "title": "Cross-agent workflow setup requires project setup verification",
     "prompt": "이 새 프로젝트에서 Codex, Claude, Cursor가 같은 workflow를 쓰게 셋팅해줘.",

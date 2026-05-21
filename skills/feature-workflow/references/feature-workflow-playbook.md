@@ -7,9 +7,9 @@
 ## read order 기준
 
 1. root instruction
-2. folder-local instruction
+2. folder-local instruction docs
 3. target spec, issue, bug report, acceptance criteria
-4. `CONTEXT.md`, ADR, PRD
+4. `CONTEXT.md`, `CONTEXT-MAP.md`, ADR, PRD, domain-first folder map
 5. design.md, mock decision, testing docs
 6. `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact
 7. current diff와 test output
@@ -33,6 +33,22 @@ spec authority -> work claim preflight -> plan -> plan review -> RED -> GREEN ->
 ```
 
 `writing-plans`는 작업을 2-5분 단위로 쪼개는 데만 쓴다. product scope를 새로 늘리는 데 쓰지 않는다.
+
+## domain structure preflight 기준
+
+`project-workflow`가 DDD-lite structure gate를 남긴 프로젝트에서는 구현 전에 현재 spec이 어느 bounded context에 속하는지 확인한다.
+
+```text
+Domain Structure Preflight
+- bounded context:
+- domain-first folder map:
+- folder-local instruction docs:
+- domain invariant:
+- TDD starting point:
+- result: clear | blocked
+```
+
+domain invariant가 있는 작업은 UI/API adapter보다 domain package 또는 pure function test에서 RED를 먼저 만드는 것을 우선한다. folder-local instruction docs가 오래됐거나 새 bounded context가 생기면 production edit 뒤 `sync-docs` 후보에 넣는다.
 
 ## work claim preflight 기준
 
@@ -85,6 +101,7 @@ browser surface가 없으면 browser-qa, screenshot, mockup selection을 요구�
 
 - bug fix는 repro 또는 characterization check를 먼저 만든다.
 - feature는 acceptance criteria 중 하나를 테스트로 고정한다.
+- domain invariant가 있으면 domain package 또는 pure function test에서 먼저 RED를 만든다.
 - UI는 browser evidence와 accessibility snapshot을 test evidence와 함께 다룬다.
 - 테스트를 만들 수 없으면 이유와 대체 command/runtime evidence를 남긴다.
 
@@ -133,6 +150,7 @@ completion은 release publishing이 아니다. commit, push, deploy, tag, GitHub
 ```text
 Workflow State Update
 - reused authority:
+- domain structure:
 - selected primitives:
 - skipped/fallback primitives:
 - TypeScript module policy:

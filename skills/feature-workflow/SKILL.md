@@ -33,9 +33,9 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 
 ## preflight 기준
 
-- local project instructions와 folder-local docs를 먼저 읽는다.
+- local project instructions와 folder-local instruction docs를 먼저 읽는다. `AGENTS.md`, `CLAUDE.md`, `README.md` 중 target agent가 실제로 쓰는 surface를 확인한다.
 - spec, issue, acceptance criteria, bug repro, or user-provided task가 있는지 확인한다.
-- `CONTEXT.md`, ADR, PRD, design.md가 있으면 현재 spec 해석의 authority로 사용한다.
+- `CONTEXT.md`, `CONTEXT-MAP.md`, ADR, PRD, design.md, domain-first folder map이 있으면 현재 spec 해석의 authority로 사용한다.
 - `.scratch/<slug>/workflow-state.md` 또는 동등한 state cache가 있으면 selected primitives, skipped questions, gate decision, prior answers를 먼저 읽는다.
 - `.scratch/<slug>/work-claims.md` 또는 동등한 coordination artifact가 있으면 현재 lane의 claimed write set, read-only paths, shared/hotspot files, integration owner를 production edit 전에 확인한다.
 - TypeScript production edit이면 ESM only boundary를 확인한다. `type: "module"`, `import`/`export`, ESM `tsconfig`를 유지하고 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`를 새로 도입하지 않는다.
@@ -62,15 +62,16 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 3. acceptance criteria와 out-of-scope 확인
 4. 현재 lane의 intended write set을 `work-claims.md`와 대조하고, active claim과 겹치면 overlap block으로 멈춤
 5. TypeScript 작업이면 ESM only와 CommonJS 금지 boundary를 plan과 검증 명령에 포함
-6. Superpowers plugin `brainstorming` 또는 fallback으로 implementation approach 정리
-7. Superpowers plugin `writing-plans` 또는 fallback으로 2-5분 단위 plan과 검증 명령 작성
-8. GStack plugin `plan-eng-review` 또는 repo-local reviewer로 plan review
-9. UI면 `plan-design-review`, `design-review`, selected mock direction 확인
-10. TDD 또는 characterization test로 RED 상태 기록
-11. 구현 후 GREEN, 필요한 경우 REFACTOR
-12. 큰 구현이면 Superpowers plugin `subagent-driven-development`로 task fan-out과 review를 수행
-13. `code-review` 또는 `codex:review`, `browser-qa` 또는 non-browser runtime evidence, `diagnose` 필요 여부 확인
-14. `sync-docs`로 docs drift를 정리하고 completion/commit handoff를 남김
+6. domain-first folder map이 있으면 intended write set이 해당 bounded context와 맞는지 확인하고, TDD 시작점을 domain invariant 또는 acceptance criteria에 연결
+7. Superpowers plugin `brainstorming` 또는 fallback으로 implementation approach 정리
+8. Superpowers plugin `writing-plans` 또는 fallback으로 2-5분 단위 plan과 검증 명령 작성
+9. GStack plugin `plan-eng-review` 또는 repo-local reviewer로 plan review
+10. UI면 `plan-design-review`, `design-review`, selected mock direction 확인
+11. TDD 또는 characterization test로 RED 상태 기록
+12. 구현 후 GREEN, 필요한 경우 REFACTOR
+13. 큰 구현이면 Superpowers plugin `subagent-driven-development`로 task fan-out과 review를 수행
+14. `code-review` 또는 `codex:review`, `browser-qa` 또는 non-browser runtime evidence, `diagnose` 필요 여부 확인
+15. `sync-docs`로 docs drift를 정리하고 completion/commit handoff를 남김
 
 ## artifact map 기준
 
@@ -79,6 +80,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 반복 호출을 위해 `workflow-state.md`를 읽고 갱신한다.
 
 - reused authority: 이번 spec에서 재사용한 `CONTEXT.md`, ADR, PRD, design.md
+- domain structure: 이번 spec에서 사용한 bounded context, domain-first folder map, folder-local instruction docs
 - selected primitives: 이번 loop에서 선택/생략/fallback 처리한 primitive
 - evidence pointers: RED/GREEN/REFACTOR, QA, docs sync 경로
 - open follow-up: 다음 spec에서 다시 물어보지 말아야 할 답변과 아직 막힌 질문
@@ -89,6 +91,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 
 - 코드 작성이 포함된 target code repo 작업에서는 production change 전에 RED evidence가 필수다.
 - RED evidence는 failing test, characterization check, repro script 중 하나로 남긴다.
+- domain invariant가 있는 작업은 가능한 한 domain package나 pure function test에서 RED를 먼저 만든다. UI/API 테스트만으로 domain rule을 대신하지 않는다.
 - target code repo가 project-local TDD hook을 제공하면, production code edit은 RED evidence, characterization evidence, 또는 명시적 TDD exception record 없이는 통과하지 않아야 한다.
 - 이 shared skills repo는 코드 제품 repo가 아니므로 TDD hook을 설치하거나 실행하지 않는다. 여기서는 target code repo에 적용할 문서 계약과 eval fixture만 유지한다.
 - RED가 현실적으로 불가능하면 이유와 대체 evidence를 workflow log와 TDD exception record에 기록한다.
@@ -116,6 +119,7 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - tests 또는 runtime evidence
 - review findings 처리 또는 명시적 defer
 - docs sync 필요 여부
+- domain-first folder map이나 folder-local instruction docs 갱신 필요 여부
 - artifact hygiene
 - TypeScript 작업이면 ESM only 유지와 CommonJS 미도입 확인
 - gate, review, QA, docs sync 누락이 반복될 위험이 있으면 `agent-eval-harness`에 넘길 eval seed 후보를 남김

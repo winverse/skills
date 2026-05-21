@@ -1,15 +1,17 @@
 ---
 name: project-workflow
-description: "새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs, product challenge, ADR, project structure, design.md, PRD, issue backlog, feature-workflow handoff까지 정리할 때 사용한다."
+description: "새 프로젝트나 큰 initiative의 초기 셋팅을 domain docs, product challenge, DDD-lite structure gate, ADR, project structure, design.md, PRD, issue backlog, feature-workflow handoff까지 정리할 때 사용한다."
 ---
 
 # project-workflow
 
 이 plugin-bundled skill은 `project-workflow`의 canonical source다. 기존 top-level `skills/project-workflow` entry는 제거됐으므로 새 프로젝트와 snippet은 `plugins/project-workflow/skills/project-workflow/SKILL.md`를 직접 링크한다.
 
-이 스킬은 `workflow suite`의 초기 셋팅 orchestration이다. 프로젝트가 기능 개발을 받을 준비가 됐는지 만들고, raw idea를 바로 코드로 넘기지 않고, domain language, product reason, architecture boundary, design direction, PRD, issue backlog를 먼저 고정한다.
+이 스킬은 `workflow suite`의 초기 셋팅 orchestration이다. 프로젝트가 기능 개발을 받을 준비가 됐는지 만들고, raw idea를 바로 코드로 넘기지 않고, domain language, product reason, DDD-lite domain boundary, architecture boundary, design direction, PRD, issue backlog를 먼저 고정한다.
 
 반복 구현은 이 스킬의 책임이 아니다. TDD, `writing-plans`, `subagent-driven-development`, 구현 review, QA, diagnose는 `feature-workflow`로 넘긴다. 이 스킬은 해당 정책과 handoff 조건만 남긴다.
+
+도메인 대화를 한 프로젝트가 시간이 지나도 다시 이어지려면 구조와 문서에도 그 언어가 남아야 한다. 그래서 중간 이상 규모의 프로젝트나 장기 유지가 예상되는 프로젝트는 full DDD를 기계적으로 강제하지 않고, `DDD-lite structure gate`로 bounded context, 핵심 entity/value object/policy/use case 후보, domain-first folder map, folder-local instruction docs를 정리한 뒤 `project-structure`로 넘긴다.
 
 ## dependency invocation contract 기준
 
@@ -53,10 +55,12 @@ upstream이 바뀌면 전체 내용을 복사하지 않는다. source package, e
 - domain language를 stack choice보다 먼저 고친다.
 - product challenge와 가장 좁은 진입점을 확인한 뒤 scope를 줄인다.
 - raw idea나 새 프로젝트에서는 Matt Pocock skills `grill-with-docs` -> GStack plugin `office-hours` -> Superpowers plugin `brainstorming` setup gap check 순서가 끝나기 전 `design.md`, `project-structure`, PRD, issue backlog, architecture handoff를 진행하지 않는다. `grill-with-docs`는 기존 `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/`, 코드와 문서의 용어를 먼저 확인하고, 문서가 없으면 첫 용어가 확정될 때 `CONTEXT.md`를 lazily 제안한다. 사용자가 “추정해서 진행”이라고 명시한 경우에만 fallback으로 진행한다.
+- domain language가 정리되면 project size와 유지보수 기간을 보고 `DDD-lite structure gate`를 실행한다. 이 gate는 bounded context, aggregate/entity/value object 여부, domain invariant, use case, adapter boundary, folder-local instruction docs 위치를 묻고, 기술 계층만 있는 구조로 바로 넘어가지 않게 막는다.
 - architecture decision은 PRD/issues 전에 ADR로 기록한다.
 - TypeScript 프로젝트를 초기 셋팅하면 ESM only를 architecture constraint로 고정한다. `package.json`의 `type: "module"`, ESM `tsconfig`, `import`/`export`를 기본값으로 두고 `CommonJS`, `require`, `module.exports`, `.cjs`, `.cts`는 새 구조나 이슈에 넣지 않는다.
 - 기존 코드가 CommonJS면 새 패턴으로 복사하지 말고 migration boundary, blocker, 또는 `project-structure` handoff 질문으로 남긴다.
 - `project-structure`는 domain language와 concrete architecture questions가 생긴 뒤 호출한다.
+- `project-structure` handoff에는 domain-first folder map과 folder-local instruction docs 요구를 포함한다. Codex 중심 프로젝트는 `AGENTS.md`, Claude 중심 프로젝트는 `CLAUDE.md`, 혼합 agent 프로젝트는 둘 중 실제로 읽히는 instruction surface와 짧은 `README.md` index를 함께 둔다.
 - Actual project shell gate: 사용자가 새 프로젝트 setup에서 구조를 확정했거나 `apps/`, `packages/`, `src/`, API/web/domain shell 같은 파일 구조를 원한다고 답하면 문서만 만들고 끝내지 않는다. 최소 실행 가능한 project shell을 현재 target project root 아래에 만들고, root `package.json`, ESM `tsconfig`, 선택된 app/package 폴더, 간단한 source file, 검증 명령을 포함한다. 구조를 만들 수 없으면 `workflow-state.md` open questions와 최종 보고에 blocker로 남기며 pass로 보고하지 않는다.
 - substantial UI는 구현 전 `design.md`와 2-3 mock direction 선택을 거친다.
 - 구현 handoff가 여러 단계로 쪼개지면 `phase/step handoff gate`를 만들고, 각 step은 이후 `feature-workflow` 실행 session이 이어받을 수 있도록 read files, claimed write set, acceptance command, blocked condition, summary field를 포함한다.
@@ -103,16 +107,17 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 5. Matt Pocock skills `grill-with-docs`를 호출하거나 fallback 질문으로 domain language, `CONTEXT.md`, `CONTEXT-MAP.md`, ADR 후보를 정리
 6. GStack plugin `office-hours`를 호출하거나 fallback 질문으로 product challenge와 가장 좁은 진입점 확인
 7. Superpowers plugin `brainstorming`을 호출하거나 fallback setup gap check 질문으로 빠진 가정, 너무 넓은 slice, 인계 위험만 보강하고, 구현 primitive는 선택하지 않음
-8. TypeScript를 쓰는 프로젝트면 ESM only와 CommonJS 금지를 architecture constraint로 기록
-9. 필요한 경우 도구/보안 위험 게이트(Agent Tool And Security Risk Gate) 기록
-10. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
-11. 구조가 확정된 뒤에는 `project-structure`를 실제 호출하거나 fallback으로 최소 shell을 만든다. fallback shell도 docs-only가 아니어야 하며, TypeScript면 `package.json` `type: "module"`, ESM `tsconfig`, `import`/`export`, CommonJS 금지를 실제 파일에 반영한다.
-12. light spec과 PRD settings 확정
-13. vertical issue backlog 작성
-14. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
-15. 구현 handoff가 크면 `.scratch/<slug>/phases/index.json`과 `step<N>.md` 초안을 만들거나 동등한 phase/step handoff plan을 남김
-16. `feature-workflow`가 받을 준비 상태를 점검
-17. document sync와 setup validation을 수행하고 다음 spec을 지정
+8. 규모가 있거나 장기 유지가 예상되면 `DDD-lite structure gate`로 bounded context, domain-first folder map, folder-local instruction docs, TDD 시작 후보를 정리
+9. TypeScript를 쓰는 프로젝트면 ESM only와 CommonJS 금지를 architecture constraint로 기록
+10. 필요한 경우 도구/보안 위험 게이트(Agent Tool And Security Risk Gate) 기록
+11. repo-local custom `project-structure`, `design.md`, ADR을 필요한 경우에만 handoff
+12. 구조가 확정된 뒤에는 `project-structure`를 실제 호출하거나 fallback으로 최소 shell을 만든다. fallback shell도 docs-only가 아니어야 하며, TypeScript면 `package.json` `type: "module"`, ESM `tsconfig`, `import`/`export`, CommonJS 금지를 실제 파일에 반영한다.
+13. light spec과 PRD settings 확정
+14. vertical issue backlog 작성
+15. 병렬 작업이 가능하면 lane별 owner/session, branch or worktree, claimed write set, read-only paths, shared/hotspot files, integration owner를 `work-claims.md`에 기록
+16. 구현 handoff가 크면 `.scratch/<slug>/phases/index.json`과 `step<N>.md` 초안을 만들거나 동등한 phase/step handoff plan을 남김
+17. `feature-workflow`가 받을 준비 상태를 점검
+18. document sync와 setup validation을 수행하고 다음 spec을 지정
 
 ## interview gate 기준
 
@@ -120,6 +125,8 @@ Raw idea나 새 서비스 요청의 첫 응답은 프로젝트를 바로 만들�
 
 - domain docs: 기존 `CONTEXT.md`나 `CONTEXT-MAP.md`가 있는지, 없으면 어떤 root `CONTEXT.md`를 첫 용어 확정 뒤 만들지
 - domain language: 사용자가 부르는 핵심 객체, 사용자가 피하고 싶은 오해, 기존 코드/문서 용어와 새 용어의 경계
+- DDD-lite structure: bounded context가 하나인지 여러 개인지, 핵심 객체가 entity/value object/DTO 중 무엇인지, domain invariant와 use case가 어떤 folder에 남아야 하는지
+- folder-local instruction docs: meaningful boundary folder마다 `AGENTS.md`, `CLAUDE.md`, 또는 짧은 `README.md` 중 target agent가 실제로 읽는 문서를 어디에 둘지
 - ADR candidate: 되돌리기 어렵고, 맥락 없이는 의외이며, 실제 trade-off가 있는 결정인지
 - product: 이 프로젝트가 해결하는 고통, 첫 번째 사용자, 지금 당장 쓸 수 있는 가장 좁은 성공 장면
 - setup gap: 첫 slice가 너무 넓은지, 빠진 가정이 있는지, 병렬/인계 위험이 있는지, 지금 디자인/구조로 넘어갈 조건이 충분한지
@@ -143,6 +150,7 @@ Korean-first artifact gate는 완료 전 필수 검사다. durable setup docs의
 - selected primitives와 skipped/fallback 이유
 - invoked primitives와 실제 호출하지 못한 이유
 - domain/product/architecture/design authority 경로
+- DDD-lite structure gate 결과: bounded context, domain-first folder map, folder-local instruction docs, TDD 시작 후보
 - 미해결 질문과 사용자가 이미 답한 질문
 - 도구/보안 위험 게이트(Agent Tool And Security Risk Gate) decision
 - 다음 `feature-workflow` handoff target
@@ -168,7 +176,9 @@ setup에서 실제 project structure가 확정됐으면 `.scratch` 문서만 만
 - `apps/web/package.json`, `apps/web/src/`
 - `apps/api/package.json`, `apps/api/src/`
 - `packages/domain/package.json`, `packages/domain/src/`
+- `packages/domain/src/<bounded-context>/` 또는 동등한 domain-first folder map. 작은 프로젝트라 하나의 context만 쓰더라도 root `CONTEXT.md`에 그 이유를 남긴다.
 - dummy data나 pure domain helper처럼 external API/secret 없이 검증 가능한 최소 source
+- 의미 있는 boundary folder의 folder-local instruction docs. 예: `apps/web/AGENTS.md`, `apps/api/AGENTS.md`, `packages/domain/AGENTS.md`, Claude 중심 프로젝트의 `CLAUDE.md`, 또는 agent가 읽지 않는 보조 `README.md`.
 - `npm`, `pnpm`, `bun` 중 하나의 실제 검증 명령과 결과 기록
 
 - `index.json`: project, phase, steps, status를 담는다.
@@ -183,6 +193,7 @@ setup에서 실제 project structure가 확정됐으면 `.scratch` 문서만 만
 `feature-workflow`로 넘기기 전에 아래가 있어야 한다.
 
 - domain term과 boundary가 `CONTEXT.md`, ADR, 또는 equivalent docs에 남아 있다.
+- DDD-lite structure gate 결과가 `CONTEXT.md`, `CONTEXT-MAP.md`, ADR, 또는 folder-local instruction docs에 남아 있고, 첫 TDD 후보가 domain invariant나 acceptance criteria에 연결되어 있다.
 - PRD 또는 issue가 problem, user, first usable slice, included/excluded scope, acceptance criteria를 갖는다.
 - UI 작업이면 `design.md` 또는 selected mock direction이 있다.
 - TypeScript 작업이면 ESM only, `type: "module"`, `import`/`export`, CommonJS 금지 constraint가 `CONTEXT.md`, ADR, PRD, issue, 또는 `workflow-state.md` 중 하나에 남아 있다.
@@ -230,6 +241,7 @@ Project setup state
 - <domain/product/architecture/design/PRD/issues readiness>
 - document language: Korean-first unless target project says otherwise
 - document language gate: pass/fail and evidence path
+- DDD-lite structure gate: <bounded context, domain-first folder map, folder-local instruction docs, TDD starting point>
 - TypeScript module policy: ESM only / CommonJS blocked or not applicable
 - state cache: <workflow-state.md path>
 - work claims: <work-claims.md path or none>
