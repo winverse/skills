@@ -1,4 +1,4 @@
 interface:
   display_name: "Design Review"
   short_description: "Product-aware UI and visual design critique"
-  default_prompt: "Use $design-review to critique this UI for product-domain fit, existing design-system consistency, hierarchy, density, typography, layout stability, controls, states, accessibility, responsive behavior, and visual polish. Pair with $browser-qa when runtime evidence is needed."
+  default_prompt: "Use $design-review to critique this UI for product-domain fit, existing design-system consistency, hierarchy, density, typography, layout stability, controls, states, accessibility, responsive behavior, and visual polish. Read references/design-review-criteria.md for substantive reviews, report severity and evidence for each finding, cite WCAG where applicable, and pair with $browser-qa when browser evidence is needed."

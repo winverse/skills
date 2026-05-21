@@ -132,7 +132,7 @@ plugins/caveman/
 - `code-review`: findings-first 코드/PR/diff 리뷰로 버그, 회귀, 테스트 누락, SRP/SOLID 경계, JS/TS 함수형 collection style, agent/tool-call boundary 위험을 점검하는 스킬.
   - Source instruction: `skills/code-review/SKILL.md`
   - Human visual guide: `skills/code-review/skill.html`
-- `design-review`: 제품 도메인과 기존 디자인 시스템을 우선해 UI hierarchy, layout density, typography, state, accessibility, responsive order, visual polish를 리뷰하는 스킬.
+- `design-review`: 제품 도메인과 기존 디자인 시스템을 우선해 UI hierarchy, layout density, typography, state, accessibility, responsive order, visual polish를 `S0-S4` severity, evidence, criterion, user impact, recommendation, residual risk로 리뷰하는 스킬.
   - Source instruction: `skills/design-review/SKILL.md`
   - Human visual guide: `skills/design-review/skill.html`
 
