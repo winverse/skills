@@ -1,0 +1,24 @@
+{
+  "allowedProtocols": ["http:", "https:", "mailto:", "relative"],
+  "blockedNeedles": [
+    "<script",
+    "onerror=",
+    "javascript:alert",
+    "vbscript:msgbox",
+    "<iframe",
+    "<object",
+    "<embed",
+    "https://example.invalid/tracker.png"
+  ],
+  "requiredModelFields": [
+    "name",
+    "purpose",
+    "input",
+    "output",
+    "criteria",
+    "workflow",
+    "guardrails",
+    "files",
+    "validation"
+  ]
+}

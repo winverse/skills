@@ -2,7 +2,7 @@
 
 - For seeing, listing, browsing, summarizing, choosing, comparing, or discovering the current skills in this repository, use the shared skill at `<skills-root>/skills/show-skills/SKILL.md`.
 - For current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
-- When creating, installing, forking, or updating a shared skill, use the shared guide at `<skills-root>/skills/skill-to-html/SKILL.md` so the skill folder gets a Korean-first static summary `skill.html` beside `SKILL.md`.
+- When creating, installing, forking, or updating a shared skill, use the shared guide at `<skills-root>/skills/markdown-to-html/SKILL.md` so the skill folder gets a short, safe Korean-first `skill.html` beside `SKILL.md`.
 - For coding, reviewing, refactoring, debugging, or implementation planning that should follow Karpathy-style agent discipline, use the shared skill at `<skills-root>/skills/karpathy-thinkings/SKILL.md`.
 - For updating, revising, maintaining, renaming, splitting, deprecating, or otherwise changing an existing shared skill, use the shared skill at `<skills-root>/skills/skill-update/SKILL.md`.
 - For commit requests, split dirty files into logical changesets and use the shared skill at `<skills-root>/skills/atomic-committer/SKILL.md`.

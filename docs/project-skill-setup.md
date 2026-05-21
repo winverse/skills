@@ -55,7 +55,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/claude-base.md`: Claude-oriented starter block.
 - `project-snippets/show-skills.md`: only current skill catalog browsing and skill recommendation.
 - `project-snippets/web-research.md`: only the web research skill.
-- `project-snippets/skill-to-html.md`: only the skill HTML guide workflow.
+- `project-snippets/markdown-to-html.md`: only the skill HTML guide workflow.
 - `project-snippets/karpathy-thinkings.md`: only Karpathy-style coding agent discipline.
 - `project-snippets/skill-update.md`: only existing skill maintenance, original/upstream source checks, and package sync rules.
 - `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.
@@ -98,7 +98,7 @@ When a shared skill changes:
 - If the skill has an original or upstream source, verify that source with `web-research` before changing the local shared package.
 - Update `README.md` if the skill's purpose changed.
 - Update `AGENTS.md`, `docs/skill-catalog.md`, `project-snippets/base.md`, and `project-snippets/claude-base.md` when the trigger, path, or project-facing behavior changed.
-- Use `skill-to-html` to update the skill's own `skill.html`.
+- Use `markdown-to-html` to update the skill's own `skill.html`.
 - Update the matching file in `project-snippets/`.
 - Update `history/skills.md` if trigger, workflow, validator, eval prompt, snippet, inspector criteria, or lifecycle state changed.
 - Keep repo-owned validators in `.ts` and run them with Node 22+.

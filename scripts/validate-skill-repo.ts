@@ -9,6 +9,7 @@ const errors: string[] = [];
 const ignoredDirs = new Set<string>([
   ".git",
   ".githooks",
+  ".artifacts",
   ".playwright-mcp",
   "archive",
   "hook-test-skill",
@@ -69,6 +70,25 @@ function requirePattern(relativePath: string, pattern: RegExp, label: string): v
   const text = readText(relativePath);
   if (!pattern.test(text)) {
     errors.push(`${relativePath} is missing ${label}`);
+  }
+}
+
+function requireDefaultPromptMention(relativePath: string, skillName: string): void {
+  if (!existsSync(path.join(root, relativePath))) return;
+  const text = readText(relativePath);
+  const match = /^\s*default_prompt:\s*(.*)$/m.exec(text);
+  if (!match) {
+    errors.push(`${relativePath} is missing default_prompt for ${skillName}`);
+    return;
+  }
+
+  const promptStart = match.index;
+  const nextTopLevel = text.slice(promptStart + match[0].length).search(/^\S/m);
+  const promptBlock = nextTopLevel === -1
+    ? text.slice(promptStart)
+    : text.slice(promptStart, promptStart + match[0].length + nextTopLevel);
+  if (!promptBlock.includes(`$${skillName}`)) {
+    errors.push(`${relativePath} is missing default_prompt mentioning $${skillName}`);
   }
 }
 
@@ -231,11 +251,7 @@ for (const skill of skills) {
       /^\s*short_description:\s*["'][^"']+["']\s*$/m,
       `non-empty short_description for ${skillName}`,
     );
-    requirePattern(
-      agentMetadataPath,
-      new RegExp("^\\s*default_prompt:\\s*[\"'][^\"']*\\$" + escapeRegExp(skillName) + "[^\"']*[\"']\\s*$", "m"),
-      `default_prompt mentioning $${skillName}`,
-    );
+    requireDefaultPromptMention(agentMetadataPath, skillName);
   }
 }
 
@@ -288,11 +304,7 @@ for (const { name: skillName, path: skill, validatorCommand } of pluginBundledSk
     /^\s*short_description:\s*["'][^"']+["']\s*$/m,
     `non-empty short_description for ${skillName}`,
   );
-  requirePattern(
-    agentMetadataPath,
-    new RegExp("^\\s*default_prompt:\\s*[\"'][^\"']*\\$" + escapeRegExp(skillName) + "[^\"']*[\"']\\s*$", "m"),
-    `default_prompt mentioning $${skillName}`,
-  );
+  requireDefaultPromptMention(agentMetadataPath, skillName);
 }
 
 for (const filePath of walkSourceFiles()) {

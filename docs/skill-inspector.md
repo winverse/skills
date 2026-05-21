@@ -13,11 +13,13 @@
 - `SKILL.md`의 trigger와 description이 명확한가
 - `skills/**/*.md`는 한국어 우선 문서인가. `SKILL.md`, `references/*.md`의 설명, 절차, 표 라벨은 한국어로 쓰고, 코드 식별자, 명령, 파일 경로, 제품명, 프로토콜명, 인용된 upstream skill 이름처럼 정확도가 필요한 용어만 원문 표기를 허용한다.
 - `SKILL.md` 본문이 과하게 길지 않고, 세부 내용은 `references/`로 분리되어 있는가
-- `skill.html`이 `SKILL.md`를 길게 복사하지 않고 요약, 사용 판단, 핵심 계약, 작업 흐름, 금지와 허용, 파일과 검증으로 빠르게 읽히는가
-- `skill-to-html` 산출물은 첫 화면에서 스킬 이름, 한 줄 목적, 사용 조건, 핵심 계약을 정적 요약으로 보여주는가
-- `skill-to-html` 산출물은 `SKILL.md` Markdown의 heading/list/table/code/link 의미를 읽어 짧은 요약 구조로 압축했는가
-- `skill-to-html` 산출물은 Markdown `raw HTML`, event handler, `javascript:` link, 외부 script를 그대로 통과시키지 않는가
-- `skill-to-html` 산출물은 버튼, script, animation, 보기 전환, 장식용 SVG 없이 읽히는가
+- `skill.html`이 `SKILL.md`를 길게 복사하지 않고 요약, 사용 판단, 중요한 기준, 작업 흐름, 보안 경계, 파일과 검증으로 빠르게 읽히는가
+- `markdown-to-html` 산출물은 첫 화면에서 문서 이름, 한 줄 목적, 입력, 출력, 중요한 기준을 보여주는가
+- `markdown-to-html` 산출물은 `SKILL.md` Markdown의 heading/list/table/code/link 의미를 읽어 `MarkdownHtmlModel`로 압축했는가
+- `markdown-to-html` 산출물은 Markdown `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script를 그대로 통과시키지 않는가
+- `markdown-to-html` 산출물은 URL을 `http:`, `https:`, `mailto:`, repo-local 상대 경로로 제한하는가
+- `markdown-to-html` validator는 위험한 Markdown fixture와 기대 경계 fixture로 회귀를 잡는가
+- `markdown-to-html` 산출물은 버튼, script, animation, 보기 전환, 장식용 SVG 없이 읽히는가
 - `skill.html`의 화면 라벨이 한국어 우선인지 확인한다. `commit`, `push`, `repo`, `SKILL.md`, `GraphQL`, `TypeScript`, `Playwright`처럼 코드 맥락의 고유어는 허용하지만 `Decision Matrix`, `Workflow`, `Resource Map`, `Do Not` 같은 일반 UI 라벨은 한국어로 쓴다.
 - `agents/openai.yaml`과 `project-snippets/`가 실제 스킬 목적과 맞는가
 - `AGENTS.md`, `CLAUDE.md`, 또는 다른 에이전트 instruction 파일에서 연결 가능한 방식으로 문서화되어 있는가
@@ -39,7 +41,7 @@
 8. repo 기본 TypeScript validator를 실행한다.
 9. 스킬별 `scripts/validate-*` 파일이 있으면 같이 실행한다.
 10. 공통 HTML validator로 `skill.html`의 portable self-contained HTML, desktop layout, scannable sections, validation, misuse guardrails를 확인한다.
-11. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap, card readable width를 확인한다. `skill-to-html` 산출물은 mobile/tablet viewport를 검사하지 않아도 된다.
+11. HTML은 가능하면 PC 데스크톱 viewport에서 열어 console error, overflow, text overlap, card readable width를 확인한다. `markdown-to-html` 산출물은 mobile/tablet viewport를 검사하지 않아도 된다.
 12. 수정하기 전에 local-only `inspector/YYYY-MM-DD-<scope>.md` 파일을 만들고 findings, 근거 파일, 검증 명령, 해결 기준을 적는다.
 13. 그 검사 문서를 기준으로 수정한다.
 14. 이슈가 처리되면 해당 검사 파일은 삭제한다. 일부만 처리됐으면 해결된 항목을 제거하고 미해결 항목만 남긴다.
@@ -62,7 +64,7 @@ repo 전체 lifecycle, history, portable path, 문서 정합성 기준도 확인
 node scripts/validate-skill-html.ts .
 node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
-node skills/skill-to-html/scripts/validate-skill-to-html-render.ts skills/skill-to-html
+node skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts skills/markdown-to-html
 ```
 
 Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상에서 `node <file>.ts`로 직접 실행하는 것을 기준으로 하고, 새 validator를 `.py`로 추가하지 않는다. Codex hook처럼 다른 실행 환경과의 호환성이 중요한 파일은 예외적으로 `.mjs`를 유지할 수 있다.
@@ -71,7 +73,7 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 
 `scripts/run-agent-evals.ts`는 `evals/agent/cases/`의 대표 prompt 계약을 검사한다. 정적 validator가 파일 정합성을 보는 동안, 이 runner는 skill routing, safety boundary, output shape 같은 agent behavior regression을 빠르게 확인한다.
 
-`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, scannable section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript가 있으면 network call, external import, eval 없이 닫혀야 한다. `skill-to-html` 산출물은 Markdown 의미 구조를 짧은 요약 구조로 압축하고, Markdown `raw HTML`이나 event handler를 통과시키지 않는지도 함께 본다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. `skill-to-html` 자체 HTML은 `validate-skill-to-html-render.ts` Playwright 검사를 추가로 실행해 정적 요약 section, script/button 부재, overflow, 읽기 폭을 본다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다.
+`scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 외부 asset이나 개인 로컬 경로 없이 열리고, PC 화면 기준 중앙 정렬, 배경 채움, scannable section, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사한다. Inline JavaScript가 있으면 network call, external import, eval 없이 닫혀야 한다. `markdown-to-html` 산출물은 Markdown 의미 구조를 `MarkdownHtmlModel`로 압축하고, Markdown `raw HTML`이나 event handler를 통과시키지 않는지도 함께 본다. 넓은 scope table이 2열 layout 안에 들어가거나 SVG `marker-end` arrow가 보이는 node에 닿지 않는 경우도 실패로 처리한다. `markdown-to-html` 자체 HTML은 `validate-markdown-to-html-render.ts` Playwright 검사를 추가로 실행해 Markdown model, 보안 경계, script/button 부재, overflow, 읽기 폭을 본다. HTML 렌더링 검사는 브라우저에서 `skill.html`을 PC 데스크톱 viewport로 직접 열거나, 프로젝트에서 쓰는 정적 서버가 있으면 그 서버로 확인한다. Playwright와 browser QA가 파일 증거를 남기면 `.artifacts/playwright/` 또는 `.artifacts/browser-qa/` 아래에 두고, 루트 PNG와 `test-results/`는 새 기준 위치로 쓰지 않는다.
 
 ## 판정 등급
 
@@ -88,9 +90,10 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 - `SKILL.md`와 `references/*.md`의 본문은 한국어로 작성한다. 영어 섹션 라벨을 그대로 남겨 `skill.html`과 대조하기 어렵게 만들지 않는다.
 - 긴 취향, 예시, 평가 prompt, source rule은 `references/`로 분리한다.
 - `skill.html`은 사람이 빠르게 훑을 수 있는 section 구조를 포함한다.
-- `skill-to-html` 산출물은 첫 viewport에 정적 요약, 사용 조건, 핵심 계약을 둔다.
-- `skill-to-html` 산출물은 `SKILL.md`를 기준 원문으로 유지하고 짧은 요약 구조로 화면을 만든다.
-- `skill-to-html` 산출물은 버튼, script, animation, 보기 전환, 장식용 SVG를 넣지 않는다.
+- `markdown-to-html` 산출물은 첫 viewport에 목적, 입력, 출력, 중요한 기준을 둔다.
+- `markdown-to-html` 산출물은 `SKILL.md`를 기준 문서로 유지하고 짧은 HTML 구조로 화면을 만든다.
+- `markdown-to-html` 산출물은 스킬 HTML mode를 기본으로 두고, 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때만 쓴다.
+- `markdown-to-html` 산출물은 버튼, script, animation, 보기 전환, 장식용 SVG를 넣지 않는다.
 - `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다.
 - `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.
 - `project-snippets/`의 문구가 실제 trigger와 맞다.

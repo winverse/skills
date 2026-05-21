@@ -1,13 +1,20 @@
 /images/*
 .DS_Store
 node_modules/
+
+# Local browser and Playwright artifacts.
+/.artifacts/
 test-results/
+playwright-report/
 /.playwright-mcp/
 /inspector/*
 !/inspector/.gitkeep
 
-# Local browser QA and eval artifacts are ignored unless promoted as reviewed fixtures.
+# Legacy/root browser screenshots are ignored unless promoted as reviewed fixtures.
 /*-browser-qa.png
+/*-desktop.png
+/*-screenshot.png
+/snapshot*.png
 /evals/agent/outputs/*
 !/evals/agent/outputs/README.md
 /evals/agent/artifacts/*

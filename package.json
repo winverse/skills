@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "validate:skill-to-html-render": "node skills/skill-to-html/scripts/validate-skill-to-html-render.ts skills/skill-to-html"
+    "clean:browser-artifacts": "rm -rf .artifacts test-results playwright-report .playwright-mcp *-browser-qa.png *-desktop.png *-screenshot.png snapshot*.png",
+    "validate:markdown-to-html-render": "node skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts skills/markdown-to-html"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0"

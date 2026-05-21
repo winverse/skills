@@ -4,8 +4,10 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 
-const skillRoot = path.resolve(process.argv[2] ?? "skills/skill-to-html");
-const specPath = path.join(skillRoot, "scripts/skill-to-html-render.spec.ts");
+const skillRoot = path.resolve(process.argv[2] ?? "skills/markdown-to-html");
+const specPath = path.join(skillRoot, "scripts/markdown-to-html-render.spec.ts");
+const repoRoot = path.resolve(skillRoot, "../..");
+const configPath = path.join(repoRoot, "scripts/playwright.config.ts");
 
 if (!existsSync(path.join(skillRoot, "skill.html"))) {
   console.error(`missing skill.html: ${skillRoot}`);
@@ -19,12 +21,12 @@ if (!existsSync(specPath)) {
 
 const result = spawnSync(
   "npx",
-  ["playwright", "test", specPath, "--browser=chromium", "--reporter=line"],
+  ["playwright", "test", specPath, "--config", configPath, "--browser=chromium", "--reporter=line"],
   {
-    cwd: path.resolve(skillRoot, "../.."),
+    cwd: repoRoot,
     env: {
       ...process.env,
-      SKILL_TO_HTML_ROOT: skillRoot,
+      MARKDOWN_TO_HTML_ROOT: skillRoot,
     },
     stdio: "inherit",
   },

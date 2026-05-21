@@ -229,7 +229,7 @@ function runSkillToHtml(root, reminders) {
     "You are running from a Codex hook in a shared skills repo.",
     "A shared skill source instruction changed, and the adjacent human visual guide is stale or missing.",
     "",
-    "Use $skill-to-html at skills/skill-to-html/SKILL.md and follow its visual guide standards.",
+    "Use $markdown-to-html at skills/markdown-to-html/SKILL.md and follow its visual guide standards.",
     "For this hook run, update only the adjacent skill.html files for the target skill folders.",
     "Do not edit SKILL.md, references, validators, README, AGENTS, project snippets, history, docs, or unrelated files.",
     "Do not commit, push, install packages, or start a dev server.",
@@ -239,7 +239,7 @@ function runSkillToHtml(root, reminders) {
     targets,
   ].join("\n");
 
-  if (dryRun) return "dry-run: would run codex exec for skill-to-html";
+  if (dryRun) return "dry-run: would run codex exec for markdown-to-html";
 
   const output = execFileSync(
     "codex",
@@ -314,7 +314,7 @@ if (reminders.length > 0 && autoRun && !recursionGuard && !noWrite) {
   try {
     const output = runSkillToHtml(root, reminders);
     autoRunMessage = [
-      "Codex hook auto-run: updated stale skill.html guide(s) with $skill-to-html.",
+      "Codex hook auto-run: updated stale skill.html guide(s) with $markdown-to-html.",
       "",
       ...reminders.map((reminder) => `- ${reminder.htmlPath}`),
       output ? `\nAuto-run output:\n${output}` : "",
@@ -333,7 +333,7 @@ if (reminders.length > 0 && autoRun && !recursionGuard && !noWrite) {
       eventName,
       [
         "Codex hook auto-run failed while trying to update stale skill.html guide(s).",
-        "Before finalizing this task, use $skill-to-html at skills/skill-to-html/SKILL.md manually for each affected skill folder.",
+        "Before finalizing this task, use $markdown-to-html at skills/markdown-to-html/SKILL.md manually for each affected skill folder.",
         "",
         ...reminders.map((reminder) => `- ${reminder.skillDir} -> ${reminder.htmlPath}`),
         "",
@@ -385,7 +385,7 @@ const lines = [
   recursionGuard
     ? "Codex hook reminder: skill HTML auto-run is already active, so this nested hook will not recurse."
     : "Codex hook reminder: a shared skill source instruction changed, but the matching human visual guide is not dirty.",
-  "Before finalizing this task, use $skill-to-html at skills/skill-to-html/SKILL.md for each affected skill folder and update the adjacent skill.html.",
+  "Before finalizing this task, use $markdown-to-html at skills/markdown-to-html/SKILL.md for each affected skill folder and update the adjacent skill.html.",
   "",
 ];
 

@@ -20,7 +20,7 @@
 | `sync-docs` | specialist skill 유지 | 문서 drift 조정에 집중한다. 초기 셋팅 완료 단계에서 조건부 호출한다. |
 | `atomic-committer`, `pull-request` | specialist skill 유지 | git publish 경계다. workflow completion과 별도 사용자 승인으로 호출한다. |
 | `web-research` | skill 유지 | 현재 사실 조사와 출처 비교가 주 역할이다. 자체 MCP/hooks/state bundle이 붙기 전까지 plugin이 아니다. |
-| `skill-update`, `skill-to-html`, `show-skills` | repo maintenance skill 유지 | 이 repo의 skill package 관리 도구다. project setup 실행과 직접 묶지 않는다. |
+| `skill-update`, `markdown-to-html`, `show-skills` | repo maintenance skill 유지 | 이 repo의 skill package 관리 도구다. project setup 실행과 직접 묶지 않는다. |
 
 ## 재검토 후보
 

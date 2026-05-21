@@ -13,7 +13,7 @@ description: "기존 shared skill을 업데이트, 수정, 개선, 유지보수,
 - 기존 유용한 behavior는 요청 없이 제거하지 않는다.
 - `SKILL.md`는 concise하고 trigger-focused로 유지한다.
 - 긴 예시, 취향, source rule은 `references/`로 옮긴다.
-- material change가 있으면 `skill-to-html`도 실행한다.
+- material change가 있으면 `markdown-to-html`도 실행한다.
 - `skill.html`을 바꾸면 정적 HTML validator뿐 아니라 PC viewport에서 표, SVG arrow, overflow, text overlap을 직접 확인한다.
 - skill add/remove/rename/archive/restore가 있으면 show-skills HTML catalog를 갱신한다.
 - 한국어 Markdown 규칙을 지켜 `skills/**/*.md`를 한국어 우선으로 유지한다.
@@ -64,7 +64,7 @@ description: "기존 shared skill을 업데이트, 수정, 개선, 유지보수,
 12. 원본 수정 권한과 위치가 확인되면 원본 skill 변경을 먼저 준비하거나 적용한다.
 13. 원본 delta를 `adopt`, `adapt`, `reject`, `defer`로 분류하고 이 repo의 skill folder, references, snippets, README, AGENTS, docs, history에 적용한다.
 14. 최소 파일을 수정한다.
-15. material change면 `skill-to-html`을 실행한다.
+15. material change면 `markdown-to-html`을 실행한다.
 16. `skill.html`이 바뀌었으면 `validate-skill-html.ts`와 browser rendering check로 wide table, SVG arrow endpoint, overflow, text overlap을 확인한다.
 17. source registry나 workflow usage map을 바꿨으면 `node scripts/validate-source-registry.ts .`를 실행한다.
 18. `docs/skill-inspector.md` 기준으로 검사한다.

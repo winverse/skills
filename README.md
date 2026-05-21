@@ -87,9 +87,9 @@ plugins/caveman/
 - `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, `web-research` 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 계약, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
-- `skill-to-html`: `SKILL.md` 옆에 사람이 빠르게 확인할 수 있는 한국어 우선 정적 요약 `skill.html`을 만들거나 고치는 스킬. `SKILL.md`를 기준 원문으로 보고 사용 조건, 핵심 계약, 금지 경계, 관련 파일, 검증 명령만 짧게 압축한다. 산출물은 PC desktop 기준만 보고, mobile/tablet layout은 비대상으로 두며, 버튼, script, 애니메이션, 외부 의존을 넣지 않는다.
-  - Source instruction: `skills/skill-to-html/SKILL.md`
-  - Human visual guide: `skills/skill-to-html/skill.html`
+- `markdown-to-html`: Markdown 문서 의미를 읽어 사람이 빠르게 확인할 수 있는 한국어 우선 HTML을 만들거나 고치는 스킬. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이며, 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때만 쓴다. 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령만 짧게 압축하고, PC desktop 기준으로 버튼, script, 애니메이션, 외부 의존 없이 확인한다.
+  - Source instruction: `skills/markdown-to-html/SKILL.md`
+  - Human visual guide: `skills/markdown-to-html/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
   - Source instruction: `skills/karpathy-thinkings/SKILL.md`
   - Human visual guide: `skills/karpathy-thinkings/skill.html`
@@ -210,16 +210,16 @@ export SKILLS_ROOT="$PWD"
 
 ## Skill HTML 원칙
 
-`skill.html`은 단순히 `SKILL.md`를 길게 복사한 문서가 아니어야 한다. 스킬의 쓰임을 빠르게 판단할 수 있도록 짧은 정적 요약으로 만든다.
+`skill.html`은 단순히 `SKILL.md`를 길게 복사한 문서가 아니어야 한다. 스킬의 쓰임을 빠르게 판단할 수 있도록 짧은 읽기용 HTML로 만든다.
 
 - 요약
 - 사용 판단
-- 핵심 계약
+- 중요한 기준
 - 작업 흐름
 - 금지와 허용
 - 파일과 검증
 
-`skill-to-html`을 사용할 때는 `skills/skill-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 바로 읽히는 self-contained HTML이어야 하며, mobile/tablet layout이나 responsive breakpoint는 신경 쓰지 않는다. Markdown 문서를 HTML로 바꿀 때는 `SKILL.md`를 기준 원문으로 두고 heading, list, table, code fence, link 의미를 읽어 요약 구조를 만든다. Markdown의 `raw HTML`, event handler, `javascript:` link, 외부 script는 그대로 통과시키지 않는다. 화면에 보이는 일반 설명어는 한국어로 번역하고, 파일 경로, 명령, 제품명, 라이브러리명, `TDD`, `QA`, `API`, `MCP`, `PRD` 같은 정확성이 필요한 식별자만 원문으로 둔다. 버튼, inline JavaScript, 애니메이션, 외부 CDN, 외부 script, 외부 이미지는 금지한다. 넓은 표나 매트릭스는 좁은 2열 layout 안에 넣지 않는다.
+`markdown-to-html`을 사용할 때는 `skills/markdown-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 바로 읽히는 self-contained HTML이어야 하며, mobile/tablet layout이나 responsive breakpoint는 신경 쓰지 않는다. 기본 mode는 `SKILL.md`에서 같은 폴더의 `skill.html`을 만드는 흐름이고, 일반 Markdown 문서 변환은 사용자가 대상과 출력 위치를 명시했을 때만 쓴다. Markdown 문서를 HTML로 바꿀 때는 heading, list, table, code fence, link 의미를 읽어 `MarkdownHtmlModel`로 줄인다. Markdown의 `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script는 그대로 통과시키지 않는다. raw HTML 지원이 꼭 필요하면 별도 parser와 allowlist sanitizer를 마지막 unsafe transform 이후에 적용한다. URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로만 남긴다. 화면에 보이는 일반 설명어는 한국어로 쓰고, 파일 경로, 명령, 제품명, 라이브러리명, `TDD`, `QA`, `API`, `MCP`, `PRD` 같은 정확성이 필요한 식별자만 원문으로 둔다. 버튼, inline JavaScript, 애니메이션, 외부 CDN, 외부 script, 외부 이미지는 금지한다. 넓은 표나 매트릭스는 좁은 2열 layout 안에 넣지 않는다.
 
 ## 생성과 검증
 
@@ -246,7 +246,7 @@ export SKILLS_ROOT="$PWD"
 
 ```text
 skill-creator 또는 SKILL.md 작성
--> skill-to-html로 skill.html 생성/갱신
+-> markdown-to-html로 skill.html 생성/갱신
 -> 스킬 추가/삭제/rename이면 show-skills HTML catalog 재생성
 -> project-snippets와 history 필요 여부 정리
 -> sync-docs로 README/AGENTS/docs/snippets/history 정합성 확인
@@ -283,8 +283,8 @@ node skills/show-skills/scripts/update-html-catalog.ts skills/show-skills --chec
 ```bash
 node skills/web-research/scripts/validate-web-research.ts skills/web-research
 node skills/show-skills/scripts/validate-show-skills.ts skills/show-skills
-node skills/skill-to-html/scripts/validate-skill-to-html.ts skills/skill-to-html
-node skills/skill-to-html/scripts/validate-skill-to-html-render.ts skills/skill-to-html
+node skills/markdown-to-html/scripts/validate-markdown-to-html.ts skills/markdown-to-html
+node skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts skills/markdown-to-html
 node skills/karpathy-thinkings/scripts/validate-karpathy-thinkings.ts skills/karpathy-thinkings
 node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update
 node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer
@@ -313,9 +313,9 @@ node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable self-contained HTML, desktop-centered layout, scannable sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사하고, inline JavaScript가 network call이나 external import 없이 닫히는지 확인한다. `skills/skill-to-html/scripts/validate-skill-to-html-render.ts`는 Playwright로 `skill-to-html/skill.html`의 정적 요약 section, script/button 부재, overflow, 읽기 폭을 검사한다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-source-registry.ts`는 workflow usage map의 `source id`가 `docs/update-source-registry.md`에 존재하는지, usage map에 source URL이나 checked date가 복사되지 않았는지 검사한다. `plugins/project-workflow/scripts/validate-project-workflow.ts`는 `plugins/project-workflow`의 canonical bundled skill 계약을 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `feature-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/feature-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable self-contained HTML, desktop-centered layout, scannable sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사하고, inline JavaScript가 network call이나 external import 없이 닫히는지 확인한다. `skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts`는 Playwright로 `markdown-to-html/skill.html`의 Markdown model, 보안 경계, script/button 부재, overflow, 읽기 폭을 검사한다. Playwright와 browser QA 산출물은 `scripts/playwright.config.ts`와 `.gitignore` 기준에 따라 `.artifacts/playwright/` 또는 `.artifacts/browser-qa/` 아래에 둔다. 루트 `test-results/`, `playwright-report/`, `.playwright-mcp/`, `snapshot*.png`, `*-desktop.png`, `*-screenshot.png`는 legacy 또는 도구 기본 출력으로만 보고 commit하지 않는다. 산출물만 비울 때는 `npm run clean:browser-artifacts`를 쓴다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-source-registry.ts`는 workflow usage map의 `source id`가 `docs/update-source-registry.md`에 존재하는지, usage map에 source URL이나 checked date가 복사되지 않았는지 검사한다. `plugins/project-workflow/scripts/validate-project-workflow.ts`는 `plugins/project-workflow`의 canonical bundled skill 계약을 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `feature-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/feature-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
 
-Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `skill-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
+Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `markdown-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 
 ## 검사관 기준
 
@@ -327,7 +327,7 @@ Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skil
 
 - `SKILL.md`에는 핵심 trigger와 workflow만 간결하게 둔다.
 - 긴 설명, 평가 prompt, source rule, 개인 취향은 `references/`로 분리한다.
-- 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `skill-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
+- 스킬을 만들거나, 설치하거나, fork하거나, 크게 수정하면 `markdown-to-html`로 해당 스킬의 `skill.html`도 함께 만든다.
 - 스킬을 추가, 삭제, rename, archive, restore하면 `show-skills`의 HTML catalog를 `update-html-catalog.ts`로 재생성한다.
 - 기존 스킬을 업데이트할 때는 `skill-update`로 `docs/update-source-registry.md`를 먼저 읽고, `.gitmodules`와 registry source id를 기준으로 original/upstream provenance preflight, source/release 비교, references, validator, snippet, docs, history까지 함께 맞춘다. Plugin update가 포함되면 `.gitmodules`, `docs/plugin-catalog.md`, `Plugin update list`, `scripts/validate-plugins.ts`, history까지 같은 변경 단위로 닫는다. 외부 dependency 전체 갱신은 dependency update sweep으로 처리해 vendored plugin, repo-owned plugin, registry workflow primitive lane, workflow usage map을 함께 확인한다.
 - 스킬을 크게 수정한 뒤에는 `docs/skill-inspector.md` 기준으로 검사한다.
