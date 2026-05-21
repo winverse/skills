@@ -55,6 +55,15 @@ requireSkillText("SKILL.md", "publish gate", "publish gate");
 requireSkillText("SKILL.md", "commit/push 전", "commit push preflight boundary");
 requireSkillText("SKILL.md", "GitHub 새 복제본", "GitHub fresh clone");
 requireSkillText("SKILL.md", "current/_github/<repo>/", "fresh clone path");
+requireSkillText("SKILL.md", "필수 개선 publish loop", "required improvement publish loop section");
+requireSkillText(
+  "SKILL.md",
+  "개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행",
+  "required improvement publish loop sequence",
+);
+requireSkillText("SKILL.md", "최종 pass", "final pass boundary");
+requireSkillText("SKILL.md", "preflight", "preflight boundary");
+requireSkillText("SKILL.md", "local-only", "local-only boundary");
 requireSkillText("SKILL.md", "실제 첫 응답", "actual first response evidence");
 requireSkillText("SKILL.md", "Bounded runner", "bounded runner section");
 requireSkillText("SKILL.md", "final response", "final response requirement");
@@ -97,11 +106,14 @@ for (const related of [
 requireSkillText("agents/openai.yaml", "$skill-plugin-test-loop", "default prompt trigger");
 requireSkillText("agents/openai.yaml", "external scratch root", "default prompt external scratch root");
 requireSkillText("agents/openai.yaml", "committed and pushed", "default prompt committed and pushed boundary");
+requireSkillText("agents/openai.yaml", "improve -> validate -> atomic-committer commit/push -> Desktop external fresh clone rerun", "default prompt required publish loop");
 requireSkillText("agents/openai.yaml", "$web-research", "default prompt research lane");
 requireSkillText("agents/openai.yaml", "adopt/adapt/reject/defer", "default prompt research decision");
 requireSkillText("skill.html", "cycle-NNN", "HTML cycle label");
 requireSkillText("skill.html", "실패 분류", "HTML failure class label");
 requireSkillText("skill.html", "리서치 기반 개선", "HTML research section");
+requireSkillText("skill.html", "필수 publish loop", "HTML required publish loop");
+requireSkillText("skill.html", "atomic-committer", "HTML atomic committer label");
 requireSkillText("skill.html", "web-research", "HTML web research label");
 requireSkillText("skill.html", "adopt/adapt/reject/defer", "HTML research decision label");
 requireSkillText("skill.html", "생략 기록", "HTML research skip record");
@@ -144,9 +156,29 @@ requireText(
   "base snippet research lane",
 );
 requireText(
+  "project-snippets/base.md",
+  "개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행",
+  "base snippet required publish loop",
+);
+requireText(
   "project-snippets/claude-base.md",
   "research-informed improvement",
   "Claude snippet research lane",
+);
+requireText(
+  "project-snippets/claude-base.md",
+  "개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행",
+  "Claude snippet required publish loop",
+);
+requireText(
+  "project-snippets/skill-plugin-test-loop.md",
+  "개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행",
+  "skill-plugin-test-loop snippet required publish loop",
+);
+requireText(
+  "AGENTS.md",
+  "개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행",
+  "AGENTS required publish loop",
 );
 
 if (failures.length > 0) {

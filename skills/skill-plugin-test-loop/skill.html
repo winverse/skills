@@ -295,7 +295,7 @@
       <div class="panel">
         <span class="label">스킬 이름: skill-plugin-test-loop</span>
         <h1>스킬과 플러그인을 실제 호출 반복으로 검증한다</h1>
-        <p class="summary">새 복제본 또는 격리 복사본에서 실제 첫 응답, 생성 산출물, 검증 결과, 실패 분류를 기록하고, 필요하면 <code>web-research</code>로 외부 best practice를 비교해 스킬과 플러그인의 사용 계약을 반복 확인한다.</p>
+        <p class="summary">새 복제본 또는 격리 복사본에서 실제 첫 응답, 생성 산출물, 검증 결과, 실패 분류를 기록한다. 개선점이 나오면 <code>개선 -> 검증 -> atomic-committer -> GitHub fresh clone 재실행</code> 순서를 지켜 최종 pass와 사전 검증을 구분한다.</p>
         <div class="contract-grid">
           <div class="contract">
             <strong>대상 고정</strong>
@@ -307,7 +307,7 @@
           </div>
           <div class="contract">
             <strong>출처 고정</strong>
-            <span>commit/push된 remote URL, branch, commit, submodule 상태를 먼저 남기고 GitHub 새 복제본 기준으로 반복 실행한다.</span>
+            <span>remote URL, branch, commit, submodule 상태를 먼저 남긴다. commit/push 전 변경은 fresh clone pass가 아니라 <code>preflight</code> 또는 <code>local-only</code>로만 기록한다.</span>
           </div>
           <div class="contract">
             <strong>실제 호출 기록</strong>
@@ -320,6 +320,10 @@
           <div class="contract">
             <strong>리서치 기반 개선</strong>
             <span>외부 관행이 중요한 스킬은 <code>web-research</code>로 source lane을 나누고 <code>adopt/adapt/reject/defer</code> 판단을 남긴다.</span>
+          </div>
+          <div class="contract">
+            <strong>bounded runner</strong>
+            <span>helper가 있으면 session id, 같은 <code>cwd</code>, source commit, timeout, stdin boundary, output path, final response를 확인한다.</span>
           </div>
         </div>
       </div>
@@ -346,7 +350,7 @@
         <div class="step">
           <span class="num">2</span>
           <h3>publish gate</h3>
-          <p>검증할 변경이 commit/push되어 있지 않으면 사전 검증으로만 보고 fresh clone pass로 기록하지 않는다.</p>
+          <p>검증할 변경이 commit/push되어 있지 않으면 <code>preflight</code> 또는 <code>local-only</code>로만 보고 fresh clone pass로 기록하지 않는다.</p>
         </div>
         <div class="step">
           <span class="num">3</span>
@@ -376,7 +380,7 @@
         <div class="step">
           <span class="num">8</span>
           <h3>분류와 반복</h3>
-          <p>실패 분류를 기록하고 출처 스킬 또는 테스트 방법 수정 후 다음 반복을 실행한다.</p>
+          <p>실패 분류를 기록하고 출처 스킬 또는 테스트 방법을 고친 뒤 검증, commit/push, 새 clone 재실행으로 다음 반복을 실행한다.</p>
         </div>
       </div>
     </section>
@@ -412,8 +416,8 @@
           <tbody>
             <tr>
               <td>commit/push</td>
-              <td>GitHub clone이 받을 변경은 먼저 commit/push되어 있다.</td>
-              <td>commit/push 전 작업본을 clone처럼 취급한다.</td>
+              <td>GitHub clone이 받을 변경은 먼저 <code>atomic-committer</code>로 commit/push되어 있다.</td>
+              <td>commit/push 전 작업본을 clone처럼 취급하거나 최종 pass라고 부른다.</td>
             </tr>
             <tr>
               <td>외부 test root</td>
@@ -424,6 +428,11 @@
               <td>새 복제본</td>
               <td><code>current/_github/&lt;repo&gt;</code>를 매 cycle 새로 만든다.</td>
               <td>이전 cycle의 <code>current/</code>를 재사용한다.</td>
+            </tr>
+            <tr>
+              <td>필수 publish loop</td>
+              <td><code>개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone 재실행</code> 순서를 남긴다.</td>
+              <td>검증만 하고 remote source를 갱신하지 않은 상태를 fresh clone 검증으로 보고한다.</td>
             </tr>
           </tbody>
         </table>
@@ -529,12 +538,44 @@
       <div class="two-col">
         <div class="note danger">
           <h3>금지</h3>
-          <p>기대 결과를 실행 기록에 끼워 맞추거나 같은 반복 기록을 덮어쓰지 않는다. 새 복제본 검증을 요구받았는데 local workspace, symlink, global install에 몰래 기대지 않는다.</p>
+          <p>기대 결과를 실행 기록에 끼워 맞추거나 같은 반복 기록을 덮어쓰지 않는다. 새 복제본 검증을 요구받았는데 local workspace, symlink, global install에 몰래 기대지 않고, commit/push 전 cycle을 최종 pass라고 부르지 않는다.</p>
         </div>
         <div class="note ok">
           <h3>허용</h3>
           <p>현재 runtime이 원본 skill, plugin, command를 실제 호출할 수 없으면 <code>fallback</code>으로 표시하고 누락된 호출 가능 표면을 기록한다.</p>
         </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>bounded runner 기준</h2>
+      <div class="wide-table">
+        <table>
+          <thead>
+            <tr>
+              <th>확인 항목</th>
+              <th>요구 기준</th>
+              <th>실패 분류</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>실행 식별자</td>
+              <td>명시적인 session id 또는 run id가 있고 같은 <code>cwd</code>와 같은 source commit으로 실행한다.</td>
+              <td><code>runner</code></td>
+            </tr>
+            <tr>
+              <td>입출력 경계</td>
+              <td>stdin boundary, prompt file, output file 경로를 기록하고 이전 세션 tail에 의존하지 않는다.</td>
+              <td><code>runner</code> 또는 <code>test method</code></td>
+            </tr>
+            <tr>
+              <td>시간 제한</td>
+              <td>timeout을 둔다. timeout이나 final response 누락은 성공으로 보지 않는다.</td>
+              <td><code>runner</code></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 

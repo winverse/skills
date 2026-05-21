@@ -45,6 +45,21 @@ description: "스킬, 플러그인, plugin-bundled skill이 실제 새 복제본
 8. 실패가 나오면 history를 고쳐서 통과시키지 않고, 출처 스킬이나 플러그인 또는 테스트 방법을 고친 뒤 새 반복으로 다시 실행한다.
 9. 새 복제본이 remote 상태를 소비해야 하면 수정 cycle 사이에 `atomic-committer`로 commit/push를 분리해 반영한다. commit/push 전 변경은 완전한 fresh clone cycle의 source로 보지 않는다.
 
+## 필수 개선 publish loop
+
+스킬이나 플러그인을 고칠 개선점이 나오면 아래 순서를 생략하지 않는다.
+
+```text
+개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행
+```
+
+- **개선**: `skill-update`나 대상 package 규칙으로 `SKILL.md`, references, validator, metadata, `skill.html`, snippets, docs, history를 고친다.
+- **검증**: 대상 skill-specific validator와 repo validator를 실행한다. 실패하면 commit하지 않고 수정한다.
+- **atomic-committer로 commit/push**: fresh clone이 소비할 source가 remote에 있어야 하므로, accepted delta는 `atomic-committer`로 logical commit을 만들고 push한다.
+- **Desktop 외부 루트에서 GitHub fresh clone cycle 재실행**: `<desktop>/skill-plugin-test-runs/<target-slug>` 같은 repo 밖 루트에서 `current/`를 삭제하고 GitHub에서 다시 clone한다. local workspace나 symlink를 source로 쓰지 않는다.
+
+이 순서를 거치기 전에는 "최종 pass"라고 부르지 않는다. commit/push 전 cycle은 `preflight` 또는 `local-only`로만 기록한다.
+
 ## 테스트 루트 구조
 
 테스트는 기본적으로 target repo 밖의 external scratch root에서 실행한다. 예시는 `<desktop>/skill-plugin-test-runs/<target-slug>`처럼 Desktop 아래 새 폴더다. target repo 안의 임시 폴더는 사용자가 명시적으로 local-only 검증을 원하거나, remote clone이 불가능한 경우에만 쓰고 `test method` risk로 기록한다.
@@ -78,8 +93,8 @@ description: "스킬, 플러그인, plugin-bundled skill이 실제 새 복제본
 8. **첫 응답 기록**: 예상 순서를 prompt에 주입하지 않고, 대상 skill/plugin을 호출했을 때 실제 첫 응답을 저장한다.
 9. **산출물 확인**: 생성된 폴더, 파일, 질문/답변 history, validator output, browser evidence를 저장한다.
 10. **실패 분류**: 아래 실패 분류 중 하나 이상으로 분류한다.
-11. **수정 루프**: 출처를 고치고 validator를 실행한다. remote 새 복제본 검증이 필요하면 commit/push 후 다음 반복을 돈다.
-12. **완료 판정**: 최소 pass 조건과 남은 위험을 `cycle-summary.md`와 최종 보고에 동시에 남긴다.
+11. **수정 루프**: 출처를 고치고 validator를 실행한다. remote 새 복제본 검증이 필요하면 `개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행` 순서로 다음 반복을 돈다.
+12. **완료 판정**: 최소 pass 조건과 남은 위험을 `cycle-summary.md`와 최종 보고에 동시에 남긴다. accepted delta가 있었는데 commit/push와 fresh clone 재실행이 없으면 완료가 아니다.
 
 ## 검증 case matrix
 
@@ -106,7 +121,7 @@ description: "스킬, 플러그인, plugin-bundled skill이 실제 새 복제본
 - local 판단은 `adopt`, `adapt`, `reject`, `defer` 중 하나로 쓴다.
 - 채택한 delta가 스킬 계약을 바꾸면 `skill-update`로 `SKILL.md`, references, validator, `agents/openai.yaml`, `skill.html`, snippets, docs, history를 맞춘다.
 - 리서치가 스킬의 durable source ledger가 될 만큼 중요하면 `docs/update-source-registry.md`에 source id를 추가하거나 기존 source id를 갱신한다. 단발 참고 자료는 cycle research ledger에만 남긴다.
-- 변경 후에는 같은 target을 새 cycle에서 다시 실행한다. 리서치 결과만 좋고 실제 호출 테스트가 실패하면 pass가 아니다.
+- 변경 후에는 반드시 `개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행` 순서로 같은 target을 새 cycle에서 다시 실행한다. 리서치 결과만 좋고 실제 호출 테스트가 실패하면 pass가 아니다.
 
 ## Bounded runner 기준
 

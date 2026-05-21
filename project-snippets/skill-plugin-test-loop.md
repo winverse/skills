@@ -8,6 +8,7 @@
 - Prefer GitHub 새 복제본 evidence under an external scratch root, for example `<desktop>/skill-plugin-test-runs/<target-slug>`, over trusting the current local workspace.
 - Delete only `current/` each cycle; preserve `runs/` and `cycles.md`.
 - If the tested changes are not committed and pushed, mark the run as preflight or local-only and do not call it a fresh clone pass.
+- If any accepted delta changes the source skill/plugin, follow `개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone cycle 재실행` before calling the loop passed.
 - If the runtime cannot call the original skill, plugin, MCP command, or hook, mark that lane as `fallback` and record the missing callable surface.
 - If the target depends on external best practice, famous workflow patterns, current agent/tool behavior, security/QA guidance, or upstream docs, run `web-research` as a parallel research-informed improvement lane and record `official/source`, `community/practice`, and `counterexample/risk` source lanes.
 - Classify research findings as `adopt`, `adapt`, `reject`, or `defer`; if a delta is accepted, update the source package through `skill-update` and rerun a new cycle before calling the test passed.
