@@ -1,25 +1,27 @@
 ## Project Skills
 
-- Use $skill-to-html at <skills-root>/skills/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a 그림 우선, 인터랙티브, 애니메이션 중심 `skill.html` beside `SKILL.md`.
+- Use $skill-to-html at <skills-root>/skills/skill-to-html/SKILL.md whenever a skill is created, installed, forked, or updated, so the skill folder gets a 짧은 정적 요약 `skill.html` beside `SKILL.md`.
 
 ## Project-Specific Overrides
 
 - Run this immediately after `skill-creator` initializes or updates a skill.
-- Do not accept a `skill.html` that only partitions text into cards or long tables.
-- The first viewport should start with an interactive visual scene, animated diagram, mode switch, or click-driven 판단 보드 before long explanatory text.
-- Prefer 판단 매트릭스, 흐름도, 순위 차트, 파일 관계도, 입출력 구조, mode switch, stepper, toggle, and progressive disclosure.
-- Keep skill explanations consistent across skills: 목적, 사용/건너뜀, 실행 흐름, 입력/출력, 파일 관계, 검증, 오용 방지.
-- Treat `SKILL.md` as the Markdown source of truth and `skill.html` as a visual view. Read Markdown meaning, extract `skill IR`, map it to visual components, then render standalone HTML.
-- Do not derive layout from Markdown line wrapping. Use heading, list, table, code fence, blockquote, and link meaning to choose 판단 보드, 흐름도, 파일 관계도, 검증 표, and evidence reveal.
-- Do not pass Markdown `raw HTML`, event handlers, `javascript:` links, external scripts, or external assets through. Put interaction in the trusted template's CSS/SVG/Web Animations API/short inline JavaScript.
-- Use 한국어 문장 우선 화면 문구 in `skill.html`; keep English only for coding terms, exact file names, commands, products, protocols, libraries, or copyable instruction snippets.
-- Do not list English explanation terms with commas. Translate terms such as workflow suite, setup, initiative, domain language, architecture boundary, issue backlog, handoff, orchestration, and source-labeled primitive into Korean unless they are exact identifiers.
-- Follow the shared quiet operational visual rules: shallow borders, restrained color, stable dimensions, no decorative hero treatment, and dark surfaces only for code or terminal snippets.
-- Use self-contained CSS/SVG animation or short inline JavaScript for interaction. Do not use external CDN, external scripts, or external images.
-- Framer Motion, Motion One, GSAP, or similar animation libraries are allowed only when the target project already has a local build pipeline and the dependency is bundled locally; standalone skill guides should use CSS animation, SVG animation, or Web Animations API.
-- Design and verify only for PC desktop viewport; mobile/tablet layout and responsive breakpoint tuning are out of scope for this skill. Desktop click, hover, focus, and animated state changes are in scope.
+- Treat `SKILL.md` as the 기준 원문 and `skill.html` as a human summary view.
+- Convert Markdown through a small `SkillHtmlModel` before writing HTML; do not copy source paragraphs or raw Markdown structure directly into layout.
+- Treat Markdown as 신뢰하지 않는 입력 and render only through a repo-authored 신뢰된 템플릿.
+- Keep the first screen focused on the skill name, one-line purpose, use condition, and 3-5 core contracts.
+- 일반 설명어는 한국어로 번역한다.
+- Keep English only for exact identifiers such as file paths, commands, protocol names, product names, library names, and common acronyms such as `TDD`, `QA`, `API`, `MCP`, and `PRD`.
+- If an English source term must remain, use `한국어(원문)` only on first mention and use Korean afterward.
+- 인터랙티브 요소를 넣지 않는다.
+- Do not add animation, view switching, click-driven state, staged reveal, or decorative SVG.
+- Do not use `<button>`, inline JavaScript, Web Animations API, 외부 CDN, external scripts, or external images.
+- Do not pass Markdown `raw HTML`, event handlers, `javascript:` links, `vbscript:` links, `<iframe>`, `<object>`, `<embed>`, external scripts, or external assets through.
+- Use self-contained CSS only for static layout, spacing, readable width, and overflow control.
+- 짧은 안내 화면은 여러 section card를 세로로 쌓지 말고 하나의 문서 시트 안에서 section divider로 구분한다.
+- 표현할 정보가 요약이나 단순 핵심 계약이면 card grid보다 선형 리스트를 우선한다.
+- 허용/금지는 table, 검증 명령은 명령 리스트를 우선한다.
 - Keep wide scope tables, matrices, and checklist tables in full-width sections rather than narrow two-column layouts.
 - Do not place 4+ core contract cards or prose cards as a multi-column grid inside a narrow side panel, status panel, or secondary column.
 - Use readable card grids such as `repeat(auto-fit, minmax(280px, 1fr))`; compact contract snapshots must still keep at least `minmax(220px, 1fr)`.
-- Make SVG arrows terminate at visible nodes, boxes, or lanes; do not leave dangling arrowheads in empty space.
-- Verify the HTML visually in a PC desktop viewport when practical, especially interaction state changes, animation state, arrow endpoints, table width, overflow, and text overlap.
+- Design and verify only for PC desktop viewport; mobile/tablet layout and responsive breakpoint tuning are out of scope for this skill.
+- Verify the HTML visually in a PC desktop viewport when practical, especially overflow, text overlap, local links, and whether the summary can be understood within 10 seconds.

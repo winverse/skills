@@ -1,85 +1,66 @@
-# skill.html 시각 가이드 기준
+# skill.html 정적 요약 기준
 
 ## local design system 기준
 
-이 repo의 `skill.html`은 한국어 우선 문구, 조용한 운영 도구형 UI, 얕은 border, 명확한 도표 구조를 기본으로 한다. 단, `skill-to-html` 산출물은 이제 텍스트 설명보다 그림, 애니메이션, 클릭 조작을 먼저 보여준다.
+이 repo의 `skill.html`은 한국어 우선 문구, 조용한 운영 도구형 UI, 얕은 border, 안정적인 읽기 폭을 기본으로 한다. `skill-to-html` 산출물은 정적 요약이어야 하며, 그림이나 애니메이션보다 사용 조건, 핵심 계약, 금지 경계, 검증 명령이 먼저 읽혀야 한다.
 
 ## language policy 기준
 
-화면 라벨과 설명 문장은 한국어로 쓴다. `SKILL.md`, `GraphQL`, `TypeScript`, `Playwright`, command, file path처럼 코드 맥락의 고유어만 원문을 유지한다.
+화면에 보이는 일반 설명어는 한국어로 번역한다. `SKILL.md`, `skill.html`, `GraphQL`, `TypeScript`, `Playwright`, 명령, 파일 경로처럼 정확한 식별자는 원문을 유지한다.
 
 영어 밀도는 낮게 유지한다. `TDD`, `QA`, `API`, `MCP`, `PRD`처럼 국내 개발 문맥에서 바로 통하는 약어는 남겨도 되지만, 설명어를 영어 단어 목록으로 나열하지 않는다. 원문 보존이 필요한 경우 첫 등장에만 `한국어(원문)` 형태로 병기하고 이후에는 한국어 표현을 쓴다.
 
 | 피할 표현 | 권장 표현 |
 | --- | --- |
-| `Workflow suite의 setup 절반` | 워크플로우 묶음의 초기 설정 구간 |
-| `domain language, product reason, architecture boundary` | 도메인 용어, 제품 이유, 아키텍처 경계 |
-| `issue backlog, handoff, orchestration` | 이슈 목록, 인계, 초기 설정 흐름 |
-| `source-labeled primitive` | 출처가 표시된 구성 요소 |
-| `input/output schema, resource map, risk guardrail chart` | 입출력 구조, 파일 관계도, 위험/안전 경계 차트 |
+| fresh clone | 새 복제본 |
+| isolated copy | 격리 복사본 |
+| failure class | 실패 분류 |
+| cycle result | 반복 결과 |
+| workflow suite | 워크플로우 묶음 |
+| source of truth | 기준 원문 |
+| handoff | 인계 |
 
-## required visual grammar 기준
+## summary structure 기준
 
-- 판단 매트릭스
-- 작업 흐름도
-- 파일 관계도
-- 입출력 구조
-- 위험/안전 경계 차트
-- mode switch, tab, stepper, toggle 같은 조작 가능한 상태 전환
-- SVG path drawing, node highlight, timeline progress 같은 의미 있는 애니메이션
-- 클릭하거나 keyboard focus를 이동했을 때 근거나 검증 상태가 드러나는 progressive disclosure
+- 요약
+- 사용 판단
+- 핵심 계약
+- 작업 흐름
+- 금지와 허용
+- 파일과 검증
 
-## page structure 기준
+위 section만으로 사람이 10초 안에 스킬의 목적과 경계를 파악할 수 있어야 한다. 세부 설명, 긴 예시, 반복되는 주의 문구는 `SKILL.md` 링크로 넘긴다.
 
-첫 화면에서 skill name, 호출 조건, 오용 방지 경계가 보여야 한다. 하지만 첫 화면의 중심은 문장 카드가 아니라 interactive hero 또는 animated diagram이어야 한다. 이어서 작업 흐름과 검증 명령이 보여야 한다.
+## Markdown 변환 기준
 
-## Markdown 변환 pipeline 기준
-
-- `SKILL.md`는 source of truth이고 `skill.html`은 사람이 조작하는 view다. HTML을 보강하더라도 Markdown 계약과 다른 새 규칙을 만들지 않는다.
-- 변환은 Markdown 원문 -> 의미 구조 -> `skill IR` -> component mapping -> standalone HTML -> browser QA 순서로 본다.
+- `SKILL.md`는 기준 원문이고 `skill.html`은 사람이 빠르게 확인하는 요약 화면이다.
+- 변환은 Markdown 원문 읽기 -> 의미 구조 파악 -> `SkillHtmlModel` 추출 -> 정적 HTML 작성 -> browser QA 순서로 본다.
 - Markdown 의미 구조는 heading, list, table, code fence, blockquote, link가 수행하는 역할이다. 원문 순서와 줄바꿈을 그대로 layout으로 복사하지 않는다.
-- `skill IR`에는 skill name, trigger, 핵심 계약, workflow, 관련 파일, validator, 위험 경계, 원문 근거를 넣고, 화면에서는 판단 보드, animated flow, file map, evidence reveal, verify table로 나눈다.
-- `unified/remark/rehype`, `remark-rehype`, `Pandoc`, `MDX`, `Markdoc`에서 배울 점은 parse/transform/render 분리와 component mapping이다. 이 repo의 standalone guide는 runtime dependency를 추가하지 않는다.
-- Markdown의 `raw HTML`, event handler, `javascript:` link, 외부 script는 그대로 통과시키지 않는다. 상호작용 코드는 repo-authored template의 닫힌 CSS/SVG/Web Animations API/짧은 inline JavaScript에서만 만든다.
+- Markdown은 신뢰하지 않는 입력으로 다룬다. `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script, `<iframe>`, `<object>`, `<embed>`는 그대로 통과시키지 않는다.
+- 최종 `skill.html`은 원문 Markdown 단편을 이어 붙인 결과가 아니라, repo가 작성한 신뢰된 템플릿에 `SkillHtmlModel`을 넣어 만든 단일 파일이다.
 
-## readability and card grid 기준
+## readability 기준
 
-- 핵심 계약 카드가 4개 이상이면 좁은 side panel, status panel, 2열 layout의 보조 영역 안에서 다열 grid로 넣지 않는다.
-- side panel은 현재 mode 설명, 진행 상태, 근거 요약, 또는 폭 280px 이상 single-column 선택 리스트에만 쓴다.
+- 짧은 스킬 안내는 여러 개의 큰 card를 세로로 쌓지 말고 하나의 문서 시트 안에서 section divider로 구분한다.
+- 요약과 단순한 핵심 계약은 카드가 아니라 리스트로 둔다. 비교, 상태, 파일 관계처럼 구조가 있는 정보에만 카드나 표를 쓴다.
+- 허용/금지처럼 두 값을 비교하는 정보는 카드 두 개보다 간단한 table을 우선한다.
+- 검증 명령은 카드보다 명령 리스트로 둔다.
 - 본문형 card grid는 `repeat(auto-fit, minmax(280px, 1fr))`를 기본으로 한다.
-- 핵심 계약처럼 짧은 snapshot card도 최소 `minmax(220px, 1fr)`를 확보한다. 그보다 좁아지면 card가 아니라 rail chip, matrix row, table row, disclosure summary로 바꾼다.
+- 핵심 계약처럼 짧은 snapshot card도 최소 `minmax(220px, 1fr)`를 확보한다.
 - Korean/CJK 본문은 긴 줄도 긴 세로 열도 피한다. 문장형 설명은 `max-width:40em` 안팎으로 두고, 좁은 카드 안에 긴 문장을 넣지 않는다.
-- 같은 층위의 카드를 4-5개 한 줄로 고정하지 않는다. PC desktop에서도 `auto-fit`, wrap, matrix, 또는 full-width table로 읽기 폭을 확보한다.
-- 비교해야 하는 정보는 tabs로 숨기지 말고 전체 폭 matrix나 table로 둔다. tabs는 같은 맥락의 관련 panel을 전환할 때만 쓴다.
+- 비교해야 하는 정보는 전체 폭 matrix나 table로 둔다.
+- PC desktop에서 section header, table cell, code path, card readable width가 부모 밖으로 밀리거나 잘리지 않아야 한다.
 
-## diagram rules 기준
+## forbidden interaction 기준
 
-도표는 실제 의사결정에 쓰여야 한다. 텍스트를 박스로 쪼개기만 한 구조는 부족하다.
-
-## interaction and animation 기준
-
-- 첫 viewport에는 최소 하나의 즉시 조작 가능한 control이 있어야 한다.
-- mode를 바꾸면 주요 도표의 강조 node, caption, evidence panel이 함께 바뀌어야 한다.
-- hover/focus/click state가 눈에 보여야 하며 keyboard focus outline을 제거하지 않는다.
-- animation은 흐름 이해를 돕는 곳에만 쓴다. 단순 배경 장식, 의미 없는 움직임, 주의를 빼앗는 반복 효과는 쓰지 않는다.
-- `prefers-reduced-motion: reduce`에서는 큰 이동과 반복 animation을 줄인다.
-- 설명 문장은 짧은 label, caption, evidence note로 나누고, 긴 문단은 접힘 패널이나 하단 검증 section으로 보낸다.
-
-## library policy 기준
-
-- 이 repo의 `skill.html`은 self-contained 단일 파일이다.
-- 외부 CDN, 외부 script, 외부 image는 금지한다.
-- inline JavaScript는 짧은 interaction controller로만 허용한다. network call, storage tracking, remote import, eval은 쓰지 않는다.
-- Framer Motion, Motion One, GSAP 같은 animation library는 target project가 build pipeline과 local dependency를 이미 갖고 있고 산출물이 bundled local asset으로 닫힐 때만 선택한다.
-- standalone skill guide에서는 Framer 같은 library를 직접 로드하지 말고 CSS animation, SVG animation, Web Animations API로 같은 상호작용을 구현한다.
+- 인터랙티브 요소를 넣지 않는다.
+- `<button>`, inline JavaScript, Web Animations API, 외부 CDN, 외부 script, 외부 image를 쓰지 않는다.
+- 정적 HTML이므로 click, hover, keyboard focus 상태로 의미가 바뀌면 안 된다.
+- 장식용 SVG, 과한 flow line, 반복 animation은 제거한다.
 
 ## render integrity 기준
 
 - 검증 viewport는 PC desktop이다. mobile/tablet viewport는 확인하지 않아도 된다.
-- PC desktop에서 mouse click, keyboard focus, animated state change를 확인한다.
-- SVG arrow는 출발 node와 도착 node가 시각적으로 분명해야 한다.
-- `marker-end`가 있는 화살표는 실제 box, node, lane, 또는 명시된 목표에 닿아야 하며 빈 공간을 가리키지 않는다.
 - 넓은 범위 표, 매트릭스, 체크리스트 표는 전체 폭 section에 둔다.
-- 2열 layout에는 짧은 카드, 구조도, 파일 지도처럼 폭이 안정적인 구조만 넣는다.
-- PC desktop viewport에서 section header, table cell, SVG text, code path, card readable width가 부모 밖으로 밀리거나 잘리지 않아야 한다.
-- mobile/tablet breakpoint, 1열 접힘, touch target, small viewport wrapping은 이 스킬의 완료 조건이 아니다.
+- 2열 layout에는 짧은 카드, 파일 지도처럼 폭이 안정적인 구조만 넣는다.
+- PC desktop viewport에서 overflow, text overlap, broken local link가 없어야 한다.

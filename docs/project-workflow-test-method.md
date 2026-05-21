@@ -66,10 +66,10 @@ Goal: project-workflow plugin과 workflow suite가 fresh clone 실제 실행에�
 
 ## 테스트 루트
 
-기본 루트는 사용자가 지정한 scratch root를 사용한다. 예시는 placeholder로 적는다.
+기본 루트는 local workspace나 target repo 안이 아니라 외부 scratch root를 사용한다. 예시는 Desktop 아래 새 폴더로 적는다.
 
 ```text
-<skill-test-root>
+<desktop>/skill-plugin-test-runs/project-workflow
 ```
 
 테스트 루트 구조는 아래처럼 유지한다.
@@ -88,7 +88,7 @@ skill-test/
         └── cycle-summary.md
 ```
 
-`current/`는 매 cycle 시작 전에 삭제하고 다시 만든다. `runs/`와 `cycles.md`는 누적 기록이므로 삭제하지 않는다. 실제 실행 history에는 사용자가 지정한 절대 경로를 기록해도 되지만, 공유 repo 문서에는 machine-specific 절대 경로를 쓰지 않는다.
+`current/`는 매 cycle 시작 전에 삭제하고 다시 만든다. `runs/`와 `cycles.md`는 누적 기록이므로 삭제하지 않는다. 테스트 루트는 Desktop 같은 repo 밖 경로를 쓰고, 공유 repo 문서에는 machine-specific 절대 경로를 쓰지 않는다. local workspace 내부 경로나 symlink를 source로 쓰면 fresh clone 검증이 아니라 local-only/preflight 검증이다.
 
 ## 실행 guard
 

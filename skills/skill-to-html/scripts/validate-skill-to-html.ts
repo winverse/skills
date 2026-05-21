@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { validateSkillPackage } from "../../../scripts/validate-skill-package.ts";
@@ -9,90 +9,147 @@ const skillRoot = process.argv[2] ?? "skills/skill-to-html";
 validateSkillPackage("skill-to-html", skillRoot);
 
 const requiredChecks = [
-  ["SKILL.md", "SVG arrow"],
-  ["SKILL.md", "2열 layout"],
-  ["SKILL.md", "PC desktop viewport"],
-  ["SKILL.md", "mobile/tablet"],
-  ["SKILL.md", "화면에 보이는 설명은 한국어 문장 우선"],
-  ["SKILL.md", "영어 설명어를 쉼표로 길게 나열하지 않는다"],
-  ["SKILL.md", "그림 우선"],
-  ["SKILL.md", "인터랙티브"],
-  ["SKILL.md", "애니메이션"],
+  ["SKILL.md", "정적 HTML"],
+  ["SKILL.md", "요약 화면"],
+  ["SKILL.md", "화면에 보이는 일반 설명어는 한국어로 번역한다"],
+  ["SKILL.md", "영어 원문이 꼭 필요하면 첫 등장에만"],
+  ["SKILL.md", "정확한 파일명, 명령, 코드 식별자"],
+  ["SKILL.md", "보기 전환"],
+  ["SKILL.md", "단계적 펼침"],
   ["SKILL.md", "inline JavaScript"],
-  ["SKILL.md", "Framer Motion"],
-  ["SKILL.md", "Web Animations API"],
-  ["SKILL.md", "arrow endpoint, table width, overflow, text overlap"],
-  ["SKILL.md", "좁은 side panel"],
-  ["SKILL.md", "card readable width"],
-  ["SKILL.md", "Markdown-to-HTML 변환 모델"],
-  ["SKILL.md", "skill IR"],
-  ["SKILL.md", "component mapping"],
-  ["SKILL.md", "remark-rehype"],
+  ["SKILL.md", "외부 CDN"],
   ["SKILL.md", "raw HTML"],
-  ["references/visual-guide-standards.md", "render integrity"],
-  ["references/visual-guide-standards.md", "interaction and animation"],
-  ["references/visual-guide-standards.md", "library policy"],
-  ["references/visual-guide-standards.md", "marker-end"],
-  ["references/visual-guide-standards.md", "PC desktop"],
-  ["references/visual-guide-standards.md", "mobile/tablet"],
-  ["references/visual-guide-standards.md", "영어 밀도"],
-  ["references/visual-guide-standards.md", "전체 폭 section"],
-  ["references/visual-guide-standards.md", "readability and card grid"],
-  ["references/visual-guide-standards.md", "minmax(220px, 1fr)"],
-  ["references/visual-guide-standards.md", "Markdown 변환 pipeline"],
-  ["references/visual-guide-standards.md", "component mapping"],
-  ["references/visual-guide-standards.md", "raw HTML"],
-  ["skill.html", "도표 무결성"],
-  ["skill.html", "한국어 문장"],
-  ["skill.html", "그림 먼저"],
-  ["skill.html", "인터랙티브"],
-  ["skill.html", "애니메이션"],
-  ["skill.html", "data-view"],
-  ["skill.html", "addEventListener"],
-  ["skill.html", "PC desktop"],
-  ["skill.html", "mobile/tablet"],
-  ["skill.html", "넓은 표"],
-  ["skill.html", "읽기 폭"],
-  ["skill.html", "Markdown-to-HTML 변환 모델"],
-  ["skill.html", "skill IR"],
-  ["skill.html", "component mapping"],
-  ["skill.html", "raw HTML"],
-  ["skill.html", "닫힌 템플릿 경계"],
-  ["skill.html", "safety-boundary"],
-  ["skill.html", "validate-skill-to-html-render.ts"],
-  ["../../project-snippets/skill-to-html.md", "한국어 문장 우선"],
-  ["../../project-snippets/skill-to-html.md", "그림 우선"],
-  ["../../project-snippets/skill-to-html.md", "인터랙티브"],
-  ["../../project-snippets/skill-to-html.md", "애니메이션"],
-  ["../../project-snippets/skill-to-html.md", "PC desktop"],
-  ["../../project-snippets/skill-to-html.md", "mobile/tablet"],
-  ["../../project-snippets/skill-to-html.md", "minmax(220px, 1fr)"],
-  ["../../project-snippets/skill-to-html.md", "skill IR"],
-  ["../../project-snippets/skill-to-html.md", "raw HTML"],
-  ["../../scripts/validate-skill-html.ts", "inline script"],
-  ["../../scripts/validate-skill-html.ts", "wide scope table should not be nested inside a two-column layout"],
-  ["../../scripts/validate-skill-html.ts", "contract card grids must use readable minmax width"],
-  ["../../scripts/validate-skill-html.ts", "arrow endpoint that does not reach a visible node"],
-  ["agents/openai.yaml", "Markdown source of truth"],
-  ["agents/openai.yaml", "skill IR"],
-  ["agents/openai.yaml", "Markdown raw HTML"],
+  ["SKILL.md", "event handler"],
+  ["SKILL.md", "javascript:"],
+  ["SKILL.md", "SkillHtmlModel"],
+  ["SKILL.md", "신뢰하지 않는 입력"],
+  ["SKILL.md", "신뢰된 템플릿"],
+  ["SKILL.md", "하나의 문서 시트"],
+  ["SKILL.md", "요약과 단순한 핵심 계약"],
+  ["SKILL.md", "선형 리스트"],
+  ["SKILL.md", "vbscript:"],
+  ["SKILL.md", "<iframe>"],
+  ["SKILL.md", "파일과 검증"],
+  ["references/visual-guide-standards.md", "정적 요약"],
+  ["references/visual-guide-standards.md", "일반 설명어는 한국어"],
+  ["references/visual-guide-standards.md", "새 복제본"],
+  ["references/visual-guide-standards.md", "실패 분류"],
+  ["references/visual-guide-standards.md", "SkillHtmlModel"],
+  ["references/visual-guide-standards.md", "신뢰하지 않는 입력"],
+  ["references/visual-guide-standards.md", "신뢰된 템플릿"],
+  ["references/visual-guide-standards.md", "하나의 문서 시트"],
+  ["references/visual-guide-standards.md", "요약과 단순한 핵심 계약"],
+  ["references/visual-guide-standards.md", "카드가 아니라 리스트"],
+  ["references/visual-guide-standards.md", "간단한 table"],
+  ["references/visual-guide-standards.md", "명령 리스트"],
+  ["references/visual-guide-standards.md", "외부 script"],
+  ["references/visual-guide-standards.md", "읽기 폭"],
+  ["skill.html", "정적 요약"],
+  ["skill.html", "한국어 우선"],
+  ["skill.html", "인터랙션 없음"],
+  ["skill.html", "SkillHtmlModel"],
+  ["skill.html", "신뢰하지 않는 입력"],
+  ["skill.html", "신뢰된 템플릿"],
+  ["skill.html", "summary-list"],
+  ["skill.html", "contract-list"],
+  ["skill.html", "workflow-list"],
+  ["skill.html", "rule-table"],
+  ["skill.html", "verify-list"],
+  ["skill.html", "금지와 허용"],
+  ["skill.html", "파일과 검증"],
+  ["skill.html", "SKILL.md"],
+  ["skill.html", "skill.html"],
+  ["../../project-snippets/skill-to-html.md", "정적 요약"],
+  ["../../project-snippets/skill-to-html.md", "SkillHtmlModel"],
+  ["../../project-snippets/skill-to-html.md", "신뢰하지 않는 입력"],
+  ["../../project-snippets/skill-to-html.md", "신뢰된 템플릿"],
+  ["../../project-snippets/skill-to-html.md", "하나의 문서 시트"],
+  ["../../project-snippets/skill-to-html.md", "요약이나 단순 핵심 계약"],
+  ["../../project-snippets/skill-to-html.md", "선형 리스트"],
+  ["../../project-snippets/skill-to-html.md", "허용/금지는 table"],
+  ["../../project-snippets/skill-to-html.md", "일반 설명어는 한국어"],
+  ["../../project-snippets/skill-to-html.md", "인터랙티브 요소를 넣지 않는다"],
+  ["../../project-snippets/skill-to-html.md", "외부 CDN"],
+  ["../../scripts/validate-skill-html.ts", "scannable"],
+  ["agents/openai.yaml", "정적 요약"],
+  ["agents/openai.yaml", "SkillHtmlModel"],
+  ["agents/openai.yaml", "신뢰하지 않는 입력"],
+  ["agents/openai.yaml", "신뢰된 템플릿"],
+  ["agents/openai.yaml", "일반 설명어는 한국어"],
+  ["agents/openai.yaml", "인터랙티브 요소"],
   ["scripts/skill-to-html-render.spec.ts", "@playwright/test"],
-  ["scripts/skill-to-html-render.spec.ts", "hero-line"],
-  ["scripts/skill-to-html-render.spec.ts", "safety-boundary"],
-  ["scripts/skill-to-html-render.spec.ts", "guard-grid"],
-  ["scripts/skill-to-html-render.spec.ts", "변환 모델 보드"],
+  ["scripts/skill-to-html-render.spec.ts", "script"],
+  ["scripts/skill-to-html-render.spec.ts", "button"],
+  ["scripts/skill-to-html-render.spec.ts", "정적 요약"],
   ["scripts/validate-skill-to-html-render.ts", "playwright"],
   ["scripts/validate-skill-to-html-render.ts", "SKILL_TO_HTML_ROOT"],
 ] as const;
 
+const forbiddenChecks = [
+  ["SKILL.md", "그림 우선"],
+  ["SKILL.md", "애니메이션 중심"],
+  ["SKILL.md", "Framer Motion"],
+  ["SKILL.md", "GSAP"],
+  ["SKILL.md", "mode switch"],
+  ["SKILL.md", "click-driven"],
+  ["skill.html", "data-view"],
+  ["skill.html", "addEventListener"],
+  ["skill.html", "<button"],
+  ["skill.html", "<script"],
+  ["skill.html", "Framer Motion"],
+  ["skill.html", "GSAP"],
+  ["../../project-snippets/skill-to-html.md", "animated"],
+  ["../../project-snippets/skill-to-html.md", "mode switch"],
+  ["../../project-snippets/skill-to-html.md", "progressive disclosure"],
+  ["agents/openai.yaml", "animated"],
+  ["agents/openai.yaml", "mode switches"],
+] as const;
+
 const failures: string[] = [];
-for (const [relativePath, needle] of requiredChecks) {
-  const target = relativePath.startsWith("../..")
+
+function resolveTarget(relativePath: string): string {
+  return relativePath.startsWith("../..")
     ? path.resolve(skillRoot, relativePath)
     : path.join(skillRoot, relativePath);
+}
+
+for (const [relativePath, needle] of requiredChecks) {
+  const target = resolveTarget(relativePath);
+  if (!existsSync(target)) {
+    failures.push(`${relativePath} is missing`);
+    continue;
+  }
   const text = readFileSync(target, "utf8");
   if (!text.includes(needle)) {
     failures.push(`${relativePath} must include ${needle}`);
+  }
+}
+
+for (const [relativePath, needle] of forbiddenChecks) {
+  const target = resolveTarget(relativePath);
+  if (!existsSync(target)) continue;
+  const text = readFileSync(target, "utf8");
+  if (text.includes(needle)) {
+    failures.push(`${relativePath} must not include ${needle}`);
+  }
+}
+
+const htmlPath = path.join(skillRoot, "skill.html");
+if (existsSync(htmlPath)) {
+  const html = readFileSync(htmlPath, "utf8");
+  const structuralBlocks: Array<[RegExp, string]> = [
+    [/<(?:iframe|object|embed|base)\b/i, "skill.html must not contain iframe/object/embed/base elements"],
+    [/<meta\b[^>]*\bhttp-equiv\s*=/i, "skill.html must not contain meta http-equiv"],
+    [/<[^>]+\son[a-z]+\s*=/i, "skill.html must not contain inline event attributes"],
+    [
+      /\b(?:href|src)\s*=\s*(['"])\s*(?:javascript:|vbscript:)/i,
+      "skill.html must not contain javascript: or vbscript: URL attributes",
+    ],
+    [/\bsrc\s*=\s*(['"])\s*data:/i, "skill.html must not contain data: src attributes"],
+  ];
+
+  for (const [pattern, message] of structuralBlocks) {
+    if (pattern.test(html)) failures.push(message);
   }
 }
 
@@ -101,3 +158,5 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
+
+console.log("skill-to-html validation passed");

@@ -409,16 +409,6 @@ function validateSkillHtml(skillPath: string): void {
     }
   }
 
-  const svgCount = countMatches(html, /<svg\b/g);
-  const visualTextCount = countMatches(
-    html,
-    /matrix|chart|flow|map|schema|meter|tree|timeline|funnel|bar|router|loop|diagram|매트릭스|차트|지도|스키마|트리|플로우|흐름/gi,
-  );
-
-  if (svgCount < 2 && visualTextCount < 6) {
-    fail(skillPath, "skill.html should include multiple diagram/chart/map visual structures");
-  }
-
   if (!/SKILL\.md/.test(html) || !/skill\.html/.test(html)) {
     fail(skillPath, "skill.html should show the SKILL.md + skill.html file pair");
   }

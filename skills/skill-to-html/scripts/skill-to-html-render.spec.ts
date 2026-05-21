@@ -11,7 +11,7 @@ const targetUrl = pathToFileURL(path.join(skillRoot, "skill.html")).href;
 test.use({ channel: "chrome" });
 
 test.describe("skill-to-html skill.html render", () => {
-  test("keeps the first viewport focused and readable", async ({ page }) => {
+  test("renders a static summary without interaction code", async ({ page }) => {
     const consoleErrors: string[] = [];
     page.on("console", (message) => {
       if (message.type() === "error") consoleErrors.push(message.text());
@@ -23,38 +23,40 @@ test.describe("skill-to-html skill.html render", () => {
 
     await expect(page).toHaveTitle(/skill-to-html/);
     await expect(page.getByRole("heading", { name: "skill-to-html" })).toBeVisible();
+    await expect(page.getByText("정적 요약", { exact: true })).toBeVisible();
+    await expect(page.getByText("인터랙션 없음", { exact: true })).toBeVisible();
+    await expect(page.getByText("SkillHtmlModel").first()).toBeVisible();
+    await expect(page.getByText("신뢰하지 않는 입력").first()).toBeVisible();
+    await expect(page.getByText("신뢰된 템플릿").first()).toBeVisible();
+    await expect(page.locator(".summary-list li")).toHaveCount(3);
+    await expect(page.locator(".contract-list li")).toHaveCount(5);
+    await expect(page.locator(".workflow-list li")).toHaveCount(4);
+    await expect(page.locator(".rule-table tbody tr")).toHaveCount(2);
+    await expect(page.locator(".verify-list li")).toHaveCount(2);
 
     const h2Titles = await page.locator("h2").evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.trim() ?? "").filter(Boolean),
     );
-    expect(h2Titles).not.toContain("변환 모델 보드");
-    expect(h2Titles).not.toContain("Markdown 변환 모델");
-    expect(h2Titles).not.toContain("애니메이션 흐름");
-    expect(h2Titles).not.toContain("도구 선택 레일");
-    expect(h2Titles.length).toBeLessThanOrEqual(7);
-    await expect(page.getByRole("heading", { name: "닫힌 템플릿 경계" })).toBeVisible();
-    await expect(page.locator(".safety-boundary")).toBeVisible();
-    await expect(page.locator(".guard-grid")).toHaveCount(0);
+    expect(h2Titles).toEqual([
+      "요약",
+      "사용 판단",
+      "핵심 계약",
+      "작업 흐름",
+      "금지와 허용",
+      "파일과 검증",
+    ]);
 
-    const layout = await page.evaluate(() => {
+    const staticShape = await page.evaluate(() => {
       const html = document.documentElement;
-      const hero = document.querySelector<HTMLElement>(".stage-shell");
-      const visual = document.querySelector<HTMLElement>(".visual");
-      const heroSvg = document.querySelector<SVGSVGElement>(".visual svg");
-      const heroLines = Array.from(document.querySelectorAll<SVGPathElement>(".hero-line"));
-      const contractWidths = Array.from(document.querySelectorAll<HTMLElement>(".contract-tile")).map(
-        (item) => item.getBoundingClientRect().width,
-      );
-      const decisionWidths = Array.from(document.querySelectorAll<HTMLElement>(".decision-card")).map(
-        (item) => item.getBoundingClientRect().width,
-      );
-      const safetyBoundary = document.querySelector<HTMLElement>(".safety-boundary");
       const visible = Array.from(document.querySelectorAll<HTMLElement>("body *")).filter((item) => {
         const box = item.getBoundingClientRect();
         const style = getComputedStyle(item);
         return box.width > 0 && box.height > 0 && style.display !== "none" && style.visibility !== "hidden";
       });
-      const overflowing = visible.filter((item) => item.scrollWidth > item.clientWidth + 1);
+      const overflowing = visible.filter((item) => {
+        const style = getComputedStyle(item);
+        return style.overflowX !== "auto" && item.scrollWidth > item.clientWidth + 1;
+      });
       const offscreen = visible.filter((item) => {
         const box = item.getBoundingClientRect();
         return box.left < -1 || box.right > window.innerWidth + 1;
@@ -62,38 +64,52 @@ test.describe("skill-to-html skill.html render", () => {
 
       return {
         noHorizontalOverflow: html.scrollWidth <= window.innerWidth + 1,
-        heroHeight: hero?.getBoundingClientRect().height ?? 0,
-        visualHeight: visual?.getBoundingClientRect().height ?? 0,
-        svgHeight: heroSvg?.getBoundingClientRect().height ?? 0,
-        heroLineCount: heroLines.length,
-        heroLineLengths: heroLines.map((line) => Math.round(line.getTotalLength())),
-        heroLineDash: heroLines.map((line) => getComputedStyle(line).strokeDasharray),
-        minContractWidth: Math.min(...contractWidths),
-        minDecisionWidth: Math.min(...decisionWidths),
-        safetyBoundaryColumns: safetyBoundary ? getComputedStyle(safetyBoundary).gridTemplateColumns.split(" ").length : 0,
+        scriptCount: document.querySelectorAll("script").length,
+        buttonCount: document.querySelectorAll("button").length,
+        inlineHandlerCount: Array.from(document.querySelectorAll("*")).filter((node) =>
+          Array.from(node.attributes).some((attribute) => attribute.name.startsWith("on")),
+        ).length,
+        summaryStripCount: document.querySelectorAll(".summary-strip").length,
+        summaryCardCount: document.querySelectorAll(".summary-node").length,
+        contractCardCount: document.querySelectorAll(".contracts .item").length,
+        genericCardCount: document.querySelectorAll("main .item").length,
+        sectionCardCount: Array.from(document.querySelectorAll("section")).filter((node) => {
+          const style = getComputedStyle(node);
+          return style.backgroundColor !== "rgba(0, 0, 0, 0)" && style.borderTopWidth !== "1px";
+        }).length,
+        unsafeElementCount: document.querySelectorAll("iframe, object, embed, base").length,
+        unsafeUrlAttributeCount: Array.from(document.querySelectorAll("[href], [src]")).filter((node) => {
+          const value = node.getAttribute("href") ?? node.getAttribute("src") ?? "";
+          return /^(javascript:|vbscript:)/i.test(value.trim());
+        }).length,
+        dataSrcCount: Array.from(document.querySelectorAll("[src]")).filter((node) => {
+          const value = node.getAttribute("src") ?? "";
+          return /^data:/i.test(value.trim());
+        }).length,
+        externalAssetCount: Array.from(document.querySelectorAll("[src], link[href]")).filter((node) => {
+          const value = node.getAttribute("src") ?? node.getAttribute("href") ?? "";
+          return /^https?:\/\//.test(value) || value.startsWith("//");
+        }).length,
         overflowingCount: overflowing.length,
         offscreenCount: offscreen.length,
       };
     });
 
-    expect(layout.noHorizontalOverflow).toBe(true);
-    expect(layout.heroHeight).toBeLessThanOrEqual(700);
-    expect(layout.visualHeight).toBeLessThanOrEqual(285);
-    expect(layout.svgHeight).toBeLessThanOrEqual(260);
-    expect(layout.heroLineCount).toBe(3);
-    expect(layout.heroLineLengths.every((length) => length >= 40)).toBe(true);
-    expect(layout.heroLineDash.every((dash) => dash === "none" || dash === "0px")).toBe(true);
-    expect(layout.minContractWidth).toBeGreaterThanOrEqual(220);
-    expect(layout.minDecisionWidth).toBeGreaterThanOrEqual(260);
-    expect(layout.safetyBoundaryColumns).toBe(3);
-    expect(layout.overflowingCount).toBe(0);
-    expect(layout.offscreenCount).toBe(0);
-
-    await page.getByRole("button", { name: /IR 변환/ }).click();
-    await expect(page.locator("#mode-title")).toHaveText("IR 변환");
-    await page.getByRole("button", { name: /신뢰 경계/ }).click();
-    await expect(page.locator("#evidence-note")).toContainText("raw HTML");
-
+    expect(staticShape.noHorizontalOverflow).toBe(true);
+    expect(staticShape.scriptCount).toBe(0);
+    expect(staticShape.buttonCount).toBe(0);
+    expect(staticShape.inlineHandlerCount).toBe(0);
+    expect(staticShape.summaryStripCount).toBe(0);
+    expect(staticShape.summaryCardCount).toBe(0);
+    expect(staticShape.contractCardCount).toBe(0);
+    expect(staticShape.genericCardCount).toBe(0);
+    expect(staticShape.sectionCardCount).toBe(0);
+    expect(staticShape.unsafeElementCount).toBe(0);
+    expect(staticShape.unsafeUrlAttributeCount).toBe(0);
+    expect(staticShape.dataSrcCount).toBe(0);
+    expect(staticShape.externalAssetCount).toBe(0);
+    expect(staticShape.overflowingCount).toBe(0);
+    expect(staticShape.offscreenCount).toBe(0);
     expect(consoleErrors).toEqual([]);
   });
 });

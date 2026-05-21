@@ -59,7 +59,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/karpathy-thinkings.md`: only Karpathy-style coding agent discipline.
 - `project-snippets/skill-update.md`: only existing skill maintenance, original/upstream source checks, and package sync rules.
 - `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.
-- `project-snippets/skill-plugin-test-loop.md`: only fresh clone or isolated copy cycle testing for skills, plugins, plugin-bundled skills, actual invocation history, failure classification, source fixes, and reruns.
+- `project-snippets/skill-plugin-test-loop.md`: only repo 밖 external scratch root의 GitHub 새 복제본 또는 격리 복사본 반복 testing for skills, plugins, plugin-bundled skills, actual invocation history, 실패 분류, source fixes, research-informed improvement, commit/push 전 preflight boundary, and reruns.
 - `project-snippets/browser-qa.md`: only browser runtime evidence and Playwright QA.
 - `project-snippets/code-review.md`: only findings-first code review.
 - `project-snippets/design-review.md`: only product-aware UI and design review.
