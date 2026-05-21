@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Video Workflow</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17212b;
+        --muted: #5b6874;
+        --line: #d9e0e7;
+        --paper: #f7f9fb;
+        --panel: #ffffff;
+        --accent: #16736b;
+        --warn: #9b4b18;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--paper);
+        line-height: 1.6;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 56px));
+        margin: 0 auto;
+        padding: 44px 0 56px;
+      }
+
+      header {
+        margin-bottom: 28px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 22px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.2;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      h2 {
+        margin-top: 34px;
+        font-size: 22px;
+      }
+
+      h3 {
+        font-size: 16px;
+      }
+
+      p {
+        margin: 10px 0 0;
+      }
+
+      .lede {
+        max-width: 880px;
+        color: var(--muted);
+        font-size: 17px;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+        margin-top: 20px;
+      }
+
+      section,
+      .box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 20px;
+      }
+
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .fact {
+        border-left: 3px solid var(--accent);
+        padding-left: 12px;
+      }
+
+      .label {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .value {
+        display: block;
+        margin-top: 2px;
+        font-weight: 700;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        background: var(--panel);
+      }
+
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 11px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #edf4f3;
+        font-size: 14px;
+      }
+
+      ol,
+      ul {
+        margin: 12px 0 0;
+        padding-left: 22px;
+      }
+
+      code {
+        border: 1px solid #d3d9df;
+        border-radius: 5px;
+        background: #f4f6f8;
+        padding: 1px 5px;
+        font-size: 0.95em;
+      }
+
+      pre {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #101820;
+        color: #edf5f7;
+        padding: 14px 16px;
+      }
+
+      pre code {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .step {
+        min-height: 118px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #ffffff;
+        padding: 13px;
+      }
+
+      .step strong {
+        display: block;
+        color: var(--accent);
+        font-size: 13px;
+      }
+
+      .step span {
+        display: block;
+        margin-top: 7px;
+        font-size: 14px;
+      }
+
+      .warning {
+        border-left: 4px solid var(--warn);
+        background: #fff7ef;
+      }
+
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>AI Video Workflow</h1>
+        <p class="lede">
+          동의된 Voicebox 목소리 profile과 HyperFrames HTML 영상 제작을 연결해 대본,
+          나레이션, 모션 그래픽 brief, render 검증까지 한 흐름으로 관리하는 plugin-bundled skill이다.
+        </p>
+      </header>
+
+      <div class="summary">
+        <section>
+          <h2>요약</h2>
+          <div class="facts">
+            <div class="fact">
+              <span class="label">입력</span>
+              <span class="value">대본, 영상 목적, 목소리 profile, 화면 비율</span>
+            </div>
+            <div class="fact">
+              <span class="label">출력</span>
+              <span class="value">나레이션 brief, HyperFrames brief, 검증 기록</span>
+            </div>
+            <div class="fact">
+              <span class="label">도구</span>
+              <span class="value">Voicebox, HyperFrames, FFmpeg, Node 22</span>
+            </div>
+            <div class="fact">
+              <span class="label">경계</span>
+              <span class="value">동의 없는 목소리 복제 금지</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="warning">
+          <h2>목소리 샘플</h2>
+          <p>
+            본인 목소리 샘플을 쓰는 방식은 적합하다. 다만 샘플 파일은 shared repo에 넣지 않고
+            target project의 ignored private path나 Voicebox profile 내부에만 둔다.
+          </p>
+        </section>
+      </div>
+
+      <section>
+        <h2>사용 판단</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>사용</th>
+              <th>건너뜀</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>대본을 본인 목소리 나레이션과 정보형 모션 그래픽 영상으로 만들 때</td>
+              <td>타인의 목소리를 동의 없이 복제하려는 요청일 때</td>
+            </tr>
+            <tr>
+              <td>Voicebox profile, private voice sample, HyperFrames render가 함께 필요할 때</td>
+              <td>실사 cinematic video generation 자체가 목표일 때</td>
+            </tr>
+            <tr>
+              <td>오디오, HTML source, MP4 산출물 검증을 한 번에 남겨야 할 때</td>
+              <td>이미 완성된 영상의 일반 UI/디자인 리뷰만 필요할 때</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>작업 흐름</h2>
+        <div class="flow">
+          <div class="step"><strong>1. 입력</strong><span>목적, 대상, 길이, 비율, 대본 상태를 정리한다.</span></div>
+          <div class="step"><strong>2. 동의</strong><span>목소리 소유자와 사용 범위를 확인한다.</span></div>
+          <div class="step"><strong>3. 점검</strong><span><code>doctor.ts</code>로 Node, FFmpeg, Voicebox 상태를 본다.</span></div>
+          <div class="step"><strong>4. 생성</strong><span><code>scaffold-video-project.ts</code>로 영상 프로젝트를 만든다.</span></div>
+          <div class="step"><strong>5. 음성</strong><span>Voicebox profile로 짧은 테스트 뒤 전체 나레이션을 만든다.</span></div>
+          <div class="step"><strong>6. 영상</strong><span>HyperFrames brief를 채우고 preview/render로 넘긴다.</span></div>
+          <div class="step"><strong>7. 검증</strong><span>audio, HTML source, MP4, caption timing을 확인한다.</span></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>보안 경계</h2>
+        <div class="two">
+          <div>
+            <h3>허용</h3>
+            <ul>
+              <li>본인 목소리 또는 명시적 동의가 있는 목소리 profile 사용</li>
+              <li>target project의 ignored private path에 샘플 보관</li>
+              <li>Voicebox localhost tool 사용 전 risk gate 기록</li>
+              <li>생성 음성과 영상 산출물의 출처 기록</li>
+            </ul>
+          </div>
+          <div>
+            <h3>금지</h3>
+            <ul>
+              <li>동의 없는 타인 목소리 복제</li>
+              <li>shared repo에 실제 voice sample commit</li>
+              <li>Voicebox profile silent fallback에 의존</li>
+              <li>Voicebox MCP를 plugin manifest에 자동 등록해 시작 경고를 만드는 구성</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>파일과 검증</h2>
+        <pre><code>node plugins/ai-video-workflow/scripts/doctor.ts
+node plugins/ai-video-workflow/scripts/scaffold-video-project.ts /path/to/video-project --title "sleep-cycle-short" --profile "My Voice"
+node plugins/ai-video-workflow/scripts/validate-video-project.ts /path/to/video-project</code></pre>
+        <table>
+          <thead>
+            <tr>
+              <th>파일</th>
+              <th>역할</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>SKILL.md</code></td>
+              <td>에이전트가 따르는 제작 workflow와 안전 기준</td>
+            </tr>
+            <tr>
+              <td><code>references/source-ledger.md</code></td>
+              <td>Voicebox, Voicebox MCP, HyperFrames 확인 출처와 local 채택 판단</td>
+            </tr>
+            <tr>
+              <td><code>scripts/doctor.ts</code></td>
+              <td>로컬 도구와 Voicebox port 준비 상태 확인</td>
+            </tr>
+            <tr>
+              <td><code>scripts/scaffold-video-project.ts</code></td>
+              <td>대본, 나레이션, 영상 brief, private asset 경계 생성</td>
+            </tr>
+            <tr>
+              <td><code>scripts/validate-video-project.ts</code></td>
+              <td>프로젝트 구조와 선택 산출물 존재 검증</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>
+

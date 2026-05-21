@@ -1,0 +1,5 @@
+interface:
+  display_name: "AI Video Workflow"
+  short_description: "Voicebox narration and HyperFrames video workflow"
+  default_prompt: "Use $ai-video-workflow when the user wants to turn a script, transcript, or video idea into a narrated motion-graphics video using a consented Voicebox voice profile or private own-voice sample and HyperFrames HTML video rendering. Start with consent and privacy boundaries, keep actual voice samples out of the shared repo, run the plugin doctor, scaffold a target video project, prepare narration and HyperFrames briefs, use Voicebox MCP/REST only when the local app is running and consent is clear, then validate audio, HTML source, and MP4 output evidence."
+

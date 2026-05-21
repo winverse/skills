@@ -25,7 +25,10 @@ const skillPathPrefix = catalog.pathPrefix;
 const compact = args.includes("--compact");
 const formatArg = valueFor("--format") ?? "markdown";
 const categoryFilter = valueFor("--category");
-const pluginBundledSkillPaths = ["plugins/project-workflow/skills/project-workflow"];
+const pluginBundledSkillPaths = [
+  "plugins/project-workflow/skills/project-workflow",
+  "plugins/ai-video-workflow/skills/ai-video-workflow",
+];
 
 const categoryOrder = [
   "탐색",
@@ -49,6 +52,7 @@ const categoryBySkill: Record<string, string> = {
   "karpathy-thinkings": "구현과 구조",
   "project-structure": "구현과 구조",
   "project-workflow": "구현과 구조",
+  "ai-video-workflow": "구현과 구조",
   "feature-workflow": "구현과 구조",
   "transcript-polisher": "문서와 커밋",
   "atomic-committer": "문서와 커밋",
@@ -62,7 +66,7 @@ const summaryBySkill: Record<string, string> = {
   "show-skills": "현재 스킬 목록을 카테고리별로 보여주고 조합을 추천",
   "web-research": "최신 정보, 출처 검증, 추천, 기술 문서 조사",
   "markdown-to-html": "Markdown 의미를 안전한 한국어 우선 HTML guide로 변환",
-  "markdown-to-comic": "Markdown을 4컷/6컷 comic 이해뷰로 변환",
+  "markdown-to-comic": "Markdown을 imagegen 4컷/6컷 comic으로 변환",
   "skill-update": "기존 스킬과 외부 dependency sweep을 references, validator, docs까지 함께 유지보수",
   "sync-docs": "README, AGENTS, docs, snippets, history 충돌과 stale 설명 정리",
   "agent-improvement-loop": "스킬 호출성, 검증, 문서 정합성, repo 품질 개선 루프",
@@ -71,6 +75,7 @@ const summaryBySkill: Record<string, string> = {
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
   "project-structure": "frontend, backend, monorepo, desktop app, infra-aware 구조와 기본 stack 결정",
   "project-workflow": "plugin-bundled 초기 설정: domain, PRD, issue backlog, workflow-state cache",
+  "ai-video-workflow": "동의된 Voicebox 목소리 profile과 HyperFrames 영상 제작 workflow",
   "feature-workflow": "Workflow suite loop: feature/issue/bug를 TDD, QA, docs sync로 구현",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 기본 push",

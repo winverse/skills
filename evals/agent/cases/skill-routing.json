@@ -253,6 +253,50 @@
     ]
   },
   {
+    "id": "route-local-ai-video-to-ai-video-workflow",
+    "title": "Consent-first Voicebox and HyperFrames video creation uses ai-video-workflow",
+    "prompt": "내 목소리 샘플을 써서 Voicebox로 한국어 나레이션을 만들고 HyperFrames로 모션 그래픽 영상을 만들어줘",
+    "scope": "skill_invocation",
+    "expectedSkills": ["ai-video-workflow"],
+    "forbiddenSkills": ["project-workflow", "feature-workflow"],
+    "agentSurfaces": ["codex", "claude"],
+    "assumptionDate": "2026-05-21",
+    "exampleType": "typical",
+    "risk": "high",
+    "mode": "blocking",
+    "checks": [
+      {
+        "type": "skill_listed_in",
+        "skill": "ai-video-workflow",
+        "files": ["AGENTS.md", "project-snippets/base.md", "project-snippets/claude-base.md"]
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md",
+        "value": "동의 없는 목소리 복제 금지"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md",
+        "value": "assets/private/voice-samples/"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/ai-video-workflow/README.md",
+        "value": "Voicebox MCP는 Voicebox desktop app이 실행 중일 때만"
+      },
+      {
+        "type": "required_text",
+        "file": "plugins/ai-video-workflow/skills/ai-video-workflow/references/source-ledger.md",
+        "value": "http://127.0.0.1:17493/mcp"
+      },
+      {
+        "type": "command_passed",
+        "command": ["node", "plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts", "plugins/ai-video-workflow"]
+      }
+    ]
+  },
+  {
     "id": "route-rendering-check-to-browser-qa",
     "title": "Browser runtime verification uses browser-qa",
     "prompt": "skill.html 렌더링을 Playwright로 확인하고 콘솔 오류를 봐줘",

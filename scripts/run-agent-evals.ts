@@ -88,6 +88,7 @@ const errors: string[] = [];
 const externalSystemSkills = new Set(["imagegen", "openai-docs", "plugin-creator", "skill-creator", "skill-installer"]);
 const pluginBundledSkillPaths = new Map<string, string>([
   ["project-workflow", "plugins/project-workflow/skills/project-workflow/SKILL.md"],
+  ["ai-video-workflow", "plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md"],
 ]);
 
 function valueFor(flag: string): string | undefined {

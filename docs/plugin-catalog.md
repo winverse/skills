@@ -7,6 +7,7 @@
 | Plugin | 위치 | 버전 | 출처 | 용도 |
 | --- | --- | --- | --- | --- |
 | `project-workflow` | `plugins/project-workflow` | `0.1.0` | repo-owned | 초기 프로젝트 셋팅 전용 orchestration plugin이다. `feature-workflow`는 별도 반복 개발 skill로 유지하고, `agent-eval-harness`는 companion 검증 스킬로 분리한다. |
+| `ai-video-workflow` | `plugins/ai-video-workflow` | `0.1.0` | repo-owned | 동의된 Voicebox 목소리 profile 또는 private own-voice sample을 HyperFrames HTML motion graphics 제작 brief와 검증 흐름으로 연결하는 local video orchestration plugin이다. |
 
 ## 외부 Vendored 플러그인
 
@@ -33,6 +34,17 @@
 - Optional TypeScript runner: `plugins/project-workflow/scripts/execute-phase.ts`
 - Boundary review: `plugins/project-workflow/references/plugin-boundary-review.md`
 - Companion validation skill: `skills/agent-eval-harness/SKILL.md`
+
+## ai-video-workflow 확인 사항
+
+- Codex manifest: `plugins/ai-video-workflow/.codex-plugin/plugin.json`
+- Bundled skills: `plugins/ai-video-workflow/skills/`
+- Primary workflow skill: `plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md`
+- Source ledger: `plugins/ai-video-workflow/skills/ai-video-workflow/references/source-ledger.md`
+- Doctor: `plugins/ai-video-workflow/scripts/doctor.ts`
+- Scaffold: `plugins/ai-video-workflow/scripts/scaffold-video-project.ts`
+- Validator: `plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts`
+- Voicebox MCP config is intentionally not auto-registered because Voicebox must be running and the local no-auth trust boundary should be explicit.
 
 ## context-mode 확인 사항
 

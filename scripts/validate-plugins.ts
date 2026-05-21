@@ -148,7 +148,7 @@ function pluginRootsMentioned(relativePath: string): Set<string> {
 requireFile(".gitmodules");
 const submodules = parseGitmodules();
 const submodulePaths = new Set(submodules.map((entry) => entry.path));
-const repoOwnedPluginPaths = new Set(["plugins/project-workflow"]);
+const repoOwnedPluginPaths = new Set(["plugins/project-workflow", "plugins/ai-video-workflow"]);
 const knownPluginPaths = new Set([...submodulePaths, ...repoOwnedPluginPaths]);
 
 for (const entry of submodules) {
@@ -217,6 +217,14 @@ requireFile("plugins/project-workflow/scripts/execute-phase.ts");
 requireFile("plugins/project-workflow/scripts/validate-execute-phase.ts");
 requireFile(path.posix.join("plugins/project-workflow/skills", "project-workflow", "SKILL.md"));
 requireFile(path.posix.join("plugins/project-workflow/skills", "project-workflow", "references", "project-workflow-playbook.md"));
+requireFile("plugins/ai-video-workflow/.codex-plugin/plugin.json");
+requireFile("plugins/ai-video-workflow/README.md");
+requireFile("plugins/ai-video-workflow/scripts/doctor.ts");
+requireFile("plugins/ai-video-workflow/scripts/scaffold-video-project.ts");
+requireFile("plugins/ai-video-workflow/scripts/validate-video-project.ts");
+requireFile("plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts");
+requireFile(path.posix.join("plugins/ai-video-workflow/skills", "ai-video-workflow", "SKILL.md"));
+requireFile(path.posix.join("plugins/ai-video-workflow/skills", "ai-video-workflow", "references", "source-ledger.md"));
 requireText(".gitmodules", "path = plugins/context-mode");
 requireText(".gitmodules", "url = https://github.com/mksglu/context-mode.git");
 requireText(".gitmodules", "path = plugins/code-review-graph");
@@ -227,12 +235,15 @@ requireText("README.md", "plugins/context-mode");
 requireText("README.md", "plugins/code-review-graph");
 requireText("README.md", "plugins/caveman");
 requireText("README.md", "plugins/project-workflow");
+requireText("README.md", "plugins/ai-video-workflow");
 requireText("README.md", "JuliusBrussee/caveman");
 requireText("README.md", "node scripts/validate-plugins.ts .");
 requireText("AGENTS.md", "Plugin folders live under `plugins/`");
 requireText("AGENTS.md", "plugins/project-workflow");
+requireText("AGENTS.md", "plugins/ai-video-workflow");
 requireText("docs/plugin-catalog.md", "`context-mode`");
 requireText("docs/plugin-catalog.md", "`project-workflow`");
+requireText("docs/plugin-catalog.md", "`ai-video-workflow`");
 requireText("docs/plugin-catalog.md", "repo-owned plugin");
 requireText("docs/plugin-catalog.md", "v1.0.136");
 requireText("docs/plugin-catalog.md", "`code-review-graph`");
@@ -250,6 +261,7 @@ requireText("docs/update-source-registry.md", ".gitmodules");
 requireText("docs/update-source-registry.md", "Repo-owned plugin");
 requireText("docs/update-source-registry.md", "## Plugin update list");
 requireText("docs/update-source-registry.md", "`project-workflow` | `plugins/project-workflow`");
+requireText("docs/update-source-registry.md", "`ai-video-workflow` | `plugins/ai-video-workflow`");
 requireText("docs/update-source-registry.md", "`context-mode` | `plugins/context-mode` | `https://github.com/mksglu/context-mode.git`");
 requireText("docs/update-source-registry.md", "`code-review-graph` | `plugins/code-review-graph` | `https://github.com/tirth8205/code-review-graph.git`");
 requireText("docs/update-source-registry.md", "`caveman` | `plugins/caveman` | `https://github.com/JuliusBrussee/caveman.git`");
@@ -259,6 +271,7 @@ requireText("docs/update-source-registry.md", "workflow provenance-only primitiv
 requireText("history/skills.md", "`code-review-graph` plugin reference added");
 requireText("history/skills.md", "`caveman` plugin reference added");
 requireText("history/skills.md", "Project workflow plugin boundary added");
+requireText("history/skills.md", "`ai-video-workflow`");
 
 const projectWorkflowManifest = readJson<CodexPluginManifest>("plugins/project-workflow/.codex-plugin/plugin.json");
 if (projectWorkflowManifest) {
@@ -273,6 +286,22 @@ if (projectWorkflowManifest) {
     [projectWorkflowManifest.interface?.category === "Productivity", "project-workflow category"],
   ];
   for (const [ok, label] of expectedProjectWorkflowManifest) {
+    if (!ok) errors.push(`Unexpected manifest value for ${label}`);
+  }
+}
+
+const aiVideoWorkflowManifest = readJson<CodexPluginManifest>("plugins/ai-video-workflow/.codex-plugin/plugin.json");
+if (aiVideoWorkflowManifest) {
+  const expectedAiVideoWorkflowManifest: Array<[unknown, string]> = [
+    [aiVideoWorkflowManifest.name === "ai-video-workflow", "ai-video-workflow plugin name"],
+    [aiVideoWorkflowManifest.version === "0.1.0", "ai-video-workflow version"],
+    [aiVideoWorkflowManifest.repository === "https://github.com/winverse/agents-skills", "ai-video-workflow repository URL"],
+    [aiVideoWorkflowManifest.license === "MIT", "ai-video-workflow license"],
+    [aiVideoWorkflowManifest.skills === "./skills/", "ai-video-workflow bundled skills path"],
+    [aiVideoWorkflowManifest.interface?.displayName === "AI Video Workflow", "ai-video-workflow display name"],
+    [aiVideoWorkflowManifest.interface?.category === "Productivity", "ai-video-workflow category"],
+  ];
+  for (const [ok, label] of expectedAiVideoWorkflowManifest) {
     if (!ok) errors.push(`Unexpected manifest value for ${label}`);
   }
 }
@@ -293,6 +322,14 @@ requireText("plugins/project-workflow/scripts/execute-phase.ts", "--project-root
 requireText("plugins/project-workflow/scripts/execute-phase.ts", "shell: false");
 requireText("plugins/project-workflow/scripts/validate-execute-phase.ts", "completed dry-run must not mutate index.json");
 requireText("plugins/project-workflow/skills/project-workflow/SKILL.md", "canonical source");
+requireText("plugins/ai-video-workflow/README.md", "Voicebox MCP");
+requireText("plugins/ai-video-workflow/README.md", "biometric artifact");
+requireText("plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md", "동의 없는 목소리 복제 금지");
+requireText("plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md", "Agent Tool And Security Risk Gate");
+requireText("plugins/ai-video-workflow/skills/ai-video-workflow/references/source-ledger.md", "http://127.0.0.1:17493/mcp");
+requireText("plugins/ai-video-workflow/scripts/doctor.ts", "--require-voicebox");
+requireText("plugins/ai-video-workflow/scripts/scaffold-video-project.ts", "assets/private/voice-samples");
+requireText("plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts", "ai-video-workflow validation passed");
 
 const manifest = readJson<CodexPluginManifest>("plugins/context-mode/.codex-plugin/plugin.json");
 if (manifest) {

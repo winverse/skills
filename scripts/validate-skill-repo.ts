@@ -186,6 +186,11 @@ const pluginBundledSkills = [
     path: "plugins/project-workflow/skills/project-workflow",
     validatorCommand: "node plugins/project-workflow/scripts/validate-project-workflow.ts plugins/project-workflow/skills/project-workflow",
   },
+  {
+    name: "ai-video-workflow",
+    path: "plugins/ai-video-workflow/skills/ai-video-workflow",
+    validatorCommand: "node plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts plugins/ai-video-workflow",
+  },
 ] as const;
 const skillNames = new Set([
   ...skills.map((skill) => path.basename(skill)),

@@ -43,6 +43,14 @@ plugins/project-workflow/
 │   └── project-workflow/
 └── README.md
 
+plugins/ai-video-workflow/
+├── .codex-plugin/
+│   └── plugin.json
+├── skills/
+│   └── ai-video-workflow/
+├── scripts/
+└── README.md
+
 plugins/context-mode/
 ├── .codex-plugin/
 │   ├── plugin.json
@@ -90,7 +98,7 @@ plugins/caveman/
 - `markdown-to-html`: Markdown 문서 의미를 읽어 사람이 확인할 수 있는 한국어 우선 HTML을 만들거나 고치는 스킬. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이며, 이때만 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령으로 짧게 압축한다. 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때 쓰며, 긴 문단, 깊은 heading, 표, 중첩 list, code fence 같은 복잡한 구조를 보존한다. 두 mode 모두 PC desktop 기준으로 버튼, script, 애니메이션, 외부 의존 없이 확인한다.
   - Source instruction: `skills/markdown-to-html/SKILL.md`
   - Human visual guide: `skills/markdown-to-html/skill.html`
-- `markdown-to-comic`: Markdown 문서의 핵심 개념, 판단 흐름, 절차를 4컷 또는 6컷 comic storyboard와 접근 가능한 `comic.html` 이해뷰로 바꾸는 스킬. 원본 Markdown을 source of truth로 두고, `ComicBrief`를 거쳐 panel별 scene, caption, dialogue, source anchor, alt text, long description을 남긴다. `$imagegen`은 캐릭터, 배경, 장면 비유 같은 선택적 raster panel art에만 쓰고, 명령어와 보안 규칙은 이미지 안에만 넣지 않는다.
+- `markdown-to-comic`: Markdown 문서의 핵심 개념, 판단 흐름, 절차를 `$imagegen` 기반 4컷 또는 6컷 raster comic으로 바꾸는 스킬. 원본 Markdown을 source of truth로 두고, `ComicBrief`를 거쳐 먼저 `comic/comic.png`를 만든 뒤 `comic/comic.html` wrapper로 이미지, transcript, source anchor, alt text, prompt summary, 검증 기록을 묶는다. 공유 스킬 대상이면 `skills/<skill-name>/comic/` 아래에 산출물을 둔다.
   - Source instruction: `skills/markdown-to-comic/SKILL.md`
   - Human visual guide: `skills/markdown-to-comic/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
@@ -111,6 +119,9 @@ plugins/caveman/
 - `project-workflow`: `plugins/project-workflow`의 초기 설정 plugin이며, 새 프로젝트나 큰 기획의 도메인 문서, 제품 검증, ADR, `design.md`, PRD, 초기 이슈 목록, 프로젝트 설정 확인, `feature-workflow` 인계까지 정리하고, 별도 언어 지정이 없으면 초기 셋팅 문서를 Korean-first artifact gate로 검사한다. 최상위 문서 제목, `workflow-state.md` risk-gate heading, `work-claims.md` lane/field label, phase step heading/body도 한국어 우선이어야 하며, `제품 요구사항(PRD): <slug>`, `workflow 상태: <slug>`, `설정 검증(setup validation): <slug>`, `도구/보안 위험 게이트(Agent Tool And Security Risk Gate)`, `API 작업 lane`처럼 exact identifier는 한국어 heading의 보조 표기로만 둔다. 구조가 확정된 setup은 `.scratch` Markdown만 만들고 끝내지 않고, root package config, ESM tsconfig, 선택한 app/package 폴더, source entrypoint, validation command가 있는 최소 실행 shell을 만든다. TypeScript 프로젝트는 ESM only와 CommonJS 금지를 architecture constraint로 남긴다. Matt Pocock skills `grill-with-docs`, GStack plugin `office-hours`, Superpowers plugin `brainstorming`, repo-local `project-structure`, user custom `design.md`처럼 출처 라벨을 붙여 추적하고, 현재 runtime에서 가능하면 선택된 원본 primitive를 실제 호출한다. `grill-me`는 project setup 기본 gate가 아니라 비코드 standalone fallback 후보로만 남긴다. 호출할 수 없을 때만 `fallback` 질문 루프로 대체하며, domain/product/design/tool gate 뒤에 실행할 항목은 `deferred`로 표시한다. 첫 raw idea 응답에서는 산출물을 생성한 것처럼 말하지 않고 target/proposed/not created yet 경로로 구분한다. 여러 session, agent, worktree가 병렬 구현할 수 있으면 `.scratch/<slug>/work-claims.md`에 lane owner와 claimed write set, shared/hotspot file의 integration owner를 기록한다. 큰 구현 인계는 `.scratch/<slug>/phases/index.json` 같은 phase/step plan으로 쪼개고, 선택 실행 도구는 Python이 아니라 TypeScript `plugins/project-workflow/scripts/execute-phase.ts`로 둔다. 이 runner는 Codex를 기본 실행 대상으로 삼고 `--agent-bin`/`--agent-arg` command를 stdin boundary로 받으며 기본값은 dry-run이다. 플러그인 자체 검증은 `/goal` 반복 개선 루프로 UI dashboard, CLI/no-browser local data tool, API/external-risk mock service 같은 확장 검증 케이스를 돌리고, 외부 agent `resume` timeout이나 final response 누락은 `runner` 실패로 기록한다.
   - Source instruction: `plugins/project-workflow/skills/project-workflow/SKILL.md`
   - Human visual guide: `plugins/project-workflow/skills/project-workflow/skill.html`
+- `ai-video-workflow`: `plugins/ai-video-workflow`의 local video orchestration plugin이며, 대본이나 영상 아이디어를 동의된 Voicebox 목소리 profile 또는 private own-voice sample, 나레이션 brief, HyperFrames HTML motion graphics 제작 brief, audio/HTML/MP4 검증 흐름으로 이어준다. 실제 음성 샘플은 biometric artifact로 보고 shared repo에 넣지 않으며, target project의 ignored private path나 Voicebox profile에만 둔다. Voicebox MCP는 desktop app이 실행 중일 때만 연결되므로 plugin manifest에 자동 등록하지 않고 필요할 때 target config에서 명시한다.
+  - Source instruction: `plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md`
+  - Human visual guide: `plugins/ai-video-workflow/skills/ai-video-workflow/skill.html`
 - `feature-workflow`: 초기 셋팅 이후 쓰는 별도 반복 개발 skill이다. 이미 있는 PRD, issue, spec, bug report, acceptance criteria, ADR, `design.md`와 `workflow-state.md` cache를 기준으로 feature, bug fix, vertical slice를 TDD, 구현 계획, review, QA/runtime evidence, document sync, completion reporting까지 끝낸다. `work-claims.md`가 있으면 production edit 전에 현재 lane의 claimed write set을 확인하고, 다른 active lane과 겹치면 overlap block으로 멈춘다. TypeScript production edit은 ESM only를 유지하고 CommonJS 도입은 blocker 또는 migration boundary로 다룬다. 대상 코드 repo에서는 production code edit 전에 RED evidence를 강제하고, 이 shared skills repo에서는 hook을 설치하지 않고 target-project hook 계약만 문서화한다. Superpowers plugin `writing-plans`/`tdd`/`subagent-driven-development`, GStack plugin `plan-eng-review`, Matt Pocock skills `diagnose`, repo-local `code-review`/`browser-qa`/`sync-docs`의 출처를 분리해 추적하고, 실패/누락이 있으면 `agent-eval-harness` seed 후보를 남긴다.
   - Source instruction: `skills/feature-workflow/SKILL.md`
   - Human visual guide: `skills/feature-workflow/skill.html`
@@ -144,6 +155,10 @@ plugins/caveman/
 - `project-workflow`: repo-owned plugin이다. 초기 프로젝트 셋팅 전용이고, `feature-workflow`는 별도 반복 개발 skill로 분리한다.
   - Version: `0.1.0`
   - Manifest: `plugins/project-workflow/.codex-plugin/plugin.json`
+  - Catalog: `docs/plugin-catalog.md`
+- `ai-video-workflow`: repo-owned plugin이다. Voicebox 로컬 음성 생성과 HyperFrames HTML motion graphics 영상 제작을 consent-first workflow로 묶는다.
+  - Version: `0.1.0`
+  - Manifest: `plugins/ai-video-workflow/.codex-plugin/plugin.json`
   - Catalog: `docs/plugin-catalog.md`
 - `context-mode`: `mksglu/context-mode` upstream을 `plugins/context-mode` submodule로 고정한 MCP plugin reference다. Codex manifest는 `plugins/context-mode/.codex-plugin/plugin.json`이고, bundled plugin skills는 `plugins/context-mode/skills/`에 그대로 둔다.
   - Version: `v1.0.136`
@@ -294,6 +309,7 @@ node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-
 node skills/pull-request/scripts/validate-pull-request.ts skills/pull-request
 node skills/project-structure/scripts/validate-project-structure.ts skills/project-structure
 node plugins/project-workflow/scripts/validate-project-workflow.ts plugins/project-workflow/skills/project-workflow
+node plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts plugins/ai-video-workflow
 node skills/feature-workflow/scripts/validate-feature-workflow.ts skills/feature-workflow
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
@@ -312,11 +328,12 @@ node scripts/validate-skill-html.ts .
 node scripts/validate-plugins.ts .
 node scripts/validate-source-registry.ts .
 node plugins/project-workflow/scripts/validate-project-workflow.ts plugins/project-workflow/skills/project-workflow
+node plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts plugins/ai-video-workflow
 node scripts/validate-skill-repo.ts .
 node scripts/run-agent-evals.ts
 ```
 
-Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable self-contained HTML, desktop-centered layout, scannable sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사하고, inline JavaScript가 network call이나 external import 없이 닫히는지 확인한다. `skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts`는 Playwright로 `markdown-to-html/skill.html`의 Markdown model, 보안 경계, script/button 부재, overflow, 읽기 폭을 검사한다. Playwright와 browser QA 산출물은 `scripts/playwright.config.ts`와 `.gitignore` 기준에 따라 `.artifacts/playwright/` 또는 `.artifacts/browser-qa/` 아래에 둔다. 루트 `test-results/`, `playwright-report/`, `.playwright-mcp/`, `snapshot*.png`, `*-desktop.png`, `*-screenshot.png`는 legacy 또는 도구 기본 출력으로만 보고 commit하지 않는다. 산출물만 비울 때는 `npm run clean:browser-artifacts`를 쓴다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-source-registry.ts`는 workflow usage map의 `source id`가 `docs/update-source-registry.md`에 존재하는지, usage map에 source URL이나 checked date가 복사되지 않았는지 검사한다. `plugins/project-workflow/scripts/validate-project-workflow.ts`는 `plugins/project-workflow`의 canonical bundled skill 계약을 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `feature-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/feature-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
+Repo가 소유하는 validator는 `.ts`를 기본으로 둔다. 이 repo는 Node 22 이상에서 `.ts` validator를 직접 실행하는 것을 기준으로 하며, 새 검증 스크립트를 `.py`로 추가하지 않는다. hook처럼 Codex나 다른 런타임의 호환성이 더 중요한 파일만 `.mjs` 예외를 유지한다. `scripts/validate-korean-markdown.ts`는 `skills/**/*.md`가 한국어 우선 문서인지 검사한다. `scripts/validate-skill-html.ts`는 모든 `skills/*/skill.html`이 portable self-contained HTML, desktop-centered layout, scannable sections, Korean-first visible labels, `SKILL.md`/`skill.html` file pair, validation and misuse guardrails를 갖췄는지 검사하고, inline JavaScript가 network call이나 external import 없이 닫히는지 확인한다. `skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts`는 Playwright로 `markdown-to-html/skill.html`의 Markdown model, 보안 경계, script/button 부재, overflow, 읽기 폭을 검사한다. Playwright와 browser QA 산출물은 `scripts/playwright.config.ts`와 `.gitignore` 기준에 따라 `.artifacts/playwright/` 또는 `.artifacts/browser-qa/` 아래에 둔다. 루트 `test-results/`, `playwright-report/`, `.playwright-mcp/`, `snapshot*.png`, `*-desktop.png`, `*-screenshot.png`는 legacy 또는 도구 기본 출력으로만 보고 commit하지 않는다. 산출물만 비울 때는 `npm run clean:browser-artifacts`를 쓴다. `scripts/validate-plugins.ts`는 `.gitmodules`를 직접 파싱해 canonical vendored plugin/submodule 목록으로 삼고, `docs/plugin-catalog.md`와 `docs/update-source-registry.md`의 `Plugin update list`가 같은 plugin path와 upstream URL을 담는지 검사하며, `plugins/context-mode`, `plugins/code-review-graph`, `plugins/caveman`의 manifest, MCP entrypoint, bundled plugin skills 경계를 검사한다. `scripts/validate-source-registry.ts`는 workflow usage map의 `source id`가 `docs/update-source-registry.md`에 존재하는지, usage map에 source URL이나 checked date가 복사되지 않았는지 검사한다. `plugins/project-workflow/scripts/validate-project-workflow.ts`는 `plugins/project-workflow`의 canonical bundled skill 계약을 검사하고, `plugins/ai-video-workflow/scripts/validate-ai-video-workflow.ts`는 `plugins/ai-video-workflow`의 Voicebox/HyperFrames workflow, private sample boundary, snippet, catalog 연결을 검사한다. `scripts/validate-skill-repo.ts`는 각 스킬이 README, AGENTS, `project-snippets/`, `history/skills.md`, validator 명령에 같은 이름과 경로로 반영되어 있는지도 검사하고, 외부 plugin submodule 내부는 repo-owned skill scan에서 제외한다. `scripts/run-agent-evals.ts`는 대표 사용자 prompt가 올바른 스킬 라우팅, 안전 경계, 출력 계약을 갖는지 `evals/agent/cases/`의 deterministic case로 확인한다. 체크 타입은 `required_text`, `forbidden_text`, `required_link_count`, `required_file_reference`, `json_schema`, `skill_listed_in`, `command_passed` 등을 포함한다. `workflow`, `project-workflow`, `feature-workflow` scope case는 정적 문구 확인만으로 충분하지 않으므로 `evals/agent/fixtures/project-workflow/` 또는 `evals/agent/fixtures/feature-workflow/` 아래의 scrubbed saved output fixture를 최소 하나 검사해야 한다.
 
 Codex에서는 `.codex/config.toml`의 hook이 `SKILL.md` 변경 후 stale `skill.html`을 감지하고, `codex exec`로 `markdown-to-html`을 자동 실행해 인접 guide를 갱신한다. 자세한 내용은 `docs/codex-hooks.md`를 본다.
 

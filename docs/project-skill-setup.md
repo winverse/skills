@@ -56,7 +56,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/show-skills.md`: only current skill catalog browsing and skill recommendation.
 - `project-snippets/web-research.md`: only the web research skill.
 - `project-snippets/markdown-to-html.md`: only the skill HTML guide workflow.
-- `project-snippets/markdown-to-comic.md`: only Markdown-to-comic storyboard, 4-panel or 6-panel visual explanation, accessible `comic.html`, and optional `$imagegen` raster panel art boundaries.
+- `project-snippets/markdown-to-comic.md`: only `$imagegen`-generated 4-panel or 6-panel Markdown-to-comic output, target-folder `comic/comic.png`, `comic/comic.html` wrapper, transcript, source anchors, and accessibility notes.
 - `project-snippets/karpathy-thinkings.md`: only Karpathy-style coding agent discipline.
 - `project-snippets/skill-update.md`: only existing skill maintenance, original/upstream source checks, and package sync rules.
 - `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.
@@ -68,6 +68,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/pull-request.md`: only GitHub PR preparation and creation rules.
 - `project-snippets/project-structure.md`: only project structure, default stack rules, selected DB provider options, and requested infra/deployment boundaries.
 - `project-snippets/project-workflow.md`: only the Workflow suite setup half, project bootstrap sequencing, domain/product/ADR/design/PRD/issue backlog setup, `workflow-state.md` cache, and `feature-workflow` handoff.
+- `project-snippets/ai-video-workflow.md`: only consent-first Voicebox narration, private own-voice sample handling, HyperFrames motion graphics brief, local tool doctor, scaffold, and video project validation.
 - `project-snippets/feature-workflow.md`: only the Workflow suite feature/issue implementation half, PRD/issue/spec/bug based implementation loops, `workflow-state.md` update, TDD, target-code-repo TDD hook contract, review, QA/runtime evidence, document sync, improvement seed, and completion reporting.
 - `project-snippets/sync-docs.md`: only documentation refresh and conflict reconciliation rules.
 - `project-snippets/transcript-polisher.md`: only transcript, lecture script, subtitle, meeting note, and long-prose polishing by direct reading without scripted replacement.

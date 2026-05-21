@@ -20,13 +20,16 @@ const skillRoot = path.resolve(skillRootArg ?? "skills/show-skills");
 const repoRoot = path.resolve(skillRoot, "../..");
 const skillsRoot = path.join(repoRoot, "skills");
 const htmlPath = path.join(skillRoot, "skill.html");
-const pluginBundledSkillPaths = ["plugins/project-workflow/skills/project-workflow"];
+const pluginBundledSkillPaths = [
+  "plugins/project-workflow/skills/project-workflow",
+  "plugins/ai-video-workflow/skills/ai-video-workflow",
+];
 
 const summaryBySkill: Record<string, string> = {
   "show-skills": "현재 스킬 목록을 카테고리별로 보여주고 조합을 추천",
   "web-research": "최신 정보, 출처 검증, 추천, 기술 문서 조사",
   "markdown-to-html": "Markdown 의미를 안전한 한국어 우선 HTML guide로 변환",
-  "markdown-to-comic": "Markdown을 4컷/6컷 comic 이해뷰로 변환",
+  "markdown-to-comic": "Markdown을 imagegen 4컷/6컷 comic으로 변환",
   "skill-update": "기존 스킬과 외부 dependency sweep을 references, validator, docs까지 함께 유지보수",
   "sync-docs": "README, AGENTS, docs, snippets, history 충돌과 stale 설명 정리",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
@@ -36,6 +39,7 @@ const summaryBySkill: Record<string, string> = {
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
   "project-structure": "frontend, backend, monorepo, desktop app, ESM TypeScript 구조 결정",
   "project-workflow": "plugin-bundled 초기 설정: 도메인, PRD, ESM TypeScript 정책, workflow-state cache",
+  "ai-video-workflow": "동의된 Voicebox 목소리 profile과 HyperFrames 영상 제작 workflow",
   "feature-workflow": "워크플로우 묶음 반복 구현: feature/issue/bug를 ESM TypeScript, TDD, QA로 구현",
   "atomic-committer": "secret guard 후 atomic commit 단위로 나누고 기본 push",
   "browser-qa": "브라우저 렌더링, console, network, viewport, accessibility 검증",
@@ -88,6 +92,7 @@ function escapeHtml(value: string): string {
 
 function displayName(skill: SkillTile): string {
   if (skill.name === "project-workflow") return "project-workflow plugin skill";
+  if (skill.name === "ai-video-workflow") return "ai-video-workflow plugin skill";
   if (skill.name === "feature-workflow") return "feature-workflow 스킬";
   return skill.name;
 }

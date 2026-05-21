@@ -18,10 +18,12 @@
 | --- | --- | --- |
 | Vendored plugin | `vendor.context-mode` | `.gitmodules`에 있는 외부 submodule |
 | Repo-owned plugin | `repo-plugin.project-workflow` | 이 repo가 직접 유지하는 plugin bundle |
+| Repo-owned plugin | `repo-plugin.ai-video-workflow` | 이 repo가 직접 유지하는 local video workflow plugin bundle |
 | Matt Pocock skills | `matt-pocock.grill-with-docs` | Matt Pocock source에서 온 skill 또는 primitive |
 | GStack plugin | `gstack.office-hours` | GStack source에서 온 plugin skill 또는 command |
 | Superpowers plugin | `superpowers.writing-plans` | Superpowers source에서 온 composable skill |
 | Observed workflow | `observed.harness-framework.execute-phase` | 원본 prompt를 복제하지 않고 구조 아이디어만 채택한 외부 자료 |
+| Observed external tool | `observed.voicebox` | vendoring하지 않고 workflow에서 호출하거나 연결하는 외부 local tool |
 
 source id는 rename하지 않는다. 원본 이름이 바뀌면 새 source id를 추가하고, 기존 id는 `replaced by` 메모를 남긴다.
 
@@ -32,6 +34,7 @@ source id는 rename하지 않는다. 원본 이름이 바뀌면 새 source id를
 | Vendored external plugin/repo | `.gitmodules`와 이 문서의 `Plugin update list` | `docs/plugin-catalog.md`, plugin 내부 manifest | submodule path와 URL drift를 확인하고, plugin update가 명시된 경우 version/commit/source ledger를 갱신한다. |
 | Repo-owned plugin | plugin root의 `.codex-plugin/plugin.json`, `README.md`, 이 문서의 `Repo-owned plugin lane` | `docs/plugin-catalog.md`, bundled skill | plugin boundary, bundled skill drift를 확인한다. |
 | Workflow primitive | 이 문서의 `Workflow primitive lane` | 각 workflow의 `references/upstream-dependency-map.md`, eval fixture | source URL과 checked ledger는 여기서만 관리하고, workflow 문서에는 채택 역할과 실행 순서만 반영한다. |
+| External tool | 이 문서의 `External tool lane` | plugin 내부 source ledger, README, bundled skill | vendoring하지 않는 local tool의 checked source와 local 채택 판단을 관리한다. |
 | Repo-owned shared skill | `skills/<skill>/SKILL.md`, `history/skills.md` | README, AGENTS, snippets, `skill.html` | local package update 범위와 lifecycle/event 기록 여부를 판단한다. |
 | Project setup snippet | `project-snippets/*.md` | README, AGENTS, `docs/project-skill-setup.md` | target project에 전달되는 instruction drift를 확인한다. |
 
@@ -55,6 +58,7 @@ source id는 rename하지 않는다. 원본 이름이 바뀌면 새 source id를
 | `code-review-graph` | `plugins/code-review-graph` | `https://github.com/tirth8205/code-review-graph.git` |
 | `caveman` | `plugins/caveman` | `https://github.com/JuliusBrussee/caveman.git` |
 | `project-workflow` | `plugins/project-workflow` | repo-owned plugin |
+| `ai-video-workflow` | `plugins/ai-video-workflow` | repo-owned plugin |
 
 이 표는 `.gitmodules`에서 파생한 사람이 읽는 Plugin update list다. Plugin 추가/삭제의 machine-readable source는 `.gitmodules`이고, 이 표는 `skill-update`가 plugin 자체 업데이트 필요성을 발견했을 때 보고할 대상과 점검 파일을 고르는 checklist다. `scripts/validate-plugins.ts`는 `.gitmodules`, `docs/plugin-catalog.md`, 이 문서의 Plugin update list가 같은 plugin path와 upstream URL을 담는지 검사한다.
 
@@ -63,6 +67,15 @@ source id는 rename하지 않는다. 원본 이름이 바뀌면 새 source id를
 | Plugin | Source ID | Path | Manifest | Bundled skills | Boundary |
 | --- | --- | --- | --- | --- | --- |
 | `project-workflow` | `repo-plugin.project-workflow` | `plugins/project-workflow` | `plugins/project-workflow/.codex-plugin/plugin.json` | `plugins/project-workflow/skills/project-workflow/SKILL.md`, `plugins/project-workflow/scripts/execute-phase.ts` | `feature-workflow`는 별도 반복 개발 스킬로 유지하고 bundle core에 넣지 않는다. |
+| `ai-video-workflow` | `repo-plugin.ai-video-workflow` | `plugins/ai-video-workflow` | `plugins/ai-video-workflow/.codex-plugin/plugin.json` | `plugins/ai-video-workflow/skills/ai-video-workflow/SKILL.md`, `plugins/ai-video-workflow/scripts/doctor.ts`, `plugins/ai-video-workflow/scripts/scaffold-video-project.ts`, `plugins/ai-video-workflow/scripts/validate-video-project.ts` | Voicebox와 HyperFrames를 submodule로 vendoring하지 않고, 동의된 profile/sample workflow와 local tool handoff만 관리한다. |
+
+## External tool lane
+
+| Source ID | 출처 패키지 | 정확한 이름 | Source URL 또는 checked source | Checked | Local 판단 |
+| --- | --- | --- | --- | --- | --- |
+| `observed.voicebox` | Voicebox | `voicebox` | `https://github.com/jamiepine/voicebox` | 2026-05-21 | `adapt`: local-first voice cloning/generation app으로 보고 profile/API workflow만 연결 |
+| `observed.voicebox-mcp` | Voicebox docs | `MCP Server` | `https://docs.voicebox.sh/overview/mcp-server` | 2026-05-21 | `adapt`: localhost no-auth boundary와 consent rule 때문에 plugin manifest에는 자동 MCP 등록하지 않고 target config snippet만 제공 |
+| `observed.hyperframes` | HyperFrames | `hyperframes` | `https://github.com/heygen-com/hyperframes`, `https://hyperframes.heygen.com/` | 2026-05-21 | `adapt`: HyperFrames 자체는 vendoring하지 않고 HTML video brief, CLI handoff, Node 22/FFmpeg doctor만 제공 |
 
 ## Workflow primitive lane
 
@@ -104,8 +117,9 @@ source id는 rename하지 않는다. 원본 이름이 바뀌면 새 source id를
 | Lane | 포함 범위 | 단일 진실원 | usage 문서와 검증 |
 | --- | --- | --- | --- |
 | Vendored plugin lane | `.gitmodules`의 모든 submodule: `context-mode`, `code-review-graph`, `caveman` | `.gitmodules` + 이 문서의 `Plugin update list` | `docs/plugin-catalog.md`, plugin manifest, `scripts/validate-plugins.ts` |
-| Repo-owned plugin lane | `repo-plugin.project-workflow` | plugin manifest + 이 문서의 `Repo-owned plugin lane` | `plugins/project-workflow/README.md`, bundled skill |
+| Repo-owned plugin lane | `repo-plugin.project-workflow`, `repo-plugin.ai-video-workflow` | plugin manifest + 이 문서의 `Repo-owned plugin lane` | repo-owned plugin `README.md`, bundled skill |
 | Workflow primitive lane | Matt Pocock, GStack, Superpowers, observed workflow source ids | 이 문서의 `Workflow primitive lane` | `plugins/project-workflow/skills/project-workflow/references/upstream-dependency-map.md`, `skills/feature-workflow/references/upstream-dependency-map.md`, snippets, eval, history |
+| External tool lane | Voicebox, Voicebox MCP, HyperFrames처럼 vendoring하지 않는 local tool source ids | 이 문서의 `External tool lane` | `plugins/ai-video-workflow/skills/ai-video-workflow/references/source-ledger.md`, plugin README, bundled skill |
 
 Sweep 결과는 source id, checked date, upstream version/commit, compared files/release notes, `adopt`/`adapt`/`reject`/`defer` 판단을 이 문서에 먼저 남긴다. 변경이 없으면 `defer` 또는 `reject` 이유와 검증 결과만 보고한다.
 

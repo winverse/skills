@@ -1,0 +1,32 @@
+{
+  "name": "ai-video-workflow",
+  "version": "0.1.0",
+  "description": "Local narrated motion-graphics workflow for consented Voicebox voice profiles and HyperFrames HTML video rendering.",
+  "author": {
+    "name": "winverse"
+  },
+  "homepage": "https://github.com/winverse/agents-skills",
+  "repository": "https://github.com/winverse/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "voicebox",
+    "hyperframes",
+    "motion-graphics",
+    "local-ai"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Video Workflow",
+    "shortDescription": "Consent-first Voicebox narration and HyperFrames video workflow",
+    "longDescription": "AI Video Workflow coordinates local Voicebox voice generation, project-private voice samples, narration briefs, and HyperFrames HTML motion-graphics render handoff without bundling personal audio.",
+    "developerName": "winverse",
+    "category": "Productivity",
+    "capabilities": [
+      "video-authoring",
+      "voice-generation",
+      "local-workflow"
+    ],
+    "defaultPrompt": "Use $ai-video-workflow to turn a script into a consented Voicebox narration and HyperFrames motion-graphics video plan."
+  }
+}
