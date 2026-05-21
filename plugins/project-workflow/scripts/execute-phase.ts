@@ -62,7 +62,7 @@ Notes:
   - Pass each command argument with repeated --agent-arg.
   - Project docs are loaded from --project-root, defaulting to the current working directory.
   - The agent command receives the full prompt on stdin.
-  - This runner is Codex-first; custom commands are explicit fallback only.
+  - The phase file format stays agent-neutral; this runner is Codex-first and custom commands are explicit fallback only.
   - Known permission-bypass flags are rejected.`);
   process.exit(2);
 }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Plugin Test Loop"
+  short_description: "Fresh-clone cycle testing for skills and plugins"
+  default_prompt: "Use $skill-plugin-test-loop to test a skill, plugin, or plugin-bundled skill through isolated fresh clone cycles, actual invocation history, cycle-NNN output folders, bounded runner evidence, failure classification, validation commands, and source-fix reruns until the package behavior is proven."

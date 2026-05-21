@@ -123,6 +123,9 @@ plugins/caveman/
 - `agent-eval-harness`: agent skill routing, cross-agent instruction portability, workflow, safety boundary, artifact hygiene, output quality, regression capture를 검증하는 초기 repo-local eval harness를 세팅하는 스킬. `required_link_count`, `required_file_reference`, `json_schema` 같은 deterministic check를 우선 쓰고, `project-workflow`나 `feature-workflow`에서 호출될 때는 routing, dependency inventory, `project-structure` timing, PRD settings, UI mockup selection, `work-claims.md` lane ownership, overlap block, CLI/no-browser evidence, MCP/API gate decisions, fallback lane, project setup verification, completion mapping, document sync, artifact hygiene seed case를 만든다.
   - Source instruction: `skills/agent-eval-harness/SKILL.md`
   - Human visual guide: `skills/agent-eval-harness/skill.html`
+- `skill-plugin-test-loop`: 스킬, 플러그인, plugin-bundled skill이 실제 fresh clone 또는 isolated copy에서 기대한 대로 호출되고 산출물을 만드는지 반복 검증하는 스킬. 실제 첫 응답, `cycle-NNN` history, output folder, bounded runner evidence, failure class, source 수정, 재실행을 한 흐름으로 묶고, 결과를 끼워 맞추는 테스트 방법을 실패로 본다.
+  - Source instruction: `skills/skill-plugin-test-loop/SKILL.md`
+  - Human visual guide: `skills/skill-plugin-test-loop/skill.html`
 - `browser-qa`: Playwright/browser evidence로 렌더링, 콘솔, 네트워크, 접근성, 링크, viewport, 텍스트 겹침, `skill.html` 표시 문제를 검증하고 종료 시 browser/server를 정리하는 스킬.
   - Source instruction: `skills/browser-qa/SKILL.md`
   - Human visual guide: `skills/browser-qa/skill.html`
@@ -292,6 +295,7 @@ node skills/feature-workflow/scripts/validate-feature-workflow.ts skills/feature
 node skills/sync-docs/scripts/validate-sync-docs.ts skills/sync-docs
 node skills/agent-improvement-loop/scripts/validate-agent-improvement-loop.ts skills/agent-improvement-loop
 node skills/agent-eval-harness/scripts/validate-agent-eval-harness.ts skills/agent-eval-harness
+node skills/skill-plugin-test-loop/scripts/validate-skill-plugin-test-loop.ts skills/skill-plugin-test-loop
 node skills/browser-qa/scripts/validate-browser-qa.ts skills/browser-qa
 node skills/code-review/scripts/validate-code-review.ts skills/code-review
 node skills/design-review/scripts/validate-design-review.ts skills/design-review

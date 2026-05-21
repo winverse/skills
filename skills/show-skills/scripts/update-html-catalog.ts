@@ -31,6 +31,7 @@ const summaryBySkill: Record<string, string> = {
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",
   "agent-improvement-loop": "스킬 호출성, 검증, 문서 정합성, repo 품질 개선 루프",
   "agent-eval-harness": "routing, portability, safety, artifact hygiene를 검증하는 eval harness",
+  "skill-plugin-test-loop": "fresh clone cycle로 스킬과 플러그인의 실제 호출을 검증",
   "karpathy-thinkings": "추측, 과설계, 주변 리팩터링을 줄이는 구현 discipline",
   "project-structure": "frontend, backend, monorepo, desktop app, ESM TypeScript 구조 결정",
   "project-workflow": "plugin-bundled 초기 설정: 도메인, PRD, ESM TypeScript 정책, workflow-state cache",

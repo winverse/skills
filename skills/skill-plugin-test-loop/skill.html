@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>skill-plugin-test-loop</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #f5f7f8;
+      --panel: #ffffff;
+      --ink: #1d252c;
+      --muted: #5a6874;
+      --line: #cdd7df;
+      --accent: #256f7a;
+      --accent-2: #835c16;
+      --danger: #9a3f38;
+      --ok: #2d6b49;
+      --shadow: 0 12px 32px rgba(29, 37, 44, 0.08);
+    }
+
+    html {
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 42px 32px 72px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .panel,
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.18;
+      margin-bottom: 12px;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      letter-spacing: 0;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    .tag,
+    .pill,
+    .badge,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      background: #f9fbfb;
+      font-size: 13px;
+    }
+
+    .hero-rail {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contracts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .contract {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfcfc;
+      min-height: 118px;
+    }
+
+    .contract strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .mode-board {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mode-board button {
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 12px 14px;
+      text-align: left;
+      font: inherit;
+    }
+
+    .mode-board button[aria-pressed="true"] {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 2px rgba(37, 111, 122, 0.14);
+    }
+
+    .mode-result {
+      border-left: 4px solid var(--accent);
+      background: #eef7f7;
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 86px;
+    }
+
+    section {
+      margin-top: 24px;
+      padding: 24px;
+    }
+
+    .flow-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+      padding: 18px;
+      overflow-x: auto;
+    }
+
+    svg {
+      width: 100%;
+      min-width: 820px;
+      height: auto;
+      display: block;
+    }
+
+    .node {
+      fill: #ffffff;
+      stroke: #b9c6ce;
+      stroke-width: 2;
+    }
+
+    .node-hot {
+      fill: #eef7f7;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+    }
+
+    .loop-line {
+      stroke: var(--accent);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 18 12;
+      animation: dash 2.8s linear infinite;
+    }
+
+    .plain-line {
+      stroke: #95a7b1;
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    @keyframes dash {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -60; }
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 1.1fr repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .matrix div {
+      padding: 12px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      min-width: 170px;
+    }
+
+    .matrix div:nth-child(4n) {
+      border-right: 0;
+    }
+
+    .matrix .head {
+      background: #eef2f4;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .map {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .map-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfc;
+    }
+
+    .risk {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .risk-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #ffffff;
+    }
+
+    .risk-card[data-tone="danger"] {
+      border-color: #e1b7b1;
+    }
+
+    .risk-card[data-tone="ok"] {
+      border-color: #b9d7c7;
+    }
+
+    .evidence-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow-x: auto;
+      display: table;
+    }
+
+    .evidence-table th,
+    .evidence-table td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .evidence-table th {
+      background: #eef2f4;
+    }
+
+    code {
+      background: #eef2f4;
+      border-radius: 5px;
+      padding: 2px 5px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(37, 111, 122, 0.35);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .loop-line {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="hero">
+      <div class="panel">
+        <span class="tag">스킬 이름: skill-plugin-test-loop</span>
+        <h1>스킬과 플러그인을 실제 cycle로 검증한다</h1>
+        <p>fresh clone, isolated copy, 실제 첫 응답, cycle-NNN 산출물, failure class를 묶어 스킬이나 플러그인이 정말 기대대로 작동하는지 반복 확인한다.</p>
+        <div class="contracts">
+          <div class="contract">
+            <strong>호출 조건</strong>
+            <span>스킬, 플러그인, plugin-bundled skill의 실제 동작을 확인할 때 쓴다.</span>
+          </div>
+          <div class="contract">
+            <strong>반드시 하는 일</strong>
+            <span>fresh clone 또는 isolated copy에서 실제 호출 기록과 산출물을 남긴다.</span>
+          </div>
+          <div class="contract">
+            <strong>절대 하지 않는 일</strong>
+            <span>기대 결과를 history에 끼워 맞추지 않는다.</span>
+          </div>
+          <div class="contract">
+            <strong>완료 기준</strong>
+            <span>실패 분류, 수정, 검증 명령, 다음 cycle 여부가 명확해야 한다.</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel mode-board" aria-label="사용 판단 보드">
+        <h2>사용 판단</h2>
+        <button type="button" data-mode="skill" aria-pressed="true">스킬 실제 호출 검증</button>
+        <button type="button" data-mode="plugin" aria-pressed="false">플러그인 bundle 검증</button>
+        <button type="button" data-mode="eval" aria-pressed="false">eval harness와 구분</button>
+        <div class="mode-result" id="mode-result">스킬을 실제 prompt로 부르고 첫 응답, 질문 흐름, 생성 파일, validator 결과를 cycle history에 남긴다.</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>루프 흐름</h2>
+      <div class="flow-wrap">
+        <svg viewBox="0 0 960 230" role="img" aria-label="스킬 플러그인 테스트 루프 흐름도">
+          <rect class="node-hot" x="30" y="44" width="150" height="72" rx="8"></rect>
+          <text x="105" y="76" text-anchor="middle">대상 고정</text>
+          <text x="105" y="98" text-anchor="middle">entrypoint</text>
+          <path class="plain-line" d="M180 80 L250 80"></path>
+          <rect class="node" x="250" y="44" width="150" height="72" rx="8"></rect>
+          <text x="325" y="76" text-anchor="middle">fresh clone</text>
+          <text x="325" y="98" text-anchor="middle">source commit</text>
+          <path class="plain-line" d="M400 80 L470 80"></path>
+          <rect class="node" x="470" y="44" width="150" height="72" rx="8"></rect>
+          <text x="545" y="76" text-anchor="middle">실제 호출</text>
+          <text x="545" y="98" text-anchor="middle">첫 응답</text>
+          <path class="plain-line" d="M620 80 L690 80"></path>
+          <rect class="node" x="690" y="44" width="150" height="72" rx="8"></rect>
+          <text x="765" y="76" text-anchor="middle">산출물 검증</text>
+          <text x="765" y="98" text-anchor="middle">history/output</text>
+          <path class="loop-line" d="M765 116 C765 184 115 184 105 116"></path>
+          <text x="480" y="202" text-anchor="middle">실패하면 source를 고치고 cycle-NNN을 증가시켜 다시 실행</text>
+        </svg>
+      </div>
+    </section>
+
+    <section>
+      <h2>검증 강도 매트릭스</h2>
+      <div class="matrix" role="table" aria-label="검증 case matrix">
+        <div class="head">case</div>
+        <div class="head">필수 증거</div>
+        <div class="head">관련 스킬</div>
+        <div class="head">완료 신호</div>
+        <div>baseline happy path</div>
+        <div>실제 첫 응답, 생성 파일, validator</div>
+        <div><code>skill-update</code></div>
+        <div>pass 또는 failure class</div>
+        <div>browser/visual</div>
+        <div>PC desktop screenshot, interaction check</div>
+        <div><code>browser-qa</code></div>
+        <div>겹침과 link 오류 없음</div>
+        <div>plugin manifest/hook</div>
+        <div>manifest, MCP, hook, bundled skill 경계</div>
+        <div><code>agent-eval-harness</code></div>
+        <div>flatten 금지 확인</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>파일 관계도</h2>
+      <div class="map">
+        <div class="map-card">
+          <span class="badge">source</span>
+          <h3>원본 package</h3>
+          <p>remote URL, branch, commit, submodule 상태를 기록한다.</p>
+        </div>
+        <div class="map-card">
+          <span class="badge">cycle</span>
+          <h3><code>runs/cycle-NNN</code></h3>
+          <p>prompt, history, output, summary를 같은 cycle 아래에 둔다.</p>
+        </div>
+        <div class="map-card">
+          <span class="badge">ledger</span>
+          <h3><code>cycles.md</code></h3>
+          <p>각 cycle의 pass/fail과 다음 수정 대상을 한 줄로 추적한다.</p>
+        </div>
+        <div class="map-card">
+          <span class="badge">guide</span>
+          <h3><code>SKILL.md</code> + <code>skill.html</code></h3>
+          <p>에이전트 source instruction과 사람용 visual guide를 함께 유지한다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>위험과 Failure class</h2>
+      <div class="risk">
+        <div class="risk-card" data-tone="danger">
+          <span class="pill">금지</span>
+          <h3>결과 끼워 맞추기</h3>
+          <p>예상 순서를 history에 적는 방식은 <code>test method</code> 실패다.</p>
+        </div>
+        <div class="risk-card" data-tone="danger">
+          <span class="pill">금지</span>
+          <h3>로컬 작업본 몰래 사용</h3>
+          <p>fresh clone 검증이 목표라면 local symlink나 global install에 기대지 않는다.</p>
+        </div>
+        <div class="risk-card" data-tone="ok">
+          <span class="pill">허용</span>
+          <h3>fallback 기록</h3>
+          <p>현재 runtime이 원본 command를 못 부르면 callable surface 누락을 기록한다.</p>
+        </div>
+        <div class="risk-card" data-tone="ok">
+          <span class="pill">허용</span>
+          <h3>source 수정 후 재실행</h3>
+          <p>실패를 고친 뒤 새 cycle로 다시 실행하고 검증 명령을 남긴다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>실제 확인</h2>
+      <table class="evidence-table">
+        <thead>
+          <tr>
+            <th>검증</th>
+            <th>명령 또는 증거</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>기본 package</td>
+            <td><code>node scripts/validate-skill.ts skills/skill-plugin-test-loop</code></td>
+            <td>실행 대상</td>
+          </tr>
+          <tr>
+            <td>전용 validator</td>
+            <td><code>node skills/skill-plugin-test-loop/scripts/validate-skill-plugin-test-loop.ts skills/skill-plugin-test-loop</code></td>
+            <td>실행 대상</td>
+          </tr>
+          <tr>
+            <td>공통 HTML</td>
+            <td><code>node scripts/validate-skill-html.ts .</code></td>
+            <td>실행 대상</td>
+          </tr>
+          <tr>
+            <td>repo 정합성</td>
+            <td><code>node scripts/validate-skill-repo.ts .</code></td>
+            <td>실행 대상</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>원문 근거</h2>
+      <p>핵심 계약은 이 스킬의 <code>SKILL.md</code>에서 사용 판단, 루프 원칙, 테스트 루트 구조, 실행 절차, Failure class, 검증 기준 heading에 연결된다.</p>
+      <div class="links">
+        <a href="SKILL.md">SKILL.md</a>
+        <a href="skill.html">skill.html</a>
+        <a href="scripts/validate-skill-plugin-test-loop.ts">전용 validator</a>
+        <a href="../../project-snippets/skill-plugin-test-loop.md">project snippet</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const modes = {
+      skill: "스킬을 실제 prompt로 부르고 첫 응답, 질문 흐름, 생성 파일, validator 결과를 cycle history에 남긴다.",
+      plugin: "플러그인의 manifest, MCP config, hook, bundled skill 경계를 보존한 상태로 실행 증거를 남긴다.",
+      eval: "반복 실행 자체는 이 스킬이 맡고, 재발 방지용 deterministic case는 agent-eval-harness로 넘긴다."
+    };
+
+    const result = document.querySelector("#mode-result");
+    document.querySelectorAll("[data-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-mode]").forEach((item) => item.setAttribute("aria-pressed", "false"));
+        button.setAttribute("aria-pressed", "true");
+        result.textContent = modes[button.dataset.mode];
+      });
+    });
+  </script>
+</body>
+</html>
