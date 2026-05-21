@@ -95,24 +95,24 @@
         </div>
       </section>
 
-      <section class="contracts" aria-label="핵심 계약">
+      <section class="contracts" aria-label="중요한 기준">
         <article class="contract use">
-          <div class="eyebrow">핵심 계약 1</div>
+          <div class="eyebrow">중요한 기준 1</div>
           <strong>호출 조건을 먼저 고릅니다.</strong>
           <p>질문의 현재성 위험과 stakes를 판단한다.</p>
         </article>
         <article class="contract must">
-          <div class="eyebrow">핵심 계약 2</div>
+          <div class="eyebrow">중요한 기준 2</div>
           <strong>근거 있는 최소 작업을 합니다.</strong>
           <p>official/source-of-record를 먼저 찾는다.</p>
         </article>
         <article class="contract never">
-          <div class="eyebrow">핵심 계약 3</div>
+          <div class="eyebrow">중요한 기준 3</div>
           <strong>범위 밖 자동화를 섞지 않습니다.</strong>
           <p>web-research 또는 alias 호출 자체를 research portion에 대한 explicit parallel sub-agent fan-out, delegation, parallel agent work 요청으로 해석한다.</p>
         </article>
         <article class="contract verify">
-          <div class="eyebrow">핵심 계약 4</div>
+          <div class="eyebrow">중요한 기준 4</div>
           <strong>완료 증거를 남깁니다.</strong>
           <p>사용자가 단일 에이전트 조사를 명시하지 않았고 runtime이 delegation을 허용하면, web-research 시작 시 바로 하위 agent를 병렬로 나눈다.</p>
         </article>
@@ -121,10 +121,10 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>사용 판단 매트릭스</h2>
+        <h2>사용 판단</h2>
         <p>요청이 이 스킬에 맞는지 먼저 가르고, 더 구체적인 스킬이 있으면 넘깁니다.</p>
       </div>
-      <div class="matrix" aria-label="사용 판단 매트릭스">
+      <div class="matrix" aria-label="사용 판단">
         <div class="matrix-cell use"><strong>사용</strong><p>현재 사실, 출처 검증, 추천, 시장·제품 비교, 법·규정, 기술 문서, 뉴스처럼 바뀔 수 있는 정보를 source-first로 조사하고 citation과 함께 답할 때 사용한다.</p></div>
         <div class="matrix-cell make"><strong>결합</strong><p>문서 drift는 <code>sync-docs</code>, 브라우저 증거는 <code>browser-qa</code>, 커밋은 <code>atomic-committer</code>와 연결합니다.</p></div>
         <div class="matrix-cell hold"><strong>보류</strong><p>호출 조건이 애매하거나 대상 repo 경계가 불명확하면 먼저 근거 파일을 읽고 범위를 좁힙니다.</p></div>
@@ -134,12 +134,12 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>작업 흐름도</h2>
+        <h2>작업 흐름</h2>
         <p>화살표는 실제 상자에 닿고, 각 단계는 검증 가능한 출력으로 이어집니다.</p>
       </div>
       <div class="two">
         <div class="panel">
-          <svg viewBox="0 0 720 292" role="img" aria-label="web-research 작업 흐름도">
+          <svg viewBox="0 0 720 292" role="img" aria-label="web-research 작업 흐름">
             <defs><marker id="flowArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2458b8"></path></marker></defs>
             <g fill="#ffffff" stroke="#cbd4df" stroke-width="2">
               <rect x="24" y="98" width="118" height="78" rx="8"></rect><rect x="174" y="98" width="118" height="78" rx="8"></rect><rect x="324" y="98" width="118" height="78" rx="8"></rect><rect x="474" y="98" width="118" height="78" rx="8"></rect><rect x="620" y="98" width="76" height="78" rx="8"></rect>
@@ -160,12 +160,12 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>핵심 계약과 원문 근거</h2>
+        <h2>중요한 기준과 기준 원문</h2>
         <p>각 계약은 <code>SKILL.md</code>의 section과 확인 방법에 연결됩니다.</p>
       </div>
-      <div class="source-map" aria-label="원문 근거 연결 표">
-        <div class="source-cell source-head"><strong>핵심 계약</strong></div>
-        <div class="source-cell source-head"><strong>원문 근거</strong></div>
+      <div class="source-map" aria-label="기준 원문 연결 표">
+        <div class="source-cell source-head"><strong>중요한 기준</strong></div>
+        <div class="source-cell source-head"><strong>기준 원문</strong></div>
         <div class="source-cell source-head"><strong>확인 방법</strong></div>
         <div class="source-cell source-head"><strong>실패 신호</strong></div>
         <div class="source-cell"><strong>호출 조건</strong><span>질문의 현재성 위험과 stakes를 판단한다.</span></div>
@@ -189,8 +189,8 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>입출력 구조와 위험 차트</h2>
-        <p>입력은 요청과 원문 근거이고, 출력은 검증 가능한 변경 또는 답변입니다.</p>
+        <h2>입출력 구조와 위험</h2>
+        <p>입력은 요청과 기준 원문이고, 출력은 검증 가능한 변경 또는 답변입니다.</p>
       </div>
       <div class="two">
         <div class="panel">
@@ -200,13 +200,13 @@
               <rect x="34" y="62" width="168" height="72" rx="8"></rect><rect x="34" y="186" width="168" height="72" rx="8"></rect><rect x="448" y="62" width="168" height="72" rx="8"></rect><rect x="448" y="186" width="168" height="72" rx="8"></rect><rect x="250" y="124" width="150" height="72" rx="8"></rect>
             </g>
             <g fill="none" stroke="#25724d" stroke-width="2.4" marker-end="url(#ioArrow)"><path d="M202 98 L250 138"></path><path d="M202 222 L250 182"></path><path d="M400 138 L448 98"></path><path d="M400 182 L448 222"></path></g>
-            <g text-anchor="middle" font-size="13" font-weight="700" fill="#161b24"><text x="118" y="92">요청</text><text x="118" y="216">원문 근거</text><text x="325" y="154">web-research</text><text x="532" y="92">결과</text><text x="532" y="216">검증 증거</text></g>
+            <g text-anchor="middle" font-size="13" font-weight="700" fill="#161b24"><text x="118" y="92">요청</text><text x="118" y="216">기준 원문</text><text x="325" y="154">web-research</text><text x="532" y="92">결과</text><text x="532" y="216">검증 증거</text></g>
             <g text-anchor="middle" font-size="11" fill="#606b78"><text x="118" y="111">작업 의도</text><text x="118" y="235">SKILL.md</text><text x="325" y="173">스킬 계약 적용</text><text x="532" y="111">파일 또는 답변</text><text x="532" y="235">validator 보고</text></g>
           </svg>
         </div>
         <div class="panel bars" aria-label="위험과 검증 차트">
           <div class="bar"><strong>요청 적합도</strong><span class="track"><span class="fill green" style="width:94%"></span></span><span>먼저</span></div>
-          <div class="bar"><strong>원문 근거</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
+          <div class="bar"><strong>기준 원문</strong><span class="track"><span class="fill green" style="width:88%"></span></span><span>필수</span></div>
           <div class="bar"><strong>범위 통제</strong><span class="track"><span class="fill" style="width:82%"></span></span><span>필수</span></div>
           <div class="bar"><strong>검증 강도</strong><span class="track"><span class="fill amber" style="width:74%"></span></span><span>위험별</span></div>
           <div class="bar"><strong>전역 변경</strong><span class="track"><span class="fill red" style="width:58%"></span></span><span>차단</span></div>
@@ -245,10 +245,10 @@
 
     <section class="section">
       <div class="section-head">
-        <h2>금지와 허용</h2>
+        <h2>보안 경계</h2>
         <p>misuse guardrails는 스킬이 맡지 않는 일을 명확히 분리합니다.</p>
       </div>
-      <div class="matrix" aria-label="금지와 허용">
+      <div class="matrix" aria-label="보안 경계">
         <div class="matrix-cell use"><strong>허용</strong><p>대상 repo 안에서 관련 파일을 읽고, 요청된 행동을 스킬 계약대로 수행합니다.</p></div>
         <div class="matrix-cell make"><strong>허용</strong><p>검증 가능한 산출물, 짧은 근거 보고, 필요한 validator 실행 결과를 남깁니다.</p></div>
         <div class="matrix-cell hold"><strong>보류</strong><p>호출 조건 밖 refactor, repo-wide preference 변경, 대상 밖 문서 확장은 별도 요청으로 분리합니다.</p></div>

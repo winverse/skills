@@ -26,6 +26,7 @@ const summaryBySkill: Record<string, string> = {
   "show-skills": "현재 스킬 목록을 카테고리별로 보여주고 조합을 추천",
   "web-research": "최신 정보, 출처 검증, 추천, 기술 문서 조사",
   "markdown-to-html": "Markdown 의미를 안전한 한국어 우선 HTML guide로 변환",
+  "markdown-to-comic": "Markdown을 4컷/6컷 comic 이해뷰로 변환",
   "skill-update": "기존 스킬과 외부 dependency sweep을 references, validator, docs까지 함께 유지보수",
   "sync-docs": "README, AGENTS, docs, snippets, history 충돌과 stale 설명 정리",
   "transcript-polisher": "전사본과 강의 대본을 직접 읽고 Claude goal 루프로 다듬기",

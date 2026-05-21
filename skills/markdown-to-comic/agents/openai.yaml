@@ -1,0 +1,16 @@
+interface:
+  display_name: "Markdown To Comic"
+  short_description: "Markdown을 4컷/6컷 comic 이해뷰로 변환"
+  default_prompt: >-
+    Use $markdown-to-comic when a Markdown document should become a 4-panel or
+    6-panel comic storyboard and accessible comic HTML for human understanding.
+    Treat the original Markdown as the source of truth. Extract one concept,
+    workflow, decision, or misconception into a ComicBrief before drawing or
+    generating assets. Use 4-panel format for one compact idea and 6-panel
+    format for workflow, failure recovery, or cause-and-effect sequences. Keep
+    dialogue, captions, commands, security rules, and exact policy text as DOM
+    text or SVG text, not raster-only image text. Use $imagegen only for optional
+    raster panel art such as characters, backgrounds, or visual metaphors; do
+    not paste raw Markdown into image prompts. Include source anchors, alt text,
+    long descriptions, and a transcript so the comic never replaces the source
+    Markdown.

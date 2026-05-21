@@ -2,7 +2,7 @@
 
 ## local design system 기준
 
-이 repo의 `skill.html`은 한국어 우선 문구, 조용한 운영 도구형 UI, 얕은 border, 안정적인 읽기 폭을 기본으로 한다. `markdown-to-html` 산출물은 Markdown 문서의 의미를 읽어 만든 짧은 HTML이어야 하며, 그림이나 애니메이션보다 입력, 출력, 중요한 기준, 보안 경계, 검증 명령이 먼저 읽혀야 한다.
+이 repo의 `skill.html`은 한국어 우선 문구, 조용한 운영 도구형 UI, 얕은 border, 안정적인 읽기 폭을 기본으로 한다. `markdown-to-html` 산출물은 Markdown 문서의 의미를 읽어 만든 안전한 HTML이어야 한다. 스킬 HTML mode는 짧은 HTML로 압축하지만, 일반 Markdown 문서 mode는 긴 문서와 복잡한 구조를 보존한다.
 
 ## language policy 기준
 
@@ -29,7 +29,7 @@
 - 보안 경계
 - 파일과 검증
 
-위 section만으로 사람이 10초 안에 스킬의 목적과 경계를 파악할 수 있어야 한다. 세부 설명, 긴 예시, 반복되는 주의 문구는 `SKILL.md` 링크로 넘긴다.
+위 section은 스킬 HTML mode의 기본 구조다. 사람이 10초 안에 스킬의 목적과 경계를 파악할 수 있어야 하므로 세부 설명, 긴 예시, 반복되는 주의 문구는 `SKILL.md` 링크로 넘긴다. 일반 Markdown 문서 mode에는 이 고정 section 구조를 강제하지 않고 원문 heading 구조를 따른다.
 
 ## Markdown 변환 기준
 
@@ -39,7 +39,8 @@
 - Markdown 원문은 내용만 읽고, `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script, `<iframe>`, `<object>`, `<embed>`는 실행 가능한 HTML로 통과시키지 않는다.
 - raw HTML 지원이 꼭 필요하면 raw HTML을 별도로 파싱한 뒤 allowlist sanitizer를 마지막 unsafe transform 이후에 적용한다.
 - URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로처럼 허용한 protocol만 남긴다.
-- 최종 `skill.html`은 원문 Markdown 단편을 이어 붙인 결과가 아니라, repo가 작성한 신뢰된 템플릿에 `MarkdownHtmlModel`을 넣어 만든 단일 파일이다.
+- 스킬 HTML mode의 최종 `skill.html`은 원문 Markdown 단편을 이어 붙인 결과가 아니라, repo가 작성한 신뢰된 템플릿에 `MarkdownHtmlModel`을 넣어 만든 단일 파일이다.
+- 일반 Markdown 문서 mode는 원문 heading tree, 긴 문단, 중첩 list, 긴 table, code fence, blockquote, footnote, task list를 가능한 한 보존한다. 복잡하다는 이유만으로 본문을 버리지 않는다.
 - diagram은 원문에 실제 흐름, 관계, 계층이 있을 때만 만든다. 원문 의미가 없는 장식용 도표는 만들지 않는다.
 
 ## mode 기준
@@ -47,6 +48,7 @@
 - 스킬 HTML mode는 `SKILL.md`에서 같은 폴더의 `skill.html`을 만든다.
 - 일반 Markdown 문서 mode는 사용자가 대상 Markdown과 출력 위치를 명시했을 때만 쓴다.
 - 두 mode 모두 `MarkdownHtmlModel`을 거치고, 원문 Markdown 단편을 바로 HTML body에 붙이지 않는다.
+- 두 mode의 차이는 요약 수준이다. 스킬 HTML mode는 빠른 판단용으로 압축하고, 일반 Markdown 문서 mode는 article 구조로 원문 세부 내용을 보존한다.
 
 ## readability 기준
 
@@ -57,6 +59,7 @@
 - 허용/금지처럼 상반되는 판정은 텍스트 heading과 간단한 table 구조로 구분한다. 색은 보조 스타일로만 쓴다.
 - 검증 명령은 카드보다 명령 리스트로 둔다.
 - 표는 비교 축, 판단 기준, 허용/금지, 검증 결과처럼 행과 열이 실제 의미를 가질 때 쓴다.
+- 일반 Markdown 문서 mode의 긴 표는 전체 폭 section에 두고 가로 스크롤이나 안정적인 열 폭으로 보존한다. 표가 길다는 이유로 요약 표로 바꾸지 않는다.
 - 차트는 실제 수치가 있을 때만 쓴다. 수치가 없는 규칙 설명에는 chart를 만들지 않는다.
 - standalone `skill.html`에서는 chart library를 쓰지 않고 table, CSS bar, `<meter>`, inline SVG를 우선한다.
 - Chart.js나 Observable Plot은 대상 프로젝트가 local build pipeline과 bundled dependency를 이미 갖춘 경우에만 쓴다. D3는 복잡한 custom visualization이 필요한 경우에만 고려한다.

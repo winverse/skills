@@ -2,14 +2,19 @@ interface:
   display_name: "Markdown To HTML"
   short_description: "Markdown 문서를 안전한 한국어 우선 HTML로 변환"
   default_prompt: >-
-    Use $markdown-to-html to convert Markdown into a short, safe, Korean-first
-    HTML view. In this repo, use skill HTML mode by default: update only the
+    Use $markdown-to-html to convert Markdown into a safe, Korean-first HTML
+    view. In this repo, use skill HTML mode by default: update only the
     adjacent skill.html for the target skill folder. Use general Markdown document mode
     only when the user explicitly gives a Markdown input and output location.
+    The skill name is general: in general Markdown document mode, preserve
+    complex source structure instead of forcing every document into a short
+    summary. Keep heading hierarchy, long paragraphs, nested lists, wide
+    tables, code fences, blockquotes, footnotes, task lists, and frontmatter
+    metadata when the parser supports them.
     Treat SKILL.md as the source document and skill.html as a
     human reading view, not a replacement source. Parse Markdown semantics
     first: headings, lists, tables, code fences, blockquotes, and links. Convert
-    through a small MarkdownHtmlModel before writing HTML; do not copy source
+    through MarkdownHtmlModel before writing HTML; do not copy source
     paragraphs, raw Markdown line breaks, or UI self-commentary directly into
     the layout. Do not pass Markdown raw HTML, event handlers, javascript:
     links, vbscript: links, iframe/object/embed elements, external scripts,
@@ -20,13 +25,13 @@ interface:
     repo-authored trusted template. Visible general prose should be Korean;
     English is allowed only for exact identifiers such as file paths, commands,
     protocol names, product names, library names, and common acronyms such as
-    TDD, QA, API, MCP, and PRD. Keep the first screen focused on document name,
-    one-line purpose, input, output, and 3-5 important criteria. 인터랙티브 요소를
+    TDD, QA, API, MCP, and PRD. In skill HTML mode, keep the first screen
+    focused on document name, one-line purpose, input, output, and 3-5 important criteria. 인터랙티브 요소를
     넣지 않는다: no buttons, no inline JavaScript, no animation, no view
     switching, no click-driven state, no staged reveal, and no decorative SVG.
     Do not put UI design rationale, layout explanation, or self-commentary in
     visible skill.html body text; visible sentences should contain only source-derived meaning,
-    criteria, boundaries, and commands. Use
+    criteria, boundaries, commands, and preserved document content. Use
     self-contained CSS only for layout, readable width, and overflow control.
     Use tables when comparison axes or decision criteria are real. 허용/금지는 텍스트 heading과 table 구조로
     구분하고 색은 보조 스타일로만 쓴다. Use charts
@@ -35,7 +40,9 @@ interface:
     is allowed only when the target project already has a local build pipeline
     and bundled dependency; use D3 only for complex custom visualization. Keep
     wide tables and 4+ prose or criteria card grids out of narrow two-column or
-    side-panel layouts. Optimize and verify only for PC desktop viewport;
+    side-panel layouts. In general Markdown document mode, keep long tables or
+    detailed sections readable with full-width layout rather than deleting rows
+    or collapsing them into summaries. Optimize and verify only for PC desktop viewport;
     mobile/tablet layout and responsive breakpoint tuning are out of scope. Run
     the HTML validator and check overflow, text overlap, local links, and
     whether the summary can be understood within 10 seconds.

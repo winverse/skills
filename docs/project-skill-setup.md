@@ -56,6 +56,7 @@ Use the smallest snippet that matches the target project and agent:
 - `project-snippets/show-skills.md`: only current skill catalog browsing and skill recommendation.
 - `project-snippets/web-research.md`: only the web research skill.
 - `project-snippets/markdown-to-html.md`: only the skill HTML guide workflow.
+- `project-snippets/markdown-to-comic.md`: only Markdown-to-comic storyboard, 4-panel or 6-panel visual explanation, accessible `comic.html`, and optional `$imagegen` raster panel art boundaries.
 - `project-snippets/karpathy-thinkings.md`: only Karpathy-style coding agent discipline.
 - `project-snippets/skill-update.md`: only existing skill maintenance, original/upstream source checks, and package sync rules.
 - `project-snippets/agent-improvement-loop.md`: only repo quality improvement loops and spend-down consent routing.

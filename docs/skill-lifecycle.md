@@ -36,7 +36,7 @@
 - 유지보수할 의지가 없지만 기존 프로젝트가 아직 참조한다.
 - HTML, snippet, validator가 현재 기준과 오래 어긋나 있다.
 
-`deprecated` 상태에서 더 이상 참조 프로젝트가 없고 복구 계획도 없으면 `archived`로 바꾼다. archived skill은 `archive/` 아래로 이동하거나, 이동이 프로젝트 링크를 깨뜨리면 원래 위치에 최소 안내만 남긴다.
+`deprecated` 상태에서 더 이상 참조 프로젝트가 없고 복구 계획도 없으면 `archived`로 바꾼다. archived skill은 필요할 때 `archive/`를 만들어 그 아래로 이동하거나, 이동이 프로젝트 링크를 깨뜨리면 원래 위치에 최소 안내만 남긴다.
 
 ## History에 기록할 것
 

@@ -75,7 +75,7 @@ plugins/caveman/
 - `docs/skill-lifecycle.md`: 상태 정의, 승격/폐기 기준, review cadence를 둔다.
 - `history/skills.md`: 확정된 상태 변경과 큰 변경만 기록하는 ledger다.
 - `inspector/`: 아직 해결되지 않은 local-only 검사 메모만 둔다.
-- `archive/`: 더 이상 새 프로젝트에 권장하지 않는 archived skill을 보관하는 위치다.
+- `archive/`: archived skill이 생겼을 때만 만드는 보관 위치다.
 
 작은 오탈자나 색상 조정은 history에 남기지 않는다. trigger, workflow, validator, eval prompt, snippet, inspector 기준, 생명주기 상태가 바뀌는 변경만 기록한다.
 
@@ -87,9 +87,12 @@ plugins/caveman/
 - `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, `web-research` 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 계약, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
-- `markdown-to-html`: Markdown 문서 의미를 읽어 사람이 빠르게 확인할 수 있는 한국어 우선 HTML을 만들거나 고치는 스킬. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이며, 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때만 쓴다. 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령만 짧게 압축하고, PC desktop 기준으로 버튼, script, 애니메이션, 외부 의존 없이 확인한다.
+- `markdown-to-html`: Markdown 문서 의미를 읽어 사람이 확인할 수 있는 한국어 우선 HTML을 만들거나 고치는 스킬. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이며, 이때만 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령으로 짧게 압축한다. 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때 쓰며, 긴 문단, 깊은 heading, 표, 중첩 list, code fence 같은 복잡한 구조를 보존한다. 두 mode 모두 PC desktop 기준으로 버튼, script, 애니메이션, 외부 의존 없이 확인한다.
   - Source instruction: `skills/markdown-to-html/SKILL.md`
   - Human visual guide: `skills/markdown-to-html/skill.html`
+- `markdown-to-comic`: Markdown 문서의 핵심 개념, 판단 흐름, 절차를 4컷 또는 6컷 comic storyboard와 접근 가능한 `comic.html` 이해뷰로 바꾸는 스킬. 원본 Markdown을 source of truth로 두고, `ComicBrief`를 거쳐 panel별 scene, caption, dialogue, source anchor, alt text, long description을 남긴다. `$imagegen`은 캐릭터, 배경, 장면 비유 같은 선택적 raster panel art에만 쓰고, 명령어와 보안 규칙은 이미지 안에만 넣지 않는다.
+  - Source instruction: `skills/markdown-to-comic/SKILL.md`
+  - Human visual guide: `skills/markdown-to-comic/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.
   - Source instruction: `skills/karpathy-thinkings/SKILL.md`
   - Human visual guide: `skills/karpathy-thinkings/skill.html`
@@ -219,7 +222,7 @@ export SKILLS_ROOT="$PWD"
 - 금지와 허용
 - 파일과 검증
 
-`markdown-to-html`을 사용할 때는 `skills/markdown-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 바로 읽히는 self-contained HTML이어야 하며, mobile/tablet layout이나 responsive breakpoint는 신경 쓰지 않는다. 기본 mode는 `SKILL.md`에서 같은 폴더의 `skill.html`을 만드는 흐름이고, 일반 Markdown 문서 변환은 사용자가 대상과 출력 위치를 명시했을 때만 쓴다. Markdown 문서를 HTML로 바꿀 때는 heading, list, table, code fence, link 의미를 읽어 `MarkdownHtmlModel`로 줄인다. Markdown의 `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script는 그대로 통과시키지 않는다. raw HTML 지원이 꼭 필요하면 별도 parser와 allowlist sanitizer를 마지막 unsafe transform 이후에 적용한다. URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로만 남긴다. 화면에 보이는 일반 설명어는 한국어로 쓰고, 파일 경로, 명령, 제품명, 라이브러리명, `TDD`, `QA`, `API`, `MCP`, `PRD` 같은 정확성이 필요한 식별자만 원문으로 둔다. 버튼, inline JavaScript, 애니메이션, 외부 CDN, 외부 script, 외부 이미지는 금지한다. 넓은 표나 매트릭스는 좁은 2열 layout 안에 넣지 않는다.
+`markdown-to-html`을 사용할 때는 `skills/markdown-to-html/references/visual-guide-standards.md`의 기준을 따른다. `skill.html`은 PC 데스크톱에서 바로 읽히는 self-contained HTML이어야 하며, mobile/tablet layout이나 responsive breakpoint는 신경 쓰지 않는다. 기본 mode는 `SKILL.md`에서 같은 폴더의 `skill.html`을 만드는 흐름이고, 일반 Markdown 문서 변환은 사용자가 대상과 출력 위치를 명시했을 때 쓴다. Markdown 문서를 HTML로 바꿀 때는 heading, list, table, code fence, link 의미를 읽어 `MarkdownHtmlModel`에 담는다. 스킬 HTML mode는 빠른 판단용으로 줄이고, 일반 Markdown 문서 mode는 긴 문단, 깊은 heading, 중첩 list, 긴 table, code fence, blockquote, footnote, task list를 가능한 한 보존한다. Markdown의 `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script는 그대로 통과시키지 않는다. raw HTML 지원이 꼭 필요하면 별도 parser와 allowlist sanitizer를 마지막 unsafe transform 이후에 적용한다. URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로만 남긴다. 화면에 보이는 일반 설명어는 한국어로 쓰고, 파일 경로, 명령, 제품명, 라이브러리명, `TDD`, `QA`, `API`, `MCP`, `PRD` 같은 정확성이 필요한 식별자만 원문으로 둔다. 버튼, inline JavaScript, 애니메이션, 외부 CDN, 외부 script, 외부 이미지는 금지한다. 넓은 표나 매트릭스는 좁은 2열 layout 안에 넣지 않는다.
 
 ## 생성과 검증
 

@@ -406,12 +406,12 @@
         <p class="subtitle">raw idea, 제품 탐색, 구조 선택이 남아 있으면 이 루프가 아니라 <code>project-workflow</code>로 되돌립니다.</p>
       </section>
 
-      <section class="board mode-feature" id="modeBoard" aria-label="조작형 핵심 계약">
+      <section class="board mode-feature" id="modeBoard" aria-label="조작형 중요한 기준">
         <div class="switcher" role="group" aria-label="요청 모드 선택">
-          <button class="mode-btn" type="button" data-mode="feature" aria-pressed="true"><strong>기능 구현</strong>spec → plan → TDD</button>
-          <button class="mode-btn" type="button" data-mode="bug" aria-pressed="false"><strong>버그 수정</strong>repro → 최소 수정</button>
-          <button class="mode-btn" type="button" data-mode="ui" aria-pressed="false"><strong>UI 변경</strong>design review → QA</button>
-          <button class="mode-btn" type="button" data-mode="large" aria-pressed="false"><strong>큰 구현</strong>claim → fan-out</button>
+          <span class="mode-btn" type="button" data-mode="feature" aria-pressed="true"><strong>기능 구현</strong>spec → plan → TDD</span>
+          <span class="mode-btn" type="button" data-mode="bug" aria-pressed="false"><strong>버그 수정</strong>repro → 최소 수정</span>
+          <span class="mode-btn" type="button" data-mode="ui" aria-pressed="false"><strong>UI 변경</strong>design review → QA</span>
+          <span class="mode-btn" type="button" data-mode="large" aria-pressed="false"><strong>큰 구현</strong>claim → fan-out</span>
         </div>
 
         <div class="stage">
@@ -461,7 +461,7 @@
             <p class="flow-caption">모드를 바꾸면 같은 루프에서 강조되는 시작 근거만 달라집니다. 공통 gate는 <code>work-claims.md</code>, TDD evidence, review, QA, document sync입니다.</p>
           </div>
 
-          <div class="contract-stack" aria-label="첫 화면 핵심 계약">
+          <div class="contract-stack" aria-label="첫 화면 중요한 기준">
             <article class="contract use"><strong>1. 기존 근거가 있을 때만 시작</strong><span>spec, issue, PRD, ADR, design.md, bug repro가 authority입니다.</span></article>
             <article class="contract plan"><strong>2. primitive는 출처와 상태를 표시</strong><span>Superpowers, GStack, Matt Pocock, repo-local helper를 selected/skipped/fallback으로 남깁니다.</span></article>
             <article class="contract block"><strong>3. claim 충돌은 overlap block</strong><span>다른 active lane이나 shared/hotspot file과 겹치면 멈춥니다.</span></article>
@@ -473,7 +473,7 @@
 
     <section class="section" aria-labelledby="router-title">
       <div class="section-head">
-        <h2 id="router-title">사용 판단 매트릭스</h2>
+        <h2 id="router-title">사용 판단</h2>
         <p>요청이 어떤 lane에 들어가는지 먼저 가르고, 초기 기획이 부족하면 즉시 넘깁니다.</p>
       </div>
       <div class="router" aria-label="요청별 lane 판단">
@@ -538,7 +538,7 @@
           </svg>
         </div>
         <div class="panel">
-          <h3>금지와 허용 gate</h3>
+          <h3>보안 경계 gate</h3>
           <div class="legend">
             <div><strong>허용</strong><span>근거 파일을 읽고, 현재 lane의 claimed write set 안에서 production edit을 수행합니다.</span></div>
             <div><strong>금지</strong><span>다른 active lane과 겹치는 파일, shared/hotspot file, read-only path를 임의로 수정하지 않습니다.</span></div>
@@ -556,10 +556,10 @@
       </div>
       <div class="evidence-board">
         <div class="checks" role="group" aria-label="증거 항목 선택">
-          <button class="check-btn" type="button" data-evidence="claim" aria-expanded="true"><strong>claim gate</strong><span>work-claims.md와 overlap block</span></button>
-          <button class="check-btn" type="button" data-evidence="tdd" aria-expanded="false"><strong>TDD 증거</strong><span>RED / GREEN / REFACTOR</span></button>
-          <button class="check-btn" type="button" data-evidence="qa" aria-expanded="false"><strong>QA 증거</strong><span>browser 또는 command runtime</span></button>
-          <button class="check-btn" type="button" data-evidence="docs" aria-expanded="false"><strong>문서 동기화</strong><span>docs drift와 handoff</span></button>
+          <span class="check-btn" type="button" data-evidence="claim" aria-expanded="true"><strong>claim gate</strong><span>work-claims.md와 overlap block</span></span>
+          <span class="check-btn" type="button" data-evidence="tdd" aria-expanded="false"><strong>TDD 증거</strong><span>RED / GREEN / REFACTOR</span></span>
+          <span class="check-btn" type="button" data-evidence="qa" aria-expanded="false"><strong>QA 증거</strong><span>browser 또는 command runtime</span></span>
+          <span class="check-btn" type="button" data-evidence="docs" aria-expanded="false"><strong>문서 동기화</strong><span>docs drift와 handoff</span></span>
         </div>
         <div class="evidence" aria-live="polite">
           <article class="evidence-item active" data-panel="claim">
@@ -620,12 +620,12 @@
 
     <section class="section" aria-labelledby="source-title">
       <div class="section-head">
-        <h2 id="source-title">핵심 계약과 원문 근거</h2>
+        <h2 id="source-title">중요한 기준과 기준 원문</h2>
         <p>각 시각 요소는 <code>SKILL.md</code>의 heading과 직접 연결됩니다.</p>
       </div>
-      <div class="source-grid" aria-label="원문 근거 표">
-        <div class="source-cell source-head">핵심 계약</div>
-        <div class="source-cell source-head">원문 근거</div>
+      <div class="source-grid" aria-label="기준 원문 표">
+        <div class="source-cell source-head">중요한 기준</div>
+        <div class="source-cell source-head">기준 원문</div>
         <div class="source-cell source-head">확인 방법</div>
         <div class="source-cell source-head">실패 신호</div>
 
@@ -767,26 +767,6 @@ Completion
     </section>
   </main>
 
-  <script>
-    const modeBoard = document.querySelector("#modeBoard");
-    const modeButtons = document.querySelectorAll(".mode-btn");
-    modeButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const mode = button.dataset.mode;
-        modeBoard.className = `board mode-${mode}`;
-        modeButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
-      });
-    });
 
-    const evidenceButtons = document.querySelectorAll(".check-btn");
-    const evidencePanels = document.querySelectorAll(".evidence-item");
-    evidenceButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const target = button.dataset.evidence;
-        evidenceButtons.forEach((item) => item.setAttribute("aria-expanded", String(item === button)));
-        evidencePanels.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === target));
-      });
-    });
-  </script>
 </body>
 </html>

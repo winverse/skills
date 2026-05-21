@@ -14,8 +14,9 @@
 - `skills/**/*.md`는 한국어 우선 문서인가. `SKILL.md`, `references/*.md`의 설명, 절차, 표 라벨은 한국어로 쓰고, 코드 식별자, 명령, 파일 경로, 제품명, 프로토콜명, 인용된 upstream skill 이름처럼 정확도가 필요한 용어만 원문 표기를 허용한다.
 - `SKILL.md` 본문이 과하게 길지 않고, 세부 내용은 `references/`로 분리되어 있는가
 - `skill.html`이 `SKILL.md`를 길게 복사하지 않고 요약, 사용 판단, 중요한 기준, 작업 흐름, 보안 경계, 파일과 검증으로 빠르게 읽히는가
-- `markdown-to-html` 산출물은 첫 화면에서 문서 이름, 한 줄 목적, 입력, 출력, 중요한 기준을 보여주는가
-- `markdown-to-html` 산출물은 `SKILL.md` Markdown의 heading/list/table/code/link 의미를 읽어 `MarkdownHtmlModel`로 압축했는가
+- `markdown-to-html` 스킬 HTML mode 산출물은 첫 화면에서 문서 이름, 한 줄 목적, 입력, 출력, 중요한 기준을 보여주는가
+- `markdown-to-html` 일반 Markdown 문서 mode 산출물은 긴 문단, 깊은 heading, 중첩 list, 긴 table, code fence, blockquote 같은 복잡한 구조를 보존하는가
+- `markdown-to-html` 산출물은 Markdown의 heading/list/table/code/link 의미를 읽어 mode에 맞는 `MarkdownHtmlModel`에 담았는가
 - `markdown-to-html` 산출물은 Markdown `raw HTML`, event handler, `javascript:` link, `vbscript:` link, 외부 script를 그대로 통과시키지 않는가
 - `markdown-to-html` 산출물은 URL을 `http:`, `https:`, `mailto:`, repo-local 상대 경로로 제한하는가
 - `markdown-to-html` validator는 위험한 Markdown fixture와 기대 경계 fixture로 회귀를 잡는가
@@ -90,9 +91,9 @@ Repo가 소유하는 validator는 `.ts`를 기본으로 한다. Node 22 이상�
 - `SKILL.md`와 `references/*.md`의 본문은 한국어로 작성한다. 영어 섹션 라벨을 그대로 남겨 `skill.html`과 대조하기 어렵게 만들지 않는다.
 - 긴 취향, 예시, 평가 prompt, source rule은 `references/`로 분리한다.
 - `skill.html`은 사람이 빠르게 훑을 수 있는 section 구조를 포함한다.
-- `markdown-to-html` 산출물은 첫 viewport에 목적, 입력, 출력, 중요한 기준을 둔다.
-- `markdown-to-html` 산출물은 `SKILL.md`를 기준 문서로 유지하고 짧은 HTML 구조로 화면을 만든다.
-- `markdown-to-html` 산출물은 스킬 HTML mode를 기본으로 두고, 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때만 쓴다.
+- `markdown-to-html` 스킬 HTML mode 산출물은 첫 viewport에 목적, 입력, 출력, 중요한 기준을 둔다.
+- `markdown-to-html` 스킬 HTML mode 산출물은 `SKILL.md`를 기준 문서로 유지하고 짧은 HTML 구조로 화면을 만든다.
+- `markdown-to-html` 일반 Markdown 문서 mode 산출물은 입력과 출력 위치가 명시됐을 때 쓰며, 복잡하다는 이유만으로 본문 구조를 삭제하지 않는다.
 - `markdown-to-html` 산출물은 버튼, script, animation, 보기 전환, 장식용 SVG를 넣지 않는다.
 - `skill.html`은 외부 CDN, 외부 이미지, 외부 script, build tool에 의존하지 않는다.
 - `agents/openai.yaml`의 `display_name`, `short_description`, `default_prompt`가 현재 스킬과 맞다.

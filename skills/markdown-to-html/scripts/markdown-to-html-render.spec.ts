@@ -31,7 +31,7 @@ test.describe("markdown-to-html skill.html render", () => {
     await expect(page.getByText("allowlist sanitizer").first()).toBeVisible();
     await expect(page.locator(".meta-line")).toContainText("보안 경계");
     await expect(page.locator(".summary-list li")).toHaveCount(5);
-    await expect(page.locator(".contract-list li")).toHaveCount(6);
+    await expect(page.locator(".contract-list li")).toHaveCount(5);
     await expect(page.locator(".workflow-list li")).toHaveCount(5);
     await expect(page.locator(".rule-table tbody tr")).toHaveCount(6);
     await expect(page.locator(".rule-zone")).toHaveCount(3);
@@ -42,9 +42,10 @@ test.describe("markdown-to-html skill.html render", () => {
     await expect(page.getByText("실행/외부 의존")).toBeVisible();
     await expect(page.getByText("본문 자기해설")).toBeVisible();
     await expect(page.getByText("mode 선택")).toBeVisible();
+    await expect(page.getByText("구조 보존")).toBeVisible();
+    await expect(page.getByText("복잡한 구조").first()).toBeVisible();
     await expect(page.getByText("URL 제한")).toBeVisible();
     await expect(page.getByText("markdown-rendering-research.md").first()).toBeVisible();
-    await expect(page.getByText("fixture 검증")).toBeVisible();
     await expect(page.getByText("unsafe-markdown.md").first()).toBeVisible();
     await expect(page.getByText("expected-boundary.json").first()).toBeVisible();
     await expect(page.locator(".verify-list li")).toHaveCount(3);

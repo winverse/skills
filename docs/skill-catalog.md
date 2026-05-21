@@ -13,7 +13,8 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | --- | --- | --- |
 | 현재 스킬 목록을 보고 싶다 | `show-skills` | `sync-docs` |
 | 최신 정보, 출처, 추천, 법/규정, 기술 문서를 조사한다. `web-search`라고 말해도 이 스킬로 해석한다. | `web-research` | `agent-improvement-loop` |
-| 새 스킬의 사람용 HTML guide를 만든다 | `markdown-to-html` | Markdown 의미를 읽어 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령만 한국어 우선 HTML로 압축한다. PC desktop 기준만 보며 버튼, script, 애니메이션, 외부 의존을 넣지 않는다. `browser-qa`, `design-review` |
+| 새 스킬의 사람용 HTML guide를 만든다 | `markdown-to-html` | 스킬 HTML mode에서는 Markdown 의미를 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령으로 압축한다. 일반 Markdown 문서 mode에서는 복잡한 문서 구조를 보존한다. PC desktop 기준만 보며 버튼, script, 애니메이션, 외부 의존을 넣지 않는다. | `browser-qa`, `design-review` |
+| Markdown 문서를 4컷/6컷 comic 이해뷰로 바꾼다 | `markdown-to-comic` | `imagegen`은 선택적 raster panel art에만 쓰고, 정확한 명령어와 보안 규칙은 DOM/SVG text와 transcript에 남긴다. | `markdown-to-html`, `browser-qa`, `design-review` |
 | 기존 스킬을 수정한다 | `skill-update` | 모든 호출에서 원본 provenance preflight를 먼저 실행하고, 원본 확인이 필요하면 `web-research`, 이후 `markdown-to-html`, `sync-docs` |
 | 문서끼리 충돌하거나 최신화가 의심된다 | `sync-docs` | `show-skills` |
 | 전사본, 강의 대본, 자막, 회의록을 문맥 흐름에 맞게 직접 다듬는다 | `transcript-polisher` | `sync-docs` |
@@ -58,7 +59,8 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
-| `markdown-to-html` | Markdown 의미를 PC desktop 기준의 한국어 우선 HTML로 줄인다. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이고, 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때만 쓴다. 목적, 입력, 출력, 중요한 기준, 보안 경계, 파일, 검증 명령만 짧게 압축하며, 버튼, inline JavaScript, animation, 외부 CDN/script/image를 쓰지 않는다. Markdown `raw HTML`/event handler/`javascript:` link/`vbscript:` link/외부 script를 그대로 통과시키지 않고, URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로만 남긴다. | [SKILL.md](../skills/markdown-to-html/SKILL.md) · [skill.html](../skills/markdown-to-html/skill.html) |
+| `markdown-to-html` | Markdown 의미를 PC desktop 기준의 한국어 우선 HTML로 변환한다. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이고, 이 mode에서는 목적, 입력, 출력, 중요한 기준, 보안 경계, 파일, 검증 명령으로 짧게 압축한다. 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때 쓰며, 긴 문단, 깊은 heading, 중첩 list, 긴 table, code fence, blockquote 같은 복잡한 구조를 보존한다. Markdown `raw HTML`/event handler/`javascript:` link/`vbscript:` link/외부 script를 그대로 통과시키지 않고, URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로만 남긴다. | [SKILL.md](../skills/markdown-to-html/SKILL.md) · [skill.html](../skills/markdown-to-html/skill.html) |
+| `markdown-to-comic` | Markdown 문서의 핵심 개념, 판단 흐름, 절차를 `ComicBrief`로 줄인 뒤 4컷 또는 6컷 comic storyboard와 접근 가능한 `comic.html` 이해뷰로 만든다. 원본 Markdown은 source of truth로 남기고, panel별 scene, caption, dialogue, visual cue, source anchor, alt text, long description, transcript를 함께 둔다. `$imagegen`은 선택적 캐릭터, 배경, 장면 비유 같은 raster panel art에만 쓰며, 명령어, 보안 규칙, 정확한 정책 문구는 이미지 안에만 넣지 않는다. | [SKILL.md](../skills/markdown-to-comic/SKILL.md) · [skill.html](../skills/markdown-to-comic/skill.html) |
 | `skill-update` | 기존 공유 스킬을 수정할 때 `docs/update-source-registry.md`와 `.gitmodules`를 먼저 확인하고, 원본/upstream provenance preflight, source/release 비교, `adopt`/`adapt`/`reject`/`defer` 판단, references, validator, visual guide, snippets, docs, history를 함께 맞춘다. 외부 dependency 전체 갱신 요청은 `.gitmodules` vendored plugin, repo-owned plugin, registry workflow primitive lane, workflow usage map을 모두 보는 dependency update sweep으로 처리하며, `scripts/validate-source-registry.ts`로 source id drift를 막는다. | [SKILL.md](../skills/skill-update/SKILL.md) · [skill.html](../skills/skill-update/skill.html) |
 | `sync-docs` | README, root/folder-local AGENTS, docs, snippets, history, skill 파일과 target project skill setup을 비교해 stale 설명과 충돌을 정리한다. | [SKILL.md](../skills/sync-docs/SKILL.md) · [skill.html](../skills/sync-docs/skill.html) |
 | `agent-improvement-loop` | 소진형 실행 전 예/아니오를 묻고, 답에 따라 safe backlog batch 또는 단계별 review로 repo 품질을 올린다. | [SKILL.md](../skills/agent-improvement-loop/SKILL.md) · [skill.html](../skills/agent-improvement-loop/skill.html) |
