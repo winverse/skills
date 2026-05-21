@@ -34,6 +34,14 @@ test.describe("skill-to-html skill.html render", () => {
     await expect(page.locator(".rule-table tbody tr")).toHaveCount(2);
     await expect(page.locator(".verify-list li")).toHaveCount(2);
 
+    await expect(page.locator(".summary-list")).toHaveCSS("border-top-width", "0px");
+    await expect(page.locator(".contract-list")).toHaveCSS("border-top-width", "0px");
+    await expect(page.locator(".rule-table")).toHaveCSS("border-top-width", "0px");
+    await expect(page.locator(".summary-list li").last()).toHaveCSS("border-bottom-width", "0px");
+    await expect(page.locator(".contract-list li").last()).toHaveCSS("border-bottom-width", "0px");
+    await expect(page.locator(".rule-table tbody tr").last().locator("td")).toHaveCSS("border-bottom-width", "0px");
+    await expect(page.locator(".verify-list li").first()).toHaveCSS("border-top-width", "0px");
+
     const h2Titles = await page.locator("h2").evaluateAll((nodes) =>
       nodes.map((node) => node.textContent?.trim() ?? "").filter(Boolean),
     );
