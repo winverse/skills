@@ -3,613 +3,303 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>atomic-committer 시각 가이드</title>
+  <title>atomic-committer 요약</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
-      --bg:#f6f7f4;
-      --surface:#ffffff;
-      --panel:#f9fbfc;
-      --ink:#16191f;
-      --muted:#5f6873;
-      --border:#c8d0d8;
-      --line:#7a8694;
-      --blue:#2457a6;
-      --green:#23724e;
-      --amber:#9a6712;
-      --red:#a13d36;
-      --violet:#6650a4;
-      --soft-blue:#eaf1fc;
-      --soft-green:#eaf6ef;
-      --soft-amber:#fff4db;
-      --soft-red:#fff0ee;
-      --shadow:0 18px 42px rgba(22,25,31,.08);
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --panel: #f8fafc;
+      --line: #c9d2dc;
+      --text: #17202b;
+      --muted: #5f6b7a;
+      --blue: #2458b8;
+      --green: #2f684f;
+      --red: #963d38;
+      --code: #eef2f7;
     }
-    * { box-sizing:border-box; }
-    html, body {
-      margin:0;
-      min-width:1180px;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      letter-spacing:0;
-      line-height:1.5;
+    * { box-sizing: border-box; }
+    html,
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
     }
-    body { padding:28px 0 56px; }
-    a { color:inherit; text-decoration:none; }
-    code, .mono { font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; overflow-wrap:anywhere; }
-    h1, h2, h3, p { margin:0; }
-    h1 { font-size:31px; line-height:1.15; }
-    h2 { font-size:20px; line-height:1.25; }
-    h3 { font-size:15px; line-height:1.25; }
-    button { font:inherit; letter-spacing:0; }
-    .shell { width:1180px; max-width:1180px; margin:0 auto; }
-    .hero {
-      min-height:560px;
-      display:grid;
-      grid-template-columns:318px 1fr;
-      gap:18px;
-      align-items:stretch;
-      margin-bottom:22px;
+    body { padding: 32px 28px 56px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: 32px; line-height: 1.18; }
+    h2 { margin-bottom: 12px; font-size: 20px; line-height: 1.3; }
+    h3 { margin-bottom: 8px; font-size: 15px; }
+    p { color: var(--muted); }
+    code {
+      border-radius: 5px;
+      background: var(--code);
+      padding: 2px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
     }
-    .identity, .stage, .panel, .contract, .matrix, .evidence, .verify-grid, .code-sample, .file-node {
-      border:1px solid var(--border);
-      border-radius:8px;
-      background:var(--surface);
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
     }
-    .identity {
-      padding:18px;
-      display:grid;
-      grid-template-rows:auto 1fr auto;
-      box-shadow:var(--shadow);
+    .hero,
+    section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
     }
-    .mark {
-      width:72px;
-      height:72px;
-      border:1px solid var(--border);
-      border-radius:8px;
-      display:grid;
-      place-items:center;
-      margin-bottom:16px;
-      background:linear-gradient(135deg, var(--soft-green), var(--soft-blue));
-      color:var(--green);
-      font-weight:900;
-      font-size:18px;
+    .hero { padding: 28px 34px 24px; }
+    section {
+      padding: 26px 34px;
+      margin-top: 16px;
     }
-    .subtitle { margin-top:9px; color:var(--muted); font-size:14px; }
-    .quick { display:grid; gap:8px; margin-top:18px; }
-    .quick div { display:grid; grid-template-columns:82px 1fr; gap:8px; font-size:12px; color:var(--muted); align-items:start; }
-    .quick strong { color:var(--ink); }
-    .stage {
-      position:relative;
-      padding:18px;
-      overflow:hidden;
-      box-shadow:var(--shadow);
+    .lead {
+      max-width: 64em;
+      margin-bottom: 16px;
+      font-size: 16px;
     }
-    .modebar {
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:8px;
-      margin:14px 0 16px;
+    .meta-line {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
     }
-    .mode {
-      height:50px;
-      border:1px solid var(--border);
-      border-radius:8px;
-      background:var(--panel);
-      color:var(--ink);
-      cursor:pointer;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      font-weight:800;
-      font-size:13px;
+    .summary-copy,
+    .use-copy {
+      max-width: 64em;
+      margin-bottom: 12px;
     }
-    .mode:hover, .mode:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
-    .mode[aria-pressed="true"] { background:var(--soft-blue); border-color:var(--blue); color:var(--blue); }
-    .scene {
-      display:grid;
-      grid-template-columns:1.08fr .92fr;
-      gap:14px;
-      align-items:stretch;
+    .summary-list,
+    .contract-list,
+    .workflow-list,
+    .verify-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
-    .diagram {
-      min-height:342px;
-      border:1px solid var(--border);
-      border-radius:8px;
-      background:#fbfcfd;
-      padding:10px;
+    .summary-list li {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
     }
-    .status-panel {
-      display:grid;
-      grid-template-rows:auto auto;
-      gap:10px;
+    .summary-list li:last-child { border-bottom: 0; }
+    .summary-list strong,
+    .contract-list strong,
+    .verify-list strong { color: var(--text); }
+    .decision-table,
+    .rule-table,
+    .command-table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    .status-card {
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:12px;
-      background:var(--panel);
+    .decision-table th,
+    .decision-table td,
+    .rule-table th,
+    .rule-table td,
+    .command-table th,
+    .command-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
     }
-    .status-card strong { display:block; font-size:13px; margin-bottom:4px; }
-    .status-card span, .status-card p { color:var(--muted); font-size:13px; }
-    .stamp {
-      display:inline-grid;
-      place-items:center;
-      min-width:72px;
-      height:28px;
-      border-radius:6px;
-      border:1px solid currentColor;
-      color:var(--green);
-      font-size:12px;
-      font-weight:900;
-      margin-bottom:8px;
+    .decision-table tr:last-child th,
+    .decision-table tr:last-child td,
+    .rule-table tr:last-child th,
+    .rule-table tr:last-child td,
+    .command-table tr:last-child th,
+    .command-table tr:last-child td { border-bottom: 0; }
+    .decision-table th,
+    .rule-table th,
+    .command-table th { width: 190px; color: var(--text); }
+    .decision-table td,
+    .rule-table td,
+    .command-table td { color: var(--muted); }
+    .contract-list li {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
     }
-    .stamp.stop { color:var(--red); }
-    .stamp.hold { color:var(--amber); }
-    .contracts {
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-      gap:10px;
-      margin-top:14px;
+    .contract-list li:last-child { border-bottom: 0; }
+    .contract-list span,
+    .workflow-list span,
+    .verify-list span {
+      color: var(--muted);
+      font-size: 14px;
     }
-    .contract {
-      min-height:138px;
-      padding:12px;
-      border-top:4px solid var(--line);
-      background:var(--panel);
+    .workflow-list li {
+      display: grid;
+      grid-template-columns: 36px 190px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
     }
-    .contract[data-active="true"] { transform:translateY(-3px); box-shadow:0 12px 26px rgba(36,87,166,.12); border-top-color:var(--blue); }
-    .contract strong { display:block; font-size:13px; margin:4px 0 5px; }
-    .contract p, .small { color:var(--muted); font-size:12.5px; }
-    .eyebrow { color:var(--muted); font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
-    .section { margin-top:22px; }
-    .section-head {
-      display:flex;
-      justify-content:space-between;
-      align-items:baseline;
-      gap:24px;
-      margin-bottom:10px;
+    .workflow-list li:first-child { border-top: 0; }
+    .workflow-list b {
+      color: var(--blue);
+      font-size: 14px;
     }
-    .section-head p { color:var(--muted); font-size:13px; }
-    .two { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; align-items:stretch; }
-    .panel { padding:16px; overflow:hidden; }
-    svg { display:block; width:100%; height:auto; }
-    .matrix {
-      display:grid;
-      grid-template-columns:190px 1fr 1fr 1fr 1fr;
-      overflow:hidden;
+    .rule-zones { display: grid; gap: 16px; }
+    .rule-zone {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
     }
-    .matrix > div {
-      min-height:82px;
-      padding:12px;
-      border-right:1px solid var(--border);
-      border-bottom:1px solid var(--border);
-      background:var(--surface);
+    .rule-zone:first-child {
+      padding-top: 0;
+      border-top: 0;
     }
-    .matrix > div:nth-child(5n) { border-right:0; }
-    .matrix > div:nth-last-child(-n+5) { border-bottom:0; }
-    .matrix .head { min-height:52px; background:#edf2f6; font-weight:900; }
-    .matrix strong { display:block; margin-bottom:4px; font-size:13px; }
-    .matrix span, .matrix p { color:var(--muted); font-size:12.5px; }
-    .matrix .go { background:var(--soft-green); }
-    .matrix .warn { background:var(--soft-amber); }
-    .matrix .stop { background:var(--soft-red); }
-    .evidence {
-      display:grid;
-      grid-template-columns:170px 1fr 230px 220px;
-      overflow:hidden;
+    .rule-zone-heading { margin: 0; }
+    .rule-zone-heading strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.35;
     }
-    .evidence > div {
-      min-height:88px;
-      padding:12px;
-      border-right:1px solid var(--border);
-      border-bottom:1px solid var(--border);
+    .allow-zone .rule-zone-heading strong { color: var(--green); }
+    .conditional-zone .rule-zone-heading strong { color: var(--blue); }
+    .block-zone .rule-zone-heading strong { color: var(--red); }
+    .rule-table thead th {
+      padding: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
     }
-    .evidence > div:nth-child(4n) { border-right:0; }
-    .evidence > div:nth-last-child(-n+4) { border-bottom:0; }
-    .evidence .head { min-height:52px; background:#edf2f6; font-weight:900; }
-    .evidence strong { display:block; margin-bottom:4px; font-size:13px; }
-    .evidence span { color:var(--muted); font-size:12.5px; }
-    details {
-      border:1px solid var(--border);
-      border-radius:8px;
-      background:var(--surface);
-      overflow:hidden;
+    .verify-list { margin-top: 12px; }
+    .verify-list li {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
     }
-    summary {
-      cursor:pointer;
-      padding:13px 14px;
-      font-weight:900;
-      background:#edf2f6;
-    }
-    summary:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
-    .detail-body { padding:14px; color:var(--muted); font-size:13px; }
-    .guards {
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:10px;
-    }
-    .guard {
-      min-height:130px;
-      border:1px solid var(--border);
-      border-radius:8px;
-      padding:12px;
-      background:var(--panel);
-    }
-    .guard.block { border-top:4px solid var(--red); background:var(--soft-red); }
-    .guard.ok { border-top:4px solid var(--green); background:var(--soft-green); }
-    .guard.warn { border-top:4px solid var(--amber); background:var(--soft-amber); }
-    .guard strong { display:block; font-size:13px; margin-bottom:6px; }
-    .guard span { color:var(--muted); font-size:12.5px; }
-    .file-map {
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:10px;
-    }
-    .file-node {
-      min-height:100px;
-      padding:12px;
-      background:var(--panel);
-    }
-    .file-node strong { display:block; font-size:13px; margin-bottom:6px; }
-    .file-node span { color:var(--muted); font-size:12.5px; }
-    .verify-grid {
-      display:grid;
-      grid-template-columns:180px 1fr 250px 210px;
-      overflow:hidden;
-    }
-    .verify-grid > div {
-      min-height:78px;
-      padding:12px;
-      border-right:1px solid var(--border);
-      border-bottom:1px solid var(--border);
-    }
-    .verify-grid > div:nth-child(4n) { border-right:0; }
-    .verify-grid > div:nth-last-child(-n+4) { border-bottom:0; }
-    .verify-grid .head { min-height:52px; background:#edf2f6; font-weight:900; }
-    .verify-grid strong { display:block; margin-bottom:4px; font-size:13px; }
-    .verify-grid span { color:var(--muted); font-size:12.5px; }
-    .code-sample {
-      margin:0;
-      padding:14px;
-      background:#141922;
-      color:#eef4ff;
-      overflow:auto;
-      white-space:pre;
-      font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    }
-    .pulse {
-      animation:pulseLine 2.8s ease-in-out infinite;
-      stroke-dasharray:12 10;
-    }
-    .push-loop {
-      animation:dash 3.4s linear infinite;
-      stroke-dasharray:10 10;
-    }
-    @keyframes pulseLine {
-      0%, 100% { stroke-dashoffset:0; opacity:.55; }
-      50% { stroke-dashoffset:-26; opacity:1; }
-    }
-    @keyframes dash {
-      to { stroke-dashoffset:-80; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
-    }
+    .verify-list li:first-child { border-top: 0; }
+    .command-table code { white-space: normal; }
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="hero">
-      <section class="identity" aria-label="스킬 정체성">
-        <div>
-          <div class="mark">AC</div>
-          <h1>atomic-committer</h1>
-          <p class="subtitle">dirty git tree를 의미 단위로 나누고, 비밀값 guard를 통과한 changeset만 commit한 뒤 push 금지가 없으면 현재 branch를 한 번 push한다.</p>
-        </div>
-        <div class="quick" aria-label="핵심 파일">
-          <div><strong>호출</strong><span><code>commit</code>, <code>커밋</code>, <code>atomic commit</code></span></div>
-          <div><strong>기본값</strong><span>commit + push</span></div>
-          <div><strong>원본</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
-          <div><strong>검증</strong><span><a href="scripts/validate-atomic-committer.ts"><code>validate-atomic-committer.ts</code></a></span></div>
-        </div>
-        <p class="small">이 화면은 PC desktop 기준의 사람용 가이드다. 전역 설치나 repo 밖 변경은 하지 않는다.</p>
-      </section>
-
-      <section class="stage" aria-label="조작 가능한 커밋 판단판">
-        <div class="section-head">
-          <div>
-            <h2>커밋 출하 판단판</h2>
-            <p>mode를 바꾸면 push 기본값, 차단 경계, 최종 보고 항목이 함께 바뀐다.</p>
-          </div>
-        </div>
-        <div class="modebar" role="group" aria-label="요청 mode">
-          <span class="mode" type="button" data-mode="default" aria-pressed="true">commit 요청</span>
-          <span class="mode" type="button" data-mode="local" aria-pressed="false">local only</span>
-          <span class="mode" type="button" data-mode="blocked" aria-pressed="false">secret 발견</span>
-          <span class="mode" type="button" data-mode="missing" aria-pressed="false">remote 누락</span>
-        </div>
-        <div class="scene">
-          <div class="diagram">
-            <svg viewBox="0 0 610 320" role="img" aria-label="atomic commit 흐름도">
-              <defs>
-                <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457a6"></path></marker>
-                <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#23724e"></path></marker>
-                <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#a13d36"></path></marker>
-              </defs>
-              <g fill="#fff" stroke="#c8d0d8" stroke-width="2">
-                <rect x="24" y="42" width="116" height="64" rx="8"></rect>
-                <rect x="178" y="42" width="116" height="64" rx="8"></rect>
-                <rect x="332" y="42" width="116" height="64" rx="8"></rect>
-                <rect x="470" y="42" width="116" height="64" rx="8"></rect>
-                <rect x="100" y="188" width="132" height="66" rx="8"></rect>
-                <rect x="326" y="188" width="132" height="66" rx="8"></rect>
-              </g>
-              <g fill="none" stroke="#2457a6" stroke-width="2.5" marker-end="url(#arrowBlue)">
-                <path class="pulse" d="M140 74 L178 74"></path>
-                <path class="pulse" d="M294 74 L332 74"></path>
-                <path class="pulse" d="M448 74 L470 74"></path>
-                <path class="pulse" d="M386 106 C382 142 250 142 200 188"></path>
-              </g>
-              <path id="pushPath" class="push-loop" d="M458 222 C536 222 548 123 528 106" fill="none" stroke="#23724e" stroke-width="3" marker-end="url(#arrowGreen)"></path>
-              <path id="blockPath" d="M236 74 C282 120 292 166 326 206" fill="none" stroke="#a13d36" stroke-width="0" marker-end="url(#arrowRed)"></path>
-              <g text-anchor="middle" font-size="13" font-weight="800" fill="#16191f">
-                <text x="82" y="68">worktree</text>
-                <text x="236" y="68">비밀값 guard</text>
-                <text x="390" y="68">changeset</text>
-                <text x="528" y="68">commit</text>
-                <text x="166" y="213">검증</text>
-                <text x="392" y="213">push 판단</text>
-              </g>
-              <g text-anchor="middle" font-size="11" fill="#5f6873">
-                <text x="82" y="87">status / diff</text>
-                <text x="236" y="87">전후 검사</text>
-                <text x="390" y="87">의미 단위</text>
-                <text x="528" y="87">해시 생성</text>
-                <text x="166" y="233">test / validator</text>
-                <text x="392" y="233">금지 없으면 push</text>
-              </g>
-              <g id="modeBadge">
-                <rect x="222" y="274" width="166" height="30" rx="6" fill="#eaf6ef" stroke="#23724e"></rect>
-                <text x="305" y="294" text-anchor="middle" font-size="12" font-weight="900" fill="#23724e">commit + push 기본</text>
-              </g>
-            </svg>
-          </div>
-          <div class="status-panel">
-            <article class="status-card">
-              <span id="statusStamp" class="stamp">진행</span>
-              <strong id="modeTitle">commit 요청은 commit + push로 해석</strong>
-              <p id="modeText">push 금지 문구가 없으면 changeset별 commit 후 현재 branch를 한 번 push한다.</p>
-            </article>
-            <article class="status-card">
-              <strong>현재 mode의 보고 항목</strong>
-              <p id="reportText">commit hash, message, validation, push 결과, remote/branch를 최종 보고에 남긴다.</p>
-            </article>
-          </div>
-        </div>
-        <div class="contracts" aria-label="첫 화면 중요한 기준">
-          <article class="contract" data-contract="split" data-active="true"><div class="eyebrow">계약 1</div><strong>의미 단위 분리</strong><p>모든 변경을 한 번에 묶지 않고 logical changeset별로 commit한다.</p></article>
-          <article class="contract" data-contract="push" data-active="true"><div class="eyebrow">계약 2</div><strong>push 기본값</strong><p><code>commit</code> 요청은 기본적으로 commit + push 요청이다.</p></article>
-          <article class="contract" data-contract="guard" data-active="true"><div class="eyebrow">계약 3</div><strong>secret 전후 검사</strong><p>candidate diff와 staged diff를 모두 검사한다.</p></article>
-          <article class="contract" data-contract="block" data-active="false"><div class="eyebrow">계약 4</div><strong>hard-block</strong><p>live-looking credential과 private key material은 commit을 멈춘다.</p></article>
-          <article class="contract" data-contract="report" data-active="true"><div class="eyebrow">계약 5</div><strong>완료 보고</strong><p>push 실행, 생략, 불가 사유를 branch 정보와 함께 남긴다.</p></article>
-        </div>
-      </section>
+      <h1>atomic-committer</h1>
+      <p class="lead">변경 파일을 secret guard로 검사하고 logical changeset별로 stage/commit한 뒤, 사용자가 push 금지를 명시하지 않는 한 remote와 branch를 확인해 push할 때 사용한다.</p>
+      <p class="meta-line">SKILL.md 기준 · 읽기용 skill.html · 한국어 우선 · 보안 경계 · 인터랙션 없음</p>
     </header>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>사용 판단</h2>
-        <p>commit 요청의 기본값과 예외를 먼저 가른다. 넓은 표는 단독 영역에 둔다.</p>
-      </div>
-      <div class="matrix" aria-label="사용 판단">
-        <div class="head">상황</div><div class="head">판정</div><div class="head">해야 할 일</div><div class="head">멈춤 조건</div><div class="head">보고</div>
-        <div><strong><code>commit</code> 요청</strong><span>사용자가 push 금지를 말하지 않음</span></div>
-        <div class="go"><strong>commit + push</strong><span>기본 경로</span></div>
-        <div><span>changeset별 commit 묶음을 만들고 현재 branch를 한 번 push한다.</span></div>
-        <div><span>secret, 검증 실패, remote/branch/upstream 확인 불가</span></div>
-        <div><span>hash, message, validation, push 결과</span></div>
-        <div><strong><code>commit only</code></strong><span><code>local only</code>, push 하지 마</span></div>
-        <div class="warn"><strong>push 생략</strong><span>명시적 금지</span></div>
-        <div><span>commit까지 수행하고 push 생략 사유를 남긴다.</span></div>
-        <div><span>secret 또는 검증 실패</span></div>
-        <div><span>hash, message, validation, push 생략</span></div>
-        <div><strong>secret 후보</strong><span>live-looking value 또는 private key</span></div>
-        <div class="stop"><strong>hard-block</strong><span>commit 중단</span></div>
-        <div><span>staging 전후 guard에서 발견 위치와 유형을 확인한다.</span></div>
-        <div><span>이미 tracked된 secret을 <code>.gitignore</code>로 우회하려는 경우</span></div>
-        <div><span>차단 사유, stage하지 않은 파일</span></div>
-        <div><strong>remote 누락</strong><span>branch/upstream 확인 불가</span></div>
-        <div class="warn"><strong>local commit</strong><span>push 불가</span></div>
-        <div><span>commit은 만들고 push 가능성만 중단한다.</span></div>
-        <div><span>remote가 없거나 upstream을 확정할 수 없음</span></div>
-        <div><span>push 불가 사유와 remote/branch 상태</span></div>
-      </div>
+    <section>
+      <h2>요약</h2>
+      <p class="summary-copy">dirty git tree를 secret guard로 확인한 뒤 logical changeset 단위로 commit하고 필요하면 push한다.</p>
+      <ul class="summary-list">
+        <li><strong>사용할 때</strong><span>dirty git tree를 secret guard로 확인한 뒤 logical changeset 단위로 commit하고 필요하면 push한다.</span></li>
+        <li><strong>주요 입력</strong><span>현재 git 변경분, user intent, remote/branch 상태, secret scan 결과.</span></li>
+        <li><strong>주요 출력</strong><span>논리적으로 나뉜 commit, 한국어 요약을 포함한 conventional commit message, push 결과.</span></li>
+        <li><strong>먼저 판단</strong><span>비밀값처럼 보이는 내용은 hard block하고, unrelated dirty change는 되돌리지 않는다.</span></li>
+        <li><strong>검증</strong><span>관련 validator와 <code>node scripts/validate-skill-html.ts .</code>로 확인한다.</span></li>
+      </ul>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>실행 흐름</h2>
-        <p>화살표는 실제 node에 닿으며, guard는 commit 전과 staged 후 두 번 지나간다.</p>
-      </div>
-      <div class="two">
-        <div class="panel">
-          <svg viewBox="0 0 680 350" role="img" aria-label="workflow 단계 흐름도">
-            <defs>
-              <marker id="flowArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#2457a6"></path></marker>
-              <marker id="stopArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#a13d36"></path></marker>
-            </defs>
-            <g fill="#fff" stroke="#c8d0d8" stroke-width="2">
-              <rect x="24" y="44" width="116" height="58" rx="8"></rect>
-              <rect x="174" y="44" width="116" height="58" rx="8"></rect>
-              <rect x="324" y="44" width="116" height="58" rx="8"></rect>
-              <rect x="512" y="44" width="124" height="58" rx="8"></rect>
-              <rect x="86" y="196" width="136" height="58" rx="8"></rect>
-              <rect x="282" y="196" width="136" height="58" rx="8"></rect>
-              <rect x="478" y="196" width="136" height="58" rx="8"></rect>
-            </g>
-            <g fill="none" stroke="#2457a6" stroke-width="2.4" marker-end="url(#flowArrow)">
-              <path d="M140 73 L174 73"></path>
-              <path d="M290 73 L324 73"></path>
-              <path d="M440 73 L512 73"></path>
-              <path d="M574 102 C574 154 154 144 154 196"></path>
-              <path d="M222 225 L282 225"></path>
-              <path d="M418 225 L478 225"></path>
-            </g>
-            <path d="M382 102 C412 140 438 156 500 196" fill="none" stroke="#a13d36" stroke-width="2.4" marker-end="url(#stopArrow)"></path>
-            <g text-anchor="middle" font-size="13" font-weight="800" fill="#16191f">
-              <text x="82" y="68">root 확인</text>
-              <text x="232" y="68">status/diff</text>
-              <text x="382" y="68">guard 1</text>
-              <text x="574" y="68">changeset</text>
-              <text x="154" y="220">stage</text>
-              <text x="350" y="220">guard 2</text>
-              <text x="546" y="220">commit/push</text>
-            </g>
-            <g text-anchor="middle" font-size="11" fill="#5f6873">
-              <text x="82" y="87">rev-parse</text>
-              <text x="232" y="87">dirty tree</text>
-              <text x="382" y="87">candidate</text>
-              <text x="574" y="87">논리 묶음</text>
-              <text x="154" y="239">필요 파일만</text>
-              <text x="350" y="239">staged diff</text>
-              <text x="546" y="239">검증 후 출하</text>
-              <text x="500" y="177" fill="#a13d36">secret이면 중단</text>
-            </g>
-          </svg>
+    <section>
+      <h2>사용 판단</h2>
+      <p class="use-copy">이 화면은 스킬을 설치하거나 적용하기 전에 “언제 쓰고 무엇을 확인해야 하는지”를 빠르게 보여준다.</p>
+      <table class="decision-table">
+        <tbody>
+          <tr><th>사용할 때</th><td>변경 파일을 secret guard로 검사하고 logical changeset별로 stage/commit한 뒤, 사용자가 push 금지를 명시하지 않는 한 remote와 branch를 확인해 push할 때 사용한다.</td></tr>
+          <tr><th>먼저 볼 것</th><td><code>SKILL.md</code>의 description, trigger, 금지 조건, 검증 명령.</td></tr>
+          <tr><th>완료 신호</th><td><code>skill.html</code>이 원문 기준과 같은 방향을 가리키고, validator가 통과한다.</td></tr>
+          
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>중요한 기준</h2>
+      <ul class="contract-list">
+        <li><strong>모든 변경을 한 번에 묶지 말고 logical changeset별로 comm</strong><span>모든 변경을 한 번에 묶지 말고 logical changeset별로 commit한다.</span></li>
+        <li><strong>사용자가 &quot;commit&quot;, &quot;커밋&quot;, &quot;atomic commit&quot;을 요청하면</strong><span>사용자가 &quot;commit&quot;, &quot;커밋&quot;, &quot;atomic commit&quot;을 요청하면 기본적으로 commit + push 요청으로 해석한다.</span></li>
+        <li><strong>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;, &quot;local on</strong><span>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;, &quot;local only&quot;처럼 push 금지를 명시한 경우에만 push를 생략한다.</span></li>
+        <li><strong>여러 변경 단락이 있으면 logical changeset별로 commit을 </strong><span>여러 변경 단락이 있으면 logical changeset별로 commit을 분리하고, 커밋 묶음을 만든 뒤 현재 branch를 한 번 push한다.</span></li>
+        <li><strong>staging 전후에 candidate diff를 secret-bearing</strong><span>staging 전후에 candidate diff를 secret-bearing content 기준으로 검사한다.</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>작업 흐름</h2>
+      <ol class="workflow-list">
+        <li><b>1</b><strong>git rev-parse --show-toplevel로 wor</strong><span>git rev-parse --show-toplevel로 worktree를 확인한다.</span></li>
+        <li><b>2</b><strong>git status --short, git diff --sta</strong><span>git status --short, git diff --stat, git diff, 필요하면 git diff --cached를 본다.</span></li>
+        <li><b>3</b><strong>candidate diff와 untracked file을 fo</strong><span>candidate diff와 untracked file을 forbidden content guard로 검사한다.</span></li>
+        <li><b>4</b><strong>변경 단락을 logical changeset으로 나누고 필요한</strong><span>변경 단락을 logical changeset으로 나누고 필요한 파일만 stage한다.</span></li>
+        <li><b>5</b><strong>staged diff를 다시 검사한다</strong><span>staged diff를 다시 검사한다.</span></li>
+        <li><b>6</b><strong>관련 validator/test를 실행한다</strong><span>관련 validator/test를 실행한다.</span></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>보안 경계</h2>
+      <div class="rule-zones">
+        <div class="rule-zone allow-zone">
+          <h3 class="rule-zone-heading"><strong>허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>사용자가 &quot;commit&quot;, &quot;커밋&quot;, &quot;atomic com</th><td>사용자가 &quot;commit&quot;, &quot;커밋&quot;, &quot;atomic commit&quot;을 요청하면 기본적으로 commit + push 요청으로 해석한다.</td></tr>
+              <tr><th>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;,</th><td>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;, &quot;local only&quot;처럼 push 금지를 명시한 경우에만 push를 생략한다.</td></tr>
+              <tr><th>반복 생성되는 local artifact나 secret-b</th><td>반복 생성되는 local artifact나 secret-bearing untracked file은 가장 좁은 .gitignore rule로 예방한다.</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="panel">
-          <h3>명령 순서</h3>
-          <p class="small">SKILL.md workflow를 사람이 확인하기 쉬운 실행 순서로 압축했다.</p>
-          <pre class="code-sample">git rev-parse --show-toplevel
-git status --short
-git diff --stat
-git diff
-# guard: candidate diff + untracked files
-git add &lt;logical changeset files&gt;
-git diff --cached
-# guard: staged diff
-&lt;validator/test&gt;
-git commit -m "docs: 한글 요약"
-git push &lt;remote&gt; &lt;branch&gt; # push 금지가 없을 때</pre>
+        <div class="rule-zone conditional-zone">
+          <h3 class="rule-zone-heading"><strong>조건부 허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;,</th><td>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;, &quot;local only&quot;처럼 push 금지를 명시한 경우에만 push를 생략한다.</td></tr>
+              <tr><th>staging 전후에 candidate diff를 secr</th><td>staging 전후에 candidate diff를 secret-bearing content 기준으로 검사한다.</td></tr>
+              <tr><th>반복 생성되는 local artifact나 secret-b</th><td>반복 생성되는 local artifact나 secret-bearing untracked file은 가장 좁은 .gitignore rule로 예방한다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rule-zone block-zone">
+          <h3 class="rule-zone-heading"><strong>금지</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;,</th><td>사용자가 &quot;push 하지 마&quot;, &quot;commit only&quot;, &quot;local only&quot;처럼 push 금지를 명시한 경우에만 push를 생략한다.</td></tr>
+              <tr><th>staging 전후에 candidate diff를 secr</th><td>staging 전후에 candidate diff를 secret-bearing content 기준으로 검사한다.</td></tr>
+              <tr><th>live-looking credential assignme</th><td>live-looking credential assignment나 private key material은 hard-block한다.</td></tr>
+              <tr><th>반복 생성되는 local artifact나 secret-b</th><td>반복 생성되는 local artifact나 secret-bearing untracked file은 가장 좁은 .gitignore rule로 예방한다.</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>금지 내용 guard</h2>
-        <p>이 guard는 경고가 아니라 hard-block이다. 허용 가능한 placeholder도 먼저 확인한다.</p>
-      </div>
-      <div class="guards">
-        <div class="guard block"><strong>live-looking assignment</strong><span><code>OPENAI_API_KEY</code>, <code>ANTHROPIC_API_KEY</code>, <code>GITHUB_TOKEN</code>, <code>DATABASE_URL</code>, <code>MONGODB_URI</code> 등에 실제처럼 보이는 값이 있으면 중단한다.</span></div>
-        <div class="guard block"><strong>private key material</strong><span><code>-----BEGIN PRIVATE KEY-----</code>, <code>-----BEGIN OPENSSH PRIVATE KEY-----</code>는 commit 대상이 될 수 없다.</span></div>
-        <div class="guard block"><strong>credential string</strong><span><code>username:password@</code> 형태 connection string과 <code>AKIA...</code>, <code>ASIA...</code> AWS key는 차단한다.</span></div>
-        <div class="guard ok"><strong>narrow ignore</strong><span>반복 생성되는 local artifact나 secret-bearing untracked file은 가장 좁은 <code>.gitignore</code> rule로 예방한다.</span></div>
-        <div class="guard warn"><strong>tracked secret</strong><span>이미 tracked된 secret은 <code>.gitignore</code>로 우회하지 않는다. 별도 제거와 기록 정리가 필요하다.</span></div>
-        <div class="guard ok"><strong>dummy 허용 후보</strong><span><code>placeholder</code>, <code>example</code>, <code>dummy</code>, <code>fake</code>, <code>redacted</code> 값은 먼저 확인한 뒤 허용될 수 있다.</span></div>
-        <div class="guard warn"><strong>scope guard</strong><span>force-push, tag, release, deploy는 사용자가 별도로 명시하지 않으면 하지 않는다.</span></div>
-        <div class="guard ok"><strong>message guard</strong><span><code>feat</code>, <code>fix</code>, <code>docs</code> 같은 English conventional prefix와 Korean summary를 쓴다.</span></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>중요한 기준과 기준 원문</h2>
-        <p>첫 화면의 판단 요소를 <code>SKILL.md</code> 줄 번호와 연결한다.</p>
-      </div>
-      <div class="evidence" aria-label="기준 원문 연결표">
-        <div class="head">계약</div><div class="head">기준 원문</div><div class="head">확인 방법</div><div class="head">실패 신호</div>
-        <div><strong>의미 단위 분리</strong></div><div><span><code>SKILL.md:12</code>, <code>SKILL.md:15</code>, <code>SKILL.md:38</code>, <code>SKILL.md:41</code></span></div><div><span>dirty file을 logical changeset으로 나누고 필요한 파일만 stage한다.</span></div><div><span>전체 변경을 한 commit에 몰아넣음</span></div>
-        <div><strong>push 기본값</strong></div><div><span><code>SKILL.md:13-15</code>, <code>SKILL.md:42</code></span></div><div><span>push 금지 표현이 있는지 먼저 확인한다.</span></div><div><span>금지 표현 없이 push를 생략하거나 여러 번 push함</span></div>
-        <div><strong>비밀값 guard</strong></div><div><span><code>SKILL.md:16-19</code>, <code>SKILL.md:44-53</code></span></div><div><span>candidate diff, untracked file, staged diff를 모두 검사한다.</span></div><div><span>credential 후보를 보고도 commit 진행</span></div>
-        <div><strong>message format</strong></div><div><span><code>SKILL.md:20</code>, <code>SKILL.md:24-31</code></span></div><div><span><code>&lt;type&gt;: &lt;한글 요약&gt;</code> 또는 <code>&lt;type&gt;(&lt;scope&gt;): &lt;한글 요약&gt;</code></span></div><div><span>영문 설명만 있거나 conventional prefix 누락</span></div>
-        <div><strong>final report</strong></div><div><span><code>SKILL.md:21</code>, <code>SKILL.md:55-60</code></span></div><div><span>hash, message, dirty file, validation, push 결과 또는 불가 사유를 남긴다.</span></div><div><span>remote/branch 상태가 보고되지 않음</span></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>파일 관계도</h2>
-        <p>이 hook run은 인접 <code>skill.html</code>만 갱신한다.</p>
-      </div>
-      <div class="two">
-        <div class="panel">
-          <svg viewBox="0 0 650 290" role="img" aria-label="atomic-committer 파일 관계도">
-            <defs><marker id="fileArrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#7a8694"></path></marker></defs>
-            <g fill="#fff" stroke="#c8d0d8" stroke-width="2">
-              <rect x="250" y="106" width="150" height="76" rx="8"></rect>
-              <rect x="38" y="34" width="162" height="64" rx="8"></rect>
-              <rect x="38" y="192" width="162" height="64" rx="8"></rect>
-              <rect x="450" y="34" width="162" height="64" rx="8"></rect>
-              <rect x="450" y="192" width="162" height="64" rx="8"></rect>
-            </g>
-            <g fill="none" stroke="#7a8694" stroke-width="2.2" marker-end="url(#fileArrow)">
-              <path d="M200 66 L250 126"></path>
-              <path d="M200 224 L250 162"></path>
-              <path d="M400 126 L450 66"></path>
-              <path d="M400 162 L450 224"></path>
-            </g>
-            <g text-anchor="middle" font-size="13" font-weight="800" fill="#16191f">
-              <text x="325" y="136">atomic-committer</text>
-              <text x="119" y="62">SKILL.md</text>
-              <text x="119" y="220">skill.html</text>
-              <text x="531" y="62">references</text>
-              <text x="531" y="220">scripts</text>
-            </g>
-            <g text-anchor="middle" font-size="11" fill="#5f6873">
-              <text x="325" y="156">스킬 폴더</text>
-              <text x="119" y="80">에이전트 계약</text>
-              <text x="119" y="238">사람용 시각 가이드</text>
-              <text x="531" y="80">세부 규칙</text>
-              <text x="531" y="238">전용 검증</text>
-            </g>
-          </svg>
-        </div>
-        <div class="file-map" aria-label="관련 파일 링크">
-          <a class="file-node" href="SKILL.md"><strong>SKILL.md</strong><span>커밋 분리, 기본 push, guard, final report의 원본 계약.</span></a>
-          <a class="file-node" href="skill.html"><strong>skill.html</strong><span>현재 파일. 조작 가능한 판단판과 근거 연결을 제공한다.</span></a>
-          <a class="file-node" href="scripts/validate-atomic-committer.ts"><strong>scripts/validate-atomic-committer.ts</strong><span>스킬 전용 문구와 구조 검증 후보.</span></a>
-          <a class="file-node" href="../../scripts/validate-skill-html.ts"><strong>validate-skill-html.ts</strong><span>외부 자산, link, SVG arrow endpoint, 구조 검증.</span></a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>메시지 형식</h2>
-        <p>English conventional prefix와 Korean summary를 함께 쓴다.</p>
-      </div>
-      <div class="two">
-        <pre class="code-sample">docs: atomic-committer 시각 가이드 갱신
-fix(secret-guard): private key 차단 조건 보강
-chore(repo): 반복 생성 산출물 ignore 추가</pre>
-        <details open>
-          <summary>권장 type</summary>
-          <div class="detail-body">
-            <code>feat</code>, <code>fix</code>, <code>docs</code>, <code>refactor</code>, <code>test</code>, <code>chore</code>, <code>build</code>, <code>ci</code>, <code>style</code>, <code>perf</code>, <code>revert</code>를 우선 사용한다. summary는 한국어로 짧게 쓴다.
-          </div>
-        </details>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>실제 확인</h2>
-        <p>이번 갱신에서 수행했거나 남겨야 할 확인 항목이다.</p>
-      </div>
-      <div class="verify-grid" aria-label="실제 확인 표">
-        <div class="head">검증 항목</div><div class="head">명령 또는 대상</div><div class="head">확인 내용</div><div class="head">이번 기록</div>
-        <div><strong>HTML 공통 validator</strong></div><div><span><code>node scripts/validate-skill-html.ts .</code></span></div><div><span>외부 자산 없음, local link, 넓은 표, SVG arrow endpoint.</span></div><div><span>최종 보고에 결과 기록</span></div>
-        <div><strong>스킬 전용 validator</strong></div><div><span><code>node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer</code></span></div><div><span>commit/push 기본값과 비밀값 guard 문구가 원본과 맞는지 확인.</span></div><div><span>최종 보고에 결과 기록</span></div>
-        <div><strong>원문 대조</strong></div><div><span><code>SKILL.md:12-22</code>, <code>SKILL.md:33-60</code></span></div><div><span>중요한 기준, workflow, forbidden content guard, final report 기준.</span></div><div><span>이 HTML에 반영</span></div>
-        <div><strong>상호작용</strong></div><div><span>mode button, <code>details</code>, focus state</span></div><div><span>click/focus 상태가 텍스트, badge, path 색상과 연결되는지 확인.</span></div><div><span>정적 inline JavaScript</span></div>
-        <div><strong>브라우저 화면</strong></div><div><span>PC desktop viewport</span></div><div><span>overflow, text overlap, arrow endpoint, wide table placement.</span></div><div><span>hook 제약상 필요 시 별도 확인</span></div>
-      </div>
+    <section>
+      <h2>파일과 검증</h2>
+      <p class="summary-copy">파일 관계와 검증 명령을 함께 확인한다.</p>
+      <ul class="verify-list">
+        <li><strong>기준 문서</strong><span><code>SKILL.md</code> agent가 실제로 따르는 원문이다.</span></li>
+        <li><strong>읽기 화면</strong><span><code>skill.html</code> 사람이 빠르게 확인하는 단일 HTML이다.</span></li>
+        <li><strong>메타데이터</strong><span><code>agents/openai.yaml</code> agent adapter용 설명과 기본 prompt를 담는다.</span></li>
+        <li><strong>참조 문서</strong><span><code>references/</code> 긴 기준과 세부 예시를 분리한다.</span></li>
+        <li><strong>검증 스크립트</strong><span><code>scripts/</code> 스킬 고유 검증 명령을 둔다.</span></li>
+      </ul>
+      <table class="command-table">
+        <tbody>
+          <tr><th>공통 HTML</th><td><code>node scripts/validate-skill-html.ts .</code></td></tr>
+            <tr><th>공통 스킬</th><td><code>node scripts/validate-skill.ts skills/atomic-committer</code></td></tr>
+            <tr><th>스킬 고유</th><td><code>node skills/atomic-committer/scripts/validate-atomic-committer.ts skills/atomic-committer</code></td></tr>
+        </tbody>
+      </table>
     </section>
   </main>
-
-
 </body>
 </html>

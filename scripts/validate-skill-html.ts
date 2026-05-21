@@ -259,6 +259,61 @@ function validateWideVisualStructure(skillPath: string, html: string): void {
   }
 }
 
+function validateTargetSpecificSummary(skillPath: string, html: string): void {
+  const skillName = path.basename(skillPath);
+  if (skillName === "markdown-to-html") return;
+
+  const summaryMatch = html.match(/<section>\s*<h2[^>]*>\s*요약\s*<\/h2>([\s\S]*?)<\/section>/i);
+  if (!summaryMatch) return;
+
+  const summaryHtml = summaryMatch[1];
+  const converterSummaryPatterns = [
+    /SKILL\.md에서\s*필요한\s*의미를\s*뽑아/i,
+    /같은\s*폴더의\s*<code>skill\.html<\/code>/i,
+    /<strong>입력<\/strong>\s*<span>\s*<code>SKILL\.md<\/code>와\s*필요한\s*참조\s*문서/i,
+    /<strong>출력<\/strong>\s*<span>\s*사람이\s*빠르게\s*확인하는\s*단일\s*<code>skill\.html<\/code>/i,
+    /<strong>범위<\/strong>/i,
+    /<strong>보존<\/strong>\s*<span>\s*스킬\s*이름,\s*호출\s*조건,\s*중요한\s*기준,\s*작업\s*흐름,\s*검증\s*명령/i,
+    /<strong>차단<\/strong>\s*<span>\s*외부\s*script,\s*실행\s*가능한\s*UI,\s*불필요한\s*장식,\s*원문과\s*무관한\s*설명/i,
+  ];
+
+  if (converterSummaryPatterns.some((pattern) => pattern.test(summaryHtml))) {
+    fail(skillPath, "summary should describe the target skill, not the markdown-to-html conversion process");
+  }
+}
+
+function validateKoreanFirstVisibleProse(skillPath: string, html: string): void {
+  const skillName = path.basename(skillPath);
+  if (skillName === "markdown-to-html") return;
+
+  const proseBlocks = [
+    ...html.matchAll(/<(?:p|span|strong|th|td|li)\b[^>]*>([\s\S]*?)<\/(?:p|span|strong|th|td|li)>/gi),
+  ].map((match) => stripTags(match[1]));
+
+  const forbiddenFragments = [
+    "domain term",
+    "first usable slice",
+    "included/excluded scope",
+    "acceptance criteria",
+    "selected mock direction",
+    "vertical slice",
+    "enabling task",
+    "product challenge",
+    "project structure",
+    "issue backlog",
+    "feature-workflow handoff",
+  ];
+
+  for (const text of proseBlocks) {
+    for (const fragment of forbiddenFragments) {
+      if (text.includes(fragment)) {
+        fail(skillPath, `visible prose should translate explanatory English first: ${fragment}`);
+        return;
+      }
+    }
+  }
+}
+
 function validateReadableCardGrids(skillPath: string, html: string): void {
   const contractsBlock = /\.contracts\s*\{(?<body>[^}]*)\}/i.exec(html)?.groups?.body ?? "";
   if (contractsBlock) {
@@ -387,6 +442,8 @@ function validateSkillHtml(skillPath: string): void {
 
   validateLocalLinks(skillPath, html);
   validateWideVisualStructure(skillPath, html);
+  validateTargetSpecificSummary(skillPath, html);
+  validateKoreanFirstVisibleProse(skillPath, html);
   validateReadableCardGrids(skillPath, html);
   validateSvgArrowEndpoints(skillPath, html);
 

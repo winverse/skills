@@ -10,13 +10,16 @@
 - The skill name is general: general Markdown document mode must preserve complex source structure instead of forcing every document into a short summary.
 - Parse Markdown semantics first: headings, lists, tables, code fences, blockquotes, and links.
 - Convert Markdown through `MarkdownHtmlModel` before writing HTML; do not copy source paragraphs or raw Markdown line breaks directly into layout.
-- In skill HTML mode, keep the first screen focused on document name, one-line purpose, input, output, and 3-5 important criteria.
+- In skill HTML mode, keep the first screen focused on the target skill's name, real purpose, when to use it, operational inputs, operational outputs, and 3-5 important criteria.
+- The summary must describe the target skill, not the `markdown-to-html` conversion process.
+- Do not use generic converter rows such as `SKILL.md` input, adjacent `skill.html` output, folder scope, preserve, or block as the target skill summary. Put source files and validation commands only in the files and validation section.
 - In general Markdown document mode, preserve heading hierarchy, long paragraphs, nested lists, wide tables, code fences, blockquotes, footnotes, task lists, and frontmatter metadata when the parser supports them.
 - Markdown 원문에 있는 raw HTML이나 위험한 링크는 실행 가능한 HTML로 통과시키지 않는다. Render only through a repo-authored trusted template.
 - If raw HTML must be supported, parse it separately and apply an allowlist sanitizer after the last unsafe transform.
 - 일반 설명어는 한국어로 쓴다.
 - Keep English only for exact identifiers such as file paths, commands, protocol names, product names, library names, and common acronyms such as `TDD`, `QA`, `API`, `MCP`, and `PRD`.
 - If an English source term must remain, use `한국어(원문)` only on first mention and use Korean afterward.
+- Do not expose English explanatory fragments such as `domain term`, `boundary`, `problem`, `user`, `first usable slice`, `included/excluded scope`, `acceptance criteria`, `selected mock direction`, `vertical slice`, `enabling task`, or `handoff` as visible prose. Translate them to Korean first and keep the source term only in parentheses when it is useful.
 - 인터랙티브 요소를 넣지 않는다.
 - Do not add animation, view switching, click-driven state, staged reveal, or decorative SVG.
 - Do not use `<button>`, inline JavaScript, Web Animations API, 외부 CDN, external scripts, or external images.

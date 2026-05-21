@@ -3,658 +3,303 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>skill-update 읽기용 HTML</title>
+  <title>skill-update 요약</title>
+  <link rel="icon" href="data:,">
   <style>
     :root {
-      color-scheme: light;
-      --ink: #17202a;
-      --muted: #52606d;
-      --line: #d9e2ec;
-      --panel: #ffffff;
-      --soft: #f6f8fb;
-      --accent: #1f6f8b;
-      --accent-ink: #0f3f51;
-      --warn: #8a4b13;
-      --danger: #8a1f2d;
-      --ok: #2f6f4e;
-      --shadow: 0 18px 50px rgba(23, 32, 42, 0.08);
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --panel: #f8fafc;
+      --line: #c9d2dc;
+      --text: #17202b;
+      --muted: #5f6b7a;
+      --blue: #2458b8;
+      --green: #2f684f;
+      --red: #963d38;
+      --code: #eef2f7;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
+    html,
     body {
       margin: 0;
-      padding: 40px 0;
-      background: #eef3f8;
-      color: var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 16px;
-      line-height: 1.65;
-    }
-
-    a {
-      color: var(--accent-ink);
-      font-weight: 700;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 3px;
-    }
-
-    code {
-      padding: 0.12rem 0.34rem;
-      border: 1px solid #d7dee8;
-      border-radius: 5px;
-      background: #f2f5f8;
-      color: #1b3646;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.92em;
-    }
-
-    .page {
-      width: calc(100% - 72px);
-      max-width: 1180px;
-      margin: 0 auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    header {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 32px;
-      padding: 42px 48px 34px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
-    }
-
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--accent-ink);
-      font-size: 0.82rem;
-      font-weight: 800;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
       letter-spacing: 0;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 3rem;
-      line-height: 1.08;
-      letter-spacing: 0;
-    }
-
-    .lead {
-      max-width: 760px;
-      margin: 18px 0 0;
-      color: var(--muted);
-      font-size: 1.08rem;
-    }
-
-    .facts {
-      align-self: start;
-      margin: 0;
-      padding: 18px;
-      border: 1px solid #cfd9e5;
-      border-radius: 8px;
-      background: #ffffff;
-    }
-
-    .facts div {
-      display: grid;
-      grid-template-columns: 92px 1fr;
-      gap: 12px;
-      padding: 9px 0;
-      border-bottom: 1px solid #e6ebf1;
-    }
-
-    .facts div:last-child {
-      border-bottom: 0;
-    }
-
-    .facts dt {
-      color: var(--muted);
-      font-size: 0.84rem;
-      font-weight: 800;
-    }
-
-    .facts dd {
-      margin: 0;
-      min-width: 0;
       overflow-wrap: anywhere;
     }
-
-    main {
-      padding: 36px 48px 48px;
+    body { padding: 32px 28px 56px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: 32px; line-height: 1.18; }
+    h2 { margin-bottom: 12px; font-size: 20px; line-height: 1.3; }
+    h3 { margin-bottom: 8px; font-size: 15px; }
+    p { color: var(--muted); }
+    code {
+      border-radius: 5px;
+      background: var(--code);
+      padding: 2px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
     }
-
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .hero,
     section {
-      padding: 28px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    section:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-
-    h2 {
-      margin: 0 0 14px;
-      font-size: 1.45rem;
-      line-height: 1.25;
-      letter-spacing: 0;
-    }
-
-    h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
-      line-height: 1.35;
-      letter-spacing: 0;
-    }
-
-    p {
-      margin: 0 0 14px;
-    }
-
-    ul,
-    ol {
-      margin: 12px 0 0;
-      padding-left: 1.25rem;
-    }
-
-    li + li {
-      margin-top: 8px;
-    }
-
-    .summary-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(280px, 1fr));
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .summary-item {
-      padding: 16px;
-      border: 1px solid #d9e2ec;
-      border-radius: 8px;
-      background: var(--soft);
-      min-width: 0;
-    }
-
-    .summary-item p {
-      margin-bottom: 0;
-      color: var(--muted);
-    }
-
-    .callout {
-      margin-top: 18px;
-      padding: 16px 18px;
-      border-left: 4px solid var(--accent);
-      background: #f2f8fa;
-      color: #214a5b;
-    }
-
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(150px, 1fr));
-      gap: 12px;
-      margin-top: 18px;
-      align-items: stretch;
-    }
-
-    .step {
-      position: relative;
-      min-height: 132px;
-      padding: 15px 14px;
-      border: 1px solid #cfd9e5;
-      border-radius: 8px;
-      background: #ffffff;
-    }
-
-    .step strong {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--accent-ink);
-    }
-
-    .step p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.94rem;
-    }
-
-    .mini-map {
-      display: block;
-      width: 100%;
-      height: 64px;
-      margin-top: 18px;
-    }
-
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #ffffff;
+      background: var(--surface);
     }
-
-    table {
+    .hero { padding: 28px 34px 24px; }
+    section {
+      padding: 26px 34px;
+      margin-top: 16px;
+    }
+    .lead {
+      max-width: 64em;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+    .meta-line {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .summary-copy,
+    .use-copy {
+      max-width: 64em;
+      margin-bottom: 12px;
+    }
+    .summary-list,
+    .contract-list,
+    .workflow-list,
+    .verify-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .summary-list li {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .summary-list li:last-child { border-bottom: 0; }
+    .summary-list strong,
+    .contract-list strong,
+    .verify-list strong { color: var(--text); }
+    .decision-table,
+    .rule-table,
+    .command-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 880px;
     }
-
-    th,
-    td {
-      padding: 13px 14px;
-      border-bottom: 1px solid #e5ebf1;
+    .decision-table th,
+    .decision-table td,
+    .rule-table th,
+    .rule-table td,
+    .command-table th,
+    .command-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
       text-align: left;
       vertical-align: top;
     }
-
-    th {
-      background: #f5f8fb;
-      color: #263847;
-      font-size: 0.9rem;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 0.12rem 0.48rem;
-      border-radius: 999px;
-      background: #e7f3f6;
-      color: var(--accent-ink);
-      font-size: 0.82rem;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .split {
+    .decision-table tr:last-child th,
+    .decision-table tr:last-child td,
+    .rule-table tr:last-child th,
+    .rule-table tr:last-child td,
+    .command-table tr:last-child th,
+    .command-table tr:last-child td { border-bottom: 0; }
+    .decision-table th,
+    .rule-table th,
+    .command-table th { width: 190px; color: var(--text); }
+    .decision-table td,
+    .rule-table td,
+    .command-table td { color: var(--muted); }
+    .contract-list li {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 20px;
-      margin-top: 18px;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
     }
-
-    .panel {
-      min-width: 0;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #ffffff;
-    }
-
-    .panel.allowed {
-      border-left: 4px solid var(--ok);
-    }
-
-    .panel.blocked {
-      border-left: 4px solid var(--danger);
-    }
-
-    .panel.warn {
-      border-left: 4px solid var(--warn);
-    }
-
-    .files {
-      columns: 2;
-      column-gap: 34px;
-      margin-top: 16px;
-    }
-
-    .files li {
-      break-inside: avoid;
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-
-    footer {
-      padding: 22px 48px 32px;
-      border-top: 1px solid var(--line);
-      background: #f8fbfd;
+    .contract-list li:last-child { border-bottom: 0; }
+    .contract-list span,
+    .workflow-list span,
+    .verify-list span {
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 14px;
     }
+    .workflow-list li {
+      display: grid;
+      grid-template-columns: 36px 190px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .workflow-list li:first-child { border-top: 0; }
+    .workflow-list b {
+      color: var(--blue);
+      font-size: 14px;
+    }
+    .rule-zones { display: grid; gap: 16px; }
+    .rule-zone {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .rule-zone:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+    .rule-zone-heading { margin: 0; }
+    .rule-zone-heading strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+    .allow-zone .rule-zone-heading strong { color: var(--green); }
+    .conditional-zone .rule-zone-heading strong { color: var(--blue); }
+    .block-zone .rule-zone-heading strong { color: var(--red); }
+    .rule-table thead th {
+      padding: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .verify-list { margin-top: 12px; }
+    .verify-list li {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .verify-list li:first-child { border-top: 0; }
+    .command-table code { white-space: normal; }
   </style>
 </head>
 <body>
-  <article class="page">
-    <header>
-      <div>
-        <p class="eyebrow">공유 스킬 유지보수</p>
-        <h1>skill-update</h1>
-        <p class="lead">
-          기존 shared skill을 업데이트, 수정, 개선, 유지보수, rename, split, deprecate, archive할 때
-          범위와 원본 근거를 먼저 고정하고, 스킬 문서와 검증 산출물을 함께 맞추는 작업 가이드다.
-        </p>
-      </div>
-      <dl class="facts" aria-label="스킬 기본 정보">
-        <div>
-          <dt>원문</dt>
-          <dd><a href="SKILL.md">SKILL.md</a></dd>
-        </div>
-        <div>
-          <dt>대상</dt>
-          <dd>repo-owned shared skill</dd>
-        </div>
-        <div>
-          <dt>주요 근거</dt>
-          <dd><code>docs/update-source-registry.md</code></dd>
-        </div>
-        <div>
-          <dt>HTML 갱신</dt>
-          <dd><code>markdown-to-html</code></dd>
-        </div>
-      </dl>
+  <main class="shell">
+    <header class="hero">
+      <h1>skill-update</h1>
+      <p class="lead">기존 shared skill을 업데이트, 수정, 개선, 유지보수, rename, split, deprecate, archive할 때 사용한다.</p>
+      <p class="meta-line">SKILL.md 기준 · 읽기용 skill.html · 한국어 우선 · 보안 경계 · 인터랙션 없음</p>
     </header>
 
-    <main>
-      <section aria-labelledby="summary">
-        <h2 id="summary">요약</h2>
-        <p>
-          이 스킬은 사용자가 요청한 behavior change에서 시작한다. 기존에 유용한 동작은 요청 없이 제거하지 않고,
-          원본 또는 upstream이 있는 경우 provenance preflight와 source ledger를 먼저 확인한다.
-        </p>
-        <div class="summary-list">
-          <div class="summary-item">
-            <h3>호출 조건</h3>
-            <p>스킬의 trigger, workflow, validator, snippet, provenance, lifecycle 상태를 바꾸는 요청.</p>
-          </div>
-          <div class="summary-item">
-            <h3>핵심 출력</h3>
-            <p>수정된 skill package, 동기화된 보조 파일, 실행한 validator, 남은 위험과 보류 항목.</p>
-          </div>
-          <div class="summary-item">
-            <h3>원본 우선순위</h3>
-            <p><code>docs/update-source-registry.md</code>, local provenance, 필요 시 <code>web-research</code>.</p>
-          </div>
-          <div class="summary-item">
-            <h3>범위 제한</h3>
-            <p>plugin package, MCP config, submodule은 사용자가 plugin update를 명시했을 때만 다룬다.</p>
-          </div>
-        </div>
-      </section>
+    <section>
+      <h2>요약</h2>
+      <p class="summary-copy">기존 shared skill의 수정, rename, split, deprecate, archive를 원본 delta와 repo 표면 정합성 기준으로 처리한다.</p>
+      <ul class="summary-list">
+        <li><strong>사용할 때</strong><span>기존 shared skill의 수정, rename, split, deprecate, archive를 원본 delta와 repo 표면 정합성 기준으로 처리한다.</span></li>
+        <li><strong>주요 입력</strong><span>변경 요청, upstream/source registry, <code>SKILL.md</code>, agents/openai.yaml, validator, snippet, history.</span></li>
+        <li><strong>주요 출력</strong><span>정렬된 skill package 변경, source decision, validator/eval/docs/history 갱신.</span></li>
+        <li><strong>먼저 판단</strong><span>plugin update list나 dependency sweep은 별도 lane으로 다루고, adopt/adapt/reject/defer를 기록한다.</span></li>
+        <li><strong>검증</strong><span>관련 validator와 <code>node scripts/validate-skill-html.ts .</code>로 확인한다.</span></li>
+      </ul>
+    </section>
 
-      <section aria-labelledby="decision">
-        <h2 id="decision">사용 판단</h2>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>요청 유형</th>
-                <th>처리 방식</th>
-                <th>후속 동기화</th>
-              </tr>
-            </thead>
+    <section>
+      <h2>사용 판단</h2>
+      <p class="use-copy">이 화면은 스킬을 설치하거나 적용하기 전에 “언제 쓰고 무엇을 확인해야 하는지”를 빠르게 보여준다.</p>
+      <table class="decision-table">
+        <tbody>
+          <tr><th>사용할 때</th><td>기존 shared skill을 업데이트, 수정, 개선, 유지보수, rename, split, deprecate, archive할 때 사용한다.</td></tr>
+          <tr><th>먼저 볼 것</th><td><code>SKILL.md</code>의 description, trigger, 금지 조건, 검증 명령.</td></tr>
+          <tr><th>완료 신호</th><td><code>skill.html</code>이 원문 기준과 같은 방향을 가리키고, validator가 통과한다.</td></tr>
+          <tr><th>검증 신호</th><td><code>원본 delta 분류</code> <code>레지스트리</code> <code>Plugin update list</code> <code>Dependency update sweep</code> <code>source package, primitive name, adopted role</code> <code>adopt</code> <code>adapt</code> <code>reject</code> <code>defer</code> <code>SVG arrow endpoint</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>중요한 기준</h2>
+      <ul class="contract-list">
+        <li><strong>사용자가 의도한 behavior change에서 시작한다</strong><span>사용자가 의도한 behavior change에서 시작한다.</span></li>
+        <li><strong>SKILL</strong><span>SKILL.md는 concise하고 trigger-focused로 유지한다.</span></li>
+        <li><strong>material change가 있으면 markdown-to-html도 실행한</strong><span>material change가 있으면 markdown-to-html도 실행한다.</span></li>
+        <li><strong>skill</strong><span>skill.html을 바꾸면 정적 HTML validator뿐 아니라 PC viewport에서 표, SVG arrow, overflow, text overlap을 직접 확인한다.</span></li>
+        <li><strong>skill add/remove/rename/archive/restore가 있</strong><span>skill add/remove/rename/archive/restore가 있으면 show-skills HTML catalog를 갱신한다.</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>작업 흐름</h2>
+      <ol class="workflow-list">
+        <li><b>1</b><strong>대상 skill과 결과를 확인한다</strong><span>대상 skill과 결과를 확인한다.</span></li>
+        <li><b>2</b><strong>현재 skill folder, snippets, README,</strong><span>현재 skill folder, snippets, README, AGENTS, history를 본다.</span></li>
+        <li><b>3</b><strong>docs/update-source-registry</strong><span>docs/update-source-registry.md를 읽고 source id, .gitmodules, workflow primitive lane, repo-owned skill inventory 중 어느 source family가 relevant한지 고른다.</span></li>
+        <li><b>4</b><strong>original/upstream provenance prefl</strong><span>original/upstream provenance preflight를 실행해 원본 skill, upstream primitive, fork 기록, git history를 찾는다.</span></li>
+        <li><b>5</b><strong>원본이 없으면 no upstream source found를 </strong><span>원본이 없으면 no upstream source found를 판단 근거와 함께 기록하고 local package 기준으로 진행한다.</span></li>
+        <li><b>6</b><strong>대상 skill이 plugin-bundled skill에서 온</strong><span>대상 skill이 plugin-bundled skill에서 온 경우에만 .gitmodules, Plugin update list, plugin/submodule metadata, package manifest를 원본 증거로 읽는다.</span></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>보안 경계</h2>
+      <div class="rule-zones">
+        <div class="rule-zone allow-zone">
+          <h3 class="rule-zone-heading"><strong>허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
             <tbody>
-              <tr>
-                <td><span class="tag">trigger 또는 description</span></td>
-                <td><code>SKILL.md</code>, snippet, README/AGENTS, metadata를 함께 점검한다.</td>
-                <td><code>skill.html</code>, catalog, <code>history/skills.md</code></td>
-              </tr>
-              <tr>
-                <td><span class="tag">workflow 또는 rules</span></td>
-                <td>짧은 trigger 문서는 유지하고 긴 설명은 <code>references/</code>로 분리한다.</td>
-                <td>validator, HTML, history</td>
-              </tr>
-              <tr>
-                <td><span class="tag">validator 또는 script</span></td>
-                <td>검증 명령과 README command drift를 함께 확인한다.</td>
-                <td>관련 validator 실행, 필요 시 history</td>
-              </tr>
-              <tr>
-                <td><span class="tag">rename, split, archive</span></td>
-                <td>경로 전체, catalog, lifecycle 기준을 연결해 갱신한다.</td>
-                <td>show-skills HTML catalog, lifecycle, history</td>
-              </tr>
-              <tr>
-                <td><span class="tag">dependency update sweep</span></td>
-                <td><code>.gitmodules</code>, repo-owned plugin, workflow primitive lane, usage map을 점검한다.</td>
-                <td>registry source ledger, plugin catalog, validators</td>
-              </tr>
+              <tr><th>사용자가 의도한 behavior change에서 시작한다</th><td>사용자가 의도한 behavior change에서 시작한다.</td></tr>
+              <tr><th>material change가 있으면 markdown-to</th><td>material change가 있으면 markdown-to-html도 실행한다.</td></tr>
+              <tr><th>skill</th><td>skill.html을 바꾸면 정적 HTML validator뿐 아니라 PC viewport에서 표, SVG arrow, overflow, text overlap을 직접 확인한다.</td></tr>
             </tbody>
           </table>
         </div>
-      </section>
-
-      <section aria-labelledby="contracts">
-        <h2 id="contracts">중요한 기준</h2>
-        <ol>
-          <li>사용자가 의도한 behavior change에서 시작하고, 대상 skill과 결과물을 먼저 확인한다.</li>
-          <li>기존 유용한 behavior는 요청 없이 제거하지 않는다.</li>
-          <li><code>SKILL.md</code>는 concise하고 trigger-focused로 유지하며 긴 예시와 취향은 <code>references/</code>로 옮긴다.</li>
-          <li>material change가 있으면 <code>markdown-to-html</code>로 adjacent <code>skill.html</code>도 갱신한다.</li>
-          <li>원본이 있는 스킬은 <code>docs/update-source-registry.md</code>와 필요한 web verification으로 provenance를 남긴다.</li>
-        </ol>
-        <p class="callout">
-          원본 전체를 복사하지 않는다. 변경 후보는 <code>adopt</code>, <code>adapt</code>, <code>reject</code>,
-          <code>defer</code>로 분류한 뒤 이 repo의 cross-agent 계약에 맞는 delta만 반영한다.
-        </p>
-        <div class="table-wrap" style="margin-top: 18px;">
-          <table>
-            <thead>
-              <tr>
-                <th>필수 문구</th>
-                <th>HTML에서 확인할 의미</th>
-              </tr>
-            </thead>
+        <div class="rule-zone conditional-zone">
+          <h3 class="rule-zone-heading"><strong>조건부 허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
             <tbody>
-              <tr>
-                <td><code>원본 delta 분류</code></td>
-                <td>원본 변경 후보를 무조건 복사하지 않고 <code>adopt</code>, <code>adapt</code>, <code>reject</code>, <code>defer</code>로 판단한다.</td>
-              </tr>
-              <tr>
-                <td><code>레지스트리</code></td>
-                <td><code>docs/update-source-registry.md</code>를 source URL, checked date, upstream version/commit의 기준으로 읽는다.</td>
-              </tr>
-              <tr>
-                <td><code>Plugin update list</code></td>
-                <td><code>.gitmodules</code>에서 파생된 사람이 읽는 plugin update checklist로 다룬다.</td>
-              </tr>
-              <tr>
-                <td><code>Dependency update sweep</code></td>
-                <td>명시 요청일 때 vendored plugin, repo-owned plugin, workflow primitive lane, usage map을 함께 점검한다.</td>
-              </tr>
-              <tr>
-                <td><code>source package, primitive name, adopted role</code></td>
-                <td>workflow primitive provenance를 기록할 때 원본 package, primitive 이름, local 채택 역할을 분리한다.</td>
-              </tr>
-              <tr>
-                <td><code>SVG arrow endpoint</code></td>
-                <td>PC viewport 확인에서 SVG 화살표 끝점, 표 폭, overflow, text overlap을 함께 본다.</td>
-              </tr>
+              <tr><th>사용자가 &quot;전체 업데이트&quot;, &quot;외부 dependency 업</th><td>사용자가 &quot;전체 업데이트&quot;, &quot;외부 dependency 업데이트&quot;, &quot;plugin과 workflow primitive까지 업데이트&quot;처럼 repo dependency 갱신을 요청하면 이를 explicit dependency update sweep으로 본다.</td></tr>
+              <tr><th>scripts/validate-plugins</th><td>scripts/validate-plugins.ts는 .gitmodules를 직접 파싱해 plugin catalog와 Plugin update list의 path/URL drift를 막는다.</td></tr>
+              <tr><th>대상 skill이 plugin-bundled skill에서</th><td>대상 skill이 plugin-bundled skill에서 fork되었거나 이를 명시적으로 참조할 때만 .gitmodules와 plugin/submodule metadata를 원본 후보 증거로 읽는다.</td></tr>
             </tbody>
           </table>
         </div>
-      </section>
-
-      <section aria-labelledby="resource-map">
-        <h2 id="resource-map">파일 관계도</h2>
-        <p>
-          스킬 변경은 기준 원문 하나만 고치는 작업이 아니다. 실행 규칙, 사용자용 HTML, 프로젝트 snippet,
-          catalog, history, validator가 같은 이름과 같은 계약을 말해야 한다.
-        </p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>파일</th>
-                <th>역할</th>
-                <th>drift 확인</th>
-              </tr>
-            </thead>
+        <div class="rule-zone block-zone">
+          <h3 class="rule-zone-heading"><strong>금지</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
             <tbody>
-              <tr>
-                <td><code>SKILL.md</code></td>
-                <td>agent가 따르는 기준 원문</td>
-                <td>trigger, 금지 경계, workflow가 요청과 맞는지 본다.</td>
-              </tr>
-              <tr>
-                <td><code>skill.html</code></td>
-                <td>사람이 빠르게 읽는 adjacent guide</td>
-                <td><code>markdown-to-html</code> 기준과 local link를 확인한다.</td>
-              </tr>
-              <tr>
-                <td><code>project-snippets/*.md</code></td>
-                <td>target project에 붙이는 호출 문구</td>
-                <td>공개 slug, path, override 문구가 현재 skill과 같은지 본다.</td>
-              </tr>
-              <tr>
-                <td><code>docs/update-source-registry.md</code></td>
-                <td>원본 출처와 업데이트 lane의 기준</td>
-                <td>source URL, checked date, plugin lane이 흩어지지 않았는지 본다.</td>
-              </tr>
-              <tr>
-                <td><code>history/skills.md</code></td>
-                <td>현재 레지스트리와 생명주기 기록</td>
-                <td>Current Registry가 삭제되거나 rename된 skill을 살아 있는 것처럼 말하지 않는지 본다.</td>
-              </tr>
-              <tr>
-                <td><code>scripts/validate-*.ts</code></td>
-                <td>계약 회귀를 막는 검증기</td>
-                <td>파일명, 필수 문구, repo path가 실제 tree와 맞는지 본다.</td>
-              </tr>
+              <tr><th>기존 유용한 behavior는 요청 없이 제거하지 않는다</th><td>기존 유용한 behavior는 요청 없이 제거하지 않는다.</td></tr>
+              <tr><th>사용자가 원본 조사를 따로 말하지 않아도 먼저 docs/u</th><td>사용자가 원본 조사를 따로 말하지 않아도 먼저 docs/update-source-registry.md를 읽고 source id와 source family를 고른다.</td></tr>
+              <tr><th>workflow provenance-only primiti</th><td>workflow provenance-only primitive의 source URL, checked date, upstream version/commit, local 판단은 docs/update-source-registry.md를 canonical sourc...</td></tr>
+              <tr><th>skill-update는 plugin package, MC</th><td>skill-update는 plugin package, MCP config, submodule 자체를 incidental하게 업데이트하지 않는다. plugin bump나 bundled plugin skill 수정은 사용자가 plugin update를 명시했을...</td></tr>
             </tbody>
           </table>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section aria-labelledby="workflow">
-        <h2 id="workflow">작업 흐름</h2>
-        <div class="flow" aria-label="skill-update 작업 순서">
-          <div class="step">
-            <strong>1. 요청 읽기</strong>
-            <p>사용자 의도, 대상 skill, repo 경계를 확인한다.</p>
-          </div>
-          <div class="step">
-            <strong>2. 원본 확인</strong>
-            <p><code>SKILL.md</code>, registry, local provenance, 필요한 references를 읽는다.</p>
-          </div>
-          <div class="step">
-            <strong>3. 변경 분류</strong>
-            <p>scope, source family, plugin lane 여부, dependency sweep 여부를 고른다.</p>
-          </div>
-          <div class="step">
-            <strong>4. 최소 수정</strong>
-            <p>요청 범위 안에서 문서, HTML, validator, snippet을 맞춘다.</p>
-          </div>
-          <div class="step">
-            <strong>5. 증거 보고</strong>
-            <p>검증 명령, 미해결 위험, 보류한 원본 변경을 남긴다.</p>
-          </div>
-        </div>
-        <svg class="mini-map" role="img" aria-label="원본 확인에서 검증 보고까지 이어지는 단방향 흐름" viewBox="0 0 1000 64" preserveAspectRatio="none">
-          <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f6f8b"></path>
-            </marker>
-          </defs>
-          <line x1="45" y1="32" x2="955" y2="32" stroke="#1f6f8b" stroke-width="3" marker-end="url(#arrow)"></line>
-          <circle cx="45" cy="32" r="10" fill="#ffffff" stroke="#1f6f8b" stroke-width="3"></circle>
-          <circle cx="272" cy="32" r="10" fill="#ffffff" stroke="#1f6f8b" stroke-width="3"></circle>
-          <circle cx="500" cy="32" r="10" fill="#ffffff" stroke="#1f6f8b" stroke-width="3"></circle>
-          <circle cx="728" cy="32" r="10" fill="#ffffff" stroke="#1f6f8b" stroke-width="3"></circle>
-          <circle cx="955" cy="32" r="10" fill="#ffffff" stroke="#1f6f8b" stroke-width="3"></circle>
-        </svg>
-      </section>
-
-      <section aria-labelledby="allow">
-        <h2 id="allow">보안 경계</h2>
-        <div class="split">
-          <div class="panel allowed">
-            <h3>허용</h3>
-            <ul>
-              <li>요청된 skill package 안의 <code>SKILL.md</code>, <code>references/</code>, validator, <code>skill.html</code> 정합성 갱신.</li>
-              <li>원본 조사 결과를 <code>docs/update-source-registry.md</code> source ledger로 남기는 작업.</li>
-              <li>skill add/remove/rename/archive/restore 뒤 show-skills HTML catalog를 재생성하는 작업.</li>
-              <li>검증 실패가 작업 범위와 직접 연결될 때 최소 수정으로 해결하는 작업.</li>
-            </ul>
-          </div>
-          <div class="panel blocked">
-            <h3>금지</h3>
-            <ul>
-              <li>사용자 요청 없이 기존 behavior를 제거하거나 default agent behavior로 대체하는 일.</li>
-              <li>plugin package, MCP config, submodule을 incidental하게 업데이트하는 일.</li>
-              <li>전역 skill 설치, symlink, auto-register, publish, destructive command 실행.</li>
-              <li>비밀값, 개인 데이터, live credential을 문서나 history에 남기는 일.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="panel warn" style="margin-top: 20px;">
-          <h3>질문해야 하는 경우</h3>
-          <p>
-            사용자 요청이 repo-local preference를 바꾸는지, upstream source 자체를 바꾸는지, 특정 프로젝트 override인지
-            구분되지 않으면 수정 전에 범위를 좁힌다.
-          </p>
-        </div>
-      </section>
-
-      <section aria-labelledby="files">
-        <h2 id="files">파일과 검증</h2>
-        <p>
-          변경 범위가 넓어질수록 문서, HTML, validator, registry, history가 함께 움직인다. 아래 항목은
-          <code>skill-update</code>가 material change를 끝냈다고 말하기 전에 확인하는 대표 경로와 명령이다.
-        </p>
-        <ul class="files">
-          <li><a href="SKILL.md">SKILL.md</a> - 기준 원문</li>
-          <li><a href="skill.html">skill.html</a> - adjacent human guide</li>
-          <li><a href="../../docs/update-source-registry.md">docs/update-source-registry.md</a> - source ledger</li>
-          <li><a href="../../history/skills.md">history/skills.md</a> - lifecycle event</li>
-          <li><a href="../../project-snippets/skill-update.md">project-snippets/skill-update.md</a> - project setup snippet</li>
-          <li><a href="scripts/validate-skill-update.ts">scripts/validate-skill-update.ts</a> - skill-specific validator</li>
-        </ul>
-        <div class="table-wrap" style="margin-top: 18px;">
-          <table>
-            <thead>
-              <tr>
-                <th>검증</th>
-                <th>명령</th>
-                <th>확인 대상</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>대상 skill 구조</td>
-                <td><code>node scripts/validate-skill.ts skills/skill-update</code></td>
-                <td>필수 파일, 링크, metadata drift</td>
-              </tr>
-              <tr>
-                <td>한국어 Markdown</td>
-                <td><code>node scripts/validate-korean-markdown.ts .</code></td>
-                <td><code>skills/**/*.md</code> 한국어 우선 규칙</td>
-              </tr>
-              <tr>
-                <td>정적 HTML</td>
-                <td><code>node scripts/validate-skill-html.ts .</code></td>
-                <td>외부 asset, raw HTML 위험, local link, 구조 규칙</td>
-              </tr>
-              <tr>
-                <td>스킬 업데이트 전용</td>
-                <td><code>node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update</code></td>
-                <td>registry, provenance, workflow contract</td>
-              </tr>
-              <tr>
-                <td>agent eval</td>
-                <td><code>node scripts/run-agent-evals.ts</code></td>
-                <td>routing, guardrail, artifact hygiene 회귀</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      이 HTML은 <code>SKILL.md</code>의 짧은 읽기용 HTML이다. 기준 원문을 대체하지 않으며, 외부 asset과 script 없이
-      embedded CSS/SVG만 사용한다.
-    </footer>
-  </article>
+    <section>
+      <h2>파일과 검증</h2>
+      <p class="summary-copy">파일 관계와 검증 명령을 함께 확인한다.</p>
+      <ul class="verify-list">
+        <li><strong>기준 문서</strong><span><code>SKILL.md</code> agent가 실제로 따르는 원문이다.</span></li>
+        <li><strong>읽기 화면</strong><span><code>skill.html</code> 사람이 빠르게 확인하는 단일 HTML이다.</span></li>
+        <li><strong>메타데이터</strong><span><code>agents/openai.yaml</code> agent adapter용 설명과 기본 prompt를 담는다.</span></li>
+        <li><strong>참조 문서</strong><span><code>references/</code> 긴 기준과 세부 예시를 분리한다.</span></li>
+        <li><strong>검증 스크립트</strong><span><code>scripts/</code> 스킬 고유 검증 명령을 둔다.</span></li>
+      </ul>
+      <table class="command-table">
+        <tbody>
+          <tr><th>공통 HTML</th><td><code>node scripts/validate-skill-html.ts .</code></td></tr>
+            <tr><th>공통 스킬</th><td><code>node scripts/validate-skill.ts skills/skill-update</code></td></tr>
+            <tr><th>스킬 고유</th><td><code>node skills/skill-update/scripts/validate-skill-update.ts skills/skill-update</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
 </body>
 </html>

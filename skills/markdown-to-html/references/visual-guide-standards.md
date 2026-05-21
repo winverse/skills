@@ -12,6 +12,20 @@
 
 | 피할 표현 | 권장 표현 |
 | --- | --- |
+| domain term | 도메인 용어 |
+| boundary | 경계 |
+| problem | 문제 |
+| user | 사용자 |
+| first usable slice | 첫 사용 단위 |
+| included/excluded scope | 포함/제외 범위 |
+| acceptance criteria | 인수 기준 |
+| selected mock direction | 선택한 시안 방향 |
+| vertical slice | 세로 기능 단위 |
+| enabling task | 선행 작업 |
+| initiative | 큰 계획 |
+| product challenge | 제품 검증 질문 |
+| project structure | 프로젝트 구조 |
+| issue backlog | 이슈 목록 |
 | fresh clone | 새 복제본 |
 | isolated copy | 격리 복사본 |
 | failure class | 실패 분류 |
@@ -31,6 +45,15 @@
 
 위 section은 스킬 HTML mode의 기본 구조다. 사람이 10초 안에 스킬의 목적과 경계를 파악할 수 있어야 하므로 세부 설명, 긴 예시, 반복되는 주의 문구는 `SKILL.md` 링크로 넘긴다. 일반 Markdown 문서 mode에는 이 고정 section 구조를 강제하지 않고 원문 heading 구조를 따른다.
 
+요약 section은 대상 스킬의 핵심을 말해야 한다. `markdown-to-html` 변환기가 무엇을 읽고 무엇을 쓰는지 설명하면 실패다. 예를 들어 `project-workflow`의 요약은 원시 아이디어를 도메인 문서, 제품 검증 질문, ADR, PRD, 이슈 목록, `feature-workflow` 인계로 정리한다는 내용을 보여야 한다. `SKILL.md에서 필요한 의미를 뽑아 같은 폴더의 skill.html로 짧게 정리한다` 같은 문장은 `project-workflow`를 설명하지 못하므로 쓰지 않는다.
+
+| 잘못된 요약 항목 | 이유 | 고쳐야 할 방향 |
+| --- | --- | --- |
+| 입력: `SKILL.md`와 필요한 참조 문서 | 변환기의 입력이지 대상 스킬의 입력이 아니다. | 대상 스킬이 실제로 받는 원시 아이디어, PRD, diff, URL, 전사본 같은 입력을 쓴다. |
+| 출력: 단일 `skill.html` | 변환기의 출력이지 대상 스킬의 산출물이 아니다. | 대상 스킬이 만드는 commit, PR 본문, 조사 요약, eval case, 프로젝트 문서 같은 산출물을 쓴다. |
+| 범위: 파일 경로 | 사용자가 스킬을 이해하는 핵심이 아니다. | 사용할 때와 멈출 때를 쓴다. |
+| 보존/차단: 외부 script, 장식 | HTML 안전 기준이지 대상 스킬의 핵심이 아니다. | 보안 경계 section이나 파일과 검증 section으로 옮긴다. |
+
 ## Markdown 변환 기준
 
 - `SKILL.md`는 기준 원문이고 `skill.html`은 사람이 빠르게 확인하는 HTML이다.
@@ -40,6 +63,7 @@
 - raw HTML 지원이 꼭 필요하면 raw HTML을 별도로 파싱한 뒤 allowlist sanitizer를 마지막 unsafe transform 이후에 적용한다.
 - URL은 `http:`, `https:`, `mailto:`, repo-local 상대 경로처럼 허용한 protocol만 남긴다.
 - 스킬 HTML mode의 최종 `skill.html`은 원문 Markdown 단편을 이어 붙인 결과가 아니라, repo가 작성한 신뢰된 템플릿에 `MarkdownHtmlModel`을 넣어 만든 단일 파일이다.
+- 스킬 HTML mode의 `MarkdownHtmlModel`은 대상 스킬의 실제 작업 모델을 담는다. `input`과 `output`은 변환기가 읽는 `SKILL.md`와 쓰는 `skill.html`이 아니라 대상 스킬이 작업에서 받는 정보와 만드는 산출물이다.
 - 일반 Markdown 문서 mode는 원문 heading tree, 긴 문단, 중첩 list, 긴 table, code fence, blockquote, footnote, task list를 가능한 한 보존한다. 복잡하다는 이유만으로 본문을 버리지 않는다.
 - diagram은 원문에 실제 흐름, 관계, 계층이 있을 때만 만든다. 원문 의미가 없는 장식용 도표는 만들지 않는다.
 
@@ -56,6 +80,8 @@
 - 요약과 단순한 중요 기준은 카드가 아니라 리스트로 둔다. 비교, 상태, 파일 관계처럼 구조가 있는 정보에만 카드나 표를 쓴다.
 - `skill.html` 본문에는 UI 설계 의도, 레이아웃 설명, 왜 이렇게 배치했는지에 대한 자기해설을 쓰지 않는다.
 - 보이는 문장은 스킬 원문에서 뽑은 의미, 기준, 경계, 명령만 담는다.
+- 대상 스킬 HTML에서는 `SKILL.md에서 필요한 의미를 뽑아`, `같은 폴더의 skill.html`, `사람이 빠르게 확인하는 단일 skill.html`처럼 변환기 작업을 설명하는 문장을 쓰지 않는다. 이런 문구는 `markdown-to-html` 자체의 HTML에만 허용된다.
+- 작업 흐름, 요약, 판단 기준에는 설명어 영어를 그대로 노출하지 않는다. `domain term과 boundary`, `problem, user, first usable slice`, `selected mock direction` 같은 문구는 `도메인 용어와 경계`, `문제, 사용자, 첫 사용 단위`, `선택한 시안 방향`으로 바꾼다.
 - 허용/금지처럼 상반되는 판정은 텍스트 heading과 간단한 table 구조로 구분한다. 색은 보조 스타일로만 쓴다.
 - 검증 명령은 카드보다 명령 리스트로 둔다.
 - 표는 비교 축, 판단 기준, 허용/금지, 검증 결과처럼 행과 열이 실제 의미를 가질 때 쓴다.

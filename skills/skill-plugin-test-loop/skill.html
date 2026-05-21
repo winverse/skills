@@ -2,669 +2,302 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>skill-plugin-test-loop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>skill-plugin-test-loop 요약</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
-      --bg: #f4f6f5;
-      --panel: #ffffff;
-      --ink: #202629;
-      --muted: #5b666b;
-      --line: #cfd8d5;
-      --soft: #edf3f1;
-      --soft-2: #f7f2e8;
-      --accent: #236c63;
-      --warn: #8b5b18;
-      --danger: #9b453c;
-      --ok: #2f6b49;
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --panel: #f8fafc;
+      --line: #c9d2dc;
+      --text: #17202b;
+      --muted: #5f6b7a;
+      --blue: #2458b8;
+      --green: #2f684f;
+      --red: #963d38;
+      --code: #eef2f7;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--bg);
-      color: var(--ink);
-      letter-spacing: 0;
-    }
-
+    * { box-sizing: border-box; }
+    html,
     body {
       margin: 0;
       background: var(--bg);
-      color: var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.55;
+      color: var(--text);
+      font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
       letter-spacing: 0;
       overflow-wrap: anywhere;
     }
-
+    body { padding: 32px 28px 56px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: 32px; line-height: 1.18; }
+    h2 { margin-bottom: 12px; font-size: 20px; line-height: 1.3; }
+    h3 { margin-bottom: 8px; font-size: 15px; }
+    p { color: var(--muted); }
+    code {
+      border-radius: 5px;
+      background: var(--code);
+      padding: 2px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
+    }
     .shell {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 40px 32px 72px;
     }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
-      gap: 20px;
-      align-items: stretch;
-    }
-
-    .panel,
+    .hero,
     section {
-      background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
-      box-shadow: 0 12px 28px rgba(32, 38, 41, 0.07);
+      background: var(--surface);
     }
-
-    .panel,
+    .hero { padding: 28px 34px 24px; }
     section {
-      padding: 24px;
+      padding: 26px 34px;
+      margin-top: 16px;
     }
-
-    section {
-      margin-top: 22px;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin-top: 0;
-    }
-
-    h1 {
-      max-width: 780px;
-      margin-bottom: 12px;
-      font-size: 34px;
-      line-height: 1.18;
-      letter-spacing: 0;
-    }
-
-    h2 {
+    .lead {
+      max-width: 64em;
       margin-bottom: 16px;
-      font-size: 22px;
-      line-height: 1.25;
-      letter-spacing: 0;
-    }
-
-    h3 {
-      margin-bottom: 8px;
       font-size: 16px;
-      line-height: 1.3;
-      letter-spacing: 0;
     }
-
-    p {
-      margin-bottom: 14px;
-      color: var(--muted);
-    }
-
-    code {
-      padding: 2px 5px;
-      border-radius: 5px;
-      background: #eef2f1;
-      color: #273033;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      font-size: 0.92em;
-    }
-
-    .label {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      margin-bottom: 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 5px 10px;
-      background: #f9fbfa;
+    .meta-line {
+      margin: 0;
       color: var(--muted);
       font-size: 13px;
     }
-
-    .summary {
-      font-size: 17px;
-      color: var(--muted);
+    .summary-copy,
+    .use-copy {
+      max-width: 64em;
+      margin-bottom: 12px;
     }
-
-    .contract-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .contract {
-      min-height: 116px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      background: #fbfcfc;
-    }
-
-    .contract strong {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--ink);
-    }
-
-    .decision-list {
-      display: grid;
-      gap: 12px;
+    .summary-list,
+    .contract-list,
+    .workflow-list,
+    .verify-list {
       margin: 0;
       padding: 0;
       list-style: none;
     }
-
-    .decision-list li {
-      border-left: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 12px 14px;
-      background: var(--soft);
-      color: var(--muted);
-    }
-
-    .decision-list li.skip {
-      border-left-color: var(--warn);
-      background: var(--soft-2);
-    }
-
-    .flow {
+    .summary-list li {
       display: grid;
-      grid-template-columns: repeat(6, minmax(150px, 1fr));
-      gap: 12px;
-      overflow-x: auto;
-      padding-bottom: 4px;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
     }
-
-    .step {
-      position: relative;
-      min-width: 150px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      background: #fbfcfc;
-    }
-
-    .step .num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 26px;
-      height: 26px;
-      margin-bottom: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #ffffff;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .wide-table {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-
-    table {
+    .summary-list li:last-child { border-bottom: 0; }
+    .summary-list strong,
+    .contract-list strong,
+    .verify-list strong { color: var(--text); }
+    .decision-table,
+    .rule-table,
+    .command-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 820px;
     }
-
-    th,
-    td {
+    .decision-table th,
+    .decision-table td,
+    .rule-table th,
+    .rule-table td,
+    .command-table th,
+    .command-table td {
+      padding: 12px 0;
       border-bottom: 1px solid var(--line);
-      border-right: 1px solid var(--line);
-      padding: 11px 12px;
       text-align: left;
       vertical-align: top;
     }
-
-    th {
-      background: #eef2f1;
-      color: var(--ink);
-      font-weight: 700;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    th:last-child,
-    td:last-child {
-      border-right: 0;
-    }
-
-    .two-col {
+    .decision-table tr:last-child th,
+    .decision-table tr:last-child td,
+    .rule-table tr:last-child th,
+    .rule-table tr:last-child td,
+    .command-table tr:last-child th,
+    .command-table tr:last-child td { border-bottom: 0; }
+    .decision-table th,
+    .rule-table th,
+    .command-table th { width: 190px; color: var(--text); }
+    .decision-table td,
+    .rule-table td,
+    .command-table td { color: var(--muted); }
+    .contract-list li {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 16px;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
     }
-
-    .note {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      background: #fbfcfc;
-    }
-
-    .note.danger {
-      border-color: #dfbbb6;
-      background: #fff8f7;
-    }
-
-    .note.ok {
-      border-color: #b9d7c7;
-      background: #f5fbf7;
-    }
-
-    .file-tree {
-      margin: 0;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      background: #fbfcfc;
-      white-space: pre;
-      overflow-x: auto;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    .contract-list li:last-child { border-bottom: 0; }
+    .contract-list span,
+    .workflow-list span,
+    .verify-list span {
+      color: var(--muted);
       font-size: 14px;
-      line-height: 1.55;
     }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
+    .workflow-list li {
+      display: grid;
+      grid-template-columns: 36px 190px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
     }
-
-    .links a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(35, 108, 99, 0.35);
+    .workflow-list li:first-child { border-top: 0; }
+    .workflow-list b {
+      color: var(--blue);
+      font-size: 14px;
     }
+    .rule-zones { display: grid; gap: 16px; }
+    .rule-zone {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .rule-zone:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+    .rule-zone-heading { margin: 0; }
+    .rule-zone-heading strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+    .allow-zone .rule-zone-heading strong { color: var(--green); }
+    .conditional-zone .rule-zone-heading strong { color: var(--blue); }
+    .block-zone .rule-zone-heading strong { color: var(--red); }
+    .rule-table thead th {
+      padding: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .verify-list { margin-top: 12px; }
+    .verify-list li {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .verify-list li:first-child { border-top: 0; }
+    .command-table code { white-space: normal; }
   </style>
 </head>
 <body>
   <main class="shell">
-    <div class="hero">
-      <div class="panel">
-        <span class="label">스킬 이름: skill-plugin-test-loop</span>
-        <h1>스킬과 플러그인을 실제 호출 반복으로 검증한다</h1>
-        <p class="summary">새 복제본 또는 격리 복사본에서 실제 첫 응답, 생성 산출물, 검증 결과, 실패 분류를 기록한다. 개선점이 나오면 <code>개선 -> 검증 -> atomic-committer -> GitHub fresh clone 재실행</code> 순서를 지켜 최종 pass와 사전 검증을 구분한다.</p>
-        <div class="contract-grid">
-          <div class="contract">
-            <strong>대상 고정</strong>
-            <span>상위 스킬, 플러그인, plugin-bundled skill 중 무엇을 검증하는지 entrypoint와 함께 기록한다.</span>
-          </div>
-          <div class="contract">
-            <strong>외부 격리 루트</strong>
-            <span>기본 테스트 위치는 repo 밖 external scratch root다. 예시는 <code>&lt;desktop&gt;/skill-plugin-test-runs/&lt;target-slug&gt;</code>다.</span>
-          </div>
-          <div class="contract">
-            <strong>출처 고정</strong>
-            <span>remote URL, branch, commit, submodule 상태를 먼저 남긴다. commit/push 전 변경은 fresh clone pass가 아니라 <code>preflight</code> 또는 <code>local-only</code>로만 기록한다.</span>
-          </div>
-          <div class="contract">
-            <strong>실제 호출 기록</strong>
-            <span>예상 흐름을 끼워 넣지 않고 prompt, 첫 응답, 실행 기록, 산출물을 그대로 보존한다.</span>
-          </div>
-          <div class="contract">
-            <strong>실패 후 새 반복</strong>
-            <span>실행 기록을 고쳐서 통과시키지 않는다. 출처 스킬이나 테스트 방법을 고친 뒤 <code>cycle-NNN</code>을 증가시킨다.</span>
-          </div>
-          <div class="contract">
-            <strong>리서치 기반 개선</strong>
-            <span>외부 관행이 중요한 스킬은 <code>web-research</code>로 source lane을 나누고 <code>adopt/adapt/reject/defer</code> 판단을 남긴다.</span>
-          </div>
-          <div class="contract">
-            <strong>bounded runner</strong>
-            <span>helper가 있으면 session id, 같은 <code>cwd</code>, source commit, timeout, stdin boundary, output path, final response를 확인한다.</span>
-          </div>
-        </div>
-      </div>
+    <header class="hero">
+      <h1>skill-plugin-test-loop</h1>
+      <p class="lead">스킬, 플러그인, plugin-bundled skill이 실제 새 복제본 또는 격리 복사본에서 기대한 대로 호출되고 산출물을 만드는지 반복 기록과 실패 분류를 남기며 테스트할 때 사용한다.</p>
+      <p class="meta-line">SKILL.md 기준 · 읽기용 skill.html · 한국어 우선 · 보안 경계 · 인터랙션 없음</p>
+    </header>
 
-      <div class="panel">
-        <h2>사용 판단</h2>
-        <ul class="decision-list">
-          <li>새 스킬, 기존 스킬, 플러그인, plugin-bundled skill을 실제 사용자 호출 흐름으로 시험할 때 사용한다.</li>
-          <li>새 복제본, 격리 복사본, 반복 기록, 실제 질문/응답, 산출물 폴더, 실패 원인 분류가 필요할 때 사용한다.</li>
-          <li class="skip">일반 앱 테스트만 돌리면 되는 경우에는 대상 repo의 테스트 실행기를 쓴다.</li>
-          <li class="skip">결정적 라우팅, schema, safety 평가 사례만 추가하는 작업은 <code>agent-eval-harness</code>가 주 스킬이다.</li>
-        </ul>
-      </div>
-    </div>
+    <section>
+      <h2>요약</h2>
+      <p class="summary-copy">스킬이나 플러그인을 새 복제본 또는 격리 복사본에서 실제 cycle로 검증한다.</p>
+      <ul class="summary-list">
+        <li><strong>사용할 때</strong><span>스킬이나 플러그인을 새 복제본 또는 격리 복사본에서 실제 cycle로 검증한다.</span></li>
+        <li><strong>주요 입력</strong><span>대상 skill/plugin, expected call, fresh clone cycle, source commit, 검증 명령.</span></li>
+        <li><strong>주요 출력</strong><span><code>cycle-NNN</code> 기록, 첫 응답 증거, 산출물 검증, 실패 분류, publish loop 판단.</span></li>
+        <li><strong>먼저 판단</strong><span>리서치 기반 개선과 생략 기록을 남기고, 필요하면 <code>atomic-committer</code>와 <code>web-research</code>를 연결한다.</span></li>
+        <li><strong>검증</strong><span>관련 validator와 <code>node scripts/validate-skill-html.ts .</code>로 확인한다.</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>사용 판단</h2>
+      <p class="use-copy">이 화면은 스킬을 설치하거나 적용하기 전에 “언제 쓰고 무엇을 확인해야 하는지”를 빠르게 보여준다.</p>
+      <table class="decision-table">
+        <tbody>
+          <tr><th>사용할 때</th><td>스킬, 플러그인, plugin-bundled skill이 실제 새 복제본 또는 격리 복사본에서 기대한 대로 호출되고 산출물을 만드는지 반복 기록과 실패 분류를 남기며 테스트할 때 사용한다.</td></tr>
+          <tr><th>먼저 볼 것</th><td><code>SKILL.md</code>의 description, trigger, 금지 조건, 검증 명령.</td></tr>
+          <tr><th>완료 신호</th><td><code>skill.html</code>이 원문 기준과 같은 방향을 가리키고, validator가 통과한다.</td></tr>
+          <tr><th>검증 신호</th><td><code>cycle-NNN</code> <code>실패 분류</code> <code>리서치 기반 개선</code> <code>필수 publish loop</code> <code>atomic-committer</code> <code>web-research</code> <code>adopt/adapt/reject/defer</code> <code>생략 기록</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>중요한 기준</h2>
+      <ul class="contract-list">
+        <li><strong>&quot;사람이 하는 것처럼&quot;, &quot;새 복제본에서&quot;, &quot;다시 처음부터&quot;, &quot;검증 ca</strong><span>&quot;사람이 하는 것처럼&quot;, &quot;새 복제본에서&quot;, &quot;다시 처음부터&quot;, &quot;검증 case를 늘려서&quot;, &quot;루프를 돌려서 완성할 때까지&quot; 같은 요청.</span></li>
+        <li><strong>테스트 history, cycle 횟수, 실제 질문/응답 기록, 산출물 폴더</strong><span>테스트 history, cycle 횟수, 실제 질문/응답 기록, 산출물 폴더, 실패 원인 분류가 필요한 요청.</span></li>
+        <li><strong>project-workflow처럼 다른 스킬이나 플러그인을 내부에서 호출해야</strong><span>project-workflow처럼 다른 스킬이나 플러그인을 내부에서 호출해야 하는 orchestration package의 실제 동작 검증.</span></li>
+        <li><strong>일반 앱의 unit/integration/e2e test만 돌리면 되는 경우</strong><span>일반 앱의 unit/integration/e2e test만 돌리면 되는 경우. 그때는 대상 repo의 test runner를 쓴다.</span></li>
+        <li><strong>테스트 대상과 source를 먼저 고정한다</strong><span>테스트 대상과 source를 먼저 고정한다.</span></li>
+      </ul>
+    </section>
 
     <section>
       <h2>작업 흐름</h2>
-      <div class="flow" aria-label="테스트 루프 단계">
-        <div class="step">
-          <span class="num">1</span>
-          <h3>대상과 출처</h3>
-          <p>entrypoint, local 또는 remote 출처, branch, commit, submodule 상태를 고정한다.</p>
-        </div>
-        <div class="step">
-          <span class="num">2</span>
-          <h3>publish gate</h3>
-          <p>검증할 변경이 commit/push되어 있지 않으면 <code>preflight</code> 또는 <code>local-only</code>로만 보고 fresh clone pass로 기록하지 않는다.</p>
-        </div>
-        <div class="step">
-          <span class="num">3</span>
-          <h3>외부 격리 루트</h3>
-          <p>Desktop 같은 repo 밖 경로에 test root를 만들고 <code>current/</code>만 매 cycle 삭제한다.</p>
-        </div>
-        <div class="step">
-          <span class="num">4</span>
-          <h3>새 clone</h3>
-          <p><code>current/_github/&lt;repo&gt;</code>에 GitHub 새 복제본을 받고 downloaded commit을 기록한다.</p>
-        </div>
-        <div class="step">
-          <span class="num">5</span>
-          <h3>리서치 판단</h3>
-          <p>best practice나 유명한 workflow 비교가 필요하면 <code>web-research</code> lane을 켠다.</p>
-        </div>
-        <div class="step">
-          <span class="num">6</span>
-          <h3>사례 실행</h3>
-          <p>정상 경로와 의심 경계 사례를 실제 prompt로 호출하고 첫 응답을 저장한다.</p>
-        </div>
-        <div class="step">
-          <span class="num">7</span>
-          <h3>증거 저장</h3>
-          <p>실행 기록, 산출물, 검증기 출력, 브라우저 증거를 <code>runs/cycle-NNN</code> 아래에 둔다.</p>
-        </div>
-        <div class="step">
-          <span class="num">8</span>
-          <h3>분류와 반복</h3>
-          <p>실패 분류를 기록하고 출처 스킬 또는 테스트 방법을 고친 뒤 검증, commit/push, 새 clone 재실행으로 다음 반복을 실행한다.</p>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>파일 관계도</h2>
-      <pre class="file-tree">&lt;desktop&gt;/skill-plugin-test-runs/&lt;target-slug&gt;/
-├── cycles.md
-├── current/
-│   ├── _github/&lt;repo&gt;/
-│   └── targets/&lt;target-slug&gt;/
-└── runs/
-    └── cycle-NNN/
-        ├── prompts/
-        ├── research/
-        │   └── ledger.md
-        ├── history/
-        ├── output/
-        └── cycle-summary.md</pre>
-    </section>
-
-    <section>
-      <h2>격리 실행 기준</h2>
-      <div class="wide-table">
-        <table>
-          <thead>
-            <tr>
-              <th>단계</th>
-              <th>통과 기준</th>
-              <th>실패로 보는 경우</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>commit/push</td>
-              <td>GitHub clone이 받을 변경은 먼저 <code>atomic-committer</code>로 commit/push되어 있다.</td>
-              <td>commit/push 전 작업본을 clone처럼 취급하거나 최종 pass라고 부른다.</td>
-            </tr>
-            <tr>
-              <td>외부 test root</td>
-              <td>Desktop 같은 repo 밖 경로에서 실행하고 <code>runs/</code>를 보존한다.</td>
-              <td>target repo 내부 scratch나 symlink에 의존한다.</td>
-            </tr>
-            <tr>
-              <td>새 복제본</td>
-              <td><code>current/_github/&lt;repo&gt;</code>를 매 cycle 새로 만든다.</td>
-              <td>이전 cycle의 <code>current/</code>를 재사용한다.</td>
-            </tr>
-            <tr>
-              <td>필수 publish loop</td>
-              <td><code>개선 -> 검증 -> atomic-committer로 commit/push -> Desktop 외부 루트에서 GitHub fresh clone 재실행</code> 순서를 남긴다.</td>
-              <td>검증만 하고 remote source를 갱신하지 않은 상태를 fresh clone 검증으로 보고한다.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>검증 사례 매트릭스</h2>
-      <div class="wide-table">
-        <table>
-          <thead>
-            <tr>
-              <th>사례</th>
-              <th>확인 질문</th>
-              <th>주요 증거</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>기본 정상 경로</td>
-              <td>올바른 trigger로 호출되고 필수 산출물을 만드는가?</td>
-              <td>첫 응답, 생성 파일, 검증기 결과</td>
-            </tr>
-            <tr>
-              <td>브라우저 없음/CLI</td>
-              <td>브라우저 없이도 실행 증거와 최종 응답이 남는가?</td>
-              <td>CLI 출력, 반복 요약, 최종 응답</td>
-            </tr>
-            <tr>
-              <td>브라우저/화면</td>
-              <td><code>skill.html</code>이나 UI가 있으면 실제 브라우저 증거가 있는가?</td>
-              <td>PC desktop 스크린샷, console/network 기록</td>
-            </tr>
-            <tr>
-              <td>API/MCP/비밀값 위험</td>
-              <td>외부 write, MCP, secret, untrusted content gate가 빠지지 않는가?</td>
-              <td>위험 gate 기록, 정리된 산출물</td>
-            </tr>
-            <tr>
-              <td>플러그인 manifest/hook</td>
-              <td>manifest, MCP config, hook, bundled skill 경계가 flatten되지 않는가?</td>
-              <td>plugin 파일 경계와 호출 증거</td>
-            </tr>
-            <tr>
-              <td>research-informed improvement</td>
-              <td>외부 best practice, 유명한 사용 방식, upstream 변화와 비교해 개선 후보를 분류했는가?</td>
-              <td><code>web-research</code> source lane, research ledger, <code>adopt/adapt/reject/defer</code> 판단</td>
-            </tr>
-            <tr>
-              <td>업데이트 어긋남/회귀</td>
-              <td>catalog, snippet, 검증기, 실행 기록이 출처 변경과 같이 움직이는가?</td>
-              <td>diff, 검증기, 어긋남 메모</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>리서치 기반 개선</h2>
-      <div class="wide-table">
-        <table>
-          <thead>
-            <tr>
-              <th>lane</th>
-              <th>역할</th>
-              <th>기록</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>official/source</code></td>
-              <td>공식 문서, upstream repo, release나 changelog를 확인한다.</td>
-              <td>source URL, checked date, 현재 스킬과의 차이</td>
-            </tr>
-            <tr>
-              <td><code>community/practice</code></td>
-              <td>사람들이 실제로 많이 쓰는 workflow나 유명한 방식이 있는지 본다.</td>
-              <td>반복되는 패턴, 적용 가능 조건, 과장 가능성</td>
-            </tr>
-            <tr>
-              <td><code>counterexample/risk</code></td>
-              <td>좋아 보이는 관행이 이 repo의 cross-agent 계약과 충돌하는지 확인한다.</td>
-              <td>거절 이유, 보류 이유, 보안/품질 위험</td>
-            </tr>
-            <tr>
-              <td><code>adopt/adapt/reject/defer</code></td>
-              <td>리서치 결과를 그대로 복사하지 않고 local delta로 분류한다.</td>
-              <td><code>runs/cycle-NNN/research/ledger.md</code>와 다음 cycle 결과</td>
-            </tr>
-            <tr>
-              <td>생략 기록</td>
-              <td><code>web-research</code>를 생략해도 생략 사유와 <code>defer</code> 판단을 남긴다.</td>
-              <td><code>runs/cycle-NNN/research/ledger.md</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ol class="workflow-list">
+        <li><b>1</b><strong>개선</strong><span>개선: skill-update나 대상 package 규칙으로 SKILL.md, references, validator, metadata, skill.html, snippets, docs, history를 고친다.</span></li>
+        <li><b>2</b><strong>검증</strong><span>검증: 대상 skill-specific validator와 repo validator를 실행한다. 실패하면 commit하지 않고 수정한다.</span></li>
+        <li><b>3</b><strong>atomic-committer로 commit/push</strong><span>atomic-committer로 commit/push: fresh clone이 소비할 source가 remote에 있어야 하므로, accepted delta는 atomic-committer로 logical commit을 만들고 push한다.</span></li>
+        <li><b>4</b><strong>Desktop 외부 루트에서 GitHub fresh clone</strong><span>Desktop 외부 루트에서 GitHub fresh clone cycle 재실행: &lt;desktop/skill-plugin-test-runs/&lt;target-slug 같은 repo 밖 루트에서 current/를 삭제하고 GitHub에서 다시 clone한다. local w...</span></li>
+        <li><b>5</b><strong>테스트 대상과 source를 먼저 고정한다</strong><span>테스트 대상과 source를 먼저 고정한다.</span></li>
+        <li><b>6</b><strong>로컬 작업본을 직접 믿지 않고, 기본적으로 repo 밖 ext</strong><span>로컬 작업본을 직접 믿지 않고, 기본적으로 repo 밖 external scratch root에서 GitHub 새 복제본을 만든다.</span></li>
+      </ol>
     </section>
 
     <section>
       <h2>보안 경계</h2>
-      <div class="two-col">
-        <div class="note danger">
-          <h3>금지</h3>
-          <p>기대 결과를 실행 기록에 끼워 맞추거나 같은 반복 기록을 덮어쓰지 않는다. 새 복제본 검증을 요구받았는데 local workspace, symlink, global install에 몰래 기대지 않고, commit/push 전 cycle을 최종 pass라고 부르지 않는다.</p>
+      <div class="rule-zones">
+        <div class="rule-zone allow-zone">
+          <h3 class="rule-zone-heading"><strong>허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>&quot;사람이 하는 것처럼&quot;, &quot;새 복제본에서&quot;, &quot;다시 처음부</th><td>&quot;사람이 하는 것처럼&quot;, &quot;새 복제본에서&quot;, &quot;다시 처음부터&quot;, &quot;검증 case를 늘려서&quot;, &quot;루프를 돌려서 완성할 때까지&quot; 같은 요청.</td></tr>
+              <tr><th>project-workflow처럼 다른 스킬이나 플러그인을</th><td>project-workflow처럼 다른 스킬이나 플러그인을 내부에서 호출해야 하는 orchestration package의 실제 동작 검증.</td></tr>
+              <tr><th>사용자의 기대 과정을 결과 history에 끼워 맞추지 않</th><td>사용자의 기대 과정을 결과 history에 끼워 맞추지 않는다. 실제 첫 응답과 실제 산출물을 그대로 기록한다.</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="note ok">
-          <h3>허용</h3>
-          <p>현재 runtime이 원본 skill, plugin, command를 실제 호출할 수 없으면 <code>fallback</code>으로 표시하고 누락된 호출 가능 표면을 기록한다.</p>
+        <div class="rule-zone conditional-zone">
+          <h3 class="rule-zone-heading"><strong>조건부 허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>테스트 history, cycle 횟수, 실제 질문/응답 </th><td>테스트 history, cycle 횟수, 실제 질문/응답 기록, 산출물 폴더, 실패 원인 분류가 필요한 요청.</td></tr>
+              <tr><th>이미 원인이 확정된 스킬 문구 수정만 필요한 경우</th><td>이미 원인이 확정된 스킬 문구 수정만 필요한 경우. 그때는 skill-update가 주 스킬이다.</td></tr>
+              <tr><th>대상 스킬의 품질 기준이 외부 best practice, </th><td>대상 스킬의 품질 기준이 외부 best practice, 유명한 workflow, 최신 agent/tool 관행과 관련되면 web-research를 병렬 lane으로 실행해 비교 근거를 남긴다.</td></tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>bounded runner 기준</h2>
-      <div class="wide-table">
-        <table>
-          <thead>
-            <tr>
-              <th>확인 항목</th>
-              <th>요구 기준</th>
-              <th>실패 분류</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>실행 식별자</td>
-              <td>명시적인 session id 또는 run id가 있고 같은 <code>cwd</code>와 같은 source commit으로 실행한다.</td>
-              <td><code>runner</code></td>
-            </tr>
-            <tr>
-              <td>입출력 경계</td>
-              <td>stdin boundary, prompt file, output file 경로를 기록하고 이전 세션 tail에 의존하지 않는다.</td>
-              <td><code>runner</code> 또는 <code>test method</code></td>
-            </tr>
-            <tr>
-              <td>시간 제한</td>
-              <td>timeout을 둔다. timeout이나 final response 누락은 성공으로 보지 않는다.</td>
-              <td><code>runner</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>실패 분류</h2>
-      <div class="wide-table">
-        <table>
-          <thead>
-            <tr>
-              <th>분류</th>
-              <th>의미</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>skill contract</code></td>
-              <td>스킬 문구가 실제 호출 조건, 순서, 산출물, 금지 경계를 충분히 강제하지 못했다.</td>
-            </tr>
-            <tr>
-              <td><code>plugin contract</code></td>
-              <td>manifest, bundled skill, MCP, hook, 출처 경계가 실제 plugin 사용과 다르다.</td>
-            </tr>
-            <tr>
-              <td><code>runner</code></td>
-              <td>helper script, timeout, session, stdout/stderr capture, final response 수집 문제다.</td>
-            </tr>
-            <tr>
-              <td><code>test method</code></td>
-              <td>테스트가 실제 호출이 아니라 결과를 끼워 맞췄거나 local workspace를 몰래 사용했다.</td>
-            </tr>
-            <tr>
-              <td><code>target artifact</code></td>
-              <td>생성된 프로젝트, 문서, 실행 기록, 검증기 출력이 요구 형태와 다르다.</td>
-            </tr>
-            <tr>
-              <td><code>environment/hook</code></td>
-              <td>shell, terminal, hook approval, MCP startup, 권한, installed binary 문제다.</td>
-            </tr>
-            <tr>
-              <td><code>source drift</code></td>
-              <td>README, snippet, catalog, 실행 기록, 검증기, plugin registry가 서로 어긋났다.</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="rule-zone block-zone">
+          <h3 class="rule-zone-heading"><strong>금지</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>리서치 결과는 그대로 복사하지 않고 adopt, adapt</th><td>리서치 결과는 그대로 복사하지 않고 adopt, adapt, reject, defer로 분류한 뒤 이 repo의 cross-agent 계약에 맞는 delta만 반영한다.</td></tr>
+              <tr><th>검증</th><td>검증: 대상 skill-specific validator와 repo validator를 실행한다. 실패하면 commit하지 않고 수정한다.</td></tr>
+              <tr><th>Desktop 외부 루트에서 GitHub fresh clo</th><td>Desktop 외부 루트에서 GitHub fresh clone cycle 재실행: &lt;desktop/skill-plugin-test-runs/&lt;target-slug 같은 repo 밖 루트에서 current/를 삭제하고 GitHub에서 다시 clone한다. lo...</td></tr>
+              <tr><th>publish gate</th><td>publish gate: GitHub 새 복제본 검증이 목표라면 테스트할 변경이 commit/push되어 있어야 한다. commit/push 전이면 사전 검증만 가능하며 fresh clone pass로 기록하지 않는다.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
     <section>
       <h2>파일과 검증</h2>
-      <div class="wide-table">
-        <table>
-          <thead>
-            <tr>
-              <th>목적</th>
-              <th>명령 또는 파일</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>대상 스킬 검증</td>
-              <td><code>node scripts/validate-skill.ts skills/skill-plugin-test-loop</code></td>
-            </tr>
-            <tr>
-              <td>전용 검증기</td>
-              <td><code>node skills/skill-plugin-test-loop/scripts/validate-skill-plugin-test-loop.ts skills/skill-plugin-test-loop</code></td>
-            </tr>
-            <tr>
-              <td>한국어 Markdown</td>
-              <td><code>node scripts/validate-korean-markdown.ts .</code></td>
-            </tr>
-            <tr>
-              <td>HTML 요약</td>
-              <td><code>node scripts/validate-skill-html.ts .</code></td>
-            </tr>
-            <tr>
-              <td>repo 정합성</td>
-              <td><code>node scripts/validate-skill-repo.ts .</code></td>
-            </tr>
-            <tr>
-              <td>agent eval</td>
-              <td><code>node scripts/run-agent-evals.ts</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="links" aria-label="관련 파일">
-        <a href="SKILL.md">SKILL.md</a>
-        <a href="scripts/validate-skill-plugin-test-loop.ts">전용 검증기</a>
-      </div>
+      <p class="summary-copy">파일 관계와 검증 명령을 함께 확인한다.</p>
+      <ul class="verify-list">
+        <li><strong>기준 문서</strong><span><code>SKILL.md</code> agent가 실제로 따르는 원문이다.</span></li>
+        <li><strong>읽기 화면</strong><span><code>skill.html</code> 사람이 빠르게 확인하는 단일 HTML이다.</span></li>
+        <li><strong>메타데이터</strong><span><code>agents/openai.yaml</code> agent adapter용 설명과 기본 prompt를 담는다.</span></li>
+        <li><strong>검증 스크립트</strong><span><code>scripts/</code> 스킬 고유 검증 명령을 둔다.</span></li>
+      </ul>
+      <table class="command-table">
+        <tbody>
+          <tr><th>공통 HTML</th><td><code>node scripts/validate-skill-html.ts .</code></td></tr>
+            <tr><th>공통 스킬</th><td><code>node scripts/validate-skill.ts skills/skill-plugin-test-loop</code></td></tr>
+            <tr><th>스킬 고유</th><td><code>node skills/skill-plugin-test-loop/scripts/validate-skill-plugin-test-loop.ts skills/skill-plugin-test-loop</code></td></tr>
+        </tbody>
+      </table>
     </section>
   </main>
 </body>

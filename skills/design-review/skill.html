@@ -3,432 +3,300 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>design-review 시각 가이드</title>
+  <title>design-review 요약</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
-      --bg: #f6f7f9;
+      --bg: #f4f6f8;
       --surface: #ffffff;
-      --surface-soft: #eef2f6;
-      --text: #151922;
-      --muted: #5c6673;
-      --border: #cbd3dd;
-      --blue: #2759a7;
-      --green: #257056;
-      --amber: #8a620f;
-      --red: #a13f36;
-      --ink: #111827;
+      --panel: #f8fafc;
+      --line: #c9d2dc;
+      --text: #17202b;
+      --muted: #5f6b7a;
+      --blue: #2458b8;
+      --green: #2f684f;
+      --red: #963d38;
+      --code: #eef2f7;
     }
     * { box-sizing: border-box; }
-    html, body {
+    html,
+    body {
       margin: 0;
-      min-width: 1120px;
       background: var(--bg);
       color: var(--text);
       font-family: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.58;
       letter-spacing: 0;
-    }
-    body { padding: 32px 0 56px; }
-    a { color: var(--blue); text-decoration: none; }
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size: 0.95em;
       overflow-wrap: anywhere;
     }
-    h1, h2, h3, p { margin: 0; }
-    h1 { font-size: 32px; line-height: 1.18; }
-    h2 { font-size: 20px; line-height: 1.3; }
-    h3 { font-size: 15px; line-height: 1.35; }
-    ul, ol { margin: 0; padding-left: 22px; }
-    li + li { margin-top: 7px; }
-    .shell { width: 1120px; max-width: 1120px; margin: 0 auto; }
-    .hero {
-      display: grid;
-      grid-template-columns: 330px 1fr;
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 24px;
+    body { padding: 32px 28px 56px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: 32px; line-height: 1.18; }
+    h2 { margin-bottom: 12px; font-size: 20px; line-height: 1.3; }
+    h3 { margin-bottom: 8px; font-size: 15px; }
+    p { color: var(--muted); }
+    code {
+      border-radius: 5px;
+      background: var(--code);
+      padding: 2px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
     }
-    .panel, .summary, .contract, .table-wrap, .severity, .file-card, .code-block {
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .hero,
+    section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
     }
-    .summary {
-      padding: 22px;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      min-height: 306px;
+    .hero { padding: 28px 34px 24px; }
+    section {
+      padding: 26px 34px;
+      margin-top: 16px;
     }
-    .mark {
-      width: 70px;
-      height: 70px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      background: var(--surface-soft);
-      color: var(--blue);
-      font-weight: 800;
-      font-size: 18px;
-      margin-bottom: 18px;
+    .lead {
+      max-width: 64em;
+      margin-bottom: 16px;
+      font-size: 16px;
     }
-    .purpose { margin-top: 10px; color: var(--muted); font-size: 15px; }
-    .meta { display: grid; gap: 8px; margin-top: 18px; }
-    .meta div { display: grid; grid-template-columns: 88px 1fr; gap: 10px; font-size: 13px; color: var(--muted); }
-    .meta strong { color: var(--text); }
-    .contracts {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .contract {
-      min-height: 147px;
-      padding: 16px;
-      border-top: 4px solid var(--blue);
-    }
-    .contract.green { border-top-color: var(--green); }
-    .contract.amber { border-top-color: var(--amber); }
-    .contract.red { border-top-color: var(--red); }
-    .eyebrow {
+    .meta-line {
+      margin: 0;
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: 5px;
+      font-size: 13px;
     }
-    .contract p, .panel p, .file-card p, .severity p, .small { color: var(--muted); font-size: 14px; }
-    .section { margin-top: 24px; }
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 24px;
-      margin-bottom: 11px;
+    .summary-copy,
+    .use-copy {
+      max-width: 64em;
+      margin-bottom: 12px;
     }
-    .section-head p { color: var(--muted); font-size: 13px; max-width: 560px; }
-    .decision {
+    .summary-list,
+    .contract-list,
+    .workflow-list,
+    .verify-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .summary-list li {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      overflow: hidden;
-    }
-    .decision .cell {
-      min-height: 142px;
-      padding: 15px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      border-top: 4px solid var(--blue);
-    }
-    .decision .cell:last-child { border-right: 0; }
-    .decision .use { border-top-color: var(--green); }
-    .decision .combine { border-top-color: var(--blue); }
-    .decision .hold { border-top-color: var(--amber); }
-    .decision .stop { border-top-color: var(--red); }
-    .two {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 150px minmax(0, 1fr);
       gap: 16px;
-      align-items: start;
-    }
-    .panel { padding: 18px; }
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      align-items: stretch;
-    }
-    .step {
-      position: relative;
-      min-height: 116px;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #fbfcfe;
-    }
-    .step:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      right: -9px;
-      top: 50%;
-      width: 8px;
-      height: 8px;
-      border-top: 2px solid var(--blue);
-      border-right: 2px solid var(--blue);
-      transform: translateY(-50%) rotate(45deg);
-      background: var(--bg);
-    }
-    .step strong { display: block; margin-bottom: 6px; font-size: 14px; }
-    .evidence-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .evidence {
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #fbfcfe;
-      min-height: 94px;
-    }
-    .table-wrap { overflow: hidden; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      background: var(--surface);
-    }
-    th, td {
-      border-bottom: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      padding: 12px 13px;
-      vertical-align: top;
-      text-align: left;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
       font-size: 14px;
     }
-    tr:last-child td { border-bottom: 0; }
-    th:last-child, td:last-child { border-right: 0; }
-    th {
-      background: var(--surface-soft);
-      font-size: 13px;
-      color: var(--text);
+    .summary-list li:last-child { border-bottom: 0; }
+    .summary-list strong,
+    .contract-list strong,
+    .verify-list strong { color: var(--text); }
+    .decision-table,
+    .rule-table,
+    .command-table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    td { color: var(--muted); }
-    .severity-row {
+    .decision-table th,
+    .decision-table td,
+    .rule-table th,
+    .rule-table td,
+    .command-table th,
+    .command-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    .decision-table tr:last-child th,
+    .decision-table tr:last-child td,
+    .rule-table tr:last-child th,
+    .rule-table tr:last-child td,
+    .command-table tr:last-child th,
+    .command-table tr:last-child td { border-bottom: 0; }
+    .decision-table th,
+    .rule-table th,
+    .command-table th { width: 190px; color: var(--text); }
+    .decision-table td,
+    .rule-table td,
+    .command-table td { color: var(--muted); }
+    .contract-list li {
       display: grid;
-      grid-template-columns: 64px 1fr 1fr;
-      border-top: 1px solid var(--border);
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
     }
-    .severity-row:first-child { border-top: 0; }
-    .severity-row > div { padding: 12px; border-right: 1px solid var(--border); }
-    .severity-row > div:last-child { border-right: 0; }
-    .sev { font-weight: 800; color: var(--ink); }
-    .files {
+    .contract-list li:last-child { border-bottom: 0; }
+    .contract-list span,
+    .workflow-list span,
+    .verify-list span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .workflow-list li {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .file-card { min-height: 104px; padding: 13px; overflow-wrap: anywhere; }
-    .file-card strong { display: block; margin-bottom: 6px; font-size: 14px; }
-    .code-block {
-      margin: 0;
-      padding: 15px;
-      background: var(--ink);
-      color: #f8fafc;
-      overflow-x: auto;
-      white-space: pre;
-      font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    }
-    .do-dont {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 36px 190px minmax(0, 1fr);
       gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
     }
-    .allow { border-top: 4px solid var(--green); }
-    .deny { border-top: 4px solid var(--red); }
-    svg { display: block; width: 100%; height: auto; }
+    .workflow-list li:first-child { border-top: 0; }
+    .workflow-list b {
+      color: var(--blue);
+      font-size: 14px;
+    }
+    .rule-zones { display: grid; gap: 16px; }
+    .rule-zone {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .rule-zone:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+    .rule-zone-heading { margin: 0; }
+    .rule-zone-heading strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+    .allow-zone .rule-zone-heading strong { color: var(--green); }
+    .conditional-zone .rule-zone-heading strong { color: var(--blue); }
+    .block-zone .rule-zone-heading strong { color: var(--red); }
+    .rule-table thead th {
+      padding: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .verify-list { margin-top: 12px; }
+    .verify-list li {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .verify-list li:first-child { border-top: 0; }
+    .command-table code { white-space: normal; }
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="hero">
-      <section class="summary" aria-label="요약">
-        <div>
-          <div class="mark">DR</div>
-          <h1>design-review</h1>
-          <p class="purpose">제품 맥락, 기존 design system, 접근성, 반응형 계층을 근거로 UI 경험을 리뷰하는 스킬입니다.</p>
-        </div>
-        <div class="meta" aria-label="핵심 정보">
-          <div><strong>사용</strong><span>UI review, visual critique, layout, interaction, accessibility 판단</span></div>
-          <div><strong>원문</strong><span><a href="SKILL.md"><code>SKILL.md</code></a></span></div>
-          <div><strong>기준</strong><span><a href="references/design-review-criteria.md"><code>references/design-review-criteria.md</code></a></span></div>
-          <div><strong>검증</strong><span><code>node scripts/validate-skill.ts skills/design-review</code></span></div>
-        </div>
-      </section>
-
-      <section class="contracts" aria-label="중요한 기준">
-        <article class="contract green">
-          <div class="eyebrow">중요한 기준 1</div>
-          <h3>제품과 사용자를 먼저 봅니다.</h3>
-          <p>target product의 도메인, 주 사용자, 반복 workflow, 업무 빈도를 바탕으로 severity를 정합니다.</p>
-        </article>
-        <article class="contract">
-          <div class="eyebrow">중요한 기준 2</div>
-          <h3>기존 design system을 우선합니다.</h3>
-          <p>component convention, typography, spacing, state 규칙을 먼저 확인하고 개인 취향만으로 지적하지 않습니다.</p>
-        </article>
-        <article class="contract amber">
-          <div class="eyebrow">중요한 기준 3</div>
-          <h3>finding마다 evidence를 붙입니다.</h3>
-          <p>screenshot, browser observation, code/CSS, design-system rule, WCAG, user/task evidence 중 최소 하나를 연결합니다.</p>
-        </article>
-        <article class="contract red">
-          <div class="eyebrow">중요한 기준 4</div>
-          <h3>눈대중으로 pass를 선언하지 않습니다.</h3>
-          <p>focus, target size, overflow, contrast, responsive 문제는 필요한 경우 <code>browser-qa</code> 관찰 증거로 확인합니다.</p>
-        </article>
-      </section>
+      <h1>design-review</h1>
+      <p class="lead">UI review, visual critique, layout, interaction, design-system fit, accessibility, responsive hierarchy, product-aware design judgment가 필요할 때 사용한다.</p>
+      <p class="meta-line">SKILL.md 기준 · 읽기용 skill.html · 한국어 우선 · 보안 경계 · 인터랙션 없음</p>
     </header>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>사용 판단</h2>
-        <p>디자인 리뷰가 필요한지, 다른 스킬과 결합해야 하는지 먼저 분리합니다.</p>
-      </div>
-      <div class="table-wrap decision" aria-label="사용 판단 표">
-        <div class="cell use">
-          <h3>사용</h3>
-          <p>화면 구조, visual hierarchy, interaction, state, accessibility, responsive layout, 제품 감각을 검토할 때 사용합니다.</p>
-        </div>
-        <div class="cell combine">
-          <h3>결합</h3>
-          <p>실제 브라우저 증거가 필요하면 <code>browser-qa</code>, 현재 best practice 확인이 필요하면 <code>web-research</code>와 결합합니다.</p>
-        </div>
-        <div class="cell hold">
-          <h3>보류</h3>
-          <p>대상 사용자, 주요 workflow, design system, viewport, evidence 범위가 불명확하면 먼저 scope를 좁힙니다.</p>
-        </div>
-        <div class="cell stop">
-          <h3>차단</h3>
-          <p>제품 맥락 없이 색감 취향만 말하거나, 모든 heuristic 위반을 동일한 bug로 단정하지 않습니다.</p>
-        </div>
-      </div>
+    <section>
+      <h2>요약</h2>
+      <p class="summary-copy">UI 화면, 레이아웃, interaction, accessibility, visual hierarchy를 제품 맥락 안에서 검토한다.</p>
+      <ul class="summary-list">
+        <li><strong>사용할 때</strong><span>UI 화면, 레이아웃, interaction, accessibility, visual hierarchy를 제품 맥락 안에서 검토한다.</span></li>
+        <li><strong>주요 입력</strong><span>스크린샷, 브라우저 target, 디자인 의도, 사용 시나리오, 접근성 기준.</span></li>
+        <li><strong>주요 출력</strong><span>S0-S4 severity finding, <code>Evidence Matrix</code>, <code>WCAG</code> 근거, 구체적 개선 제안.</span></li>
+        <li><strong>먼저 판단</strong><span>색·장식보다 정보 구조, 반복 사용성, focus/target/error 같은 실제 사용 문제를 우선한다.</span></li>
+        <li><strong>검증</strong><span>관련 validator와 <code>node scripts/validate-skill-html.ts .</code>로 확인한다.</span></li>
+      </ul>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>작업 흐름</h2>
-        <p>리뷰는 발견 목록이 아니라 사용자 영향과 수정 방향까지 연결된 판단이어야 합니다.</p>
-      </div>
-      <div class="panel">
-        <div class="flow" aria-label="작업 흐름 단계">
-          <div class="step"><strong>1. 맥락 확인</strong><p>제품 도메인, 사용자, 반복 workflow, device, design system을 확인합니다.</p></div>
-          <div class="step"><strong>2. 화면 관찰</strong><p>density, hierarchy, spacing, typography, state, responsive order를 봅니다.</p></div>
-          <div class="step"><strong>3. 접근성 확인</strong><p>focus, keyboard path, target size, contrast, error recovery를 점검합니다.</p></div>
-          <div class="step"><strong>4. severity 판단</strong><p>frequency, impact, persistence, domain/business risk로 등급을 정합니다.</p></div>
-          <div class="step"><strong>5. 결과 작성</strong><p>finding, evidence, user impact, recommendation, residual risk를 남깁니다.</p></div>
-        </div>
-      </div>
+    <section>
+      <h2>사용 판단</h2>
+      <p class="use-copy">이 화면은 스킬을 설치하거나 적용하기 전에 “언제 쓰고 무엇을 확인해야 하는지”를 빠르게 보여준다.</p>
+      <table class="decision-table">
+        <tbody>
+          <tr><th>사용할 때</th><td>UI review, visual critique, layout, interaction, design-system fit, accessibility, responsive hierarchy, product-aware design judgment가 필요할 때 사용한다.</td></tr>
+          <tr><th>먼저 볼 것</th><td><code>SKILL.md</code>의 description, trigger, 금지 조건, 검증 명령.</td></tr>
+          <tr><th>완료 신호</th><td><code>skill.html</code>이 원문 기준과 같은 방향을 가리키고, validator가 통과한다.</td></tr>
+          <tr><th>검증 신호</th><td><code>S0</code> <code>S4</code> <code>Evidence Matrix</code> <code>WCAG</code></td></tr>
+        </tbody>
+      </table>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Evidence Matrix</h2>
-        <p>finding마다 적어도 하나의 근거를 붙이고, 추론은 추론이라고 표시합니다.</p>
-      </div>
-      <div class="two">
-        <section class="panel" aria-label="증거 유형">
-          <h3>증거 유형</h3>
-          <div class="evidence-grid">
-            <div class="evidence"><strong>시각</strong><p>screenshot, spacing, hierarchy, overlap, palette</p></div>
-            <div class="evidence"><strong>상호작용</strong><p>keyboard path, focus order, hover, loading, empty, error state</p></div>
-            <div class="evidence"><strong>접근성</strong><p>WCAG 2.2, contrast, focus visible, target size, error suggestion</p></div>
-            <div class="evidence"><strong>코드</strong><p>CSS, component rule, token, breakpoint, state handling</p></div>
-            <div class="evidence"><strong>사용자 과업</strong><p>task frequency, workflow speed, recovery path</p></div>
-            <div class="evidence"><strong>조사 출처</strong><p>요청 시 <code>web-research</code>로 source ledger와 채택 판단 기록</p></div>
-          </div>
-        </section>
-        <section class="panel" aria-label="접근성 기준">
-          <h3>접근성 기준</h3>
-          <table>
-            <thead>
-              <tr><th>기준</th><th>확인 대상</th></tr>
-            </thead>
+    <section>
+      <h2>중요한 기준</h2>
+      <ul class="contract-list">
+        <li><strong>target product의 사용자와 반복 workflow를 먼저 본다</strong><span>target product의 사용자와 반복 workflow를 먼저 본다.</span></li>
+        <li><strong>기존 design system과 component convention을 우선</strong><span>기존 design system과 component convention을 우선한다.</span></li>
+        <li><strong>density, hierarchy, spacing, typography, s</strong><span>density, hierarchy, spacing, typography, state, responsive order를 확인한다.</span></li>
+        <li><strong>heuristic violation을 자동 bug로 단정하지 않는다</strong><span>heuristic violation을 자동 bug로 단정하지 않는다. 사용자 task, 빈도, 영향, 반복성, domain/business risk로 severity를 판단한다.</span></li>
+        <li><strong>추론이면 inference라고 표시하고, 실제 사용자 조사나 screen r</strong><span>추론이면 inference라고 표시하고, 실제 사용자 조사나 screen reader/assistive tech 검증을 대체했다고 말하지 않는다.</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>작업 흐름</h2>
+      <ol class="workflow-list">
+        <li><b>1</b><strong>대상 Markdown과 관련 파일을 읽는다</strong><span>대상 Markdown과 관련 파일을 읽는다.</span></li>
+        <li><b>2</b><strong>사용 조건과 중요한 기준을 뽑는다</strong><span>사용 조건과 중요한 기준을 뽑는다.</span></li>
+        <li><b>3</b><strong>사람이 읽을 짧은 HTML 구조로 정리한다</strong><span>사람이 읽을 짧은 HTML 구조로 정리한다.</span></li>
+        <li><b>4</b><strong>검증 명령과 브라우저 확인으로 결과를 점검한다</strong><span>검증 명령과 브라우저 확인으로 결과를 점검한다.</span></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>보안 경계</h2>
+      <div class="rule-zones">
+        <div class="rule-zone allow-zone">
+          <h3 class="rule-zone-heading"><strong>허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
             <tbody>
-              <tr><td><code>2.4.7 Focus Visible</code></td><td>focus indicator와 keyboard 이동 경로</td></tr>
-              <tr><td><code>2.5.8 Target Size</code></td><td>터치와 포인터 대상 크기</td></tr>
-              <tr><td><code>3.3.1 Error Identification</code></td><td>오류 위치와 원인 인식</td></tr>
-              <tr><td><code>3.3.3 Error Suggestion</code></td><td>수정 방법, 입력 보존, recovery path</td></tr>
+              <tr><th>target product의 사용자와 반복 workflow</th><td>target product의 사용자와 반복 workflow를 먼저 본다.</td></tr>
+              <tr><th>density, hierarchy, spacing, typ</th><td>density, hierarchy, spacing, typography, state, responsive order를 확인한다.</td></tr>
+              <tr><th>heuristic violation을 자동 bug로 단정하</th><td>heuristic violation을 자동 bug로 단정하지 않는다. 사용자 task, 빈도, 영향, 반복성, domain/business risk로 severity를 판단한다.</td></tr>
             </tbody>
           </table>
-        </section>
+        </div>
+        <div class="rule-zone conditional-zone">
+          <h3 class="rule-zone-heading"><strong>조건부 허용</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>heuristic violation을 자동 bug로 단정하</th><td>heuristic violation을 자동 bug로 단정하지 않는다. 사용자 task, 빈도, 영향, 반복성, domain/business risk로 severity를 판단한다.</td></tr>
+              <tr><th>screenshot, browser observation,</th><td>screenshot, browser observation, code/CSS, design-system rule, WCAG/heuristic reference, user/task evidence 중 최소 하나를 finding마다 붙인다.</td></tr>
+              <tr><th>browser evidence가 필요한 focus, tar</th><td>browser evidence가 필요한 focus, target size, overflow, contrast, responsive 문제는 관찰 증거 없이 pass로 단정하지 않는다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rule-zone block-zone">
+          <h3 class="rule-zone-heading"><strong>금지</strong></h3>
+          <table class="rule-table">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><th>heuristic violation을 자동 bug로 단정하</th><td>heuristic violation을 자동 bug로 단정하지 않는다. 사용자 task, 빈도, 영향, 반복성, domain/business risk로 severity를 판단한다.</td></tr>
+              <tr><th>browser evidence가 필요한 focus, tar</th><td>browser evidence가 필요한 focus, target size, overflow, contrast, responsive 문제는 관찰 증거 없이 pass로 단정하지 않는다.</td></tr>
+              <tr><th>추론이면 inference라고 표시하고, 실제 사용자 조사</th><td>추론이면 inference라고 표시하고, 실제 사용자 조사나 screen reader/assistive tech 검증을 대체했다고 말하지 않는다.</td></tr>
+              <tr><th>destructive, legal, financial, h</th><td>destructive, legal, financial, health, data-changing action은 confirm/reverse/review path가 없으면 높은 severity로 본다.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Severity 기준</h2>
-        <p>등급은 heuristic 이름이 아니라 사용자 영향과 business risk로 정합니다.</p>
-      </div>
-      <div class="severity" aria-label="severity 기준">
-        <div class="severity-row"><div class="sev">S0</div><div>문제로 보지 않음 또는 의도된 trade-off</div><div>리뷰 대상에서 제외하거나 의도 근거만 기록합니다.</div></div>
-        <div class="severity-row"><div class="sev">S1</div><div>polish/cosmetic</div><div>여유가 있을 때 수정해도 되는 표현, 정렬, 마감 문제입니다.</div></div>
-        <div class="severity-row"><div class="sev">S2</div><div>friction</div><div>일부 사용자의 흐름을 늦추지만 주요 과업을 막지는 않습니다.</div></div>
-        <div class="severity-row"><div class="sev">S3</div><div>major task risk</div><div>주요 workflow 성공률, 신뢰, 반복 업무 효율에 영향을 줍니다.</div></div>
-        <div class="severity-row"><div class="sev">S4</div><div>release blocker</div><div>접근성, 안전, 법적/금전/데이터 손상, 되돌리기 어려운 action 위험입니다.</div></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>보안 경계</h2>
-        <p>공유 취향은 보조 기준이며, 실제 severity는 맥락과 증거로 판단합니다.</p>
-      </div>
-      <div class="do-dont">
-        <section class="panel allow" aria-label="허용">
-          <h3>허용</h3>
-          <ul>
-            <li>조용한 운영 UI, 절제된 색, 얕은 border, stable dimension을 fallback taste로 사용합니다.</li>
-            <li>제품군별 감각을 반영합니다. SaaS/CRM은 밀도, 콘텐츠 앱은 읽기 흐름, 게임은 즉각성을 우선합니다.</li>
-            <li>위험한 action은 confirm, reverse, review path 유무를 높은 severity 판단에 포함합니다.</li>
-          </ul>
-        </section>
-        <section class="panel deny" aria-label="금지">
-          <h3>금지</h3>
-          <ul>
-            <li>제품 맥락 없이 decorative orb, heavy gradient, nested card 같은 일반 금지만 반복하지 않습니다.</li>
-            <li>screenshot만 붙이고 finding, severity rationale, user impact를 생략하지 않습니다.</li>
-            <li>screen reader나 assistive tech를 실제로 검증하지 않았다면 검증했다고 말하지 않습니다.</li>
-          </ul>
-        </section>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>출력 형식</h2>
-        <p>최종 리뷰는 findings를 먼저 두고, evidence와 남은 위험을 명확히 분리합니다.</p>
-      </div>
-      <pre class="code-block">Scope
-- user/task/device/design system/evidence
-
-Findings
-- [S3 Major][heuristic: recognition/error recovery][evidence: browser screenshot + WCAG 3.3.1]
-  Location: &lt;screen/component&gt;
-  Problem: &lt;specific issue&gt;
-  User impact: &lt;task blocked/slowed/confused&gt;
-  Severity rationale: frequency=&lt;...&gt;, impact=&lt;...&gt;, persistence=&lt;...&gt;
-  Recommendation: &lt;specific direction&gt;
-
-Evidence Matrix
-- visual / interaction / accessibility / content / responsive / state coverage
-
-Recommendations
-- &lt;구체적 수정 방향&gt;
-
-Residual Risk
-- &lt;확인 못 한 부분&gt;</pre>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>파일 관계도와 검증</h2>
-        <p><code>skill.html</code>은 요약 화면이며 기준 원문은 항상 <code>SKILL.md</code>입니다.</p>
-      </div>
-      <div class="files" aria-label="관련 파일">
-        <div class="file-card"><strong><a href="SKILL.md"><code>SKILL.md</code></a></strong><p>호출 조건, evidence, severity, accessibility, output shape의 기준 원문입니다.</p></div>
-        <div class="file-card"><strong><a href="skill.html"><code>skill.html</code></a></strong><p>사람이 빠르게 읽는 HTML입니다. 새 기준 원문으로 쓰지 않습니다.</p></div>
-        <div class="file-card"><strong><a href="references/design-review-criteria.md"><code>references/design-review-criteria.md</code></a></strong><p>제품군별 감각, fallback taste, browser evidence boundary를 담은 참고 기준입니다.</p></div>
-        <div class="file-card"><strong><a href="scripts/validate-design-review.ts"><code>scripts/validate-design-review.ts</code></a></strong><p>스킬 패키지 구조를 확인하는 대상 validator입니다.</p></div>
-      </div>
-      <pre class="code-block" style="margin-top:12px;">node scripts/validate-skill.ts skills/design-review
-node skills/design-review/scripts/validate-design-review.ts skills/design-review
-node scripts/validate-korean-markdown.ts .
-node scripts/validate-skill-html.ts .
-node scripts/run-agent-evals.ts</pre>
-      <p class="small" style="margin-top:10px;">이 가이드는 PC desktop 기준 정적 HTML입니다. 외부 asset, inline JavaScript, 조작 UI, animation을 사용하지 않습니다.</p>
+    <section>
+      <h2>파일과 검증</h2>
+      <p class="summary-copy">파일 관계와 검증 명령을 함께 확인한다.</p>
+      <ul class="verify-list">
+        <li><strong>기준 문서</strong><span><code>SKILL.md</code> agent가 실제로 따르는 원문이다.</span></li>
+        <li><strong>읽기 화면</strong><span><code>skill.html</code> 사람이 빠르게 확인하는 단일 HTML이다.</span></li>
+        <li><strong>메타데이터</strong><span><code>agents/openai.yaml</code> agent adapter용 설명과 기본 prompt를 담는다.</span></li>
+        <li><strong>참조 문서</strong><span><code>references/</code> 긴 기준과 세부 예시를 분리한다.</span></li>
+        <li><strong>검증 스크립트</strong><span><code>scripts/</code> 스킬 고유 검증 명령을 둔다.</span></li>
+      </ul>
+      <table class="command-table">
+        <tbody>
+          <tr><th>공통 HTML</th><td><code>node scripts/validate-skill-html.ts .</code></td></tr>
+            <tr><th>공통 스킬</th><td><code>node scripts/validate-skill.ts skills/design-review</code></td></tr>
+            <tr><th>스킬 고유</th><td><code>node skills/design-review/scripts/validate-design-review.ts skills/design-review</code></td></tr>
+        </tbody>
+      </table>
     </section>
   </main>
 </body>

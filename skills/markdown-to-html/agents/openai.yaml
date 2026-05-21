@@ -26,7 +26,19 @@ interface:
     English is allowed only for exact identifiers such as file paths, commands,
     protocol names, product names, library names, and common acronyms such as
     TDD, QA, API, MCP, and PRD. In skill HTML mode, keep the first screen
-    focused on document name, one-line purpose, input, output, and 3-5 important criteria. 인터랙티브 요소를
+    focused on the target skill's name, real purpose, when to use it, operational
+    inputs, operational outputs, and 3-5 important criteria. The summary must
+    keep operational inputs and outputs as target-skill concepts and describe
+    the target skill, not the markdown-to-html conversion process. Do
+    not write generic converter rows such as SKILL.md input, adjacent
+    skill.html output, folder scope, preserve, or block as the target skill
+    summary; put source files and validation commands only in the files and
+    validation section. Visible workflow prose must not expose English explanatory fragments such as
+    domain term, boundary, problem, user, first usable slice, included/excluded
+    scope, acceptance criteria, selected mock direction, vertical slice,
+    enabling task, or handoff. Translate them to Korean first and keep the
+    source term only in parentheses when needed.
+    인터랙티브 요소를
     넣지 않는다: no buttons, no inline JavaScript, no animation, no view
     switching, no click-driven state, no staged reveal, and no decorative SVG.
     Do not put UI design rationale, layout explanation, or self-commentary in
