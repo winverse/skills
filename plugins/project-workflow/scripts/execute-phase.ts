@@ -38,6 +38,7 @@ type Options = {
   projectRoot: string;
   run: boolean;
   agent: "codex" | "custom";
+  agentExplicit: boolean;
   agentBin?: string;
   agentArgs: string[];
   maxRetries: number;
@@ -61,8 +62,9 @@ Notes:
   - --run requires --agent-bin.
   - Pass each command argument with repeated --agent-arg.
   - Project docs are loaded from --project-root, defaulting to the current working directory.
-  - The agent command receives the full prompt on stdin.
-  - The phase file format stays agent-neutral; this runner is Codex-first and custom commands are explicit fallback only.
+  - The agent command runs in --project-root and receives the full prompt on stdin.
+  - The phase file format stays agent-neutral and this runner remains Codex-first.
+  - Default agent mode is codex; custom commands require explicit --agent custom.
   - Known permission-bypass flags are rejected.`);
   process.exit(2);
 }
@@ -75,7 +77,8 @@ function parseArgs(argv: string[]): Options {
     phaseDir,
     projectRoot: process.cwd(),
     run: false,
-    agent: "custom",
+    agent: "codex",
+    agentExplicit: false,
     agentArgs: [],
     maxRetries: 3,
   };
@@ -88,6 +91,7 @@ function parseArgs(argv: string[]): Options {
       const value = rest[++i] as Options["agent"] | undefined;
       if (!value || !["codex", "custom"].includes(value)) usage();
       options.agent = value;
+      options.agentExplicit = true;
     } else if (arg === "--agent-bin") {
       options.agentBin = rest[++i];
       if (!options.agentBin) usage();
@@ -110,6 +114,21 @@ function parseArgs(argv: string[]): Options {
   if (options.run && !options.agentBin) {
     console.error("ERROR: --run requires --agent-bin.");
     usage();
+  }
+
+  if (options.run && !existsSync(options.projectRoot)) {
+    console.error(`ERROR: project root not found: ${options.projectRoot}`);
+    process.exit(1);
+  }
+
+  if (options.run && options.agent === "codex" && options.agentBin && path.basename(options.agentBin) !== "codex") {
+    console.error("ERROR: Codex agent mode requires --agent-bin codex. Use --agent custom for explicit fallback commands.");
+    process.exit(2);
+  }
+
+  if (options.run && options.agent === "custom" && !options.agentExplicit) {
+    console.error("ERROR: custom agent mode requires explicit --agent custom.");
+    process.exit(2);
   }
 
   for (const value of [options.agentBin, ...options.agentArgs]) {
@@ -243,8 +262,9 @@ function buildPrompt(
   ].filter(Boolean).join("\n\n---\n\n");
 }
 
-function runAgent(bin: string, args: string[], prompt: string): { code: number; stdout: string; stderr: string } {
+function runAgent(bin: string, args: string[], prompt: string, cwd: string): { code: number; stdout: string; stderr: string } {
   const result = spawnSync(bin, args, {
+    cwd,
     input: prompt,
     encoding: "utf8",
     stdio: ["pipe", "pipe", "pipe"],
@@ -304,12 +324,13 @@ function main(): void {
   writeJson(indexFile, index);
 
   for (let attempt = 1; attempt <= options.maxRetries; attempt += 1) {
-    const result = runAgent(options.agentBin!, options.agentArgs, prompt);
+    const result = runAgent(options.agentBin!, options.agentArgs, prompt, options.projectRoot);
     const outputFile = path.join(phaseDir, `${stepOutputStem(step, stepIndex)}-output.json`);
     writeJson(outputFile, {
       step: stepLabel(step, stepIndex),
       name: stepName(step, stepIndex),
       agent: options.agent,
+      cwd: options.projectRoot,
       command: [options.agentBin, ...options.agentArgs].join(" "),
       argv: [options.agentBin, ...options.agentArgs],
       attempt,

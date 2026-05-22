@@ -253,6 +253,8 @@ const requiredChecks = [
   ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "pre-blocked step should exit 2"],
   ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "pre-error step should exit 1"],
   ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "successful custom run should mark step completed"],
+  ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "implicit custom command should fail without --agent custom"],
+  ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "successful custom run should execute inside project root"],
   ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "agent-blocked run should exit 2"],
   ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "max retries should mark step error"],
   ["repo:plugins/project-workflow/scripts/validate-execute-phase.ts", "dangerous permission-bypass flag should fail"],

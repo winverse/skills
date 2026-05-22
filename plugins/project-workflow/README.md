@@ -18,7 +18,7 @@ node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phas
 node plugins/project-workflow/scripts/execute-phase.ts .scratch/new-product/phases --run --agent codex --agent-bin codex --agent-arg exec
 ```
 
-실행 command는 prompt를 stdin으로 받는다. Target project 문서는 `--project-root` 기준으로 읽고, 생략하면 현재 작업 디렉터리를 쓴다. 이 script는 Codex를 기본 실행 대상으로 보고, custom command는 사용자가 명시했을 때만 fallback으로 허용한다. 권한 우회 flag는 hard-code하지 않고, 알려진 권한 우회 flag는 거부한다. 실제 production edit은 `feature-workflow` step 실행으로 다룬다.
+실행 command는 `--project-root`를 cwd로 쓰고 prompt를 stdin으로 받는다. Target project 문서도 `--project-root` 기준으로 읽으며, 생략하면 현재 작업 디렉터리를 쓴다. 이 script는 Codex를 기본 실행 대상으로 보고, custom command는 `--agent custom`을 사용자가 명시했을 때만 fallback으로 허용한다. 권한 우회 flag는 hard-code하지 않고, 알려진 권한 우회 flag는 거부한다. 실제 production edit은 `feature-workflow` step 실행으로 다룬다.
 
 ## 반복 테스트
 

@@ -311,11 +311,11 @@ Python `execute.py`를 repo에 들여오지 않는다. 선택 실행 도구가 �
 
 - 기본 동작은 dry-run prompt 출력이며 index file을 수정하지 않는다.
 - 실제 실행은 사용자가 `--run`과 `--agent-bin`을 명시했을 때만 한다.
-- agent command는 `--agent-bin`과 반복 `--agent-arg`로 구성하고 prompt를 stdin으로 받아야 한다.
+- agent command는 `--agent-bin`과 반복 `--agent-arg`로 구성하고, `--project-root`를 cwd로 실행하며, prompt를 stdin으로 받아야 한다.
 - target project 문서는 `--project-root` 기준으로 읽으며, 생략하면 현재 작업 디렉터리를 쓴다.
 - 알려진 권한 우회 flag는 사용자 입력으로도 거부한다.
 - `--dangerously-skip-permissions` 같은 권한 우회 flag를 hard-code하지 않는다.
-- Codex-first command boundary로 둔다. 다른 command는 사용자가 명시한 custom fallback일 때만 허용한다.
+- Codex-first command boundary로 둔다. 다른 command는 사용자가 `--agent custom`을 명시한 custom fallback일 때만 허용한다.
 - 자동 branch checkout, commit, push는 하지 않는다. publish는 `atomic-committer`가 맡는다.
 - production code edit 책임은 `feature-workflow`가 맡는다. runner prompt는 `project-workflow` 실행이 아니라 `feature-workflow` step 실행 adapter로 해석한다.
 

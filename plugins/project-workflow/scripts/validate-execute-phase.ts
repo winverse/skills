@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -112,6 +112,7 @@ process.stdin.on("data", (chunk) => {
 });
 process.stdin.on("end", () => {
   writeFileSync(path.join(phaseDir, "captured-prompt.md"), input, "utf8");
+  writeFileSync(path.join(phaseDir, "captured-cwd.txt"), process.cwd(), "utf8");
   appendFileSync(path.join(phaseDir, "attempts.log"), mode + "\\n", "utf8");
 
   const indexFile = path.join(phaseDir, "index.json");
@@ -232,6 +233,10 @@ const dangerous = run([makePendingPhase(), "--run", "--agent", "codex", "--agent
 assert(dangerous.status === 2, "dangerous permission-bypass flag should fail");
 assert(dangerous.stderr.includes("forbidden agent argument"), "dangerous flag failure should explain the reason");
 
+const implicitCustom = run([makePendingPhase(), "--run", "--agent-bin", "node", "--agent-arg", agentScript]);
+assert(implicitCustom.status === 2, "implicit custom command should fail without --agent custom");
+assert(implicitCustom.stderr.includes("Use --agent custom"), "implicit custom command failure should explain explicit fallback");
+
 const successful = makePendingPhase();
 const successfulRun = run([
   successful,
@@ -252,6 +257,8 @@ const successfulRun = run([
 const successfulIndex = readJson<{ created_at?: string; steps: Array<JsonObject> }>(path.join(successful, "index.json"));
 const successfulOutput = readJson<JsonObject>(path.join(successful, "step0-output.json"));
 const successfulPrompt = readFileSync(path.join(successful, "captured-prompt.md"), "utf8");
+const successfulCwd = readFileSync(path.join(successful, "captured-cwd.txt"), "utf8");
+const expectedProjectRoot = realpathSync(projectRoot);
 assert(successfulRun.status === 0, "successful custom run should exit 0");
 assert(successfulRun.stdout.includes("completed: step 0 first"), "successful custom run should report completed step");
 assert(successfulIndex.created_at, "successful custom run should stamp phase created_at");
@@ -260,9 +267,11 @@ assert(successfulIndex.steps[0]?.summary === "agent completed", "successful cust
 assert(successfulIndex.steps[0]?.started_at, "successful custom run should stamp started_at");
 assert(successfulIndex.steps[0]?.completed_at, "successful custom run should stamp completed_at");
 assert(successfulOutput.agent === "custom", "successful custom run should record agent label");
+assert(successfulOutput.cwd === projectRoot, "successful custom run should record project root cwd");
 assert(successfulOutput.exitCode === 0, "successful custom run should record agent exit code");
 assert(successfulPrompt.includes("Codex feature-workflow step 실행 agent"), "successful custom run should pass prompt on stdin");
 assert(successfulPrompt.includes("codex rule"), "successful custom run prompt should include project docs");
+assert(successfulCwd === expectedProjectRoot, "successful custom run should execute inside project root");
 assert(existsSync(path.join(successful, "step0-output.json")), "successful custom run should write step output JSON");
 
 const blockedByAgent = makePendingPhase();
