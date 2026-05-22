@@ -1,6 +1,6 @@
 ---
 name: markdown-to-comic
-description: "Markdown 문서의 핵심 개념, 판단 흐름, 절차를 imagegen 기반 4컷 또는 6컷 raster comic으로 만들 때 사용한다. 원본 Markdown을 대체하지 않고, 사람 이해를 돕는 실제 그림 산출물과 transcript를 만든다."
+description: "Markdown 문서의 핵심 개념, 판단 흐름, 절차를 imagegen 기반 raster comic으로 만들 때 사용한다. 컷 수는 원문 구조와 사용자 의도에 맞춰 정하고, 원본 Markdown을 대체하지 않고, 사람 이해를 돕는 실제 그림 산출물과 transcript를 만든다."
 ---
 
 # Markdown을 Comic으로 바꾸기
@@ -28,7 +28,8 @@ Markdown은 heading, list, table, code fence, link의 역할을 읽어 `ComicBri
 - `source`: 원본 Markdown 경로
 - `audience`: 읽을 사람
 - `concept`: 다룰 핵심 개념 하나
-- `format`: `4-panel` 또는 `6-panel`
+- `panel_count`: 사용자 지정 또는 원문 구조에 맞춘 컷 수
+- `layout`: page grid, strip, sequence 등 panel 배치
 - `takeaway`: 마지막에 남길 한 문장
 - `panels`: panel별 `scene`, `caption`, `dialogue`, `visual_cue`, `source_anchor`, `alt_text`, `must_not_distort`
 - `imagegen_prompts`: 실제 그림 생성을 위한 panel 또는 page prompt 목록
@@ -36,17 +37,17 @@ Markdown은 heading, list, table, code fence, link의 역할을 읽어 `ComicBri
 - `accessibility`: alt text와 long description
 - `validation`: 사실성, 접근성, 검색 가능성, text density 확인 명령 또는 체크리스트
 
-## 4컷과 6컷 선택
+## 컷 수 선택
 
-- `4-panel`은 오해 교정, 전후 비교, 한 가지 판단 기준, 작은 개념 설명에 쓴다.
-- `4-panel`은 `도입 -> 전개 -> 반전/대조 -> 결론` 흐름을 기본으로 한다.
-- `6-panel`은 절차, 실패와 복구, 원인과 결과, 여러 단계 workflow에 쓴다.
-- 6컷 이상이 필요하면 문서 전체를 억지로 넣지 말고 comic을 여러 개로 나눈다.
-- 4컷이든 6컷이든 최종 이미지는 먼저 만들고, 그 다음 HTML wrapper로 묶는다.
+- 사용자가 컷 수를 지정하면 그 수를 우선한다.
+- 지정이 없으면 원문에서 한 comic에 담을 개념, 절차, 오해 교정 흐름을 보존하는 데 필요한 최소 컷 수를 고른다.
+- 한 panel에는 한 장면, 한 판단, 한 상태 변화만 둔다. 컷 수를 줄이려고 여러 결정을 한 panel에 욱여넣지 않는다.
+- 컷 수가 많아져 text density, 순서, 가독성이 무너지면 하나의 큰 comic으로 밀어붙이지 말고 여러 comic으로 나눈다.
+- 최종 이미지는 먼저 만들고, 그 다음 HTML wrapper로 묶는다.
 
 ## imagegen 사용 기준
 
-- 기본적으로 사용한다: 4컷/6컷 comic page, 캐릭터, 배경, 장면 분위기, 비유 그림, panel별 illustration.
+- 기본적으로 사용한다: 내용 맞춤 comic page, 캐릭터, 배경, 장면 분위기, 비유 그림, panel별 illustration.
 - 예외적으로 쓰지 않는다: 사용자가 storyboard-only를 명시한 경우, runtime/tool policy가 이미지 생성을 막는 경우, private source를 이미지 prompt로 옮길 수 없는 경우.
 - imagegen을 쓰지 못하면 실패가 아니라 `blocked/deferred`로 보고하고, 임시 HTML/CSS 대체물을 최종 comic이라고 부르지 않는다.
 - imagegen에는 짧은 panel caption과 장면 설명만 맡긴다. code block, CLI command, 정확한 UI label, 보안 규칙은 companion transcript에 둔다.
@@ -59,9 +60,9 @@ Markdown은 heading, list, table, code fence, link의 역할을 읽어 `ComicBri
 1. 대상 Markdown과 필요한 주변 문서만 읽는다.
 2. source of truth, audience, 한 comic에 담을 개념 하나를 정한다.
 3. Markdown 의미를 `ComicBrief`로 줄이고, 원문 line 또는 heading을 `source_anchor`로 남긴다.
-4. `4-panel` 또는 `6-panel`을 고른다.
+4. 컷 수와 layout을 고른다.
 5. 각 panel을 짧게 쓴다. 한 panel의 caption은 한 문장, dialogue는 1-2개 말풍선으로 제한한다.
-6. `ComicBrief`에서 page-level imagegen prompt를 만든다. 4컷/6컷 grid, panel order, style, caption 목록, 금지할 왜곡을 명시한다.
+6. `ComicBrief`에서 page-level imagegen prompt를 만든다. panel count, grid/layout, panel order, style, caption 목록, 금지할 왜곡을 명시한다.
 7. `imagegen`을 호출해 실제 comic image를 만든다.
 8. 생성 이미지를 검사한다. panel 수, 순서, 주제 일치, 텍스트 과밀, 어색한 글자, 왜곡된 사실이 있으면 한 번 이상 targeted regeneration을 시도한다.
 9. 통과한 이미지를 대상 폴더의 `comic/comic.png`로 복사한다.

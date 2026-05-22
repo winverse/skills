@@ -98,7 +98,7 @@ plugins/caveman/
 - `markdown-to-html`: Markdown 문서 의미를 읽어 사람이 확인할 수 있는 한국어 우선 HTML을 만들거나 고치는 스킬. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이며, 이때만 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령으로 짧게 압축한다. 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때 쓰며, 긴 문단, 깊은 heading, 표, 중첩 list, code fence 같은 복잡한 구조를 보존한다. 두 mode 모두 PC desktop 기준으로 버튼, script, 애니메이션, 외부 의존 없이 확인한다.
   - Source instruction: `skills/markdown-to-html/SKILL.md`
   - Human visual guide: `skills/markdown-to-html/skill.html`
-- `markdown-to-comic`: Markdown 문서의 핵심 개념, 판단 흐름, 절차를 `$imagegen` 기반 4컷 또는 6컷 raster comic으로 바꾸는 스킬. 원본 Markdown을 source of truth로 두고, `ComicBrief`를 거쳐 먼저 `comic/comic.png`를 만든 뒤 `comic/comic.html` wrapper로 이미지, transcript, source anchor, alt text, prompt summary, 검증 기록을 묶는다. 공유 스킬 대상이면 `skills/<skill-name>/comic/` 아래에 산출물을 둔다.
+- `markdown-to-comic`: Markdown 문서의 핵심 개념, 판단 흐름, 절차를 `$imagegen` 기반 raster comic으로 바꾸는 스킬. 컷 수는 원문 구조와 사용자 의도에 맞춰 정하고, 원본 Markdown을 source of truth로 두고, `ComicBrief`를 거쳐 먼저 `comic/comic.png`를 만든 뒤 `comic/comic.html` wrapper로 이미지, transcript, source anchor, alt text, prompt summary, 검증 기록을 묶는다. 공유 스킬 대상이면 `skills/<skill-name>/comic/` 아래에 산출물을 둔다.
   - Source instruction: `skills/markdown-to-comic/SKILL.md`
   - Human visual guide: `skills/markdown-to-comic/skill.html`
 - `karpathy-thinkings`: Karpathy식 코딩 에이전트 사고를 적용해 추측, 과설계, 주변 리팩터링, 약한 검증을 줄이는 구현 스킬.

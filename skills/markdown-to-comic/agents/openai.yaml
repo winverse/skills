@@ -1,20 +1,21 @@
 interface:
   display_name: "Markdown To Comic"
-  short_description: "Markdown을 imagegen 4컷/6컷 comic으로 변환"
+  short_description: "Markdown을 imagegen comic으로 변환"
   default_prompt: >-
-    Use $markdown-to-comic when a Markdown document should become a 4-panel or
-    6-panel raster comic generated with $imagegen. Treat the original Markdown
-    as the source of truth. Extract one concept, workflow, decision, or
-    misconception into a ComicBrief before generating. Use 4-panel format for
-    one compact idea and 6-panel format for workflow, failure recovery, or
-    cause-and-effect sequences. Call $imagegen as the default generation path
-    unless the user explicitly asks for storyboard-only output or image
-    generation is blocked by runtime, tool policy, or private-source handling.
-    Do not accept HTML/CSS-only output as completion. After image generation,
-    save the accepted project-bound image under the target document folder's
+    Use $markdown-to-comic when a Markdown document should become a raster
+    comic generated with $imagegen. Treat the original Markdown as the source
+    of truth. Extract one concept, workflow, decision, or misconception into a
+    ComicBrief before generating. Do not hard-limit the comic to a fixed panel
+    count set. If the user specifies a panel count, follow it. Otherwise, choose
+    the smallest panel count that preserves the source concept, sequence, and
+    readability. Call $imagegen as the default generation path unless the
+    user explicitly asks for storyboard-only output or image generation is
+    blocked by runtime, tool policy, or private-source handling. Do not accept
+    HTML/CSS-only output as completion. After image generation, save the
+    accepted project-bound image under the target document folder's
     comic/comic.png path, for example skills/<skill-name>/comic/comic.png for a
-    skill. Then create comic/comic.html beside it as a wrapper that
-    displays the image and includes transcript, source anchors, alt text, long
+    skill. Then create comic/comic.html beside it as a wrapper that displays
+    the image and includes transcript, source anchors, alt text, long
     descriptions, prompt summary, and validation notes. Keep exact commands,
     security rules, and policy text in the wrapper transcript or source ledger,
     not raster-only image text. Do not paste raw Markdown into image prompts;
