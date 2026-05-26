@@ -7,6 +7,7 @@
     "validate:markdown-to-html-render": "node skills/markdown-to-html/scripts/validate-markdown-to-html-render.ts skills/markdown-to-html"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0"
+    "@playwright/test": "^1.60.0",
+    "vitest": "^4.1.7"
   }
 }
