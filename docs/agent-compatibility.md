@@ -40,7 +40,8 @@ Codex 프로젝트에서는 보통 `AGENTS.md`에 다음처럼 연결한다.
 
 - Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 - Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
-- Treat any user request that invokes `web-research` or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
+- Do not treat skill review/update requests or user-provided-document-only summarization as browse requests. Use local sources first when provided, then choose the smallest sufficient research budget.
+- Use parallel source lanes for recommendations, comparisons, high-stakes/current facts, source conflicts, or downstream product/architecture/PR decisions. Single official quick checks can stay single-agent.
 ```
 
 ## Claude 연결
@@ -52,7 +53,8 @@ Claude 프로젝트에서는 보통 `CLAUDE.md`에 같은 스킬 경로와 사�
 
 - For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
 - Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
-- Treat any user request that invokes `web-research` or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
+- Do not treat skill review/update requests or user-provided-document-only summarization as browse requests. Use local sources first when provided, then choose the smallest sufficient research budget.
+- Use parallel source lanes for recommendations, comparisons, high-stakes/current facts, source conflicts, or downstream product/architecture/PR decisions. Single official quick checks can stay single-agent.
 - Before using a shared skill, read its adjacent `skill.html` if you need a quick human-facing overview.
 
 ## Project Skill Overrides

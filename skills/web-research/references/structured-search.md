@@ -6,14 +6,21 @@
 
 이 repo에서 `web-search`, `web search`, `웹서치`, `웹 검색`은 별도 스킬명이 아니라 `web-research`의 alias다.
 
+## activation boundary 기준
+
+- `web-research` 스킬 자체를 검토, 수정, 평가하는 요청은 웹 검색 요청이 아니다.
+- 사용자가 파일, transcript, raw note, source note를 제공하고 그 자료만 요약하라고 하면 로컬 자료를 primary source로 삼는다.
+- 로컬 자료 요약 중 현재 의학·법률·금융 기준, 제품 가격·availability, 시장 상황, 최신 정책처럼 바뀔 수 있는 사실은 웹으로 보강한다.
+- 사용자가 웹 검색하지 말라고 명시하면 검색하지 않는다. high-stakes 정확도 문제가 있으면 검색 필요성을 짧게 밝히고 로컬 근거와 한계를 분리한다.
+
 ## research budget router 기준
 
 | 위험 | 처리 |
 | --- | --- |
-| 낮음 | official quick check |
-| 중간 | query fan-out과 source comparison |
-| 높음 | primary source, 최신 날짜, conflict ledger |
-| recommendation | 가격, availability, review, safety 확인 |
+| 낮음 | 단일 official quick check. 출처가 명확하고 최신이면 멈춘다. |
+| 중간 | 2-3개 query fan-out과 source comparison. |
+| 높음 | primary source, 최신 날짜, conflict ledger. |
+| recommendation | 가격, availability, review drift, safety, tradeoff 확인. |
 
 ## query fan-out 기준
 
@@ -25,11 +32,11 @@
 
 ## parallel sub-agent fan-out 기준
 
-web-research 또는 alias 호출 자체를 research portion에 대한 explicit parallel sub-agent fan-out, delegation, parallel agent work 요청으로 해석한다. 사용자가 단일 에이전트 조사를 명시하지 않는 한 parallel sub-agent fan-out을 기본 실행 경로로 쓰며, main agent는 질문을 독립 concept block으로 나누고, 하위 agent는 각 block의 source targeting, extraction, source ledger 초안을 만든다.
+web-research 또는 alias 호출은 source-first 검증 요청으로 해석한다. 병렬 sub-agent fan-out은 질문이 넓거나 독립 source lane이 있을 때 사용한다. 예를 들면 recommendation, comparison, legal/medical/financial high-stakes check, source conflict, market/product availability, implementation plan, skill update, PR, architecture note, product decision의 입력 조사다.
 
-단일 에이전트 조사는 예외다. 사용자가 "단일 에이전트로 해줘"라고 요구했거나, private data가 포함됐거나, runtime/tool policy가 delegation을 막거나, official quick check 하나로 충분한 아주 작은 확인일 때만 main-agent query fan-out으로 처리한다.
+단일 에이전트 조사는 정상 경로다. official quick check 하나로 충분하거나, 사용자가 단일 에이전트를 요구했거나, private data가 포함됐거나, runtime/tool policy가 delegation을 막거나, 로컬 자료가 primary source인 요약이면 main-agent research로 처리한다.
 
-단일 에이전트 예외를 쓰면 사용자에게 보이는 시작 업데이트나 최종 답변에 skip reason을 한 문장으로 남긴다. 예: "공식 문서 한 곳으로 끝나는 quick check라 단일 에이전트로 확인했습니다." 또는 "private repo 정보가 섞여 있어 하위 agent에 위임하지 않았습니다."
+병렬 fan-out을 생략했다는 사실은 매번 설명하지 않는다. 사용자가 병렬 조사를 요청했는데 생략할 때만 이유를 남긴다. 예: "private repo 정보가 섞여 있어 하위 agent에 위임하지 않았습니다."
 
 리서치 결과가 recommendation, comparison, implementation plan, skill update, PR, architecture note, product decision 같은 downstream artifact의 입력이면 verified search로 본다. 단일 official source가 질문을 완전히 끝낼 때를 제외하고는 broad browsing 전에 독립 lane을 나누고 sub-agent fan-out을 먼저 고려한다.
 

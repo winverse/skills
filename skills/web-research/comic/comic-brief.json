@@ -2,9 +2,9 @@
   "name": "web-research 4-panel comic",
   "source": "../SKILL.md",
   "audience": "web-research skill을 처음 쓰는 agent와 사람",
-  "concept": "source-first 병렬 조사 후 citation과 함께 답한다",
+  "concept": "질문 위험도에 맞는 source-first 조사 후 citation과 함께 답한다",
   "format": "4-panel",
-  "takeaway": "먼저 현재성 위험을 판단하고, 병렬로 검증한 뒤, 출처 장부와 citation으로 답한다.",
+  "takeaway": "먼저 현재성 위험과 로컬 자료 여부를 판단하고, 필요한 만큼만 검증한 뒤, 출처 장부와 citation으로 답한다.",
   "panels": [
     {
       "caption": "1. 최신성 판단",
@@ -14,11 +14,11 @@
       "must_not_distort": "모든 질문을 무조건 웹 검색해야 한다고 표현하지 않는다."
     },
     {
-      "caption": "2. 병렬 조사",
-      "scene": "공식 문서, 논문, 비교 출처를 동시에 나누어 조사한다.",
+      "caption": "2. 예산 선택",
+      "scene": "공식 quick check, source comparison, 병렬 source lane 중 질문에 맞는 조사 깊이를 고른다.",
       "source_anchor": "research workflow 기준 2-5",
-      "alt_text": "연구자가 공식, 논문, 비교 세 출처로 조사 흐름을 나누는 장면",
-      "must_not_distort": "web-research 호출과 alias가 병렬 research 요청이라는 점을 빼지 않는다."
+      "alt_text": "연구자가 로컬 자료, 공식 출처, 비교 출처 중 필요한 조사 깊이를 선택하는 장면",
+      "must_not_distort": "모든 web-research 호출과 alias를 무조건 병렬 research 요청으로 표현하지 않는다."
     },
     {
       "caption": "3. 출처 장부",

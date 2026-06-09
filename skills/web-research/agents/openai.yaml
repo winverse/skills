@@ -1,4 +1,4 @@
 interface:
   display_name: "Web Research"
   short_description: "Agentic source-first web research"
-  default_prompt: "Treat web-search, web search, 웹서치, and 웹 검색 as aliases for $web-research. Treat any $web-research or alias invocation as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion when delegation is available; use single-agent research only on explicit user request, private data, runtime policy limits, or tiny official quick checks, and state the skip reason when using that exception."
+  default_prompt: "Treat web-search, web search, 웹서치, and 웹 검색 as aliases for $web-research. Do not treat skill review/update requests or user-provided-document-only summarization as a request to browse. Use official/source-of-record first, local sources first when provided, and choose the smallest sufficient research budget; use parallel source lanes for recommendations, comparisons, high-stakes/current facts, source conflicts, or downstream product/architecture/PR decisions."

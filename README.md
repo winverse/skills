@@ -92,7 +92,7 @@ plugins/caveman/
 - `show-skills`: 현재 repo의 스킬 목록을 파일 시스템과 history에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천하는 탐색 스킬.
   - Source instruction: `skills/show-skills/SKILL.md`
   - Human visual guide: `skills/show-skills/skill.html`
-- `web-research`: 출처 우선 웹 리서치 스킬. research budget routing, query fan-out, `web-research` 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 계약, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
+- `web-research`: 출처 우선 웹 리서치 스킬. activation boundary, local-source-first handling, research budget routing, conditional parallel source lanes, source ledger, evidence scoring, stop rules, 한국어 친화적이고 간결한 출력 기준을 포함한다.
   - Source instruction: `skills/web-research/SKILL.md`
   - Human visual guide: `skills/web-research/skill.html`
 - `markdown-to-html`: Markdown 문서 의미를 읽어 사람이 확인할 수 있는 한국어 우선 HTML을 만들거나 고치는 스킬. 기본은 `SKILL.md` 옆 `skill.html`만 갱신하는 스킬 HTML mode이며, 이때만 목적, 입력, 출력, 중요한 기준, 보안 경계, 관련 파일, 검증 명령으로 짧게 압축한다. 일반 Markdown 문서 mode는 입력과 출력 위치가 명시됐을 때 쓰며, 긴 문단, 깊은 heading, 표, 중첩 list, code fence 같은 복잡한 구조를 보존한다. 두 mode 모두 PC desktop 기준으로 버튼, script, 애니메이션, 외부 의존 없이 확인한다.
@@ -184,7 +184,8 @@ Codex 프로젝트 예시:
 
 - Use $web-research at <skills-root>/skills/web-research/SKILL.md when a task needs current facts, web verification, source comparison, citations, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords.
 - Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
-- Treat any user request that invokes `web-research` or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
+- Do not treat skill review/update requests or user-provided-document-only summarization as browse requests. Use local sources first when provided, then choose the smallest sufficient research budget.
+- Use parallel source lanes for recommendations, comparisons, high-stakes/current facts, source conflicts, or downstream product/architecture/PR decisions. Single official quick checks can stay single-agent.
 ```
 
 Claude 프로젝트 예시:
@@ -194,7 +195,8 @@ Claude 프로젝트 예시:
 
 - For current facts, source verification, recommendations, product research, laws, regulations, technical documentation lookup, or structured search beyond simple keywords, use the shared skill at `<skills-root>/skills/web-research/SKILL.md`.
 - Treat `web-search`, `web search`, `웹서치`, and `웹 검색` as aliases for `web-research`.
-- Treat any user request that invokes `web-research` or its aliases as an explicit request for parallel sub-agent fan-out, delegation, and parallel agent work for the research portion. Use single-agent research only when the user explicitly asks for it, private data is involved, runtime/tool policy blocks delegation, or the task is a tiny official quick check.
+- Do not treat skill review/update requests or user-provided-document-only summarization as browse requests. Use local sources first when provided, then choose the smallest sufficient research budget.
+- Use parallel source lanes for recommendations, comparisons, high-stakes/current facts, source conflicts, or downstream product/architecture/PR decisions. Single official quick checks can stay single-agent.
 ```
 
 `<skills-root>`는 이 repo를 clone한 실제 위치로 바꾼다. 컴퓨터를 바꾸면 새 컴퓨터에서 이 repo를 clone한 경로만 다시 지정하면 된다. `<codex-home>`은 보통 `$HOME/.codex`이고, `CODEX_HOME`을 따로 설정했다면 그 값을 쓴다.

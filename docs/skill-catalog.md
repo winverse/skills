@@ -55,7 +55,7 @@ node skills/show-skills/scripts/show-skills.ts --root skills --compact
 | Skill | 설명 | 자세히 |
 | --- | --- | --- |
 | `show-skills` | 현재 repo의 스킬을 파일 시스템에서 읽어 카테고리별로 보여주고, 작업에 맞는 스킬 조합을 추천한다. | [SKILL.md](../skills/show-skills/SKILL.md) · [skill.html](../skills/show-skills/skill.html) |
-| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰며 `web-search` alias 호출 자체를 explicit parallel sub-agent fan-out/delegation/parallel agent work 요청으로 해석하는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
+| `web-research` | 현재성 있는 사실, 출처 검증, 추천, 규정, 기술 문서 조사에 쓰며 로컬 자료 우선, activation boundary, 최소 충분 research budget, 조건부 병렬 source lane을 관리하는 리서치 스킬이다. | [SKILL.md](../skills/web-research/SKILL.md) · [skill.html](../skills/web-research/skill.html) |
 
 ### 스킬 운영
 

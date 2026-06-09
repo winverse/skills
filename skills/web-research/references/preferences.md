@@ -6,7 +6,7 @@
 
 ## evidence standard 기준
 
-현재성 있는 사실은 source link와 날짜를 확인한다. recommendation은 가격, availability, risk, tradeoff를 함께 본다.
+사용자가 제공한 로컬 자료는 먼저 primary source로 다룬다. 현재성 있는 사실은 source link와 날짜를 확인한다. recommendation은 가격, availability, risk, tradeoff를 함께 본다.
 
 ## summary style 기준
 

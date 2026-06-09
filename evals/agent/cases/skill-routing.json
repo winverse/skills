@@ -47,7 +47,7 @@
     "expectedSkills": ["web-research"],
     "forbiddenSkills": ["browser-qa"],
     "agentSurfaces": ["codex"],
-    "assumptionDate": "2026-05-18",
+    "assumptionDate": "2026-06-09",
     "exampleType": "typical",
     "risk": "medium",
     "mode": "blocking",
@@ -65,32 +65,32 @@
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
-        "value": "parallel sub-agent fan-out"
+        "value": "activation boundary 기준"
       },
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
-        "value": "explicit parallel sub-agent fan-out, delegation, parallel agent work 요청"
+        "value": "research budget router 기준"
       },
       {
         "type": "required_text",
         "file": "AGENTS.md",
-        "value": "explicit request for parallel sub-agent fan-out, delegation, and parallel agent work"
+        "value": "smallest sufficient research budget"
       },
       {
         "type": "required_text",
         "file": "project-snippets/base.md",
-        "value": "explicit request for parallel sub-agent fan-out, delegation, and parallel agent work"
+        "value": "Use parallel source lanes for recommendations"
       },
       {
         "type": "required_text",
         "file": "skills/web-research/agents/openai.yaml",
-        "value": "explicit request for parallel sub-agent fan-out, delegation, and parallel agent work"
+        "value": "choose the smallest sufficient research budget"
       },
       {
         "type": "required_text",
         "file": "skills/web-research/SKILL.md",
-        "value": "단일 에이전트는 사용자가 명시적으로 요구"
+        "value": "단일 official source"
       },
       {
         "type": "required_text",
